@@ -1,6 +1,6 @@
 
 
-import Foundation
+import UIKit
 
 class BufferingBar: UIView {
     

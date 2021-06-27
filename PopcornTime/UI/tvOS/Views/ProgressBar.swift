@@ -1,6 +1,7 @@
 
 
 import Foundation
+import UIKit
 
 enum TransportBarHint: String {
     case none

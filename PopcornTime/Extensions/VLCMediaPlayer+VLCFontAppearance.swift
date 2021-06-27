@@ -1,6 +1,7 @@
 
 
 import Foundation
+import TVVLCKit
 
 /**
  Protocol wrapper for private subtitle appearance API in MobileVLCKit. Can be toll free bridged from VLCMediaPlayer. Example for changing font:

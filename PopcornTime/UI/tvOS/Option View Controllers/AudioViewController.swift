@@ -2,7 +2,7 @@
 
 import Foundation
 import PopcornKit
-import AVFoundation.AVFAudio.AVAudioSession
+import AVFoundation
 
 enum EqualizerProfiles: UInt32 {
     case fullDynamicRange = 0
