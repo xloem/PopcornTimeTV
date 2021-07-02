@@ -52,7 +52,7 @@ public class ThemeSongManager: NSObject, AVAudioPlayerDelegate {
                 if let data = data {
                     try AVAudioSession.sharedInstance().setCategory(AVAudioSession.Category.playback, mode: AVAudioSession.Mode.default)
                     
-                    let adjustedVolume = UserDefaults.standard.float(forKey: "themeSongVolume") * 0.25
+                    let adjustedVolume = Session.themeSongVolume * 0.25
                     
                     if adjustedVolume > 0 {
                     let player = try AVAudioPlayer(data: data)

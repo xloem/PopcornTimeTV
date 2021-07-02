@@ -43,10 +43,8 @@ struct PlayerOptionsView: View {
         }
         .ignoresSafeArea(.all)
         .frame(maxHeight: height)
-        
-        
         .padding([.bottom], 30)
-        .background(VisualEffectBlur().cornerRadius(60))
+        .background(VisualEffectBlur().cornerRadius(60).padding(.top, 100))
         .padding([.leading, .trailing], 120)
         .padding([.top], 30)
         

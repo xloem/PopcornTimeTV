@@ -64,20 +64,6 @@ class DetailViewModel: ObservableObject {
         }
     }
     
-    var autoSelectTorrent: Torrent? {
-        if let quality = Session.autoSelectQuality {
-            let sorted  = movie.torrents.sorted(by: <)
-            let torrent = quality == "Highest".localized ? sorted.last! : sorted.first!
-            return torrent
-        }
-        
-        if movie.torrents.count == 1 {
-            return movie.torrents[0]
-        }
-        
-        return nil
-    }
-    
     var backgroundUrl: URL {
         return URL(string: movie.largeBackgroundImage ?? "")!
     }

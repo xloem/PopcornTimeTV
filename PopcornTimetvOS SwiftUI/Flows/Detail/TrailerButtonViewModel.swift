@@ -11,12 +11,14 @@ import AVKit
 import XCDYouTubeKit
 import PopcornKit
 
-class TrailerButtonViewModel {
+class TrailerButtonViewModel: ObservableObject {
     var movie: Movie
     var trailerUrl: URL? // scrapped from youtube
+    var error: Binding<Error?>
     
     init(movie: Movie) {
         self.movie = movie
+        error = .constant(nil)
     }
     
     var _trailerVidePlayer: AVPlayer?
@@ -46,7 +48,11 @@ class TrailerButtonViewModel {
     }
     
     func loadTrailerUrl(_ completion: @escaping (URL) -> Void) {
-        guard let id = movie.trailerCode else { return }
+        self.error.wrappedValue = nil
+        guard let id = movie.trailerCode else {
+            self.error.wrappedValue = NSError(domain: "popcorn", code: 2, userInfo: [NSLocalizedDescriptionKey: "Video trailer not found!".localized])
+            return
+        }
         
         if let url = trailerUrl {
             completion(url)
@@ -54,11 +60,9 @@ class TrailerButtonViewModel {
         }
         
         XCDYouTubeClient.default().getVideoWithIdentifier(id) { (video, error) in
-            guard
-                let streamUrls = video?.streamURLs,
-                let qualities = Array(streamUrls.keys) as? [UInt]
-                else {
-                    return
+            guard let streamUrls = video?.streamURLs, let qualities = Array(streamUrls.keys) as? [UInt] else {
+                self.error.wrappedValue = error
+                return
             }
             
             let preferredVideoQualities = [XCDYouTubeVideoQuality.HD720.rawValue, XCDYouTubeVideoQuality.medium360.rawValue, XCDYouTubeVideoQuality.small240.rawValue]
@@ -71,7 +75,10 @@ class TrailerButtonViewModel {
                 }
             }
             
-            guard let url = videoUrl else { return }
+            guard let url = videoUrl else {
+                self.error.wrappedValue = error
+                return
+            }
             
             self.trailerUrl = url
             completion(url)

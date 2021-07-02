@@ -14,6 +14,7 @@ import UIKit
 struct DetailView: View {
     @StateObject var viewModel: DetailViewModel
     @State var showPlayer: Bool = false
+    @State var error: Error?
     
     @Environment(\.colorScheme) var colorScheme
     var isDark: Bool {
@@ -69,6 +70,7 @@ struct DetailView: View {
                             Spacer(minLength: 40)
                             HStack(spacing: 24) {
                                 TrailerButton(viewModel: viewModel.trailerModel)
+                                
                                 PlayButton(viewModel: viewModel)
 //                                seasonsButton
                                 watchlistButton
@@ -85,9 +87,20 @@ struct DetailView: View {
                 }
                 .padding(.leading, 100)
             }
+            if let error = error {
+                BannerView(error: error)
+                    .padding([.top, .trailing], 60)
+                    .transition(.move(edge: .top))
+                    .onAppear {
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 5) {
+                            self.error = nil
+                        }
+                    }
+            }
         }.onAppear {
-//            ThemeSongManager.shared.playMovieTheme(movie.title)
+            ThemeSongManager.shared.playMovieTheme(movie.title)
             viewModel.load()
+            viewModel.trailerModel.error = $error // bind error for displaying
         }.onDisappear {
             ThemeSongManager.shared.stopTheme()
         }
@@ -176,5 +189,7 @@ struct DetailView: View {
 struct DetailView_Previews: PreviewProvider {
     static var previews: some View {
         DetailView(viewModel: DetailViewModel(movie: Movie.dummy()))
+        
+        DetailView(viewModel: DetailViewModel(movie: Movie.dummy()), error: NSError(domain: "", code: 1, userInfo: [NSLocalizedDescriptionKey: "This is an error text example"]))
     }
 }

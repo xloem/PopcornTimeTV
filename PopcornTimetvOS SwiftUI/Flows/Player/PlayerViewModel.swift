@@ -14,7 +14,9 @@ import AVKit
 import MediaPlayer
 import SwiftUI
 
-class PlayerViewModel: NSObject, ObservableObject {
+
+
+class PlayerViewModel: NSObject, ObservableObject, UIGestureRecognizerDelegate {
     var media: Media
     private (set) var url: URL
     private (set) var mediaplayer = VLCMediaPlayer()
@@ -26,7 +28,6 @@ class PlayerViewModel: NSObject, ObservableObject {
     internal var nextEpisode: Episode?
     internal var startPosition: Float = 0.0
     private var idleWorkItem: DispatchWorkItem?
-    internal var shouldHideStatusBar = true
     private let NSNotFound: Int32 = -1
     internal var workItem: DispatchWorkItem?
     internal var torrentStatusChangeObserver: AnyObject?
@@ -38,7 +39,8 @@ class PlayerViewModel: NSObject, ObservableObject {
     @Published var isPlaying = false
     @Published var showControls = false
     @Published var showInfo = false
-
+    var presentationMode: Binding<PresentationMode>?
+    
     var audioProfile: EqualizerProfiles = .fullDynamicRange
     var audioProfileBinding: Binding<EqualizerProfiles> = .constant(.fullDynamicRange)
     var audioDelayBinding: Binding<Int> = .constant(0)
@@ -69,7 +71,6 @@ class PlayerViewModel: NSObject, ObservableObject {
         var bufferProgress: Float = 0
         var isScrubbing = false
         var scrubbingProgress: Float = 0
-        var isHidden = false
         var remainingTime: String = ""
         var elapsedTime: String = ""
         var scrubbing: String = ""
@@ -78,7 +79,7 @@ class PlayerViewModel: NSObject, ObservableObject {
     }
     @Published var progress = Progress()
     
-    init(media: Media, fromUrl: URL, localUrl: URL, directory: URL, streamer: PTTorrentStreamer) {
+    init(media: Media, fromUrl: URL, localUrl: URL, directory: URL, streamer: PTTorrentStreamer, testingMode: Bool = false) {
         self.media = media
         self.url = fromUrl
         self.localPathToMedia = localUrl
@@ -92,7 +93,7 @@ class PlayerViewModel: NSObject, ObservableObject {
         
         super.init()
         
-        if (!Simulator.isPreview) {
+        if (!testingMode) {
             prepare()
         }
         
@@ -187,16 +188,12 @@ class PlayerViewModel: NSObject, ObservableObject {
         idleWorkItem?.cancel()
     }
     
-    func playandPause() {
-        #if os(tvOS)
-            clickGesture()
-        #elseif os(iOS)
-            if mediaplayer.isPlaying {
-                mediaplayer.canPause ? mediaplayer.pause() : ()
-            } else {
-                mediaplayer.willPlay ? mediaplayer.play() : ()
-            }
-        #endif
+    @objc func playandPause() {
+        if isLoading {
+            return
+        }
+        
+        self.clickGesture()
     }
     
     func fastForward() {
@@ -260,10 +257,10 @@ class PlayerViewModel: NSObject, ObservableObject {
         }
     }
     
-    func clickGesture() {
+    @objc func clickGesture() {
         if progress.isScrubbing {
             endScrubbing()
-            
+
             // seek to desired position
             if mediaplayer.isSeekable && progress.progress != progress.scrubbingProgress {
                 let streamDuration = nowPlaying.streamDuration
@@ -276,6 +273,61 @@ class PlayerViewModel: NSObject, ObservableObject {
         } else {
             startScrubbing()
         }
+    }
+    
+    @objc func touchLocationDidChange(_ gesture: SiriRemoteGestureRecognizer) {
+        print("", gesture.touchLocation)
+        
+        progress.hint = .none
+        resetIdleTimer()
+        guard progress.isScrubbing && showControls && !progress.isBuffering else { return }
+        print(progress)
+        
+        switch gesture.touchLocation {
+        case .left:
+            if gesture.isClick && gesture.state == .ended {
+                rewind()
+                progress.hint = .none
+            }
+            if gesture.isLongPress {
+                rewindHeld(gesture)
+            } else if gesture.state != .ended {
+                progress.hint = .jumpBackward30
+            }
+        case .right:
+            if gesture.isClick && gesture.state == .ended {
+                fastForward()
+                progress.hint = .none
+            }
+            if gesture.isLongPress {
+                fastForwardHeld(gesture)
+            } else if gesture.state != .ended {
+                progress.hint = .jumpForward30
+            }
+        default: return
+        }
+    }
+    
+    func handlePositionSliderDrag(offset: Float) {
+        guard showControls && progress.isScrubbing else {
+            return
+        }
+        
+        progress.scrubbingProgress += offset
+        positionSliderDidDrag()
+    }
+    
+    func positionSliderDidDrag() {
+        let streamDuration = nowPlaying.streamDuration
+        let time = NSNumber(value: progress.scrubbingProgress * streamDuration)
+        let remainingTime = NSNumber(value: time.floatValue - streamDuration)
+        progress.remainingTime = VLCTime(number: remainingTime).stringValue
+        progress.scrubbing = VLCTime(number: time).stringValue
+        workItem?.cancel()
+        workItem = DispatchWorkItem { [weak self] in
+            self?.progress.screenshot = self?.nowPlaying.screenshotAtTime(time)
+        }
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.25, execute: workItem!)
     }
     
     func toggleControlsVisible() {
@@ -345,20 +397,7 @@ class PlayerViewModel: NSObject, ObservableObject {
         saveProgress(status: .finished)
         NotificationCenter.default.removeObserver(self, name: .PTTorrentStatusDidChange, object: nil)
         
-//        dismiss(animated: true)
-    }
-    
-    func positionSliderDidDrag() {
-        let streamDuration = nowPlaying.streamDuration
-        let time = NSNumber(value: progress.scrubbingProgress * streamDuration)
-        let remainingTime = NSNumber(value: time.floatValue - streamDuration)
-        progress.remainingTime = VLCTime(number: remainingTime).stringValue
-        progress.scrubbing = VLCTime(number: time).stringValue
-        workItem?.cancel()
-        workItem = DispatchWorkItem { [weak self] in
-            self?.progress.screenshot = self?.nowPlaying.screenshotAtTime(time)
-        }
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.25, execute: workItem!)
+        presentationMode?.wrappedValue.dismiss()
     }
 }
 
@@ -425,17 +464,5 @@ extension PlayerViewModel: VLCMediaPlayerDelegate {
         default:
             break
         }
-    }
-}
-
-
-
-public struct Simulator {
-    static var isPreview: Bool {
-        #if DEBUG
-        return ProcessInfo.processInfo.environment["XCODE_RUNNING_FOR_PREVIEWS"] == "1"
-        #else
-        return false
-        #endif
     }
 }

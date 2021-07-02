@@ -10,18 +10,16 @@ import SwiftUI
 
 @main
 struct PopcornTimetvOS_SwiftUIApp: App {
+    @State var tosAccepted = Session.tosAccepted
+    
     var body: some Scene {
         WindowGroup {
             NavigationView {
-                if !Session.tosAccepted {
-                    TermsOfServiceView()
+                if !tosAccepted {
+                    TermsOfServiceView(tosAccepted: $tosAccepted)
                 } else {
                     TabBarView()
-                }
-            }.onAppear {
-                let adjustedVolume = UserDefaults.standard.float(forKey: "themeSongVolume") * 0.25
-                if adjustedVolume == 0 {
-                    UserDefaults.standard.set(0.75, forKey: "themeSongVolume")
+//                    PlayerView_Previews.dummyPreview
                 }
             }
         }

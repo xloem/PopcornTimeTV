@@ -7,7 +7,6 @@
 //
 
 import Foundation
-import Reachability
 
 enum Session {
     @UserDefault(key: "tosAccepted", defaultValue: false)
@@ -19,8 +18,9 @@ enum Session {
     @UserDefault(key: "streamOnCellular", defaultValue: false)
     static var streamOnCellular: Bool
     
-    static var reachability: Reachability = .forInternetConnection()
-    
     @UserDefault(key: "removeCacheOnPlayerExit", defaultValue: false)
     static var removeCacheOnPlayerExit: Bool
+    
+    @UserDefault(key: "themeSongVolume", defaultValue: 0.75)
+    static var themeSongVolume: Float
 }

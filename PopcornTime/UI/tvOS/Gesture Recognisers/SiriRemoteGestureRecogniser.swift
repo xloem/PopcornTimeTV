@@ -138,3 +138,41 @@ extension UIEvent {
         return value
     }
 }
+
+
+class SiriRemoteButtonRecognizer: UIGestureRecognizer {
+    private(set) var isLongPress = false
+    private (set) var isLongTap = false
+    var isClick = false
+    var pressTypes: [UIPress.PressType] = [UIPress.PressType.select]
+    var detectedType: UIPress.PressType?
+    
+    
+    init(target: Any?, action: Selector?, allowedPressTypes: [UIPress.PressType] = [UIPress.PressType.select]) {
+        super.init(target: target, action: action)
+        allowedTouchTypes = [NSNumber(value: UITouch.TouchType.indirect.rawValue)]
+        self.allowedPressTypes = allowedPressTypes.map({ NSNumber(value: $0.rawValue )})
+        cancelsTouchesInView = false
+    }
+    
+    // MARK: Presses
+    
+    override func pressesBegan(_ presses: Set<UIPress>, with event: UIPressesEvent) {
+        guard let type = presses.first?.type, allowedPressTypes.contains(NSNumber(value: type.rawValue)) else { return }
+        isClick = true
+        detectedType = presses.first?.type
+    }
+    
+    override func pressesChanged(_ presses: Set<UIPress>, with event: UIPressesEvent) {
+        state = .changed
+    }
+    
+    override func pressesCancelled(_ presses: Set<UIPress>, with event: UIPressesEvent) {
+        state = .cancelled
+    }
+    
+    override func pressesEnded(_ presses: Set<UIPress>, with event: UIPressesEvent) {
+        guard isClick || isLongPress else { return }
+        state = .ended
+    }
+}

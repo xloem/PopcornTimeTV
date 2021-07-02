@@ -12,13 +12,11 @@ import Combine
 
 struct PlayButton: View {
     var viewModel: DetailViewModel
+    
     @State var preloadTorrentModel: PreloadTorrentViewModel?
     @State var playerModel: PlayerViewModel?
     @State var listenForReadToPlay: AnyCancellable?
     
-    @State var showChooseQualityAction: Bool = false
-    @State var noTorrentsFoundAlert: Bool = false
-    @State var showStreamOnCellularAlert = false
     @State var torrent: Torrent?
     
     @State var selection: Selection? = nil
@@ -53,41 +51,18 @@ struct PlayButton: View {
                 case nil: EmptyView()
                 }
             }
-            Button(action: {
-                if movie.torrents.count == 0 {
-                    self.noTorrentsFoundAlert = true
-                } else if let torrent = viewModel.autoSelectTorrent {
-                    playTorrent(torrent)
-                } else {
-                    showChooseQualityAction = true
-                }
-            }, label: {
+            
+            SelectTorrentQualityButton(media: movie) { torrent in
+                playTorrent(torrent)
+            } label: {
                 VStack {
                     VisualEffectBlur() {
                         Image("Play")
                     }
                     Text("Play".localized)
                 }
-            })
-            .frame(width: 142, height: 115)
-            .actionSheet(isPresented: $showChooseQualityAction) {
-                ActionSheet(title: Text("Choose Quality".localized),
-                            message: nil,
-                            buttons: chooseTorrentsButtons + [.cancel()]
-                )
             }
-            .alert(isPresented: $noTorrentsFoundAlert, content: {
-                Alert(title: Text("No torrents found".localized),
-                      message: Text("Torrents could not be found for the specified media.".localized),
-                      dismissButton: .cancel())
-            }).alert(isPresented: $showStreamOnCellularAlert, content: {
-                Alert(title: Text("Cellular Data is turned off for streaming".localized),
-                      message: nil,
-                      primaryButton: .default(Text("Turn On".localized)) {
-                        Session.streamOnCellular = true
-                      },
-                      secondaryButton: .cancel())
-            })
+            .frame(width: 142, height: 115)
         }
     }
     
@@ -102,19 +77,15 @@ struct PlayButton: View {
     }
     
     func playTorrent(_ torrent: Torrent) {
-        if UIDevice.current.hasCellularCapabilites && !Session.reachability.isReachableViaWiFi() && !Session.streamOnCellular {
-            self.showStreamOnCellularAlert = true
-        } else {
-            self.torrent = torrent
-            self.preloadTorrentModel = PreloadTorrentViewModel(torrent: torrent, media: movie)
-            self.listenForReadToPlay = self.preloadTorrentModel?.objectWillChange.sink(receiveValue: { _ in
-                if let playerModel = self.preloadTorrentModel?.playerModel {
-                    self.playerModel = playerModel
-                    selection = Selection.play
-                }
-            })
-            selection = Selection.preload
-        }
+        self.torrent = torrent
+        self.preloadTorrentModel = PreloadTorrentViewModel(torrent: torrent, media: movie)
+        self.listenForReadToPlay = self.preloadTorrentModel?.objectWillChange.sink(receiveValue: { _ in
+            if let playerModel = self.preloadTorrentModel?.playerModel {
+                self.playerModel = playerModel
+                selection = Selection.play
+            }
+        })
+        selection = Selection.preload
     }
 }
 

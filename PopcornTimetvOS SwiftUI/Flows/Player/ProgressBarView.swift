@@ -13,6 +13,7 @@ struct ProgressBarView: UIViewRepresentable {
     
     func makeUIView(context: Context) -> ProgressBar {
         let view = ProgressBar()
+//        view.isUserInteractionEnabled = false
         return view
     }
     

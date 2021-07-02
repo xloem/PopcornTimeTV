@@ -7,6 +7,11 @@
 //
 
 import UIKit
+import Reachability
+
+extension Session {
+    static var reachability: Reachability = .forInternetConnection()
+}
 
 extension UIDevice {
     var hasCellularCapabilites: Bool {

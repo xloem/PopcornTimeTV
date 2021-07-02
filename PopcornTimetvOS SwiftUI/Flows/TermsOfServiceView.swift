@@ -9,6 +9,7 @@
 import SwiftUI
 
 struct TermsOfServiceView: View {
+    @Binding var tosAccepted: Bool
     
     var body: some View {
         VStack {
@@ -29,6 +30,7 @@ struct TermsOfServiceView: View {
                 .frame(width: 400, height: 80)
                 Button(action: {
                     Session.tosAccepted = true
+                    tosAccepted = true
                 }, label: {
                     Text("Accept")
                 })
@@ -67,6 +69,6 @@ struct TermsOfServiceView: View {
 
 struct TermsOfServiceView_Previews: PreviewProvider {
     static var previews: some View {
-        TermsOfServiceView()
+        TermsOfServiceView(tosAccepted: .constant(false))
     }
 }

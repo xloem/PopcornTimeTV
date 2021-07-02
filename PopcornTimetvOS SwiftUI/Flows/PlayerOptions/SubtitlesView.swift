@@ -25,21 +25,15 @@ struct SubtitlesView: View {
     let enLocale = Locale.current.localizedString(forLanguageCode: "en")!
     let selectOther = "Select Other".localized
     
-    @Namespace private var namespace
-    @Environment(\.resetFocus) var resetFocus
-    
     var body: some View {
         HStack (alignment:.top, spacing: 0) {
             Spacer()
             languageSection
                 .frame(width: 390)
             delaySection
-//                .frame(width: 200)
             encodingSection
-//                .frame(width: 700)
             Spacer()
         }
-        .focusScope(namespace)
         .frame(maxHeight: 300)
     }
     
@@ -65,7 +59,7 @@ struct SubtitlesView: View {
                                             self.triggerRefresh.toggle()
                                         }
                                     }
-                                    .prefersDefaultFocus(subtitle.language == currentSubtitle?.language, in: namespace)
+//                                    .prefersDefaultFocus(subtitle.language == currentSubtitle?.language, in: namespace)
                                     .id(subtitle.language)
                                 }
                             }
@@ -73,7 +67,6 @@ struct SubtitlesView: View {
                         .onAppear(perform: {
                             self.subtitlesInView = self.generateSubtitles()
                             scroll.scrollTo(currentSubtitle?.language, anchor: .center)
-//                            resetFocus.callAsFunction(in: namespace)
                         })
                     }
                 }
@@ -123,7 +116,6 @@ struct SubtitlesView: View {
                                 self.currentEncoding = encodings[key]!
                                 self.triggerRefresh.toggle()
                             }
-                            .prefersDefaultFocus(currentEncoding == encodings[key], in: namespace)
                             .id(encodings[key])
                         }
                     }
