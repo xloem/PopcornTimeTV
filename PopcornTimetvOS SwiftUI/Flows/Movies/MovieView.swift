@@ -12,6 +12,7 @@ import PopcornKit
 
 struct MovieView: View {
     var movie: Movie
+    var lineLimit = 1
     
     var body: some View {
         VStack {
@@ -23,10 +24,15 @@ struct MovieView: View {
                 .aspectRatio(contentMode: .fit)
                 .cornerRadius(10)
                 .shadow(radius: 5)
-                .padding(.bottom, 5)
+//                .padding(.bottom, 5)
             Text(movie.title)
-                .lineLimit(2)
-                .frame(height: 80)
+                .font(.system(size: 28, weight: .medium))
+                .multilineTextAlignment(.center)
+                .lineLimit(lineLimit)
+                .shadow(color: .init(white: 0, opacity: 0.6), radius: 2, x: 0, y: 1)
+                .padding(0)
+                .zIndex(10)
+//                .frame(height: 80)
         }
     }
 }

@@ -122,8 +122,7 @@ struct PlayerView: View {
                                       audioProfile: viewModel.audioProfileBinding,
                                       subtitleDelay: viewModel.subtitleDelayBinding,
                                       subtitleEncoding: viewModel.subtitleEncodingBinding,
-                                      subtitle: viewModel.subtitleBinding,
-                                      namespace: namespace)
+                                      subtitle: viewModel.subtitleBinding)
 //                    .focusScope(namespace)
 //                    .focusable()
                     .prefersDefaultFocus(in: namespace)

@@ -11,10 +11,12 @@ import PopcornKit
 import AVKit
 
 class DetailViewModel: ObservableObject {
-    @Published var movie: Movie
+    var movie: Movie
     var error: Error?
+    
     @Published var isLoading = false
-    var didLoad = false
+    @Published var didLoad = false
+    
     var trailerModel: TrailerButtonViewModel
     var downloadModel: DownloadButtonViewModel
     
@@ -54,11 +56,11 @@ class DetailViewModel: ObservableObject {
                 print("crew\n", self.movie.crew.toJSON())
                 print("actors\n", self.movie.actors.toJSON())
                 group.leave()
-                self.isLoading = false
             }
             
             group.notify(queue: .main) {
                 self.didLoad = true
+                self.isLoading = false
                 print(self.movie.toJSON())
             }
         }
@@ -66,5 +68,17 @@ class DetailViewModel: ObservableObject {
     
     var backgroundUrl: URL {
         return URL(string: movie.largeBackgroundImage ?? "")!
+    }
+    
+    func playSongTheme() {
+        if let movie = movie as? Movie {
+            ThemeSongManager.shared.playMovieTheme(movie.title)
+        } else if let show = movie as? Show, let tvdbId = Int(show.tvdbId) {
+            ThemeSongManager.shared.playShowTheme(tvdbId)
+        }
+    }
+    
+    func stopTheme() {
+        ThemeSongManager.shared.stopTheme()
     }
 }

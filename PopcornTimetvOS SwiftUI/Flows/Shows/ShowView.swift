@@ -18,15 +18,15 @@ struct ShowView: View {
             KFImage(URL(string: show.smallCoverImage ?? ""))
                 .resizable()
                 .placeholder {
-                    Image("Movie Placeholder")
+                    Image("Episode Placeholder")
                 }
                 .aspectRatio(contentMode: .fit)
                 .cornerRadius(10)
                 .shadow(radius: 5)
                 .padding(.bottom, 5)
             Text(show.title)
-                .lineLimit(2)
-                .frame(height: 80)
+                .lineLimit(1)
+//                .frame(height: 80)
         }
     }
 }

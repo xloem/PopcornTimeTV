@@ -45,6 +45,7 @@ struct PlainNavigationLinkButton: View {
   var body: some View {
     configuration.label
       .scaleEffect(focused ? 1.1 : 1)
+      .foregroundColor(.init(white: 1, opacity: focused ? 1 : 0.667))
       .focusable(true)
       .animation(.easeOut, value: focused)
   }
@@ -70,11 +71,11 @@ struct PlainButton: View {
     configuration.label
       .scaleEffect(focused ? 1.1 : 1)
       .foregroundColor(.init(white: 1, opacity: focused ? 1 : 0.5))
-        .focusable(true, onFocusChange: { focused in
+      .focusable(true, onFocusChange: { focused in
             if (focused) {
                 onFocus()
             }
-        })
+      })
       .animation(.easeOut, value: focused)
   }
 }

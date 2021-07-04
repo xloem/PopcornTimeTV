@@ -26,12 +26,7 @@ struct DetailView: View {
     
     var body: some View {
         ZStack {
-            KFImage(viewModel.backgroundUrl)
-//                .resizable()
-                .aspectRatio(contentMode: .fill)
-                .padding(0)
-                .ignoresSafeArea()
-                .frame(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height)
+            backgroundImage
             Color(white: 0, opacity: 0.3)
                 .ignoresSafeArea()
             ScrollView {
@@ -82,10 +77,20 @@ struct DetailView: View {
                         Spacer()
                     }
                     .padding(.leading, 10)
-                    
-                    
                 }
                 .padding(.leading, 100)
+                
+                VStack {
+                    if movie.related.count > 0 {
+                        alsoWatchedSection
+                    }
+                    if movie.crew.count > 0 {
+                        crewSection
+                    }
+                }
+                .padding([.bottom, .top], 30)
+                .background(Color.init(white: 1, opacity: 0.3))
+                .padding(.top, 50)
             }
             if let error = error {
                 BannerView(error: error)
@@ -98,12 +103,21 @@ struct DetailView: View {
                     }
             }
         }.onAppear {
-            ThemeSongManager.shared.playMovieTheme(movie.title)
+            viewModel.playSongTheme()
             viewModel.load()
             viewModel.trailerModel.error = $error // bind error for displaying
         }.onDisappear {
-            ThemeSongManager.shared.stopTheme()
+            viewModel.stopTheme()
         }
+    }
+    
+    var backgroundImage: some View {
+        KFImage(viewModel.backgroundUrl)
+//                .resizable()
+            .aspectRatio(contentMode: .fill)
+            .padding(0)
+            .ignoresSafeArea()
+            .frame(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height)
     }
     
     
@@ -184,11 +198,77 @@ struct DetailView: View {
         })
         .frame(width: 142, height: 115)
     }
+    
+    var alsoWatchedSection: some View {
+        VStack (alignment: .leading) {
+            Text("Viewers Also Watched".localized)
+                .font(.callout)
+                .foregroundColor(.init(white: 1.0, opacity: 0.667)) // light text color
+                .padding(.leading, 90)
+                .padding(.top, 14)
+            ScrollView(.horizontal, showsIndicators: false) {
+                HStack() {
+                    Spacer(minLength: 90)
+                    ForEach(movie.related, id: \.self) { movie in
+                        NavigationLink(
+                            destination: DetailView(viewModel: DetailViewModel(movie: movie)),
+                            label: {
+                                MovieView(movie: movie, lineLimit: 1)
+                            })
+                            .buttonStyle(PlainNavigationLinkButtonStyle())
+                            .frame(maxWidth: 200)
+//                            .padding([.leading, .trailing], 5)
+                    }
+                }
+//                .background(Color.blue)
+            }
+//            .background(Color.gray)
+        }
+//        .background(Color.red)
+        .frame(height: 380)
+        .padding(0)
+    }
+    
+    var crewSection: some View {
+        let crew: [Person] = movie.actors + movie.crew
+        return VStack(alignment: .leading) {
+            Text("Cast & Crew".localized)
+                .font(.callout)
+                .foregroundColor(.init(white: 1.0, opacity: 0.667)) // light text color
+                .padding(.leading, 90)
+                .padding(.top, 14)
+            ScrollView(.horizontal, showsIndicators: false) {
+                HStack(alignment: .center, spacing: 90) {
+                    Spacer(minLength: 90)
+                    ForEach(0..<crew.count, id: \.self) { index in
+                        NavigationLink(
+                            destination: PersonDetailsView(viewModel: PersonDetailsViewModel(person: crew[index])),
+                            label: {
+                                PersonView(person: crew[index])
+                                    .frame(width: 220)
+//                                    .background(Color.blue)
+                            })
+                            .buttonStyle(PlainNavigationLinkButtonStyle())
+                    }
+//                    Spacer()
+                }
+//                .frame(height: 321)
+//                .background(Color.blue)
+                Spacer()
+            }
+            .frame(height: 321)
+//            .background(Color.gray)
+        }
+//        .background(Color.red)
+        .padding(0)
+    }
 }
 
 struct DetailView_Previews: PreviewProvider {
     static var previews: some View {
         DetailView(viewModel: DetailViewModel(movie: Movie.dummy()))
+//            .frame(height: 2000)
+            .previewLayout(.fixed(width: 2000, height: 2000))
         
         DetailView(viewModel: DetailViewModel(movie: Movie.dummy()), error: NSError(domain: "", code: 1, userInfo: [NSLocalizedDescriptionKey: "This is an error text example"]))
     }
