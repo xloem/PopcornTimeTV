@@ -20,7 +20,7 @@ struct ShowsView: View {
             LazyVGrid(columns: columns, spacing: 60) {
                 ForEach(viewModel.shows, id: \.self) { show in
                     NavigationLink(
-                        destination: EmptyView(),
+                        destination: ShowDetailsView(viewModel: ShowDetailsViewModel(show: show)),
                         label: {
                             ShowView(show: show)
                         })

@@ -10,7 +10,7 @@ import Foundation
 import PopcornKit
 import AVKit
 
-class DetailViewModel: ObservableObject {
+class MovieDetailsViewModel: ObservableObject {
     var movie: Movie
     var error: Error?
     
@@ -71,11 +71,7 @@ class DetailViewModel: ObservableObject {
     }
     
     func playSongTheme() {
-        if let movie = movie as? Movie {
-            ThemeSongManager.shared.playMovieTheme(movie.title)
-        } else if let show = movie as? Show, let tvdbId = Int(show.tvdbId) {
-            ThemeSongManager.shared.playShowTheme(tvdbId)
-        }
+        ThemeSongManager.shared.playMovieTheme(movie.title)
     }
     
     func stopTheme() {

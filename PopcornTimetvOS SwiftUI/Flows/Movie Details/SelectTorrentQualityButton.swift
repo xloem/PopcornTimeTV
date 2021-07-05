@@ -17,7 +17,7 @@ struct SelectTorrentQualityButton<Label>: View where Label : View {
     @State var showChooseQualityActionSheet = false
     @State var noTorrentsFoundAlert = false
     @State var showStreamOnCellularAlert = false
-
+    var onFocus: () -> Void = {}
     
     var body: some View {
         Button(action: {
@@ -32,7 +32,7 @@ struct SelectTorrentQualityButton<Label>: View where Label : View {
             }
         }, label: label)
         .frame(width: 142, height: 115)
-        .buttonStyle(TVButtonStyle())
+        .buttonStyle(TVButtonStyle(onFocus: onFocus))
         .actionSheet(isPresented: $showChooseQualityActionSheet) {
             ActionSheet(title: Text("Choose Quality".localized),
                         message: nil,

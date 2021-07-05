@@ -11,8 +11,8 @@ import PopcornKit
 import Kingfisher
 import UIKit
 
-struct DetailView: View {
-    @StateObject var viewModel: DetailViewModel
+struct MovieDetailsView: View {
+    @StateObject var viewModel: MovieDetailsViewModel
     @State var showPlayer: Bool = false
     @State var error: Error?
     
@@ -65,9 +65,7 @@ struct DetailView: View {
                             Spacer(minLength: 40)
                             HStack(spacing: 24) {
                                 TrailerButton(viewModel: viewModel.trailerModel)
-                                
                                 PlayButton(viewModel: viewModel)
-//                                seasonsButton
                                 watchlistButton
                                 watchedButton
                                 DownloadButton(viewModel: viewModel.downloadModel)
@@ -211,7 +209,7 @@ struct DetailView: View {
                     Spacer(minLength: 90)
                     ForEach(movie.related, id: \.self) { movie in
                         NavigationLink(
-                            destination: DetailView(viewModel: DetailViewModel(movie: movie)),
+                            destination: MovieDetailsView(viewModel: MovieDetailsViewModel(movie: movie)),
                             label: {
                                 MovieView(movie: movie, lineLimit: 1)
                             })
@@ -266,10 +264,10 @@ struct DetailView: View {
 
 struct DetailView_Previews: PreviewProvider {
     static var previews: some View {
-        DetailView(viewModel: DetailViewModel(movie: Movie.dummy()))
+        MovieDetailsView(viewModel: MovieDetailsViewModel(movie: Movie.dummy()))
 //            .frame(height: 2000)
             .previewLayout(.fixed(width: 2000, height: 2000))
         
-        DetailView(viewModel: DetailViewModel(movie: Movie.dummy()), error: NSError(domain: "", code: 1, userInfo: [NSLocalizedDescriptionKey: "This is an error text example"]))
+        MovieDetailsView(viewModel: MovieDetailsViewModel(movie: Movie.dummy()), error: NSError(domain: "", code: 1, userInfo: [NSLocalizedDescriptionKey: "This is an error text example"]))
     }
 }

@@ -11,7 +11,7 @@ import PopcornKit
 import Combine
 
 struct PlayButton: View {
-    var viewModel: DetailViewModel
+    var viewModel: MovieDetailsViewModel
     
     @State var preloadTorrentModel: PreloadTorrentViewModel?
     @State var playerModel: PlayerViewModel?
@@ -66,16 +66,6 @@ struct PlayButton: View {
         }
     }
     
-    var chooseTorrentsButtons: [Alert.Button] {
-        movie.torrents.map { torrent in
-            ActionSheet.Button.default(
-                Text(Image(uiImage: torrent.health.image.withRenderingMode(.alwaysOriginal))) +
-                Text(torrent.quality)) {
-                playTorrent(torrent)
-            }
-        }
-    }
-    
     func playTorrent(_ torrent: Torrent) {
         self.torrent = torrent
         self.preloadTorrentModel = PreloadTorrentViewModel(torrent: torrent, media: movie)
@@ -91,7 +81,7 @@ struct PlayButton: View {
 
 struct PlayButton_Previews: PreviewProvider {
     static var previews: some View {
-        PlayButton(viewModel: DetailViewModel(movie: Movie.dummy()))
+        PlayButton(viewModel: MovieDetailsViewModel(movie: Movie.dummy()))
             .buttonStyle(TVButtonStyle())
             .padding(40)
             .previewLayout(.fixed(width: 300, height: 300))

@@ -47,7 +47,7 @@ struct PersonDetailsView: View {
                 HStack(spacing: 40) {
                     ForEach(viewModel.movies, id: \.self) { movie in
                         NavigationLink(
-                            destination: DetailView(viewModel: DetailViewModel(movie: movie)),
+                            destination: MovieDetailsView(viewModel: MovieDetailsViewModel(movie: movie)),
                             label: {
                                 MovieView(movie: movie)
                                     .frame(width: 240)

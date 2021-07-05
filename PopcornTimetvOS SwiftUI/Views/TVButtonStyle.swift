@@ -10,21 +10,29 @@ import Foundation
 import SwiftUI
 
 struct TVButtonStyle: ButtonStyle {
-  func makeBody(configuration: Self.Configuration) -> some View {
-    TVButton(configuration: configuration)
-  }
+    var onFocus: () -> Void = {}
+    
+    func makeBody(configuration: Self.Configuration) -> some View {
+        TVButton(configuration: configuration, onFocus: onFocus)
+    }
 }
 
 struct TVButton: View {
-  @Environment(\.isFocused) var focused: Bool
-  let configuration: ButtonStyle.Configuration
-
-  var body: some View {
-    configuration.label
-        .scaleEffect(focused ? 1.1 : 1)
-        .focusable(true)
-        .font(.system(size: 23, weight: .medium))
-        .foregroundColor(focused ? .white : Color(white: 1, opacity: 0.6))
-        .animation(.easeOut, value: focused)
-  }
+    @Environment(\.isFocused) var focused: Bool
+    let configuration: ButtonStyle.Configuration
+    var onFocus: () -> Void = {}
+    
+    var body: some View {
+        return configuration.label
+            .scaleEffect(focused ? 1.1 : 1)
+            .focusable(true)
+            .font(.system(size: 23, weight: .medium))
+            .foregroundColor(focused ? .white : Color(white: 1, opacity: 0.6))
+            .animation(.easeOut, value: focused)
+            .onChange(of: focused) { newValue in
+                if newValue {
+                    onFocus()
+                }
+            }
+    }
 }
