@@ -11,7 +11,7 @@ import PopcornKit
 import AVKit
 
 class MovieDetailsViewModel: ObservableObject {
-    var movie: Movie
+    @Published var movie: Movie
     var error: Error?
     
     @Published var isLoading = false
