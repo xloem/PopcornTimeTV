@@ -82,8 +82,8 @@ struct MovieDetailsView: View {
                     if movie.related.count > 0 {
                         alsoWatchedSection
                     }
-                    if movie.crew.count > 0 {
-                        crewSection
+                    if movie.actors.count > 0 {
+                        ActorsCrewView(persons: movie.actors + movie.crew)
                     }
                 }
                 .padding([.bottom, .top], 30)
@@ -218,46 +218,13 @@ struct MovieDetailsView: View {
 //                            .padding([.leading, .trailing], 5)
                     }
                 }
+//                .padding() // on focus zoom will not be clipped
 //                .background(Color.blue)
             }
 //            .background(Color.gray)
         }
 //        .background(Color.red)
         .frame(height: 380)
-        .padding(0)
-    }
-    
-    var crewSection: some View {
-        let crew: [Person] = movie.actors + movie.crew
-        return VStack(alignment: .leading) {
-            Text("Cast & Crew".localized)
-                .font(.callout)
-                .foregroundColor(.init(white: 1.0, opacity: 0.667)) // light text color
-                .padding(.leading, 90)
-                .padding(.top, 14)
-            ScrollView(.horizontal, showsIndicators: false) {
-                HStack(alignment: .center, spacing: 90) {
-                    Spacer(minLength: 90)
-                    ForEach(0..<crew.count, id: \.self) { index in
-                        NavigationLink(
-                            destination: PersonDetailsView(viewModel: PersonDetailsViewModel(person: crew[index])),
-                            label: {
-                                PersonView(person: crew[index])
-                                    .frame(width: 220)
-//                                    .background(Color.blue)
-                            })
-                            .buttonStyle(PlainNavigationLinkButtonStyle())
-                    }
-//                    Spacer()
-                }
-//                .frame(height: 321)
-//                .background(Color.blue)
-                Spacer()
-            }
-            .frame(height: 321)
-//            .background(Color.gray)
-        }
-//        .background(Color.red)
         .padding(0)
     }
 }

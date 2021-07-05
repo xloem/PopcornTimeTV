@@ -79,6 +79,7 @@
 		23446ADF2680E8600049CC72 /* ProgressBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23446ADE2680E8600049CC72 /* ProgressBarView.swift */; };
 		237F28652692F6B900FE036C /* SeasonPickerViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 237F28642692F6B900FE036C /* SeasonPickerViewModel.swift */; };
 		237F28672692F91000FE036C /* SeasonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 237F28662692F91000FE036C /* SeasonView.swift */; };
+		237F286A2693503D00FE036C /* ActorsCrewView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 237F28692693503D00FE036C /* ActorsCrewView.swift */; };
 		2388FD54268F7D2100B51201 /* Session.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23313B3E267E3D7600774A85 /* Session.swift */; };
 		2388FD55268F7D2100B51201 /* Session.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23313B3E267E3D7600774A85 /* Session.swift */; };
 		2388FD56268F7DF700B51201 /* UserDefault.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23313B40267E3DC100774A85 /* UserDefault.swift */; };
@@ -612,6 +613,7 @@
 		23446ADE2680E8600049CC72 /* ProgressBarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgressBarView.swift; sourceTree = "<group>"; };
 		237F28642692F6B900FE036C /* SeasonPickerViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SeasonPickerViewModel.swift; sourceTree = "<group>"; };
 		237F28662692F91000FE036C /* SeasonView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SeasonView.swift; sourceTree = "<group>"; };
+		237F28692693503D00FE036C /* ActorsCrewView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActorsCrewView.swift; sourceTree = "<group>"; };
 		2388FD5A268F871F00B51201 /* BannerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BannerView.swift; sourceTree = "<group>"; };
 		2388FD5C2691C4E000B51201 /* PersonDetailsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersonDetailsView.swift; sourceTree = "<group>"; };
 		2388FD5E2691C50600B51201 /* PersonDetailsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersonDetailsViewModel.swift; sourceTree = "<group>"; };
@@ -1146,6 +1148,7 @@
 				23313B37267E3C2700774A85 /* PreloadTorrentView.swift */,
 				23446AC5267FAD000049CC72 /* PreloadTorrentViewModel.swift */,
 				2391BE7E26847B9800576CAD /* SelectTorrentQualityButton.swift */,
+				237F28692693503D00FE036C /* ActorsCrewView.swift */,
 			);
 			path = "Movie Details";
 			sourceTree = "<group>";
@@ -2513,6 +2516,7 @@
 				23446ACA26804AD20049CC72 /* TrailerButton.swift in Sources */,
 				23989FAC2687706C00FEDA41 /* IfModifier.swift in Sources */,
 				23989FA726865A3500FEDA41 /* PlayerOptionsView.swift in Sources */,
+				237F286A2693503D00FE036C /* ActorsCrewView.swift in Sources */,
 				23C96EE42685DBC40056455E /* RotateAnimation.swift in Sources */,
 				23313B22267E3AFB00774A85 /* PersonView.swift in Sources */,
 				2343A7692688AEFC00B824E7 /* ShowsViewModel.swift in Sources */,

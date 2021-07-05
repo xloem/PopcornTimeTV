@@ -66,8 +66,8 @@ struct ShowDetailsView: View {
                     if show.related.count > 0 {
                         alsoWatchedSection
                     }
-                    if show.crew.count > 0 {
-                        crewSection
+                    if show.actors.count > 0 {
+                        ActorsCrewView(persons: show.actors + show.crew)
                     }
                 }
                 .padding([.bottom, .top], 30)
@@ -187,6 +187,7 @@ struct ShowDetailsView: View {
 //                            .padding([.leading, .trailing], 5)
                     }
                 }
+                .padding() // on focus zoom will not be clipped
 //                .background(Color.blue)
             }
 //            .background(Color.gray)
@@ -196,39 +197,7 @@ struct ShowDetailsView: View {
         .padding(0)
     }
     
-    var crewSection: some View {
-        let crew: [Person] = show.actors + show.crew
-        return VStack(alignment: .leading) {
-            Text("Cast & Crew".localized)
-                .font(.callout)
-                .foregroundColor(.init(white: 1.0, opacity: 0.667)) // light text color
-                .padding(.leading, 90)
-                .padding(.top, 14)
-            ScrollView(.horizontal, showsIndicators: false) {
-                HStack(alignment: .center, spacing: 90) {
-                    Spacer(minLength: 90)
-                    ForEach(0..<crew.count, id: \.self) { index in
-                        NavigationLink(
-                            destination: PersonDetailsView(viewModel: PersonDetailsViewModel(person: crew[index])),
-                            label: {
-                                PersonView(person: crew[index])
-                                    .frame(width: 220)
-//                                    .background(Color.blue)
-                            })
-                            .buttonStyle(PlainNavigationLinkButtonStyle())
-                    }
-//                    Spacer()
-                }
-//                .frame(height: 321)
-//                .background(Color.blue)
-                Spacer()
-            }
-            .frame(height: 321)
-//            .background(Color.gray)
-        }
-//        .background(Color.red)
-        .padding(0)
-    }
+
 
     func change(to season: Int) {
 //        let localizedSeason = NumberFormatter.localizedString(from: NSNumber(value: season), number: .none)
