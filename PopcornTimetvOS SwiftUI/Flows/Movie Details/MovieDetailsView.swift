@@ -134,6 +134,9 @@ struct MovieDetailsView: View {
             ForEach(0..<items.count) { item in
                 items[item]
             }
+            
+            RatingView(rating: movie.rating)
+                .frame(width: 185, height: 33)
         }
     }
     
