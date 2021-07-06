@@ -29,9 +29,8 @@ struct PopcornTimetvOS_SwiftUIApp: App {
                                 EmptyView()
                         }
                         .hidden()
-                        if (!showOpenedMedia) {
-                            TabBarView()
-                        }
+                        
+                        TabBarView()
                     }.onOpenURL { url in
                         openUrl(url: url)
                     }

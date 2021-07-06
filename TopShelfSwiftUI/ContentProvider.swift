@@ -8,6 +8,7 @@
 
 import TVServices
 import PopcornKit
+import ObjectMapper
 
 class ContentProvider: TVTopShelfContentProvider {
 
@@ -56,7 +57,11 @@ class ContentProvider: TVTopShelfContentProvider {
         var components = URLComponents()
         components.scheme = "PopcornTimeSwiftUI"
         components.queryItems = [URLQueryItem(name: "action", value: toJSONString(media))]
-        item.playAction = .init(url: components.url!)
+        if let url = components.url {
+            item.playAction = TVTopShelfAction(url: url)
+            item.displayAction = TVTopShelfAction(url: url)
+        }
+        
         
         return item
     }

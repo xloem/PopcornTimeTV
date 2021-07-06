@@ -13,6 +13,8 @@
 		23025D8F267E6E1B00229559 /* PopcornKit.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 4D0F9D321E6F29E500860852 /* PopcornKit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		23025D93267E71BA00229559 /* MovieView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23025D92267E71BA00229559 /* MovieView.swift */; };
 		23025D95267EEC8000229559 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4D990E321DC4F028005CDE34 /* Images.xcassets */; };
+		23121F1D2694B6AC00D8126B /* PopcornKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4D0F9D321E6F29E500860852 /* PopcornKit.framework */; };
+		23121F1E2694B6AC00D8126B /* PopcornKit.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 4D0F9D321E6F29E500860852 /* PopcornKit.framework */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		232BB51E269450B3005448AE /* XCDYouTubeKit in Frameworks */ = {isa = PBXBuildFile; productRef = 232BB51D269450B3005448AE /* XCDYouTubeKit */; };
 		232BB5212694512C005448AE /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = 232BB5202694512C005448AE /* Alamofire */; };
 		232BB5242694562C005448AE /* PopcornTorrent in Frameworks */ = {isa = PBXBuildFile; productRef = 232BB5232694562C005448AE /* PopcornTorrent */; };
@@ -86,7 +88,7 @@
 		23446ADD2680E8240049CC72 /* UIActivityIndicatorViewStyle+Grey.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D37C4581E6DC9BD00845665 /* UIActivityIndicatorViewStyle+Grey.swift */; };
 		23446ADF2680E8600049CC72 /* ProgressBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23446ADE2680E8600049CC72 /* ProgressBarView.swift */; };
 		23507DC8269483310098CC12 /* ObjectMapper in Frameworks */ = {isa = PBXBuildFile; productRef = 23507DC7269483310098CC12 /* ObjectMapper */; };
-		237D2FE42694A576009884FB /* PopcornKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4D0F9D321E6F29E500860852 /* PopcornKit.framework */; };
+		2364708B2694B76E008743CB /* ObjectMapper in Frameworks */ = {isa = PBXBuildFile; productRef = 2364708A2694B76E008743CB /* ObjectMapper */; };
 		237F28652692F6B900FE036C /* SeasonPickerViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 237F28642692F6B900FE036C /* SeasonPickerViewModel.swift */; };
 		237F28672692F91000FE036C /* SeasonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 237F28662692F91000FE036C /* SeasonView.swift */; };
 		237F286A2693503D00FE036C /* ActorsCrewView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 237F28692693503D00FE036C /* ActorsCrewView.swift */; };
@@ -119,7 +121,6 @@
 		23E4976726947E1300175DEE /* TVServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 002682111CD0B76200F51D31 /* TVServices.framework */; };
 		23E4976A26947E1300175DEE /* ContentProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23E4976926947E1300175DEE /* ContentProvider.swift */; };
 		23E4976E26947E1300175DEE /* TopShelfSwiftUI.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 23E4976626947E1300175DEE /* TopShelfSwiftUI.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
-		23F59A792694820A008F455A /* ObjectMapper in Frameworks */ = {isa = PBXBuildFile; productRef = 23F59A782694820A008F455A /* ObjectMapper */; };
 		4AE98B91F909C34BCD60A851 /* Pods_PopcornTimetvOS.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3D92693A60D32B7994D9285D /* Pods_PopcornTimetvOS.framework */; };
 		4D0183A91DC3ACB500AB75B3 /* Locale+Langs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D0183A81DC3ACB400AB75B3 /* Locale+Langs.swift */; };
 		4D07E17C1E8C364F00457FCB /* Object.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D07E17B1E8C364F00457FCB /* Object.swift */; };
@@ -543,6 +544,17 @@
 				4D2543B51DACFBFE00149533 /* TopShelf.appex in Embed App Extensions */,
 			);
 			name = "Embed App Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		23121F1F2694B6AC00D8126B /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				23121F1E2694B6AC00D8126B /* PopcornKit.framework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 		23313B52267E4A3D00774A85 /* Embed Frameworks */ = {
@@ -1034,8 +1046,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				237D2FE42694A576009884FB /* PopcornKit.framework in Frameworks */,
-				23F59A792694820A008F455A /* ObjectMapper in Frameworks */,
+				2364708B2694B76E008743CB /* ObjectMapper in Frameworks */,
+				23121F1D2694B6AC00D8126B /* PopcornKit.framework in Frameworks */,
 				23E4976726947E1300175DEE /* TVServices.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -2063,6 +2075,7 @@
 				23E4976226947E1300175DEE /* Sources */,
 				23E4976326947E1300175DEE /* Frameworks */,
 				23E4976426947E1300175DEE /* Resources */,
+				23121F1F2694B6AC00D8126B /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
@@ -2071,7 +2084,7 @@
 			);
 			name = TopShelfSwiftUI;
 			packageProductDependencies = (
-				23F59A782694820A008F455A /* ObjectMapper */,
+				2364708A2694B76E008743CB /* ObjectMapper */,
 			);
 			productName = TopShelfSwiftUI;
 			productReference = 23E4976626947E1300175DEE /* TopShelfSwiftUI.appex */;
@@ -4081,7 +4094,7 @@
 			package = 232BB52A26946B47005448AE /* XCRemoteSwiftPackageReference "ObjectMapper" */;
 			productName = ObjectMapper;
 		};
-		23F59A782694820A008F455A /* ObjectMapper */ = {
+		2364708A2694B76E008743CB /* ObjectMapper */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 232BB52A26946B47005448AE /* XCRemoteSwiftPackageReference "ObjectMapper" */;
 			productName = ObjectMapper;
