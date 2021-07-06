@@ -7,6 +7,7 @@ import SwiftyJSON
 #if os(iOS)
     import SafariServices
 #endif
+import UIKit
 
 open class TraktManager: NetworkManager {
     
@@ -589,7 +590,7 @@ struct TraktContext: MapContext {}
 
 // MARK: Trakt OAuth
 
-@objc public protocol TraktManagerDelegate: class {
+@objc public protocol TraktManagerDelegate: AnyObject {
     /// Called when a user has successfully logged in.
     @objc optional func authenticationDidSucceed()
     

@@ -2,7 +2,7 @@
 
 import Alamofire
 import Foundation
-import Locksmith
+//import Locksmith
 
 enum OAuthGrantType: String {
     case Code = "authorization_code"
@@ -16,7 +16,7 @@ enum OAuthGrantType: String {
  
  OAuth credentials can be stored in the user's keychain, and retrieved on subsequent launches.
  */
-class OAuthCredential: NSObject, NSCoding {
+class OAuthCredential: NSObject, Codable {
     
     /// Service name for storing the credential.
     private static let service = "OAuthCredentialService"
@@ -222,7 +222,12 @@ class OAuthCredential: NSObject, NSCoding {
         withIdentifier identifier: String,
         accessibility: AnyObject = kSecAttrAccessibleWhenUnlocked
         ) throws {
-        return try Locksmith.updateData(data: ["credential": NSKeyedArchiver.archivedData(withRootObject: self)], forUserAccount: identifier, inService: OAuthCredential.service)
+        
+        if let data = try? JSONEncoder().encode(self) {
+            Session.oauthCredentials = data
+        }
+        
+//        return try Locksmith.updateData(data: ["credential": NSKeyedArchiver.archivedData(withRootObject: self)], forUserAccount: identifier, inService: OAuthCredential.service)
     }
     
     /**
@@ -234,7 +239,11 @@ class OAuthCredential: NSObject, NSCoding {
      */
     init?(identifier: String) {
         
-        guard let result = Locksmith.loadDataForUserAccount(userAccount: identifier, inService: OAuthCredential.service)?["credential"] as? Data, let credential = NSKeyedUnarchiver.unarchiveObject(with: result) as? OAuthCredential else { return nil }
+        guard let data = Session.oauthCredentials,
+              let credential = try? JSONDecoder().decode(Self.self, from: data) else {
+             return nil
+        }
+//        guard let result = Locksmith.loadDataForUserAccount(userAccount: identifier, inService: OAuthCredential.service)?["credential"] as? Data, let credential = NSKeyedUnarchiver.unarchiveObject(with: result) as? OAuthCredential else { return nil }
         
         self.accessToken = credential.accessToken
         self.expiration = credential.expiration
@@ -251,23 +260,24 @@ class OAuthCredential: NSObject, NSCoding {
       - Throws: Error if deleting the credential fails.
      */
     class func delete(withIdentifier identifier: String) throws {
-        return try Locksmith.deleteDataForUserAccount(userAccount: identifier, inService: service)
+        Session.oauthCredentials = nil
+//        return try Locksmith.deleteDataForUserAccount(userAccount: identifier, inService: service)
     }
     
     // MARK: - NSCoding
     
-    func encode(with aCoder: NSCoder) {
-        aCoder.encode(accessToken, forKey: "accessToken")
-        aCoder.encode(tokenType, forKey: "tokenType")
-        aCoder.encode(refreshToken, forKey: "refreshToken")
-        aCoder.encode(expiration, forKey: "expiration")
-    }
+//    func encode(with aCoder: NSCoder) {
+//        aCoder.encode(accessToken, forKey: "accessToken")
+//        aCoder.encode(tokenType, forKey: "tokenType")
+//        aCoder.encode(refreshToken, forKey: "refreshToken")
+//        aCoder.encode(expiration, forKey: "expiration")
+//    }
     
-    required init(coder aDecoder: NSCoder) {
-        accessToken = aDecoder.decodeObject(forKey: "accessToken") as! String
-        tokenType = aDecoder.decodeObject(forKey: "tokenType") as! String
-        refreshToken = aDecoder.decodeObject(forKey: "refreshToken") as? String
-        expiration = aDecoder.decodeObject(forKey: "expiration") as? Date
-        super.init()
-    }
+//    required init(coder aDecoder: NSCoder) {
+//        accessToken = aDecoder.decodeObject(forKey: "accessToken") as! String
+//        tokenType = aDecoder.decodeObject(forKey: "tokenType") as! String
+//        refreshToken = aDecoder.decodeObject(forKey: "refreshToken") as? String
+//        expiration = aDecoder.decodeObject(forKey: "expiration") as? Date
+//        super.init()
+//    }
 }

@@ -51,8 +51,8 @@ end
 def kitPods
 #    pod 'Alamofire', '~> 4.9.0'
 #    pod 'ObjectMapper', '~> 3.5.0'
-    pod 'SwiftyJSON', '~> 5.0.0'
-    pod 'Locksmith', '~> 4.0.0'
+#    pod 'SwiftyJSON', '~> 5.0.0'
+#    pod 'Locksmith', '~> 4.0.0'
 end
 
 target 'PopcornKit tvOS' do

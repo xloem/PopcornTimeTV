@@ -102,11 +102,13 @@ struct PlayerView: View {
                     break
                 }
             })
-//            .onExitCommand {
+            .onExitCommand {
+                viewModel.stop()
+                presentationMode.wrappedValue.dismiss()
 //                withAnimation {
 //                    viewModel.showInfo = true
 //                }
-//            }
+            }
             
 //            dimmerView
             controlsView

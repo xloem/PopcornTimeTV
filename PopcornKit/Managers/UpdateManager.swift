@@ -3,7 +3,7 @@
 import Foundation
 import Alamofire
 import SwiftyJSON
-
+import UIKit
 /**
  A manager class that automatically looks for new releases from github and presents them to the user.
  */
@@ -34,13 +34,17 @@ public final class UpdateManager: NSObject {
     /// The version that the user does not want installed. If the user has never clicked "Skip this version" this variable will be `nil`, otherwise it will be the last version that the user opted not to install.
     private var skipReleaseVersion: VersionString? {
         get {
-            guard let data = UserDefaults.standard.data(forKey: "skipReleaseVersion") else { return nil }
-            return VersionString.unarchive(data)
+            guard let data = Session.skipReleaseVersion,
+                  let version = try? JSONDecoder().decode(VersionString.self, from: data)
+            else {
+                return nil
+            }
+            return version
         } set {
             if let newValue = newValue {
-                UserDefaults.standard.set(newValue.archived(), forKey: "skipReleaseVersion")
+                Session.skipReleaseVersion = try? JSONEncoder().encode(newValue)
             } else {
-                UserDefaults.standard.removeObject(forKey: "skipReleaseVersion")
+                Session.skipReleaseVersion = nil
             }
         }
     }
@@ -119,7 +123,7 @@ public final class UpdateManager: NSObject {
     }
 }
 
-internal class VersionString: NSObject, NSCoding {
+internal struct VersionString: Codable {
     
     enum ReleaseType: String {
         case beta = "Beta"
@@ -128,7 +132,20 @@ internal class VersionString: NSObject, NSCoding {
     
     let date: Date
     let buildNumber: String
-    let releaseType: ReleaseType
+    var releaseType: ReleaseType {
+        let components = buildNumber.components(separatedBy: ".")
+        if let first = components.first, let _ = components[safe: 1], let _ = components[safe: 2] {
+            if first == "0" // Beta release. Format will be 0.<major>.<minor>-<patch>.
+            {
+                return .beta
+            } else // Stable release. Format will be <major>.<minor>.<patch>.
+            {
+                return .stable
+            }
+        }
+        
+        return .beta
+    }
     
     init?(_ string: String, _ dateString: String) {
         self.buildNumber = string
@@ -137,44 +154,32 @@ internal class VersionString: NSObject, NSCoding {
             formatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ssZ"
             return formatter.date(from: dateString)!
         }()
-        
-        let components = string.components(separatedBy: ".")
-        if let first = components.first, let _ = components[safe: 1], let _ = components[safe: 2] {
-            if first == "0" // Beta release. Format will be 0.<major>.<minor>-<patch>.
-            {
-                self.releaseType = .beta
-            } else // Stable release. Format will be <major>.<minor>.<patch>.
-            {
-                self.releaseType = .stable
-            }
-            return
-        }
         return nil
     }
     
-    func encode(with aCoder: NSCoder) {
-        aCoder.encode(date, forKey: "date")
-        aCoder.encode(buildNumber, forKey: "buildNumber")
-        aCoder.encode(releaseType.rawValue, forKey: "releaseType")
-    }
+//    func encode(with aCoder: NSCoder) {
+//        aCoder.encode(date, forKey: "date")
+//        aCoder.encode(buildNumber, forKey: "buildNumber")
+//        aCoder.encode(releaseType.rawValue, forKey: "releaseType")
+//    }
+//
+//    required init?(coder aDecoder: NSCoder) {
+//        guard let date = aDecoder.decodeObject(forKey: "date") as? Date,
+//            let buildNumber = aDecoder.decodeObject(forKey: "buildNumber") as? String,
+//            let releaseTypeRawValue = aDecoder.decodeObject(forKey: "releaseType") as? String,
+//            let releaseType = ReleaseType(rawValue: releaseTypeRawValue) else { return nil }
+//        self.date = date
+//        self.buildNumber = buildNumber
+//        self.releaseType = releaseType
+//    }
     
-    required init?(coder aDecoder: NSCoder) {
-        guard let date = aDecoder.decodeObject(forKey: "date") as? Date,
-            let buildNumber = aDecoder.decodeObject(forKey: "buildNumber") as? String,
-            let releaseTypeRawValue = aDecoder.decodeObject(forKey: "releaseType") as? String,
-            let releaseType = ReleaseType(rawValue: releaseTypeRawValue) else { return nil }
-        self.date = date
-        self.buildNumber = buildNumber
-        self.releaseType = releaseType
-    }
-    
-    func archived() -> Data {
-        return NSKeyedArchiver.archivedData(withRootObject: self)
-    }
-    
-    class func unarchive(_ data: Data) -> VersionString? {
-        return NSKeyedUnarchiver.unarchiveObject(with: data) as? VersionString
-    }
+//    func archived() -> Data {
+//        return NSKeyedArchiver.archivedData(withRootObject: self)
+//    }
+//    
+//    class func unarchive(_ data: Data) -> VersionString? {
+//        return NSKeyedUnarchiver.unarchiveObject(with: data) as? VersionString
+//    }
 }
 
 internal func >(lhs: VersionString, rhs: VersionString) -> Bool {
