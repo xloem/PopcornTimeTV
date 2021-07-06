@@ -8,9 +8,9 @@
 
 import Foundation
 import MediaPlayer
-import AlamofireImage
 import TVVLCKit
 import PopcornKit
+import Kingfisher
 
 class NowPlayingController {
     private (set) var mediaplayer: VLCMediaPlayer
@@ -90,18 +90,32 @@ class NowPlayingController {
                           MPNowPlayingInfoPropertyPlaybackRate: Double(mediaplayer.rate),
                           MPMediaItemPropertyMediaType: MPMediaType.movie.rawValue]
         
-        if let image = media.mediumCoverImage ?? media.mediumBackgroundImage, let request = try? URLRequest(url: image, method: .get) {
-            ImageDownloader.default.download(request) { (response) in
-                guard let image = response.result.value else { return }
-                if #available(iOS 10.0, tvOS 10.0, *) {
-                    self.nowPlayingInfo?[MPMediaItemPropertyArtwork] = MPMediaItemArtwork(boundsSize: image.size) { (_) -> UIImage in
-                        return image
-                    }
-                } else {
-                    self.nowPlayingInfo?[MPMediaItemPropertyArtwork] = MPMediaItemArtwork(image: image)
+        if let image = media.mediumCoverImage ?? media.mediumBackgroundImage, let imageUrl = URL(string: image) {
+            let imageResouce = ImageResource(downloadURL: imageUrl)
+            KingfisherManager.shared.retrieveImage(with: imageResouce) { result in
+                guard let image = result.value?.image else {
+                    return
+                }
+
+                self.nowPlayingInfo?[MPMediaItemPropertyArtwork] = MPMediaItemArtwork(boundsSize: image.size) { (_) -> UIImage in
+                    return image
                 }
             }
         }
+        
+        
+//        if let image = media.mediumCoverImage ?? media.mediumBackgroundImage, let request = try? URLRequest(url: image, method: .get) {
+//            ImageDownloader.default.download(request) { (response) in
+//                guard let image = response.result.value else { return }
+//                if #available(iOS 10.0, tvOS 10.0, *) {
+//                    self.nowPlayingInfo?[MPMediaItemPropertyArtwork] = MPMediaItemArtwork(boundsSize: image.size) { (_) -> UIImage in
+//                        return image
+//                    }
+//                } else {
+//                    self.nowPlayingInfo?[MPMediaItemPropertyArtwork] = MPMediaItemArtwork(image: image)
+//                }
+//            }
+//        }
     }
     
     func remoteControlReceived(with event: UIEvent?) {

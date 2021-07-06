@@ -5,17 +5,17 @@ source 'https://github.com/PopcornTimeTV/Specs'
 
 def pods
 #    pod 'PopcornTorrent', :git => 'https://github.com/portellaa/PopcornTorrent' #, '~> 1.3.16'
-    pod 'PopcornTorrent', '~> 1.3.0'
+#    pod 'PopcornTorrent', '~> 1.3.0'
 #    pod 'PopcornTorrent',  :path => 'PopcornTorrent.podspec'#, '~> 1.3.16'
 #    pod 'XCDYouTubeKit', '~> 2.15.2'
-    pod 'XCDYouTubeKit', :git => 'https://github.com/hinge-agency/XCDYouTubeKit.git', :branch => 'fix/issue-534-XCDYouTubeVideoErrorDomain-error-code-3'
-    pod 'Alamofire', '~> 4.9.0'
-    pod 'AlamofireImage', '~> 3.5.0'
+#    pod 'XCDYouTubeKit', :git => 'https://github.com/hinge-agency/XCDYouTubeKit.git', :branch => 'fix/issue-534-XCDYouTubeVideoErrorDomain-error-code-3'
+#    pod 'Alamofire', '~> 4.9.0'
+#    pod 'AlamofireImage', '~> 3.5.0'
     pod 'SwiftyTimer', '~> 2.1.0'
     pod 'FloatRatingView', '~> 3.0.1'
     pod 'Reachability', :git => 'https://github.com/tonymillion/Reachability'
     pod 'MarqueeLabel', '~> 4.0.0'
-    pod 'ObjectMapper', '~> 3.5.0'
+#    pod 'ObjectMapper', '~> 3.5.0'
 end
 
 target 'PopcornTimeiOS' do
@@ -41,18 +41,16 @@ target 'PopcornTimetvOS SwiftUI' do
     pods
     pod 'TvOSMoreButton', '~> 1.2.0'
     pod 'TVVLCKit', '~> 3.3.16'
-    pod 'MBCircularProgressBar', '~> 0.3.5-1'
-    pod 'Kingfisher', '~> 6.3.0'
 end
 
 target 'TopShelf' do
     platform :tvos, '14.5'
-    pod 'ObjectMapper', '~> 3.5.0'
+#    pod 'ObjectMapper', '~> 3.5.0'
 end
 
 def kitPods
-    pod 'Alamofire', '~> 4.9.0'
-    pod 'ObjectMapper', '~> 3.5.0'
+#    pod 'Alamofire', '~> 4.9.0'
+#    pod 'ObjectMapper', '~> 3.5.0'
     pod 'SwiftyJSON', '~> 5.0.0'
     pod 'Locksmith', '~> 4.0.0'
 end

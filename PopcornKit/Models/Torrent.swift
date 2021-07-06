@@ -2,6 +2,7 @@
 
 import Foundation
 import ObjectMapper
+import UIKit
 
 /**
  Health of a torrent.
