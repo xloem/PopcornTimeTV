@@ -55,16 +55,16 @@ def kitPods
 #    pod 'Locksmith', '~> 4.0.0'
 end
 
-target 'PopcornKit tvOS' do
-    platform :tvos, '14.5'
-    kitPods
-end
-
-target 'PopcornKit iOS' do
-    platform :ios, '14.5'
-    kitPods
-    pod 'google-cast-sdk', '~> 4.4'
-end
+# target 'PopcornKit tvOS' do
+#     platform :tvos, '14.5'
+#     kitPods
+# end
+#
+# target 'PopcornKit iOS' do
+#     platform :ios, '14.5'
+#     kitPods
+#     pod 'google-cast-sdk', '~> 4.4'
+# end
 
 post_install do |installer|
     installer.pods_project.targets.each do |target|

@@ -4,8 +4,8 @@ import Foundation
 import ObjectMapper
 
 private struct Static {
-    static var episodeInstance: WatchedlistManager<Episode>? = nil
-    static var movieInstance: WatchedlistManager<Movie>? = nil
+    static var episodeInstance: WatchedlistManager<Episode>? = WatchedlistManager<Episode>()
+    static var movieInstance: WatchedlistManager<Movie>? = WatchedlistManager<Movie>()
 }
 
 /// Class for managing a users watch history. **Only available for movies, and episodes**.
@@ -15,21 +15,15 @@ open class WatchedlistManager<N: Media & Hashable> {
     
     /// Creates new instance of WatchedlistManager class with type of Episodes.
     public class var episode: WatchedlistManager<Episode> {
-        DispatchQueue.once(token: "EpisodeWatchedlist") {
-            Static.episodeInstance = WatchedlistManager<Episode>()
-        }
         return Static.episodeInstance!
     }
     
     /// Creates new instance of WatchlistManager class with type of Movies.
     public class var movie: WatchedlistManager<Movie> {
-        DispatchQueue.once(token: "MovieWatchedlist") {
-            Static.movieInstance = WatchedlistManager<Movie>()
-        }
         return Static.movieInstance!
     }
     
-    private init?() {
+    fileprivate init?() {
         switch N.self {
         case is Movie.Type:
             currentType = .movies
@@ -150,7 +144,7 @@ open class WatchedlistManager<N: Media & Hashable> {
                 let ids = media.map({ $0.id })
                 let progress = Array(dict.values)
                 
-                UserDefaults.standard.set(Dictionary<String, Float>(zip(ids, progress)), forKey: "\(self.currentType.rawValue)Progress")
+                UserDefaults.standard.set(Dictionary<String, Float>(uniqueKeysWithValues: zip(ids, progress)), forKey: "\(self.currentType.rawValue)Progress")
                 
                 completion?(dict)
             }

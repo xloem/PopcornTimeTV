@@ -1,5 +1,5 @@
 
-
+import Foundation
 import ObjectMapper
 
 open class MovieManager: NetworkManager {

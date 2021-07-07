@@ -4,8 +4,8 @@ import Foundation
 import ObjectMapper
 
 private struct Static {
-    static var movieInstance: WatchlistManager<Movie>? = nil
-    static var showInstance: WatchlistManager<Show>? = nil
+    static var movieInstance: WatchlistManager<Movie>? = WatchlistManager<Movie>()
+    static var showInstance: WatchlistManager<Show>? = WatchlistManager<Show>()
 }
 
 typealias jsonArray = [[String : Any]]
@@ -17,21 +17,15 @@ open class WatchlistManager<N: Media> {
     
     /// Creates new instance of WatchlistManager class with type of Shows.
     public class var show: WatchlistManager<Show> {
-        DispatchQueue.once(token: "ShowWatchlist") {
-            Static.showInstance = WatchlistManager<Show>()
-        }
         return Static.showInstance!
     }
     
     /// Creates new instance of WatchlistManager class with type of Movies.
     public class var movie: WatchlistManager<Movie> {
-        DispatchQueue.once(token: "MovieWatchlist") {
-            Static.movieInstance = WatchlistManager<Movie>()
-        }
         return Static.movieInstance!
     }
     
-    private init?() {
+    fileprivate init?() {
         switch N.self {
         case is Movie.Type:
             currentType = .movies
