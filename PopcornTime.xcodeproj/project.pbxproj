@@ -101,8 +101,6 @@
 		23989FAD2687B83C00FEDA41 /* NSNotificationName+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4DE6FDEE1F04256B00A7F274 /* NSNotificationName+Extension.swift */; };
 		23C96EE22685B40E0056455E /* DownloadProgressView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23C96EE12685B40E0056455E /* DownloadProgressView.swift */; };
 		23C96EE42685DBC40056455E /* RotateAnimation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23C96EE32685DBC40056455E /* RotateAnimation.swift */; };
-		23C96EE72685E8600056455E /* ExceptionCatcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23C96EE62685E8600056455E /* ExceptionCatcher.swift */; };
-		23C96EEA2685E92E0056455E /* PCTTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 23C96EE92685E92E0056455E /* PCTTest.m */; };
 		23D2B398269586810077BBED /* Reachability in Frameworks */ = {isa = PBXBuildFile; productRef = 23D2B397269586810077BBED /* Reachability */; };
 		23D2B39B269587BE0077BBED /* MarqueeLabel in Frameworks */ = {isa = PBXBuildFile; productRef = 23D2B39A269587BE0077BBED /* MarqueeLabel */; };
 		23D2B39E269588380077BBED /* TvOSMoreButton in Frameworks */ = {isa = PBXBuildFile; productRef = 23D2B39D269588380077BBED /* TvOSMoreButton */; };
@@ -534,10 +532,6 @@
 		23989FAB2687706C00FEDA41 /* IfModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IfModifier.swift; sourceTree = "<group>"; };
 		23C96EE12685B40E0056455E /* DownloadProgressView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DownloadProgressView.swift; sourceTree = "<group>"; };
 		23C96EE32685DBC40056455E /* RotateAnimation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RotateAnimation.swift; sourceTree = "<group>"; };
-		23C96EE52685E8270056455E /* ExceptionCatcher.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ExceptionCatcher.h; sourceTree = "<group>"; };
-		23C96EE62685E8600056455E /* ExceptionCatcher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExceptionCatcher.swift; sourceTree = "<group>"; };
-		23C96EE82685E92E0056455E /* PopcornTimetvOS SwiftUI-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "PopcornTimetvOS SwiftUI-Bridging-Header.h"; sourceTree = "<group>"; };
-		23C96EE92685E92E0056455E /* PCTTest.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PCTTest.m; sourceTree = "<group>"; };
 		23D2B39F26959C910077BBED /* StarRatingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StarRatingView.swift; sourceTree = "<group>"; };
 		23E4976626947E1300175DEE /* TopShelf.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = TopShelf.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		23E4976926947E1300175DEE /* ContentProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentProvider.swift; sourceTree = "<group>"; };
@@ -930,10 +924,6 @@
 				23313B45267E3DF600774A85 /* JSONDecoder+KeyPath.swift */,
 				23313B40267E3DC100774A85 /* UserDefault.swift */,
 				23313B4A267E409700774A85 /* Result.swift */,
-				23C96EE52685E8270056455E /* ExceptionCatcher.h */,
-				23C96EE62685E8600056455E /* ExceptionCatcher.swift */,
-				23C96EE92685E92E0056455E /* PCTTest.m */,
-				23C96EE82685E92E0056455E /* PopcornTimetvOS SwiftUI-Bridging-Header.h */,
 			);
 			path = Access;
 			sourceTree = "<group>";
@@ -1985,7 +1975,6 @@
 				2343A7662688AD5000B824E7 /* SearchViewModel.swift in Sources */,
 				23313B34267E3C0000774A85 /* UpNextView.swift in Sources */,
 				2343A7612688718300B824E7 /* Subtitle + Identifiable.swift in Sources */,
-				23C96EEA2685E92E0056455E /* PCTTest.m in Sources */,
 				23313B2C267E3BAC00774A85 /* EpisodesView.swift in Sources */,
 				23446ADD2680E8240049CC72 /* UIActivityIndicatorViewStyle+Grey.swift in Sources */,
 				23313B12267E3A3900774A85 /* MoviesView.swift in Sources */,
@@ -2004,7 +1993,6 @@
 				23313B2E267E3BD500774A85 /* InfoView.swift in Sources */,
 				23446ADB2680E7BB0049CC72 /* ProgressBar.swift in Sources */,
 				23446ACE26804F9F0049CC72 /* PlayButton.swift in Sources */,
-				23C96EE72685E8600056455E /* ExceptionCatcher.swift in Sources */,
 				23313B41267E3DC100774A85 /* UserDefault.swift in Sources */,
 				23989FAD2687B83C00FEDA41 /* NSNotificationName+Extension.swift in Sources */,
 				23313B16267E3A7100774A85 /* WatchlistView.swift in Sources */,
@@ -2499,7 +2487,6 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
-				SWIFT_OBJC_BRIDGING_HEADER = "PopcornTimetvOS SwiftUI/Access/PopcornTimetvOS SwiftUI-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 3;
@@ -2541,7 +2528,6 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "tapp.PopcornTimetvOS-SwiftUI";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
-				SWIFT_OBJC_BRIDGING_HEADER = "PopcornTimetvOS SwiftUI/Access/PopcornTimetvOS SwiftUI-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 3;
 				TVOS_DEPLOYMENT_TARGET = 14.5;
