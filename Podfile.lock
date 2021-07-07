@@ -1,80 +1,35 @@
 PODS:
-  - 1PasswordExtension (1.8.6)
-  - Alamofire (4.9.1)
-  - AlamofireNetworkActivityIndicator (2.4.0):
-    - Alamofire (~> 4.8)
-  - FloatRatingView (3.0.1)
   - google-cast-sdk (4.6.1):
     - google-cast-sdk/Core (= 4.6.1)
     - Protobuf (~> 3.13)
   - google-cast-sdk/Core (4.6.1):
     - Protobuf (~> 3.13)
-  - MarqueeLabel (4.0.5)
-  - MBCircularProgressBar (0.3.5)
   - MobileVLCKit (3.3.16.3)
   - OBSlider (1.1.1)
   - Protobuf (3.17.0)
-  - Reachability (3.2)
-  - SwiftyTimer (2.1.0)
-  - TvOSMoreButton (1.2.3)
   - TVVLCKit (3.3.16)
 
 DEPENDENCIES:
-  - 1PasswordExtension (~> 1.8.4)
-  - AlamofireNetworkActivityIndicator (~> 2.4.0)
-  - FloatRatingView (~> 3.0.1)
   - google-cast-sdk (~> 4.4)
-  - MarqueeLabel (~> 4.0.0)
-  - MBCircularProgressBar (~> 0.3.5-1)
   - MobileVLCKit (~> 3.3.16)
   - OBSlider (~> 1.1.1)
-  - Reachability (from `https://github.com/tonymillion/Reachability`)
-  - SwiftyTimer (~> 2.1.0)
-  - TvOSMoreButton (~> 1.2.0)
   - TVVLCKit (~> 3.3.16)
 
 SPEC REPOS:
   https://github.com/CocoaPods/Specs.git:
-    - 1PasswordExtension
-    - Alamofire
-    - AlamofireNetworkActivityIndicator
     - google-cast-sdk
-    - MarqueeLabel
     - MobileVLCKit
     - OBSlider
     - Protobuf
-    - SwiftyTimer
-    - TvOSMoreButton
     - TVVLCKit
-  https://github.com/PopcornTimeTV/Specs:
-    - FloatRatingView
-    - MBCircularProgressBar
-
-EXTERNAL SOURCES:
-  Reachability:
-    :git: https://github.com/tonymillion/Reachability
-
-CHECKOUT OPTIONS:
-  Reachability:
-    :commit: ea5dd8d4646ecb2f0d07e6619827df1dfea809b8
-    :git: https://github.com/tonymillion/Reachability
 
 SPEC CHECKSUMS:
-  1PasswordExtension: f97cc80ae58053c331b2b6dc8843ba7103b33794
-  Alamofire: 85e8a02c69d6020a0d734f6054870d7ecb75cf18
-  AlamofireNetworkActivityIndicator: 9acc3de3ca6645bf0efed462396b0df13dd3e7b8
-  FloatRatingView: 5b31eb72798ca3531df5243959f7cfe03d0b7ac9
   google-cast-sdk: 9fc76175641bc24ef2515e0263344bd2c5c4e75c
-  MarqueeLabel: 00cc0bcd087111dca575878b3531af980559707d
-  MBCircularProgressBar: 29e6df5e8683ff2375a291792a5988a16dd78c8e
   MobileVLCKit: 2b408a9c5cc327353afab418fafbc942780b248a
   OBSlider: 38853ebbb9cc6978a9b7ddc0d4f525588e8bb294
   Protobuf: 7327d4444215b5f18e560a97f879ff5503c4581c
-  Reachability: 07e976fb63651163096e04b1528d4d29a4a212aa
-  SwiftyTimer: 02dd6cf10cbc71cbf67cec494f6e5eb782102543
-  TvOSMoreButton: 41fab9ceec49f0806e822ed4c78ac0634e16ff4e
   TVVLCKit: a006a10734558712e8b4c20ef2c8b472d95ba990
 
-PODFILE CHECKSUM: 95510a09d1f9754cd6ff416fc2c3f7ae55786b64
+PODFILE CHECKSUM: bbc2924bd2478efc1b8f4a13a7e5fd316f660fb8
 
 COCOAPODS: 1.10.1

@@ -135,8 +135,9 @@ struct MovieDetailsView: View {
                 items[item]
             }
             
-            RatingView(rating: movie.rating)
-                .frame(width: 185, height: 33)
+            StarRatingView(rating: movie.rating / 20)
+                .frame(height: 33)
+                .padding(.top, -8)
         }
     }
     

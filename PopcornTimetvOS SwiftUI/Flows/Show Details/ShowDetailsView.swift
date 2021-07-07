@@ -123,9 +123,9 @@ struct ShowDetailsView: View {
                 ForEach(0..<items.count) { item in
                     items[item]
                 }
-                RatingView(rating: show.rating)
-                    .frame(width: 185, height: 33)
-                    .padding(.top, -1)
+                StarRatingView(rating: show.rating / 20)
+                    .frame(height: 33)
+                    .padding(.top, -8)
             }
             Text(watchOn)
                 .foregroundColor(Color.init(white: 1, opacity: 0.67))

@@ -21,7 +21,8 @@ struct SelectTorrentQualityButton<Label>: View where Label : View {
     
     var body: some View {
         Button(action: {
-            if UIDevice.current.hasCellularCapabilites && !Session.reachability.isReachableViaWiFi() && !Session.streamOnCellular {
+            if UIDevice.current.hasCellularCapabilites &&
+                Session.reachability.connection != .wifi && !Session.streamOnCellular {
                 self.showStreamOnCellularAlert = true
             } else if media.torrents.count == 0 {
                 self.noTorrentsFoundAlert = true

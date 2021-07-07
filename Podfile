@@ -11,35 +11,29 @@ def pods
 #    pod 'XCDYouTubeKit', :git => 'https://github.com/hinge-agency/XCDYouTubeKit.git', :branch => 'fix/issue-534-XCDYouTubeVideoErrorDomain-error-code-3'
 #    pod 'Alamofire', '~> 4.9.0'
 #    pod 'AlamofireImage', '~> 3.5.0'
-    pod 'SwiftyTimer', '~> 2.1.0'
-    pod 'FloatRatingView', '~> 3.0.1'
-    pod 'Reachability', :git => 'https://github.com/tonymillion/Reachability'
-    pod 'MarqueeLabel', '~> 4.0.0'
+#    pod 'FloatRatingView', '~> 3.0.1'
 #    pod 'ObjectMapper', '~> 3.5.0'
 end
 
 target 'PopcornTimeiOS' do
     platform :ios, '14.5'
     pods
-    pod 'AlamofireNetworkActivityIndicator', '~> 2.4.0'
+#    pod 'AlamofireNetworkActivityIndicator', '~> 2.4.0'
     pod 'google-cast-sdk', '~> 4.4'
     pod 'OBSlider', '~> 1.1.1'
-    pod '1PasswordExtension', '~> 1.8.4'
     pod 'MobileVLCKit', '~> 3.3.16'
 end
 
 target 'PopcornTimetvOS' do
     platform :tvos, '14.5'
     pods
-    pod 'TvOSMoreButton', '~> 1.2.0'
     pod 'TVVLCKit', '~> 3.3.16'
-    pod 'MBCircularProgressBar', '~> 0.3.5-1'
+#    pod 'MBCircularProgressBar', '~> 0.3.5-1'
 end
 
 target 'PopcornTimetvOS SwiftUI' do
     platform :tvos, '14.5'
     pods
-    pod 'TvOSMoreButton', '~> 1.2.0'
     pod 'TVVLCKit', '~> 3.3.16'
 end
 
