@@ -142,39 +142,35 @@ public struct Episode: Media, Equatable {
     
     public var mediaItemDictionary: [String: Any] {
         return [MPMediaItemPropertyTitle: title,
-                MPMediaItemPropertyMediaType: NSNumber(value:
-                                                        MPMediaType.tvShow.rawValue),
-//                                                        MPMediaType.episode.rawValue),
+                MPMediaItemPropertyMediaType: NSNumber(value: MPMediaType.episode.rawValue),
                 MPMediaItemPropertyPersistentID: id,
                 MPMediaItemPropertyArtwork: smallBackgroundImage ?? "",
-//                MPMediaItemPropertyBackgroundArtwork: smallBackgroundImage ?? "",
-//                MPMediaItemPropertySummary: summary,
-//                MPMediaItemPropertyShow: show?.mediaItemDictionary ?? [:],
-//                MPMediaItemPropertyEpisode: episode,
-//                MPMediaItemPropertySeason: season
-        ]
+                MPMediaItemPropertyBackgroundArtwork: smallBackgroundImage ?? "",
+                MPMediaItemPropertySummary: summary,
+                MPMediaItemPropertyShow: show?.mediaItemDictionary ?? [:],
+                MPMediaItemPropertyEpisode: episode,
+                MPMediaItemPropertySeason: season]
     }
     
     public init?(_ mediaItemDictionary: [String: Any]) {
         guard
             let rawValue = mediaItemDictionary[MPMediaItemPropertyMediaType] as? NSNumber,
             let type = MPMediaType(rawValue: rawValue.uintValue) as MPMediaType?,
-//            type == MPMediaType.episode,
+            type == MPMediaType.episode,
             let id = mediaItemDictionary[MPMediaItemPropertyPersistentID] as? String,
-            let title = mediaItemDictionary[MPMediaItemPropertyTitle] as? String
-//            let backgroundImage = mediaItemDictionary[MPMediaItemPropertyBackgroundArtwork] as? String,
-//            let summary = mediaItemDictionary[MPMediaItemPropertySummary] as? String,
-//            let showMediaItemDictionary = mediaItemDictionary[MPMediaItemPropertyShow] as? [String: Any],
-//            let episode = mediaItemDictionary[MPMediaItemPropertyEpisode] as? Int,
-//            let season = mediaItemDictionary[MPMediaItemPropertySeason] as? Int
+            let title = mediaItemDictionary[MPMediaItemPropertyTitle] as? String,
+            let backgroundImage = mediaItemDictionary[MPMediaItemPropertyBackgroundArtwork] as? String,
+            let summary = mediaItemDictionary[MPMediaItemPropertySummary] as? String,
+            let showMediaItemDictionary = mediaItemDictionary[MPMediaItemPropertyShow] as? [String: Any],
+            let episode = mediaItemDictionary[MPMediaItemPropertyEpisode] as? Int,
+            let season = mediaItemDictionary[MPMediaItemPropertySeason] as? Int
             else {
                 return nil
         }
         
-//        let largeBackgroundImage = backgroundImage.replacingOccurrences(of: backgroundImage.isAmazonUrl ? "SX300" : "w300", with: backgroundImage.isAmazonUrl ? "SX1000" : "w780")
+        let largeBackgroundImage = backgroundImage.replacingOccurrences(of: backgroundImage.isAmazonUrl ? "SX300" : "w300", with: backgroundImage.isAmazonUrl ? "SX1000" : "w780")
         
-//        self.init(title: title, id: id, slug: title.slugged, summary: summary, largeBackgroundImage: largeBackgroundImage, show: Show(map: showMediaItemDictionary), episode: episode, season: season)
-        return nil
+        self.init(title: title, id: id, slug: title.slugged, summary: summary, largeBackgroundImage: largeBackgroundImage, show: Show(showMediaItemDictionary), episode: episode, season: season)
     }
 }
 

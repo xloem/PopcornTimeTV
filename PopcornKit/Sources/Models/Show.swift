@@ -202,9 +202,8 @@ public struct Show: Media, Equatable {
                 MPMediaItemPropertyMediaType: NSNumber(value: MPMediaType.tvShow.rawValue),
                 MPMediaItemPropertyPersistentID: id,
                 MPMediaItemPropertyArtwork: smallCoverImage ?? "",
-//                MPMediaItemPropertyBackgroundArtwork: smallBackgroundImage ?? "",
-//                MPMediaItemPropertySummary: summary
-        ]
+                MPMediaItemPropertyBackgroundArtwork: smallBackgroundImage ?? "",
+                MPMediaItemPropertySummary: summary]
     }
     
     public init?(_ mediaItemDictionary: [String: Any]) {
@@ -214,17 +213,17 @@ public struct Show: Media, Equatable {
             type == MPMediaType.tvShow,
             let id = mediaItemDictionary[MPMediaItemPropertyPersistentID] as? String,
             let title = mediaItemDictionary[MPMediaItemPropertyTitle] as? String,
-            let image = mediaItemDictionary[MPMediaItemPropertyArtwork] as? String
-//            let backgroundImage = mediaItemDictionary[MPMediaItemPropertyBackgroundArtwork] as? String,
-//            let summary = mediaItemDictionary[MPMediaItemPropertySummary] as? String
+            let image = mediaItemDictionary[MPMediaItemPropertyArtwork] as? String,
+            let backgroundImage = mediaItemDictionary[MPMediaItemPropertyBackgroundArtwork] as? String,
+            let summary = mediaItemDictionary[MPMediaItemPropertySummary] as? String
             else {
                 return nil
         }
         
-//        let largeBackgroundImage = backgroundImage.replacingOccurrences(of: backgroundImage.isAmazonUrl ? "SX300" : "w342", with: backgroundImage.isAmazonUrl ? "SX1000" : "w780")
+        let largeBackgroundImage = backgroundImage.replacingOccurrences(of: backgroundImage.isAmazonUrl ? "SX300" : "w342", with: backgroundImage.isAmazonUrl ? "SX1000" : "w780")
         let largeCoverImage = image.replacingOccurrences(of: image.isAmazonUrl ? "SX300" : "w342", with: image.isAmazonUrl ? "SX1000" : "w780")
         
-        self.init(title: title, id: id, slug: title.slugged, summary: "", largeBackgroundImage: nil, largeCoverImage: largeCoverImage)
+        self.init(title: title, id: id, slug: title.slugged, summary: summary, largeBackgroundImage: largeBackgroundImage, largeCoverImage: largeCoverImage)
     }
 }
 
