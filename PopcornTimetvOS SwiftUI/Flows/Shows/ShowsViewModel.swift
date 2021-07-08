@@ -14,13 +14,19 @@ class ShowsViewModel: ObservableObject {
     var page = 1
     @Published var hasNextPage = false
     @Published var currentFilter: ShowManager.Filters = .trending {
-        didSet { page = 1 }
+        didSet { reload() }
     }
     @Published var currentGenre = NetworkManager.Genres.all {
-        didSet { page = 1 }
+        didSet { reload() }
     }
     @Published var error: Error? = nil
     @Published var shows: [Show] = []
+    
+    func reload() {
+        shows = []
+        page = 1
+        loadShows()
+    }
     
     func loadShows() {
         guard !isLoading else {

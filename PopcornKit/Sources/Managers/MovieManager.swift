@@ -7,32 +7,6 @@ open class MovieManager: NetworkManager {
     /// Creates new instance of MovieManager class
     public static let shared = MovieManager()
     
-    /// Possible filters used in API call.
-    public enum Filters: String {
-        case trending = "trending"
-        case popularity = "seeds"
-        case rating = "rating"
-        case date = "last added"
-        case year = "year"
-        
-        public static let array = [trending, popularity, rating, date, year]
-        
-        public var string: String {
-            switch self {
-            case .popularity:
-                return "Popular".localized
-            case .year:
-                return "New".localized
-            case .date:
-                return "Recently Added".localized
-            case .rating:
-                return "Top Rated".localized
-            case .trending:
-                return "Trending".localized
-            }
-        }
-    }
-    
     /**
      Load Movies from API.
      

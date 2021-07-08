@@ -16,25 +16,32 @@ struct ShowsView: View {
     ]
     
     var body: some View {
-        ScrollView {
-            LazyVGrid(columns: columns, spacing: 60) {
-                ForEach(viewModel.shows, id: \.self) { show in
-                    NavigationLink(
-                        destination: ShowDetailsView(viewModel: ShowDetailsViewModel(show: show)),
-                        label: {
-                            ShowView(show: show)
-                        })
-                        .buttonStyle(PlainNavigationLinkButtonStyle())
-                        .padding([.leading, .trailing], 10)
+        ZStack(alignment: .leading) {
+            ScrollView {
+                LazyVGrid(columns: columns, spacing: 60) {
+                    ForEach(viewModel.shows, id: \.self) { show in
+                        NavigationLink(
+                            destination: ShowDetailsView(viewModel: ShowDetailsViewModel(show: show)),
+                            label: {
+                                ShowView(show: show)
+                            })
+                            .buttonStyle(PlainNavigationLinkButtonStyle())
+                            .padding([.leading, .trailing], 10)
+                    }
+                    if (!viewModel.shows.isEmpty) {
+                        loadingView
+                    }
+                }.padding(.all, 0)
+                if viewModel.isLoading && viewModel.shows.isEmpty {
+                    ProgressView()
                 }
-                if (!viewModel.shows.isEmpty) {
-                    loadingView
-                }
-            }.padding(.all, 0)
-        }
-        .padding(.horizontal)
-        .onAppear {
-            viewModel.loadShows()
+            }
+            .padding(.horizontal)
+            .onAppear {
+                viewModel.loadShows()
+            }
+            LeftSidePanelView(currentSort: $viewModel.currentFilter, currentGenre: $viewModel.currentGenre)
+                .padding(.leading, -50)
         }
     }
     

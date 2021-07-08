@@ -19,25 +19,32 @@ struct MoviesView: View {
     ]
     
     var body: some View {
-        ScrollView {
-            LazyVGrid(columns: columns, spacing: 60) {
-                ForEach(viewModel.movies, id: \.self) { movie in
-                    NavigationLink(
-                        destination: MovieDetailsView(viewModel: MovieDetailsViewModel(movie: movie)),
-                        label: {
-                            MovieView(movie: movie)
-                        })
-                        .buttonStyle(PlainNavigationLinkButtonStyle())
-                        .padding([.leading, .trailing], 10)
+        ZStack(alignment: .leading) {
+            ScrollView {
+                LazyVGrid(columns: columns, spacing: 60) {
+                    ForEach(viewModel.movies, id: \.self) { movie in
+                        NavigationLink(
+                            destination: MovieDetailsView(viewModel: MovieDetailsViewModel(movie: movie)),
+                            label: {
+                                MovieView(movie: movie)
+                            })
+                            .buttonStyle(PlainNavigationLinkButtonStyle())
+                            .padding([.leading, .trailing], 10)
+                    }
+                    if (!viewModel.movies.isEmpty) {
+                        loadingView
+                    }
+                }.padding(.all, 0)
+                if viewModel.isLoading && viewModel.movies.isEmpty {
+                    ProgressView()
                 }
-                if (!viewModel.movies.isEmpty) {
-                    loadingView
-                }
-            }.padding(.all, 0)
-        }
-        .padding(.horizontal)
-        .onAppear {
-            viewModel.loadMovies()
+            }
+            .padding(.horizontal)
+            .onAppear {
+                viewModel.loadMovies()
+            }
+            LeftSidePanelView(currentSort: $viewModel.currentFilter, currentGenre: $viewModel.currentGenre)
+                .padding(.leading, -50)
         }
     }
     

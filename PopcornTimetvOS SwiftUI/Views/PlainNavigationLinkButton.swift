@@ -71,11 +71,11 @@ struct PlainButton: View {
     configuration.label
       .scaleEffect(focused ? 1.1 : 1)
       .foregroundColor(.init(white: 1, opacity: focused ? 1 : 0.5))
-      .focusable(true, onFocusChange: { focused in
-            if (focused) {
+      .animation(.easeOut, value: focused)
+        .onChange(of: focused) { newValue in
+            if newValue {
                 onFocus()
             }
-      })
-      .animation(.easeOut, value: focused)
+        }
   }
 }

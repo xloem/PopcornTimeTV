@@ -129,8 +129,32 @@ open class NetworkManager: NSObject {
         
     }
     
+    /// Possible filters used in API call.
+    public enum Filters: String, CaseIterable {
+        case popularity = "popularity"
+        case year = "year"
+        case date = "updated"
+        case rating = "rating"
+        case trending = "trending"
+        
+        public var string: String {
+            switch self {
+            case .popularity:
+                return "Popular".localized
+            case .year:
+                return "New".localized
+            case .date:
+                return "Recently Added".localized
+            case .rating:
+                return "Top Rated".localized
+            case .trending:
+                return "Trending".localized
+            }
+        }
+    }
+    
     /// Possible genres used in API call.
-    public enum Genres: String {
+    public enum Genres: String, Hashable, CaseIterable {
         case all = "All"
         case action = "Action"
         case adventure = "Adventure"
@@ -160,8 +184,6 @@ open class NetworkManager: NSObject {
         case thriller = "Thriller"
         case war = "War"
         case western = "Western"
-        
-        public static var array = [all, action, adventure, animation, comedy, crime, disaster, documentary, drama, family, fanFilm, fantasy, filmNoir, history, holiday, horror, indie, music, mystery, road, romance, sciFi, short, sports, sportingEvent, suspense, thriller, war, western]
         
         public var string: String {
             return rawValue.localized

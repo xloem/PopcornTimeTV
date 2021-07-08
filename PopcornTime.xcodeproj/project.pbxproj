@@ -30,7 +30,6 @@
 		23313B24267E3B4A00774A85 /* MovieDetailsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23313B23267E3B4A00774A85 /* MovieDetailsView.swift */; };
 		23313B26267E3B6300774A85 /* SeasonPickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23313B25267E3B6300774A85 /* SeasonPickerView.swift */; };
 		23313B28267E3B6F00774A85 /* DescriptionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23313B27267E3B6F00774A85 /* DescriptionView.swift */; };
-		23313B2A267E3BA300774A85 /* ItemView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23313B29267E3BA300774A85 /* ItemView.swift */; };
 		23313B2C267E3BAC00774A85 /* EpisodesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23313B2B267E3BAC00774A85 /* EpisodesView.swift */; };
 		23313B2E267E3BD500774A85 /* InfoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23313B2D267E3BD500774A85 /* InfoView.swift */; };
 		23313B30267E3BE200774A85 /* SubtitlesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23313B2F267E3BE200774A85 /* SubtitlesView.swift */; };
@@ -94,6 +93,7 @@
 		2391BE7D268475A200576CAD /* DownloadButtonViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2391BE7C268475A200576CAD /* DownloadButtonViewModel.swift */; };
 		2391BE7F26847B9800576CAD /* SelectTorrentQualityButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2391BE7E26847B9800576CAD /* SelectTorrentQualityButton.swift */; };
 		2391BE81268496E300576CAD /* Media + Download.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2391BE80268496E300576CAD /* Media + Download.swift */; };
+		2394540626960FA300D0B80D /* SwiftUIFocusGuide in Frameworks */ = {isa = PBXBuildFile; productRef = 2394540526960FA300D0B80D /* SwiftUIFocusGuide */; };
 		23989FA726865A3500FEDA41 /* PlayerOptionsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23989FA626865A3500FEDA41 /* PlayerOptionsView.swift */; };
 		23989FA92687572B00FEDA41 /* AVSpeakerManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4DF3942E1E96B5B600DFCEC6 /* AVSpeakerManager.swift */; };
 		23989FAA2687574F00FEDA41 /* AVAudioRoute.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4DF394311E96BA3300DFCEC6 /* AVAudioRoute.swift */; };
@@ -478,7 +478,6 @@
 		23313B23267E3B4A00774A85 /* MovieDetailsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovieDetailsView.swift; sourceTree = "<group>"; };
 		23313B25267E3B6300774A85 /* SeasonPickerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SeasonPickerView.swift; sourceTree = "<group>"; };
 		23313B27267E3B6F00774A85 /* DescriptionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DescriptionView.swift; sourceTree = "<group>"; };
-		23313B29267E3BA300774A85 /* ItemView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ItemView.swift; sourceTree = "<group>"; };
 		23313B2B267E3BAC00774A85 /* EpisodesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EpisodesView.swift; sourceTree = "<group>"; };
 		23313B2D267E3BD500774A85 /* InfoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InfoView.swift; sourceTree = "<group>"; };
 		23313B2F267E3BE200774A85 /* SubtitlesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubtitlesView.swift; sourceTree = "<group>"; };
@@ -802,6 +801,7 @@
 			files = (
 				23313B53267E4A6600774A85 /* libc++.tbd in Frameworks */,
 				232BB5212694512C005448AE /* Alamofire in Frameworks */,
+				2394540626960FA300D0B80D /* SwiftUIFocusGuide in Frameworks */,
 				23507DC8269483310098CC12 /* ObjectMapper in Frameworks */,
 				23E8172D26950B56003258CC /* PopcornKit in Frameworks */,
 				232BB527269456BF005448AE /* Kingfisher in Frameworks */,
@@ -885,6 +885,7 @@
 				23313B3B267E3CA800774A85 /* TermsOfServiceView.swift */,
 				23313B0D267E388C00774A85 /* LoadingView.swift */,
 				23313B0F267E39B400774A85 /* TabBarView.swift */,
+				23313B19267E3A9200774A85 /* LeftSidePanelView.swift */,
 				23025D94267E71C400229559 /* Movies */,
 				2343A7672688AEEC00B824E7 /* Shows */,
 				237F286D26935E2300FE036C /* Watchlist */,
@@ -893,13 +894,11 @@
 				237F28682693433100FE036C /* Show Details */,
 				238C1DCD268DB11C003DC953 /* Player */,
 				23989FA826865BF700FEDA41 /* PlayerOptions */,
-				23313B19267E3A9200774A85 /* LeftSidePanelView.swift */,
 				23313B1B267E3AAB00774A85 /* DownloadView.swift */,
 				23313B1F267E3AF200774A85 /* DownloadDetailsView.swift */,
 				23313B1D267E3AB800774A85 /* SettingsView.swift */,
 				2388FD602691C50D00B51201 /* PersonDetails */,
 				23313B27267E3B6F00774A85 /* DescriptionView.swift */,
-				23313B29267E3BA300774A85 /* ItemView.swift */,
 				23313B33267E3C0000774A85 /* UpNextView.swift */,
 			);
 			path = Flows;
@@ -1612,6 +1611,7 @@
 				23507DC7269483310098CC12 /* ObjectMapper */,
 				23E8172C26950B56003258CC /* PopcornKit */,
 				23D2B397269586810077BBED /* Reachability */,
+				2394540526960FA300D0B80D /* SwiftUIFocusGuide */,
 			);
 			productName = "PopcornTimetvOS SwiftUI";
 			productReference = 23313AFD267E374F00774A85 /* PopcornTimetvOS SwiftUI.app */;
@@ -1759,6 +1759,7 @@
 				23D2B396269586810077BBED /* XCRemoteSwiftPackageReference "Reachability" */,
 				23D2B399269587BE0077BBED /* XCRemoteSwiftPackageReference "MarqueeLabel" */,
 				23D2B39C269588370077BBED /* XCRemoteSwiftPackageReference "TvOSMoreButton" */,
+				2394540426960FA300D0B80D /* XCRemoteSwiftPackageReference "SwiftUIFocusGuide" */,
 			);
 			productRefGroup = 287B85351C9873A200EEF5C8 /* Products */;
 			projectDirPath = "";
@@ -2045,7 +2046,6 @@
 				23313B36267E3C1400774A85 /* PlayerView.swift in Sources */,
 				23446ADA2680C1110049CC72 /* NowPlayingController.swift in Sources */,
 				23446ABB267F168F0049CC72 /* MovieDetailsViewModel.swift in Sources */,
-				23313B2A267E3BA300774A85 /* ItemView.swift in Sources */,
 				23446ADF2680E8600049CC72 /* ProgressBarView.swift in Sources */,
 				23C96EE22685B40E0056455E /* DownloadProgressView.swift in Sources */,
 				23989FA92687572B00FEDA41 /* AVSpeakerManager.swift in Sources */,
@@ -2948,6 +2948,14 @@
 				minimumVersion = 4.2.0;
 			};
 		};
+		2394540426960FA300D0B80D /* XCRemoteSwiftPackageReference "SwiftUIFocusGuide" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/rmnblm/SwiftUIFocusGuide";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 0.1.0;
+			};
+		};
 		23D2B396269586810077BBED /* XCRemoteSwiftPackageReference "Reachability" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/ashleymills/Reachability.swift";
@@ -3004,6 +3012,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 232BB52A26946B47005448AE /* XCRemoteSwiftPackageReference "ObjectMapper" */;
 			productName = ObjectMapper;
+		};
+		2394540526960FA300D0B80D /* SwiftUIFocusGuide */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 2394540426960FA300D0B80D /* XCRemoteSwiftPackageReference "SwiftUIFocusGuide" */;
+			productName = SwiftUIFocusGuide;
 		};
 		23D2B397269586810077BBED /* Reachability */ = {
 			isa = XCSwiftPackageProductDependency;

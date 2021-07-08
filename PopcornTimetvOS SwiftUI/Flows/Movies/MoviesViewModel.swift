@@ -14,13 +14,19 @@ class MoviesViewModel: ObservableObject {
     var page = 1
     @Published var hasNextPage = false
     @Published var currentFilter: MovieManager.Filters = .trending {
-        didSet { page = 1 }
+        didSet { reload() }
     }
     @Published var currentGenre = NetworkManager.Genres.all {
-        didSet { page = 1 }
+        didSet { reload() }
     }
     @Published var error: Error? = nil
     @Published var movies: [Movie] = []
+    
+    func reload() {
+        movies = []
+        page = 1
+        loadMovies()
+    }
     
     func loadMovies() {
         guard !isLoading else {

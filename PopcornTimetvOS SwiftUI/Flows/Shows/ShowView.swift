@@ -19,6 +19,8 @@ struct ShowView: View {
                 .resizable()
                 .placeholder {
                     Image("Episode Placeholder")
+                        .resizable()
+                        .aspectRatio(contentMode: .fit)
                 }
                 .aspectRatio(contentMode: .fit)
                 .cornerRadius(10)

@@ -7,32 +7,6 @@ open class ShowManager: NetworkManager {
     /// Creates new instance of ShowManager class
     public static let shared = ShowManager()
     
-    /// Possible filters used in API call.
-    public enum Filters: String {
-        case popularity = "popularity"
-        case year = "year"
-        case date = "updated"
-        case rating = "rating"
-        case trending = "trending"
-        
-        public static let array = [trending, popularity, rating, date, year]
-        
-        public var string: String {
-            switch self {
-            case .popularity:
-                return "Popular".localized
-            case .year:
-                return "New".localized
-            case .date:
-                return "Recently Added".localized
-            case .rating:
-                return "Top Rated".localized
-            case .trending:
-                return "Trending".localized
-            }
-        }
-    }
-    
     /**
      Load TV Shows from API.
      
