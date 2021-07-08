@@ -32,4 +32,7 @@ enum Session {
     
     @UserDefault(key: "subtitleSettings", defaultValue: nil)
     static var subtitleSettings: Data?
+    
+    @UserDefault(key: "lastVersionCheckPerformedOnDate", defaultValue: nil)
+    static var lastVersionCheckPerformedOnDate: Date?
 }

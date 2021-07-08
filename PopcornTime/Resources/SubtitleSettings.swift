@@ -5,13 +5,11 @@ import UIKit
 
 class SubtitleSettings: NSObject, NSCoding {
     
-    enum Size: Float {
+    enum Size: Float, CaseIterable {
         case small = 20.0
         case medium = 16.0
         case mediumLarge = 12.0
         case large = 6.0
-        
-        static let array = [small, medium, mediumLarge, large]
         
         var localizedString: String {
             switch self {

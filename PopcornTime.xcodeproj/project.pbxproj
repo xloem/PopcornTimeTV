@@ -107,6 +107,8 @@
 		23D2B3A026959C910077BBED /* StarRatingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23D2B39F26959C910077BBED /* StarRatingView.swift */; };
 		23E4976726947E1300175DEE /* TVServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 002682111CD0B76200F51D31 /* TVServices.framework */; };
 		23E4976A26947E1300175DEE /* ContentProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23E4976926947E1300175DEE /* ContentProvider.swift */; };
+		23E6239F26975A0C007B11EF /* FileManager+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4DBE60891E5E49B200C2549B /* FileManager+Extension.swift */; };
+		23E623A026975AB6007B11EF /* Locale+Langs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D0183A81DC3ACB400AB75B3 /* Locale+Langs.swift */; };
 		23E8172D26950B56003258CC /* PopcornKit in Frameworks */ = {isa = PBXBuildFile; productRef = 23E8172C26950B56003258CC /* PopcornKit */; };
 		23E8172F26950B60003258CC /* PopcornKit in Frameworks */ = {isa = PBXBuildFile; productRef = 23E8172E26950B60003258CC /* PopcornKit */; };
 		4D0183A91DC3ACB500AB75B3 /* Locale+Langs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D0183A81DC3ACB400AB75B3 /* Locale+Langs.swift */; };
@@ -1978,8 +1980,10 @@
 				2343A7612688718300B824E7 /* Subtitle + Identifiable.swift in Sources */,
 				23313B2C267E3BAC00774A85 /* EpisodesView.swift in Sources */,
 				23446ADD2680E8240049CC72 /* UIActivityIndicatorViewStyle+Grey.swift in Sources */,
+				23E6239F26975A0C007B11EF /* FileManager+Extension.swift in Sources */,
 				23313B12267E3A3900774A85 /* MoviesView.swift in Sources */,
 				2343A7642688A8DF00B824E7 /* SearchWrapperView.swift in Sources */,
+				23E623A026975AB6007B11EF /* Locale+Langs.swift in Sources */,
 				2388FD652691EEA900B51201 /* Show+Extension.swift in Sources */,
 				2391BE81268496E300576CAD /* Media + Download.swift in Sources */,
 				2388FD672692019E00B51201 /* EpisodeView.swift in Sources */,

@@ -62,14 +62,15 @@ struct LeftSidePanelView: View {
                         selection = nil
                     }
                 })
-                .transition(.opacity)
             
         }
         .onExitCommand(perform: {
             selection = nil
         })
+        .onDisappear {
+            selection = nil
+        }
         .background(backgroundView)
-        .zIndex(2)
         .ignoresSafeArea()
     }
     
