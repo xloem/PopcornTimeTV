@@ -28,7 +28,7 @@ struct TabBarView: View {
                 .tabItem {
                     Text("🔍")
                 }
-            DownloadView()
+            DownloadsView()
                 .tabItem {
                     Text("Downloads")
                 }

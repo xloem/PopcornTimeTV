@@ -94,7 +94,8 @@ struct ShowDetailsView: View {
     
     var backgroundImage: some View {
         KFImage(viewModel.backgroundUrl)
-//                .resizable()
+            .resizable()
+            .loadImmediately()
             .aspectRatio(contentMode: .fill)
             .padding(0)
             .ignoresSafeArea()
@@ -198,16 +199,6 @@ struct ShowDetailsView: View {
 //        .background(Color.red)
         .frame(height: 380)
         .padding(0)
-    }
-    
-
-
-    func change(to season: Int) {
-//        let localizedSeason = NumberFormatter.localizedString(from: NSNumber(value: season), number: .none)
-//        seasonsLabel.text = "Season".localized + " \(localizedSeason)"
-//        currentSeason = season
-//        episodesCollectionViewController.dataSource = show.episodes.filter({$0.season == season}).sorted(by: {$0.episode < $1.episode})
-//        episodesCollectionViewController.collectionView?.reloadData()
     }
 }
 

@@ -27,6 +27,8 @@ struct PersonView: View {
                             .resizable()
                             .placeholder {
                                 Image("Movie Placeholder")
+                                    .resizable()
+                                    .aspectRatio(contentMode: .fit)
                             }
                             .aspectRatio(contentMode: .fit)
                             .cornerRadius(10)

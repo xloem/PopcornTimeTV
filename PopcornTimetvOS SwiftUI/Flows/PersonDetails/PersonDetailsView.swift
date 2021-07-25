@@ -72,7 +72,7 @@ struct PersonDetailsView: View {
                 HStack(spacing: 40) {
                     ForEach(viewModel.shows, id: \.self) { show in
                         NavigationLink(
-                            destination: EmptyView(),
+                            destination: ShowDetailsView(viewModel: ShowDetailsViewModel(show: show)),
                             label: {
                                 ShowView(show: show)
                                     .frame(width: 240)

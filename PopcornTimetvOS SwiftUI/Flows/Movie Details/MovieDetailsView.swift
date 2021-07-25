@@ -111,7 +111,8 @@ struct MovieDetailsView: View {
     
     var backgroundImage: some View {
         KFImage(viewModel.backgroundUrl)
-//                .resizable()
+            .resizable()
+            .loadImmediately()
             .aspectRatio(contentMode: .fill)
             .padding(0)
             .ignoresSafeArea()

@@ -7,6 +7,7 @@
 //
 
 import SwiftUI
+import PopcornKit
 
 struct WatchlistView: View {
     @StateObject var viewModel = WatchlistViewModel()
@@ -67,7 +68,7 @@ struct WatchlistView: View {
                 HStack(spacing: 40) {
                     ForEach(viewModel.shows, id: \.self) { show in
                         NavigationLink(
-                            destination: EmptyView(),
+                            destination: ShowDetailsView(viewModel: ShowDetailsViewModel(show: show)),
                             label: {
                                 ShowView(show: show)
                                     .frame(width: 240)
@@ -100,6 +101,15 @@ struct WatchlistView: View {
 
 struct WatchlistView_Previews: PreviewProvider {
     static var previews: some View {
+        // empty list
         WatchlistView(viewModel: WatchlistViewModel())
+        
+        let moviesModel = WatchlistViewModel()
+        WatchlistView(viewModel: moviesModel)
+            .onAppear {
+                DispatchQueue.main.async {
+                    moviesModel.movies = Movie.dummiesFromJSON()
+                }
+            }
     }
 }

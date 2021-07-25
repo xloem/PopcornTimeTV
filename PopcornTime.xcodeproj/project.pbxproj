@@ -23,7 +23,7 @@
 		23313B16267E3A7100774A85 /* WatchlistView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23313B15267E3A7100774A85 /* WatchlistView.swift */; };
 		23313B18267E3A7F00774A85 /* SearchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23313B17267E3A7F00774A85 /* SearchView.swift */; };
 		23313B1A267E3A9200774A85 /* LeftSidePanelView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23313B19267E3A9200774A85 /* LeftSidePanelView.swift */; };
-		23313B1C267E3AAB00774A85 /* DownloadView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23313B1B267E3AAB00774A85 /* DownloadView.swift */; };
+		23313B1C267E3AAB00774A85 /* DownloadsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23313B1B267E3AAB00774A85 /* DownloadsView.swift */; };
 		23313B1E267E3AB800774A85 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23313B1D267E3AB800774A85 /* SettingsView.swift */; };
 		23313B20267E3AF200774A85 /* DownloadDetailsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23313B1F267E3AF200774A85 /* DownloadDetailsView.swift */; };
 		23313B22267E3AFB00774A85 /* PersonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23313B21267E3AFB00774A85 /* PersonView.swift */; };
@@ -78,6 +78,7 @@
 		23446ADF2680E8600049CC72 /* ProgressBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23446ADE2680E8600049CC72 /* ProgressBarView.swift */; };
 		23507DC8269483310098CC12 /* ObjectMapper in Frameworks */ = {isa = PBXBuildFile; productRef = 23507DC7269483310098CC12 /* ObjectMapper */; };
 		2364708B2694B76E008743CB /* ObjectMapper in Frameworks */ = {isa = PBXBuildFile; productRef = 2364708A2694B76E008743CB /* ObjectMapper */; };
+		23793D9D26AD950D0094FFA0 /* DownloadView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23793D9C26AD950D0094FFA0 /* DownloadView.swift */; };
 		237F28652692F6B900FE036C /* SeasonPickerViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 237F28642692F6B900FE036C /* SeasonPickerViewModel.swift */; };
 		237F28672692F91000FE036C /* SeasonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 237F28662692F91000FE036C /* SeasonView.swift */; };
 		237F286A2693503D00FE036C /* ActorsCrewView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 237F28692693503D00FE036C /* ActorsCrewView.swift */; };
@@ -111,6 +112,8 @@
 		23E623A026975AB6007B11EF /* Locale+Langs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D0183A81DC3ACB400AB75B3 /* Locale+Langs.swift */; };
 		23E8172D26950B56003258CC /* PopcornKit in Frameworks */ = {isa = PBXBuildFile; productRef = 23E8172C26950B56003258CC /* PopcornKit */; };
 		23E8172F26950B60003258CC /* PopcornKit in Frameworks */ = {isa = PBXBuildFile; productRef = 23E8172E26950B60003258CC /* PopcornKit */; };
+		23F0856E269787B300B341D0 /* DownloadViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23F0856D269787B300B341D0 /* DownloadViewModel.swift */; };
+		23F0856F26978B4900B341D0 /* MPMediaType+Episode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4DE6FDE41F0423F700A7F274 /* MPMediaType+Episode.swift */; };
 		4D0183A91DC3ACB500AB75B3 /* Locale+Langs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D0183A81DC3ACB400AB75B3 /* Locale+Langs.swift */; };
 		4D07E17C1E8C364F00457FCB /* Object.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D07E17B1E8C364F00457FCB /* Object.swift */; };
 		4D07E17D1E8C365200457FCB /* Object.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D07E17B1E8C364F00457FCB /* Object.swift */; };
@@ -473,7 +476,7 @@
 		23313B15267E3A7100774A85 /* WatchlistView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WatchlistView.swift; sourceTree = "<group>"; };
 		23313B17267E3A7F00774A85 /* SearchView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchView.swift; sourceTree = "<group>"; };
 		23313B19267E3A9200774A85 /* LeftSidePanelView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LeftSidePanelView.swift; sourceTree = "<group>"; };
-		23313B1B267E3AAB00774A85 /* DownloadView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DownloadView.swift; sourceTree = "<group>"; };
+		23313B1B267E3AAB00774A85 /* DownloadsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DownloadsView.swift; sourceTree = "<group>"; };
 		23313B1D267E3AB800774A85 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		23313B1F267E3AF200774A85 /* DownloadDetailsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DownloadDetailsView.swift; sourceTree = "<group>"; };
 		23313B21267E3AFB00774A85 /* PersonView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersonView.swift; sourceTree = "<group>"; };
@@ -515,6 +518,7 @@
 		23446AD62680BBE80049CC72 /* VLCPlayerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VLCPlayerView.swift; sourceTree = "<group>"; };
 		23446AD92680C1110049CC72 /* NowPlayingController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NowPlayingController.swift; sourceTree = "<group>"; };
 		23446ADE2680E8600049CC72 /* ProgressBarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgressBarView.swift; sourceTree = "<group>"; };
+		23793D9C26AD950D0094FFA0 /* DownloadView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DownloadView.swift; sourceTree = "<group>"; };
 		237F28642692F6B900FE036C /* SeasonPickerViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SeasonPickerViewModel.swift; sourceTree = "<group>"; };
 		237F28662692F91000FE036C /* SeasonView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SeasonView.swift; sourceTree = "<group>"; };
 		237F28692693503D00FE036C /* ActorsCrewView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActorsCrewView.swift; sourceTree = "<group>"; };
@@ -538,6 +542,7 @@
 		23E4976926947E1300175DEE /* ContentProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentProvider.swift; sourceTree = "<group>"; };
 		23E4976B26947E1300175DEE /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		23E8172B26950B34003258CC /* PopcornKit */ = {isa = PBXFileReference; lastKnownFileType = folder; path = PopcornKit; sourceTree = "<group>"; };
+		23F0856D269787B300B341D0 /* DownloadViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DownloadViewModel.swift; sourceTree = "<group>"; };
 		287B85341C9873A200EEF5C8 /* PopcornTime.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PopcornTime.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		287B85401C9873A200EEF5C8 /* iOS.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = iOS.plist; sourceTree = "<group>"; };
 		4D0183A81DC3ACB400AB75B3 /* Locale+Langs.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Locale+Langs.swift"; sourceTree = "<group>"; };
@@ -894,12 +899,11 @@
 				2343A7622688A8C400B824E7 /* Search */,
 				23446ABC267F16950049CC72 /* Movie Details */,
 				237F28682693433100FE036C /* Show Details */,
+				2388FD602691C50D00B51201 /* PersonDetails */,
 				238C1DCD268DB11C003DC953 /* Player */,
 				23989FA826865BF700FEDA41 /* PlayerOptions */,
-				23313B1B267E3AAB00774A85 /* DownloadView.swift */,
-				23313B1F267E3AF200774A85 /* DownloadDetailsView.swift */,
+				23F0856C2697801400B341D0 /* Downloads */,
 				23313B1D267E3AB800774A85 /* SettingsView.swift */,
-				2388FD602691C50D00B51201 /* PersonDetails */,
 				23313B27267E3B6F00774A85 /* DescriptionView.swift */,
 				23313B33267E3C0000774A85 /* UpNextView.swift */,
 			);
@@ -1047,6 +1051,17 @@
 				23E4976B26947E1300175DEE /* Info.plist */,
 			);
 			path = TopShelf;
+			sourceTree = "<group>";
+		};
+		23F0856C2697801400B341D0 /* Downloads */ = {
+			isa = PBXGroup;
+			children = (
+				23313B1B267E3AAB00774A85 /* DownloadsView.swift */,
+				23F0856D269787B300B341D0 /* DownloadViewModel.swift */,
+				23313B1F267E3AF200774A85 /* DownloadDetailsView.swift */,
+				23793D9C26AD950D0094FFA0 /* DownloadView.swift */,
+			);
+			path = Downloads;
 			sourceTree = "<group>";
 		};
 		287B852B1C9873A200EEF5C8 = {
@@ -2002,7 +2017,7 @@
 				23989FAD2687B83C00FEDA41 /* NSNotificationName+Extension.swift in Sources */,
 				23313B16267E3A7100774A85 /* WatchlistView.swift in Sources */,
 				23D2B3A026959C910077BBED /* StarRatingView.swift in Sources */,
-				23313B1C267E3AAB00774A85 /* DownloadView.swift in Sources */,
+				23313B1C267E3AAB00774A85 /* DownloadsView.swift in Sources */,
 				23446ADC2680E7E40049CC72 /* BufferingBar.swift in Sources */,
 				23313B18267E3A7F00774A85 /* SearchView.swift in Sources */,
 				2391BE7D268475A200576CAD /* DownloadButtonViewModel.swift in Sources */,
@@ -2023,8 +2038,10 @@
 				23313B3F267E3D7600774A85 /* Session.swift in Sources */,
 				23446ABE267F1ED10049CC72 /* TVButtonStyle.swift in Sources */,
 				23446AC6267FAD000049CC72 /* PreloadTorrentViewModel.swift in Sources */,
+				23F0856F26978B4900B341D0 /* MPMediaType+Episode.swift in Sources */,
 				23313B47267E3DF600774A85 /* JSONCache.swift in Sources */,
 				23446ACA26804AD20049CC72 /* TrailerButton.swift in Sources */,
+				23F0856E269787B300B341D0 /* DownloadViewModel.swift in Sources */,
 				23989FAC2687706C00FEDA41 /* IfModifier.swift in Sources */,
 				23989FA726865A3500FEDA41 /* PlayerOptionsView.swift in Sources */,
 				237F286A2693503D00FE036C /* ActorsCrewView.swift in Sources */,
@@ -2045,6 +2062,7 @@
 				23446AD72680BBE80049CC72 /* VLCPlayerView.swift in Sources */,
 				23313B49267E3DF600774A85 /* CodableCaching.swift in Sources */,
 				23313B1E267E3AB800774A85 /* SettingsView.swift in Sources */,
+				23793D9D26AD950D0094FFA0 /* DownloadView.swift in Sources */,
 				23446AD5268072130049CC72 /* UIColor+Extension.swift in Sources */,
 				2388FD5D2691C4E000B51201 /* PersonDetailsView.swift in Sources */,
 				23313B36267E3C1400774A85 /* PlayerView.swift in Sources */,
