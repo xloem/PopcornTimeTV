@@ -34,6 +34,7 @@ class MoviesViewModel: ObservableObject {
         }
         
         isLoading = true
+        self.error = nil
         PopcornKit.loadMovies(page, filterBy: currentFilter, genre: currentGenre) { [unowned self] (movies, error) in
             isLoading = false
 //            print(movies, error)

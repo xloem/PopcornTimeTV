@@ -15,6 +15,7 @@ import Combine
 class DownloadButtonViewModel: NSObject, ObservableObject {
     var media: Media
     var torrent: Torrent?
+    var download: PTTorrentDownload?
     @Published var state: State = .normal
     @Published var showStopDownloadAlert = false
     @Published var showDownloadFailedAlert = false
@@ -24,7 +25,6 @@ class DownloadButtonViewModel: NSObject, ObservableObject {
     
     var playerModel: PlayerViewModel?
     var preloadTorrentModel: PreloadTorrentViewModel?
-    var listenForReadToPlay: AnyCancellable?
     @Published var selection: Selection? = nil
     
     enum Selection: Int, Identifiable {
@@ -55,9 +55,11 @@ class DownloadButtonViewModel: NSObject, ObservableObject {
     
     init(media: Media) {
         self.media = media
-        state = media.associatedDownload.flatMap{ State($0.downloadStatus) } ?? .normal
+        self.download = media.associatedDownload
+        state = download.flatMap{ State($0.downloadStatus) } ?? .normal
         super.init()
         PTTorrentDownloadManager.shared().add(self)
+        print(self.media.title, "state: ", state)
     }
     
     deinit {
@@ -65,38 +67,38 @@ class DownloadButtonViewModel: NSObject, ObservableObject {
     }
     
     func download(torrent: Torrent) {
-        PTTorrentDownloadManager.shared().startDownloading(fromFileOrMagnetLink:  torrent.url, mediaMetadata: self.media.mediaItemDictionary)
+        self.download = PTTorrentDownloadManager.shared().startDownloading(fromFileOrMagnetLink:  torrent.url, mediaMetadata: self.media.mediaItemDictionary)
         print("download torrent", torrent)
         state = .pending
     }
     
     func stopDownload() {
-        guard let download = media.associatedDownload else { return }
+        guard let download = download else { return }
         PTTorrentDownloadManager.shared().stop(download)
         state = .normal
     }
     
     func play() {
-        guard let download = media.associatedDownload else { return }
-//        AppDelegate.shared.play(Movie(download.mediaMetadata) ?? Episode(download.mediaMetadata)!, torrent: Torrent()) // No torrent metadata necessary, media
-        self.preloadTorrentModel = PreloadTorrentViewModel(torrent: Torrent(), media: Movie(download.mediaMetadata)!)
-        self.selection = .preload
-        self.listenForReadToPlay = self.preloadTorrentModel?.objectWillChange.sink(receiveValue: { _ in
-            if let playerModel = self.preloadTorrentModel?.playerModel {
-                self.playerModel = playerModel
-                self.selection = .play
-            }
+        guard let download = download else { return }
+        
+        let media: Media = Movie(download.mediaMetadata) ?? Episode(download.mediaMetadata)!
+        // No torrent metadata necessary, media
+        self.preloadTorrentModel = PreloadTorrentViewModel(torrent: Torrent(), media: media, onReadyToPlay: { [weak self] playerModel in
+            self?.playerModel = playerModel
+            self?.selection = .play
         })
+        self.selection = .preload
     }
     
     func deleteDownload() {
-        guard let download = media.associatedDownload else { return }
+        guard let download = download else { return }
         PTTorrentDownloadManager.shared().delete(download)
+        self.download = nil
         state = .normal
     }
     
     func resumeDownload() {
-        guard let download = media.associatedDownload else { return }
+        guard let download = download else { return }
         download.resume()
         state = .downloading
     }
@@ -104,18 +106,18 @@ class DownloadButtonViewModel: NSObject, ObservableObject {
 
 extension DownloadButtonViewModel: PTTorrentDownloadManagerListener {
     func torrentStatusDidChange(_ torrentStatus: PTTorrentStatus, for download: PTTorrentDownload) {
-        guard download == media.associatedDownload else { return }
+        guard download === self.download else { return }
         downloadProgress = torrentStatus.totalProgress
         print("download progress", downloadProgress)
     }
     
     func downloadStatusDidChange(_ downloadStatus: PTTorrentDownloadStatus, for download: PTTorrentDownload) {
-        guard download == media.associatedDownload else { return }
+        guard download === self.download else { return }
         state = State(downloadStatus)
     }
     
     func downloadDidFail(_ download: PTTorrentDownload, withError error: Error) {
-        guard download == media.associatedDownload else { return }
+        guard download === self.download else { return }
         
         downloadError = error
         showDownloadFailedAlert = true

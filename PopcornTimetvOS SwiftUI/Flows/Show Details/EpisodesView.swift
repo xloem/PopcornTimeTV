@@ -18,7 +18,6 @@ struct EpisodesView: View {
     
     @State var preloadTorrentModel: PreloadTorrentViewModel?
     @State var playerModel: PlayerViewModel?
-    @State var listenForReadToPlay: AnyCancellable?
     
     @State var torrent: Torrent?
     
@@ -119,13 +118,14 @@ struct EpisodesView: View {
                 VStack(alignment: .leading) {
                     Text("\(episode.episode). " + episode.title)
                         .font(.headline)
-                    HStack {
+                    LazyHStack {
                         Text(episode.summary)
                             .multilineTextAlignment(.leading)
                             .lineLimit(5)
                             .padding(.bottom, 30)
-                            .frame(minWidth: 600)
+                            .frame(minWidth: 600, maxWidth: 800)
                         DownloadButton(viewModel: DownloadButtonViewModel(media: episode))
+                            .buttonStyle(TVButtonStyle())
                     }
                 }
             }.frame(height: 400)
@@ -135,14 +135,11 @@ struct EpisodesView: View {
     
     func playTorrent(_ torrent: Torrent, episode: Episode) {
         self.torrent = torrent
-        self.preloadTorrentModel = PreloadTorrentViewModel(torrent: torrent, media: episode)
-        self.listenForReadToPlay = self.preloadTorrentModel?.objectWillChange.sink(receiveValue: { _ in
-            if let playerModel = self.preloadTorrentModel?.playerModel {
-                self.playerModel = playerModel
-                selection = Selection.play
-            }
+        self.preloadTorrentModel = PreloadTorrentViewModel(torrent: torrent, media: episode, onReadyToPlay: { playerModel in
+            self.playerModel = playerModel
+            selection = .play
         })
-        selection = Selection.preload
+        selection = .preload
     }
 }
 

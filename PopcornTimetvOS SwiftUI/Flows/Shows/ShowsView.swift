@@ -17,6 +17,7 @@ struct ShowsView: View {
     
     var body: some View {
         ZStack(alignment: .leading) {
+            errorView
             ScrollView {
                 LazyVGrid(columns: columns, spacing: 60) {
                     ForEach(viewModel.shows, id: \.self) { show in
@@ -38,7 +39,9 @@ struct ShowsView: View {
             }
             .padding(.horizontal)
             .onAppear {
-                viewModel.loadShows()
+                if viewModel.shows.isEmpty {
+                    viewModel.loadShows()
+                }
             }
             LeftSidePanelView(currentSort: $viewModel.currentFilter, currentGenre: $viewModel.currentGenre)
                 .padding(.leading, -50)
@@ -53,6 +56,18 @@ struct ShowsView: View {
             }
         if viewModel.isLoading {
             ProgressView()
+        }
+    }
+    
+    @ViewBuilder
+    var errorView: some View {
+        if let error = viewModel.error {
+            HStack() {
+                Spacer()
+                ErrorView(error: error)
+                    .padding(.bottom, 100)
+                Spacer()
+            }
         }
     }
 }

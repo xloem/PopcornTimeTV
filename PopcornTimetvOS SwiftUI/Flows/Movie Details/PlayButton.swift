@@ -15,7 +15,6 @@ struct PlayButton: View {
     
     @State var preloadTorrentModel: PreloadTorrentViewModel?
     @State var playerModel: PlayerViewModel?
-    @State var listenForReadToPlay: AnyCancellable?
     
     @State var torrent: Torrent?
     
@@ -68,14 +67,11 @@ struct PlayButton: View {
     
     func playTorrent(_ torrent: Torrent) {
         self.torrent = torrent
-        self.preloadTorrentModel = PreloadTorrentViewModel(torrent: torrent, media: movie)
-        self.listenForReadToPlay = self.preloadTorrentModel?.objectWillChange.sink(receiveValue: { _ in
-            if let playerModel = self.preloadTorrentModel?.playerModel {
-                self.playerModel = playerModel
-                selection = Selection.play
-            }
-        })
         selection = Selection.preload
+        self.preloadTorrentModel = PreloadTorrentViewModel(torrent: torrent, media: movie, onReadyToPlay: { playerModel in
+            self.playerModel = playerModel
+            self.selection = .play
+        })
     }
 }
 

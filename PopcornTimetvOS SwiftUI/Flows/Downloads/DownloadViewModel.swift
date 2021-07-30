@@ -1,82 +1,99 @@
 //
-//  DownloadsViewModel.swift
+//  DownloadViewModel.swift
 //  PopcornTimetvOS SwiftUI
 //
-//  Created by Alexandru Tudose on 08.07.2021.
+//  Created by Alexandru Tudose on 25.07.2021.
 //  Copyright © 2021 PopcornTime. All rights reserved.
 //
 
 import SwiftUI
 import PopcornTorrent
-import PopcornKit
 import MediaPlayer
+import PopcornKit
+import Combine
 
 class DownloadViewModel: NSObject, ObservableObject {
-    @Published var error: Error?
-    @Published var hasChanges: Bool = false
-    let downloadManager = PTTorrentDownloadManager.shared()
+    var download: PTTorrentDownload
     
-    override init() {
+    @Published var showStopDownloadAlert = false
+    @Published var showDownloadFailedAlert = false
+    @Published var showDownloadedActionSheet = false
+    @Published var downloadError: Error?
+    @Published var status: PTTorrentStatus
+    var observation: NSKeyValueObservation?
+    
+    var playerModel: PlayerViewModel?
+    var preloadTorrentModel: PreloadTorrentViewModel?
+    
+    @Published var selection: Selection? = nil
+    
+    enum Selection: Int, Identifiable {
+        case preload = 2
+        case play = 3
+        var id: Int { return rawValue }
+    }
+    
+    init(download: PTTorrentDownload) {
+        self.download = download
+        status = download.torrentStatus
         super.init()
-        PTTorrentDownloadManager.shared().add(self)
-    }
-    
-    deinit {
-        PTTorrentDownloadManager.shared().remove(self)
-    }
-    
-    var isEmpty: Bool {
-        return downloadManager.activeDownloads.isEmpty && downloadManager.completedDownloads.isEmpty
-    }
-    
-    var completedEpisodes: [PTTorrentDownload] {
-        return filter(downloads: downloadManager.completedDownloads, through: .episode)
-    }
-    
-    var completedMovies: [PTTorrentDownload] {
-        return filter(downloads: downloadManager.completedDownloads, through: .movie)
-    }
-    
-    var completedShows: [Show] {
-        return completedEpisodes.compactMap({ Episode($0.mediaMetadata)?.show }).uniqued
-    }
-    
-    var downloadingEpisodes: [PTTorrentDownload] {
-        return filter(downloads: downloadManager.activeDownloads, through: .episode)
-    }
-    
-    var downloadingMovies: [PTTorrentDownload] {
-        return filter(downloads: downloadManager.activeDownloads, through: .movie)
-    }
-    
-    var downloading: [PTTorrentDownload] {
-        return downloadManager.activeDownloads
-    }
-    
-    private func filter(downloads: [PTTorrentDownload], through predicate: MPMediaType) -> [PTTorrentDownload] {
-        return downloads.filter { download in
-            guard let rawValue = download.mediaMetadata[MPMediaItemPropertyMediaType] as? NSNumber else { return false }
-            let type = MPMediaType(rawValue: rawValue.uintValue)
-            return type == predicate
-        }.sorted { (first, second) in
-            guard
-                let firstTitle = first.mediaMetadata[MPMediaItemPropertyTitle] as? String,
-                let secondTitle = second.mediaMetadata[MPMediaItemPropertyTitle] as? String
-                else {
-                    return false
-            }
-            return firstTitle > secondTitle
+        
+        observation = download.observe(\.torrentStatus) { [weak self] download, change in
+            self?.status = download.torrentStatus
         }
     }
     
-}
-
-extension DownloadViewModel: PTTorrentDownloadManagerListener {
-    func downloadStatusDidChange(_ downloadStatus: PTTorrentDownloadStatus, for download: PTTorrentDownload) {
-        hasChanges.toggle()
+    func delete() {
+        PTTorrentDownloadManager.shared().delete(download)
     }
     
-    func downloadDidFail(_ download: PTTorrentDownload, withError error: Error) {
-        self.error = error
+    func play() {
+        let media: Media = Movie(download.mediaMetadata) ?? Episode(download.mediaMetadata)!
+        // No torrent metadata necessary, media
+        self.preloadTorrentModel = PreloadTorrentViewModel(torrent: Torrent(), media: media, onReadyToPlay: { [weak self] playerModel in
+            self?.playerModel = playerModel
+            self?.selection = .play
+        })
+        self.selection = .preload
+    }
+    
+    func continueDownload() {
+        PTTorrentDownloadManager.shared().resumeDownload(download)
+    }
+    
+    func pause() {
+        PTTorrentDownloadManager.shared().pause(download)
+    }
+}
+
+
+extension PTTorrentDownload {
+    var title: String {
+        return mediaMetadata[MPMediaItemPropertyTitle] as? String ?? ""
+    }
+    
+    var smallCoverImage: String? {
+        return mediaMetadata[MPMediaItemPropertyBackgroundArtwork]  as? String
+    }
+    
+    var show: Show? {
+        Episode(mediaMetadata)?.show
+    }
+    
+    var isEpisode: Bool {
+        Episode(mediaMetadata)?.show != nil
+    }
+    
+    var isCompleted: Bool {
+        return downloadStatus == .finished
+    }
+    
+    static func dummy(status: PTTorrentDownloadStatus) -> PTTorrentDownload {
+        return PTTorrentDownload(mediaMetadata: Movie.dummy().mediaItemDictionary, downloadStatus: status)
+    }
+    
+    static func dummyEpisode(status: PTTorrentDownloadStatus) -> PTTorrentDownload {
+        let episode = Episode(JSON: showEpisodesJSON[0])!
+        return PTTorrentDownload(mediaMetadata: episode.mediaItemDictionary, downloadStatus: status)
     }
 }

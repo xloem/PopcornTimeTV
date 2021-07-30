@@ -12,7 +12,6 @@ struct TabBarView: View {
     var body: some View {
         TabView {
             MoviesView()
-                .environmentObject(MoviesViewModel())
                 .tabItem {
                     Text("Movies")
                 }

@@ -67,7 +67,7 @@ struct PreloadTorrentView: View {
 
 struct PreloadTorrentView_Previews: PreviewProvider {
     static var previews: some View {
-        let model = PreloadTorrentViewModel(torrent: Torrent(), media: Movie.dummy())
+        let model = PreloadTorrentViewModel(torrent: Torrent(), media: Movie.dummy(), onReadyToPlay: {_ in })
         PreloadTorrentView(viewModel: model)
     }
 }

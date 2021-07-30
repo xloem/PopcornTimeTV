@@ -118,7 +118,8 @@ open class NetworkManager: NSObject {
         configuration.httpCookieAcceptPolicy = .never
         configuration.httpShouldSetCookies = false
         configuration.urlCache = nil
-        configuration.requestCachePolicy = .reloadIgnoringCacheData
+//        configuration.requestCachePolicy = .reloadIgnoringCacheData
+        configuration.httpAdditionalHeaders = ["User-Agent": "Popcorn Time NodeJS"]
         return Alamofire.SessionManager(configuration: configuration)
     }()
     

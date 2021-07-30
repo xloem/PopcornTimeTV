@@ -68,7 +68,6 @@ struct DownloadButton: View {
                 VStack {
                     VisualEffectBlur() {
                         Image("Download Progress Finished")
-                            .background(VisualEffectBlur())
                     }
                     Text("Options".localized)
                 }

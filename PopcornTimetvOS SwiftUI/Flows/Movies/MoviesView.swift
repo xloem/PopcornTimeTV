@@ -10,7 +10,7 @@ import SwiftUI
 import PopcornKit
 
 struct MoviesView: View {
-    @EnvironmentObject var viewModel: MoviesViewModel
+    @StateObject var viewModel = MoviesViewModel()
     let columns = [
         GridItem(.adaptive(minimum: 240))
 //        GridItem(.fixed(250), spacing: 80),
@@ -20,6 +20,7 @@ struct MoviesView: View {
     
     var body: some View {
         ZStack(alignment: .leading) {
+            errorView
             ScrollView {
                 LazyVGrid(columns: columns, spacing: 60) {
                     ForEach(viewModel.movies, id: \.self) { movie in
@@ -41,7 +42,9 @@ struct MoviesView: View {
             }
             .padding(.horizontal)
             .onAppear {
-                viewModel.loadMovies()
+                if viewModel.movies.isEmpty {
+                    viewModel.loadMovies()
+                }
             }
             LeftSidePanelView(currentSort: $viewModel.currentFilter, currentGenre: $viewModel.currentGenre)
                 .padding(.leading, -50)
@@ -56,6 +59,18 @@ struct MoviesView: View {
             }
         if viewModel.isLoading {
             ProgressView()
+        }
+    }
+    
+    @ViewBuilder
+    var errorView: some View {
+        if let error = viewModel.error {
+            HStack() {
+                Spacer()
+                ErrorView(error: error)
+                    .padding(.bottom, 100)
+                Spacer()
+            }
         }
     }
 }

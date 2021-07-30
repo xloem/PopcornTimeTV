@@ -28,9 +28,12 @@ class PreloadTorrentViewModel: ObservableObject {
     @Published var showFileToPlay = false
     @Published var playerModel: PlayerViewModel?
     
-    init(torrent: Torrent, media: Media) {
+    var onReadyToPlay: (PlayerViewModel) -> Void
+    
+    init(torrent: Torrent, media: Media, onReadyToPlay: @escaping (PlayerViewModel) -> Void) {
         self.torrent = torrent
         self.media = media
+        self.onReadyToPlay = onReadyToPlay
     }
     
     func cancel() {
@@ -70,16 +73,29 @@ class PreloadTorrentViewModel: ObservableObject {
         finishedLoadingBlock: @escaping () -> Void)
     {
         let playBlock: (URL, URL, Media, Episode?) -> Void = { (videoFileURL, videoFilePath, media, nextEpisode) in
-            self.playerModel = PlayerViewModel(media: media, fromUrl: videoFileURL, localUrl: videoFilePath, directory: videoFilePath.deletingLastPathComponent(), streamer: self.streamer!)
-            self.playerModel?.startPosition = self.watchedProgress
-            finishedLoadingBlock()
+            DispatchQueue.main.async {
+                let playerModel = PlayerViewModel(media: media, fromUrl: videoFileURL, localUrl: videoFilePath, directory: videoFilePath.deletingLastPathComponent(), streamer: self.streamer!)
+                playerModel.startPosition = self.watchedProgress
+                finishedLoadingBlock()
+                self.playerModel = playerModel
+                self.onReadyToPlay(playerModel)
+            }
         }
         
         if hasDownloaded, let download = associatedDownload {
-            return download.play { (videoFileURL, videoFilePath) in
+            download.play { (videoFileURL, videoFilePath) in
                 self.streamer = download
                 playBlock(videoFileURL, videoFilePath, self.media, nextEpisode)
             }
+            return
+        }
+        
+        if isDownloading, let download = associatedDownload {
+            download.play { (videoFileURL, videoFilePath) in
+                self.streamer = download
+                playBlock(videoFileURL, videoFilePath, self.media, nextEpisode)
+            }
+            return
         }
         
         let loadingBlock: (PTTorrentStatus) -> Void = { status in
@@ -98,7 +114,7 @@ class PreloadTorrentViewModel: ObservableObject {
         
         if url.hasPrefix("magnet") || (url.hasSuffix(".torrent") && !url.hasPrefix("http")) {
             self.streamer = .shared()
-            PTTorrentStreamer.shared().startStreaming(fromFileOrMagnetLink: url, progress: { (status) in
+            self.streamer!.startStreaming(fromFileOrMagnetLink: url, progress: { (status) in
                 loadingBlock(status)
             }, readyToPlay: { (videoFileURL, videoFilePath) in
                 playBlock(videoFileURL, videoFilePath, self.media, nextEpisode)

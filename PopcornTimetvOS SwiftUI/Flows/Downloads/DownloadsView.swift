@@ -8,44 +8,53 @@
 
 import SwiftUI
 import PopcornKit
+import PopcornTorrent
 
 struct DownloadsView: View {
-    @StateObject var viewModel = DownloadViewModel()
+    @StateObject var viewModel = DownloadsViewModel()
     
     var body: some View {
-        emptyView
+        ZStack {
+            if viewModel.isEmpty {
+                emptyView
+            } else {
+                ScrollView {
+                    VStack {
+                        if !viewModel.downloading.isEmpty {
+                            downloadingSection
+                        }
+                        if !viewModel.completedMovies.isEmpty {
+                            movieSection
+                        }
+                        if !viewModel.completedEpisodes.isEmpty {
+                            showSection
+                        }
+                    }
+                }
+                
+            }
+        }
+        .onAppear {
+            viewModel.reload()
+        }
     }
     
     @ViewBuilder
     var emptyView: some View {
-        if viewModel.isEmpty {
-            VStack {
-                Text("Downloads Empty".localized)
-                    .font(.title2)
-                    .padding()
-                Text("Movies and episodes you download will show up here.".localized)
-                    .font(.callout)
-                    .foregroundColor(.init(white: 1.0, opacity: 0.667))
-                    .frame(maxWidth: 400)
-                    .multilineTextAlignment(.center)
-            }
-        } else {
-            ScrollView {
-                VStack {
-                    downloadingSection
-                    movieSection
-                    showSection
-                }
-            }
+        VStack {
+            Text("Downloads Empty".localized)
+                .font(.title2)
+                .padding()
+            Text("Movies and episodes you download will show up here.".localized)
+                .font(.callout)
+                .foregroundColor(.init(white: 1.0, opacity: 0.667))
+                .frame(maxWidth: 400)
+                .multilineTextAlignment(.center)
         }
     }
     
     @ViewBuilder
     var downloadingSection: some View {
-        if viewModel.downloading.isEmpty {
-            EmptyView()
-        }
-                
         VStack(alignment: .leading) {
             Text("Downloading".localized)
                 .font(.callout)
@@ -54,17 +63,12 @@ struct DownloadsView: View {
             ScrollView(.horizontal) {
                 HStack(spacing: 40) {
                     ForEach(viewModel.downloading, id: \.self) { download in
-                        NavigationLink(
-                            destination:
-                                EmptyView(),
-                            label: {
-                                DownloadView(download: download)
-                                    .frame(width: download.isEpisode ? 310 : 240)
-                            })
-                            .buttonStyle(PlainNavigationLinkButtonStyle())
+                        DownloadView(viewModel: DownloadViewModel(download: download))
+                            .frame(width: 500)
+//                            .background(Color.red)
 //                            .padding([.leading, .trailing], 10)
                     }
-                    .padding(20) // allow zoom
+                    .padding(30) // allow zoom
                 }.padding(.all, 0)
             }
         }
@@ -80,14 +84,8 @@ struct DownloadsView: View {
             ScrollView(.horizontal) {
                 HStack(spacing: 40) {
                     ForEach(viewModel.completedMovies, id: \.self) { download in
-                        NavigationLink(
-                            destination:
-                                EmptyView(),
-                            label: {
-                                DownloadView(download: download)
-                                    .frame(width: 240)
-                            })
-                            .buttonStyle(PlainNavigationLinkButtonStyle())
+                        DownloadView(viewModel: DownloadViewModel(download: download))
+                            .frame(width: 240, height: 420)
 //                            .padding([.leading, .trailing], 10)
                     }
                     .padding(20) // allow zoom
@@ -99,22 +97,15 @@ struct DownloadsView: View {
     @ViewBuilder
     var showSection: some View {
         VStack(alignment: .leading) {
-            Text("Shows".localized)
+            Text("Episodes".localized)
                 .font(.callout)
                 .foregroundColor(.init(white: 1.0, opacity: 0.667)) // light text color
                 .padding(.top, 14)
             ScrollView(.horizontal) {
                 HStack(spacing: 40) {
                     ForEach(viewModel.completedEpisodes, id: \.self) { download in
-                        NavigationLink(
-                            destination:
-                                EmptyView(),
-                            label: {
-                                DownloadView(download: download, show: Episode(download.mediaMetadata)?.show)
-                                    .frame(width: 240)
-                            })
-                            .buttonStyle(PlainNavigationLinkButtonStyle())
-//                            .padding([.leading, .trailing], 10)
+                        DownloadView(viewModel: DownloadViewModel(download: download))
+                            .frame(width: 240, height: 420)
                     }
                     .padding(20) // allow zoom
                 }.padding(.all, 0)
@@ -125,6 +116,17 @@ struct DownloadsView: View {
 
 struct DownloadsView_Previews: PreviewProvider {
     static var previews: some View {
-        DownloadsView()
+        activeDownloadsView
+//        DownloadsView()
+    }
+    
+    static var activeDownloadsView: some View {
+        let viewModel = DownloadsViewModel()
+        return DownloadsView(viewModel: viewModel)
+            .onAppear {
+//                viewModel.downloading = [.dummy(status: .downloading), .dummy(status: .downloading)]
+                viewModel.completedMovies = [.dummy(status: .finished)]
+                viewModel.completedEpisodes = [.dummyEpisode(status: .finished)]
+            }
     }
 }
