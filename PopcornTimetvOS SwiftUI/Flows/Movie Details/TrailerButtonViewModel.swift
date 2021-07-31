@@ -50,7 +50,7 @@ class TrailerButtonViewModel: ObservableObject {
     func loadTrailerUrl(_ completion: @escaping (URL) -> Void) {
         self.error.wrappedValue = nil
         guard let id = movie.trailerCode else {
-            self.error.wrappedValue = NSError(domain: "popcorn", code: 2, userInfo: [NSLocalizedDescriptionKey: "Video trailer not found!".localized])
+            self.error.wrappedValue = NSError(domain: "popcorn", code: 2, userInfo: [NSLocalizedDescriptionKey: "Trailer not found!".localized])
             return
         }
         
