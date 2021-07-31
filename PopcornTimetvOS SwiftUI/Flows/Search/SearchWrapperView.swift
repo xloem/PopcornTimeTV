@@ -10,15 +10,20 @@ import SwiftUI
 
 struct SearchWrapperView: UIViewControllerRepresentable {
     @Binding var text: String
+    var scopesTitles: [String] = []
 
-     typealias UIViewControllerType = UISearchContainerViewController
+     typealias UIViewControllerType = UINavigationController
 
      typealias Context = UIViewControllerRepresentableContext<SearchWrapperView>
      
      func makeUIViewController(context: Context) -> UIViewControllerType {
          let controller = UISearchController(searchResultsController: context.coordinator)
          controller.searchResultsUpdater = context.coordinator
-         return UISearchContainerViewController(searchController: controller)
+         controller.searchBar.scopeButtonTitles = scopesTitles
+         controller.searchBar.showsScopeBar = scopesTitles.count > 1
+         controller.isActive = true
+         controller.searchBar.delegate = context.coordinator
+         return UINavigationController(rootViewController: UISearchContainerViewController(searchController: controller))
      }
 
      func updateUIViewController(_ uiViewController: UIViewControllerType, context: Context) { }
@@ -27,7 +32,7 @@ struct SearchWrapperView: UIViewControllerRepresentable {
          return Coordinator(text: $text)
      }
 
-     class Coordinator: UIViewController, UISearchResultsUpdating {
+     class Coordinator: UIViewController, UISearchResultsUpdating, UISearchBarDelegate {
          
          @Binding var text: String
 
@@ -45,5 +50,8 @@ struct SearchWrapperView: UIViewControllerRepresentable {
              text = searchText
          }
      
+        func searchBar(_ searchBar: UISearchBar, selectedScopeButtonIndexDidChange selectedScope: Int) {
+            print(#function)
+        }
      }
 }

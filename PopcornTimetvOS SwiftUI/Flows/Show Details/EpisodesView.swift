@@ -35,7 +35,7 @@ struct EpisodesView: View {
             titleView
             episodesCountView
             ScrollView(.horizontal) {
-                HStack {
+                LazyHStack {
                     ForEach(episodes, id: \.self) { episode in
                         SelectTorrentQualityButton(media: episode, action: { torrent in
                             playTorrent(torrent, episode: episode)
