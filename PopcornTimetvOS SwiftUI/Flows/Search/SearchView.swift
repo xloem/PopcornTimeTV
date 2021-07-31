@@ -13,32 +13,27 @@ struct SearchView: View {
     @StateObject var viewModel = SearchViewModel()
     
     var body: some View {
-        VStack {
+        ZStack {
             SearchWrapperView(text: $viewModel.search,
+                              selection: $viewModel.selection,
                               scopesTitles: ["Movies".localized,
                                              "Shows".localized,
                                              "People".localized])
-                .focusable()
-//            Picker(selection: $viewModel.selection, label: Text("")) {
-//                Text("Movies".localized).tag(SearchViewModel.SearchType.movies)
-//                Text("Shows".localized).tag(SearchViewModel.SearchType.shows)
-//                Text("People".localized).tag(SearchViewModel.SearchType.people)
-//            }
-//            .pickerStyle(SegmentedPickerStyle())
-//            Spacer()
-            errorView
-            if viewModel.isLoading {
-                ProgressView()
+            VStack {
+                Spacer(minLength: 400)
+                errorView
+                if viewModel.isLoading {
+                    ProgressView()
+                }
+                switch viewModel.selection {
+                case .movies:
+                    moviesSection
+                case .shows:
+                    showsSection
+                case .people:
+                    peopleSection
+                }
             }
-            switch viewModel.selection {
-            case .movies:
-                moviesSection
-            case .shows:
-                showsSection
-            case .people:
-                peopleSection
-            }
-            
         }
     }
     
@@ -48,7 +43,7 @@ struct SearchView: View {
             emptyView
         } else {
             ScrollView(.horizontal) {
-                LazyHStack(spacing: 20) {
+                LazyHStack(spacing: 40) {
                     ForEach(viewModel.movies, id: \.self) { movie in
                         NavigationLink(
                             destination: MovieDetailsView(viewModel: MovieDetailsViewModel(movie: movie)),
@@ -69,7 +64,7 @@ struct SearchView: View {
             emptyView
         } else {
             ScrollView(.horizontal) {
-                LazyHStack(spacing: 20) {
+                LazyHStack(spacing: 40) {
                     ForEach(viewModel.shows, id: \.self) { show in
                         NavigationLink(
                             destination: ShowDetailsView(viewModel: ShowDetailsViewModel(show: show)),
@@ -92,7 +87,7 @@ struct SearchView: View {
             let persons = viewModel.persons
             
             ScrollView(.horizontal) {
-                LazyHStack(spacing: 20) {
+                LazyHStack(spacing: 40) {
                     ForEach(0..<persons.count, id: \.self) { index in
                         NavigationLink(
                             destination: PersonDetailsView(viewModel: PersonDetailsViewModel(person: persons[index])),
@@ -103,6 +98,8 @@ struct SearchView: View {
                             .buttonStyle(PlainNavigationLinkButtonStyle())
                     }
                 }
+                .frame(height: 321)
+                Spacer()
             }
         }
     }
@@ -121,12 +118,13 @@ struct SearchView: View {
     
     @ViewBuilder
     var emptyView: some View {
-        if viewModel.search.count > 0 {
+        if viewModel.search.count > 0 && viewModel.error == nil {
             let openQuote = Locale.current.quotationBeginDelimiter ?? "\""
             let closeQuote = Locale.current.quotationEndDelimiter ?? "\""
             let description = String.localizedStringWithFormat("We didn't turn anything up for %@. Try something else.".localized, "\(openQuote + viewModel.search + closeQuote)")
             
             VStack {
+                Spacer()
                 Text("No results".localized)
                     .font(.title2)
                     .padding()
@@ -135,6 +133,7 @@ struct SearchView: View {
                     .foregroundColor(.init(white: 1.0, opacity: 0.667))
                     .frame(maxWidth: 400)
                     .multilineTextAlignment(.center)
+                Spacer()
             }
         }
     }

@@ -10,34 +10,43 @@ import SwiftUI
 
 struct SearchWrapperView: UIViewControllerRepresentable {
     @Binding var text: String
+    @Binding var selection: SearchViewModel.SearchType
     var scopesTitles: [String] = []
 
      typealias UIViewControllerType = UINavigationController
-
      typealias Context = UIViewControllerRepresentableContext<SearchWrapperView>
      
-     func makeUIViewController(context: Context) -> UIViewControllerType {
+    func makeUIViewController(context: Context) -> UIViewControllerType {
          let controller = UISearchController(searchResultsController: context.coordinator)
          controller.searchResultsUpdater = context.coordinator
          controller.searchBar.scopeButtonTitles = scopesTitles
          controller.searchBar.showsScopeBar = scopesTitles.count > 1
-         controller.isActive = true
-         controller.searchBar.delegate = context.coordinator
-         return UINavigationController(rootViewController: UISearchContainerViewController(searchController: controller))
+//         controller.hidesNavigationBarDuringPresentation = false
+//        controller.edgesForExtendedLayout = []
+         let navigationController = UINavigationController(rootViewController: UISearchContainerViewController(searchController: controller))
+//        controller.searchControllerObservedScrollView = UIScrollView()
+        return navigationController
      }
 
-     func updateUIViewController(_ uiViewController: UIViewControllerType, context: Context) { }
+     func updateUIViewController(_ uiViewController: UIViewControllerType, context: Context) {
+        let container = uiViewController.viewControllers.first as? UISearchContainerViewController
+//        container?.searchController.searchControllerObservedScrollView = nil
+//        container?.searchController.tabBarObservedScrollView = nil
+     }
 
      func makeCoordinator() -> SearchWrapperView.Coordinator {
-         return Coordinator(text: $text)
+         return Coordinator(text: $text, selection: $selection)
      }
 
-     class Coordinator: UIViewController, UISearchResultsUpdating, UISearchBarDelegate {
+     class Coordinator: UIViewController, UISearchResultsUpdating {
          
          @Binding var text: String
+         @Binding var selection: SearchViewModel.SearchType
+        var observer: Any?
 
-         init(text: Binding<String>) {
+        init(text: Binding<String>, selection: Binding<SearchViewModel.SearchType>) {
              _text = text
+             _selection = selection
              super.init(nibName: nil, bundle: nil)
          }
         
@@ -48,10 +57,7 @@ struct SearchWrapperView: UIViewControllerRepresentable {
          func updateSearchResults(for searchController: UISearchController) {
              guard let searchText = searchController.searchBar.text else { return }
              text = searchText
+             selection = .init(rawValue: searchController.searchBar.selectedScopeButtonIndex)!
          }
-     
-        func searchBar(_ searchBar: UISearchBar, selectedScopeButtonIndexDidChange selectedScope: Int) {
-            print(#function)
-        }
      }
 }

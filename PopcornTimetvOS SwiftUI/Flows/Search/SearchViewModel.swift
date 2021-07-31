@@ -8,6 +8,7 @@
 
 import SwiftUI
 import PopcornKit
+import Combine
 
 class SearchViewModel: ObservableObject {
     enum SearchType: Int {
@@ -22,14 +23,15 @@ class SearchViewModel: ObservableObject {
     @Published var shows: [Show] = []
     @Published var persons: [Person] = []
     @Published var error: Error?
-    var onTextChange: Any?
+    var onTextChange: AnyCancellable?
     
     init() {
-        self.onTextChange = self.$search
-//            .filter({ $0.count > 2})
-            .removeDuplicates()
-            .debounce(for: 0.5, scheduler: RunLoop.main).sink(receiveValue: { [weak self] value in
-            self?.filterSearchText(value)
+        self.onTextChange = Publishers.CombineLatest($search, $selection)
+            .removeDuplicates { prev, curent in
+                prev == curent
+            }.debounce(for: 0.5, scheduler: RunLoop.main)
+            .sink(receiveValue: { [weak self] value in
+                self?.filterSearchText(value.0)
         })
     }
     
@@ -43,6 +45,9 @@ class SearchViewModel: ObservableObject {
         }
         
         isLoading = true
+        persons = []
+        movies = []
+        shows = []
         
         switch selection {
         case .movies:
