@@ -8,17 +8,23 @@
 
 import SwiftUI
 import PopcornKit
+import SwiftUIFocusGuide
 
 struct SearchView: View {
     @StateObject var viewModel = SearchViewModel()
+    @StateObject var focusBag = SwiftUIFocusBag()
     
     var body: some View {
         ZStack {
+            VStack {
             SearchWrapperView(text: $viewModel.search,
                               selection: $viewModel.selection,
                               scopesTitles: ["Movies".localized,
                                              "Shows".localized,
                                              "People".localized])
+                .addFocusGuide(using: focusBag, name: "Search", destinations: [.bottom: "Results"], debug: true)
+                Spacer(minLength: 475)
+            }
             VStack {
                 Spacer(minLength: 400)
                 errorView
@@ -28,10 +34,13 @@ struct SearchView: View {
                 switch viewModel.selection {
                 case .movies:
                     moviesSection
+                        .addFocusGuide(using: focusBag, name: "Results", destinations: [.top: "Search", .bottom: "Search"], debug: true)
                 case .shows:
                     showsSection
+                        .addFocusGuide(using: focusBag, name: "Results", destinations: [.top: "Search", .bottom: "Search"])
                 case .people:
                     peopleSection
+                        .addFocusGuide(using: focusBag, name: "Results", destinations: [.top: "Search", .bottom: "Search"])
                 }
             }
         }
