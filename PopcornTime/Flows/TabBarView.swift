@@ -15,6 +15,7 @@ struct TabBarView: View {
                 .tabItem {
                     Text("Movies")
                 }
+            #if os(tvOS)
             ShowsView()
                 .tabItem {
                     Text("Shows")
@@ -35,6 +36,7 @@ struct TabBarView: View {
                 .tabItem {
                     Text("Settings")
                 }
+            #endif
             
         }.ignoresSafeArea()
     }

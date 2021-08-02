@@ -6,8 +6,6 @@
 //
 
 import Foundation
-import UIKit
-import UserNotifications
 
 // explanation https://dev.to/kodelit/userdefaults-property-wrapper-issues-solutions-4lk9#improved-user-default
 // repo https://github.com/kodelit/UserDefaultPropertyWrapper

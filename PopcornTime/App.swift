@@ -11,7 +11,7 @@ import PopcornKit
 import ObjectMapper
 
 @main
-struct PopcornTimetvOS_SwiftUIApp: App {
+struct PopcornTime: App {
     @State var tosAccepted = Session.tosAccepted
     @State var media: Media?
     @State var showOpenedMedia: Bool = false
@@ -23,12 +23,14 @@ struct PopcornTimetvOS_SwiftUIApp: App {
                     TermsOfServiceView(tosAccepted: $tosAccepted)
                 } else {
                     ZStack {
+                        #if os(tvOS)
                         NavigationLink(
                             destination: mediaView,
                             isActive: $showOpenedMedia) {
                                 EmptyView()
                         }
                         .hidden()
+                        #endif
                         
                         TabBarView()
                     }.onOpenURL { url in
@@ -41,6 +43,7 @@ struct PopcornTimetvOS_SwiftUIApp: App {
         }
     }
     
+    #if os(tvOS)
     @ViewBuilder
     var mediaView: some View {
         switch media {
@@ -52,6 +55,7 @@ struct PopcornTimetvOS_SwiftUIApp: App {
             EmptyView()
         }
     }
+    #endif
     
     func openUrl(url: URL) {
         if url.scheme == "PopcornTimeSwiftUI" {

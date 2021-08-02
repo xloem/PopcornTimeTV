@@ -1,5 +1,5 @@
 //
-//  MoviesView.swift
+//  ShowsView.swift
 //  PopcornTimetvOS SwiftUI
 //
 //  Created by Alexandru Tudose on 19.06.2021.
@@ -9,13 +9,10 @@
 import SwiftUI
 import PopcornKit
 
-struct MoviesView: View {
-    @StateObject var viewModel = MoviesViewModel()
+struct ShowsView: View {
+    @StateObject var viewModel = ShowsViewModel()
     let columns = [
         GridItem(.adaptive(minimum: 240))
-//        GridItem(.fixed(250), spacing: 80),
-//        GridItem(.fixed(250), spacing: 80),
-//        GridItem(.flexible(), spacing: 80)
     ]
     
     var body: some View {
@@ -23,31 +20,33 @@ struct MoviesView: View {
             errorView
             ScrollView {
                 LazyVGrid(columns: columns, spacing: 60) {
-                    ForEach(viewModel.movies, id: \.self) { movie in
+                    ForEach(viewModel.shows, id: \.self) { show in
                         NavigationLink(
-                            destination: MovieDetailsView(viewModel: MovieDetailsViewModel(movie: movie)),
+                            destination: ShowDetailsView(viewModel: ShowDetailsViewModel(show: show)),
                             label: {
-                                MovieView(movie: movie)
+                                ShowView(show: show)
                             })
                             .buttonStyle(PlainNavigationLinkButtonStyle())
                             .padding([.leading, .trailing], 10)
                     }
-                    if (!viewModel.movies.isEmpty) {
+                    if (!viewModel.shows.isEmpty) {
                         loadingView
                     }
                 }.padding(.all, 0)
-                if viewModel.isLoading && viewModel.movies.isEmpty {
+                if viewModel.isLoading && viewModel.shows.isEmpty {
                     ProgressView()
                 }
             }
             .padding(.horizontal)
             .onAppear {
-                if viewModel.movies.isEmpty {
-                    viewModel.loadMovies()
+                if viewModel.shows.isEmpty {
+                    viewModel.loadShows()
                 }
             }
+            #if os(tvOS)
             LeftSidePanelView(currentSort: $viewModel.currentFilter, currentGenre: $viewModel.currentGenre)
                 .padding(.leading, -50)
+            #endif
         }
     }
     
@@ -55,7 +54,7 @@ struct MoviesView: View {
     var loadingView: some View {
         Text("")
             .onAppear {
-                viewModel.loadMovies()
+                viewModel.loadShows()
             }
         if viewModel.isLoading {
             ProgressView()
@@ -75,10 +74,10 @@ struct MoviesView: View {
     }
 }
 
-struct MoviesView_Previews: PreviewProvider {
+struct ShowsView_Previews: PreviewProvider {
     static var previews: some View {
-        let model = MoviesViewModel()
-        model.movies = Movie.dummiesFromJSON()
-        return MoviesView().environmentObject(model)
+        let model = ShowsViewModel()
+        model.shows = Show.dummiesFromJSON()
+        return ShowsView(viewModel: model)
     }
 }

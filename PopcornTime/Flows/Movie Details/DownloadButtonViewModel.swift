@@ -22,9 +22,10 @@ class DownloadButtonViewModel: NSObject, ObservableObject {
     @Published var showDownloadedActionSheet = false
     @Published var downloadError: Error?
     @Published var downloadProgress: Float = 0
-    
+    #if os(tvOS)
     var playerModel: PlayerViewModel?
     var preloadTorrentModel: PreloadTorrentViewModel?
+    #endif
     @Published var selection: Selection? = nil
     
     enum Selection: Int, Identifiable {
@@ -79,6 +80,7 @@ class DownloadButtonViewModel: NSObject, ObservableObject {
     }
     
     func play() {
+        #if os(tvOS)
         guard let download = download else { return }
         
         let media: Media = Movie(download.mediaMetadata) ?? Episode(download.mediaMetadata)!
@@ -88,6 +90,7 @@ class DownloadButtonViewModel: NSObject, ObservableObject {
             self?.selection = .play
         })
         self.selection = .preload
+        #endif
     }
     
     func deleteDownload() {

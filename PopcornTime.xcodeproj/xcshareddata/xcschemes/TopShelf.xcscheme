@@ -30,8 +30,8 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "23313AFC267E374F00774A85"
-               BuildableName = "PopcornTimetvOS SwiftUI.app"
-               BlueprintName = "PopcornTimetvOS SwiftUI"
+               BuildableName = "PopcornTime (tvOS).app"
+               BlueprintName = "PopcornTime (tvOS)"
                ReferencedContainer = "container:PopcornTime.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
@@ -62,8 +62,8 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "23313AFC267E374F00774A85"
-            BuildableName = "PopcornTimetvOS SwiftUI.app"
-            BlueprintName = "PopcornTimetvOS SwiftUI"
+            BuildableName = "PopcornTime (tvOS).app"
+            BlueprintName = "PopcornTime (tvOS)"
             ReferencedContainer = "container:PopcornTime.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
@@ -81,8 +81,8 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "23313AFC267E374F00774A85"
-            BuildableName = "PopcornTimetvOS SwiftUI.app"
-            BlueprintName = "PopcornTimetvOS SwiftUI"
+            BuildableName = "PopcornTime (tvOS).app"
+            BlueprintName = "PopcornTime (tvOS)"
             ReferencedContainer = "container:PopcornTime.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>

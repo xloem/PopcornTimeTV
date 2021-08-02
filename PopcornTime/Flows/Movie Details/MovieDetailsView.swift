@@ -9,7 +9,9 @@
 import SwiftUI
 import PopcornKit
 import Kingfisher
+#if canImport(UIKit)
 import UIKit
+#endif
 
 struct MovieDetailsView: View {
     @StateObject var viewModel: MovieDetailsViewModel
@@ -26,7 +28,11 @@ struct MovieDetailsView: View {
     
     var body: some View {
         ZStack {
-            backgroundImage
+//            GeometryReader { geometry
+//                in
+//                backgroundImage(size: geometry.size)
+//            }
+            backgroundImage(size: UIScreen.main.bounds.size)
             Color(white: 0, opacity: 0.3)
                 .ignoresSafeArea()
             ScrollView {
@@ -109,14 +115,15 @@ struct MovieDetailsView: View {
         }
     }
     
-    var backgroundImage: some View {
-        KFImage(viewModel.backgroundUrl)
+    func backgroundImage(size: CGSize) -> some View {
+        print(size)
+        return KFImage(viewModel.backgroundUrl)
             .resizable()
             .loadImmediately()
             .aspectRatio(contentMode: .fill)
             .padding(0)
             .ignoresSafeArea()
-            .frame(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height)
+            .frame(width: size.width, height: size.height)
     }
     
     
