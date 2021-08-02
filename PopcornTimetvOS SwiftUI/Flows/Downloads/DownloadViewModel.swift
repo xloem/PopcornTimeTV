@@ -44,7 +44,11 @@ class DownloadViewModel: NSObject, ObservableObject {
     }
     
     func delete() {
-        PTTorrentDownloadManager.shared().delete(download)
+        if download.downloadStatus == .processing {
+            PTTorrentDownloadManager.shared().pause(download)
+        } else {
+            PTTorrentDownloadManager.shared().delete(download)
+        }
     }
     
     func play() {

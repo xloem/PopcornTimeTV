@@ -4,16 +4,16 @@ PODS:
     - Protobuf (~> 3.13)
   - google-cast-sdk/Core (4.6.1):
     - Protobuf (~> 3.13)
-  - MobileVLCKit (3.3.16.3)
+  - MobileVLCKit (3.3.17)
   - OBSlider (1.1.1)
   - Protobuf (3.17.0)
-  - TVVLCKit (3.3.16)
+  - TVVLCKit (3.3.17)
 
 DEPENDENCIES:
   - google-cast-sdk (~> 4.4)
-  - MobileVLCKit (~> 3.3.16)
+  - MobileVLCKit (~> 3.3.17)
   - OBSlider (~> 1.1.1)
-  - TVVLCKit (~> 3.3.16)
+  - TVVLCKit (~> 3.3.17)
 
 SPEC REPOS:
   https://github.com/CocoaPods/Specs.git:
@@ -25,11 +25,11 @@ SPEC REPOS:
 
 SPEC CHECKSUMS:
   google-cast-sdk: 9fc76175641bc24ef2515e0263344bd2c5c4e75c
-  MobileVLCKit: 2b408a9c5cc327353afab418fafbc942780b248a
+  MobileVLCKit: c5dd1b0ae933dc9c2348099840e753496dcdd908
   OBSlider: 38853ebbb9cc6978a9b7ddc0d4f525588e8bb294
   Protobuf: 7327d4444215b5f18e560a97f879ff5503c4581c
-  TVVLCKit: a006a10734558712e8b4c20ef2c8b472d95ba990
+  TVVLCKit: 49e913b2e2d90ca538a84c012dd9281c7fa2cec0
 
-PODFILE CHECKSUM: deec5ff449815ce9ded5e25f6f41b445ea83dbc0
+PODFILE CHECKSUM: 6728d614d9baa318fabb6629c8ea60dff3c1ebea
 
 COCOAPODS: 1.10.1
