@@ -50,7 +50,9 @@ public class ThemeSongManager: NSObject, AVAudioPlayerDelegate {
         self.task = URLSession.shared.dataTask(with: URL(string: url)!, completionHandler: { (data, response, error) in
             do {
                 if let data = data {
+                    #if os(iOS) || os(tvOS)
                     try AVAudioSession.sharedInstance().setCategory(AVAudioSession.Category.playback, mode: AVAudioSession.Mode.default)
+                    #endif
                     
                     let adjustedVolume = Session.themeSongVolume * 0.25
                     
@@ -86,10 +88,4 @@ public class ThemeSongManager: NSObject, AVAudioPlayerDelegate {
             self.task = nil
         }
     }
-}
-
-
-// Helper function inserted by Swift 4.2 migrator.
-fileprivate func convertFromAVAudioSessionCategory(_ input: AVAudioSession.Category) -> String {
-	return input.rawValue
 }

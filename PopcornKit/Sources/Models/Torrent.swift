@@ -2,7 +2,10 @@
 
 import Foundation
 import ObjectMapper
+
+#if os(iOS) || os(tvOS)
 import UIKit
+#endif
 
 /**
  Health of a torrent.
@@ -19,6 +22,22 @@ public enum Health {
     /// Health of the torrent cannot be calcualted.
     case unknown
     
+    public var name: String {
+        switch self {
+        case .bad:
+            return "bad"
+        case .medium:
+            return "medium"
+        case .good:
+            return "good"
+        case .excellent:
+            return "excellent"
+        case .unknown:
+            return "unknow"
+        }
+    }
+    
+    #if os(iOS) || os(tvOS)
     /**
      - Bad:         Red.
      - Medium:      Orange.
@@ -55,6 +74,7 @@ public enum Health {
         UIGraphicsEndImageContext()
         return image!
     }
+    #endif
 }
 
 public struct Torrent: Mappable, Equatable, Comparable {

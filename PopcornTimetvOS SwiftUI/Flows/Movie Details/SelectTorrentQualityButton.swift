@@ -71,8 +71,11 @@ struct SelectTorrentQualityButton<Label>: View where Label : View {
     var chooseTorrentsButtons: [Alert.Button] {
         media.torrents.map { torrent in
             ActionSheet.Button.default(
-                Text(Image(uiImage: torrent.health.image.withRenderingMode(.alwaysOriginal))) +
-                Text(torrent.quality)) {
+                Text(torrent.quality)
+//                + Text(" (Health - \(torrent.health.name))")
+                + Text(" (seeds: \(torrent.seeds) - peers: \(torrent.peers))")
+//                Text(Image(uiImage: torrent.health.image.withRenderingMode(.alwaysOriginal)))
+                ) {
                 action(torrent)
             }
         }

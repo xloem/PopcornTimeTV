@@ -1,7 +1,6 @@
 
 
 import Foundation
-import UIKit.NSAttributedString
 
 extension String {
     

@@ -4,7 +4,7 @@ import PackageDescription
 let package = Package(
     name: "PopcornKit",
     platforms: [
-        .iOS(.v12), .tvOS(.v12)
+        .iOS(.v12), .tvOS(.v12), .macOS(.v11)
     ],
     products: [
         .library(name: "PopcornKit", targets: ["PopcornKit"]),

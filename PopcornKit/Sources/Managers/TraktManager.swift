@@ -3,11 +3,15 @@
 import ObjectMapper
 import Alamofire
 import SwiftyJSON
+import Foundation
 
 #if os(iOS)
     import SafariServices
+    import UIKit
 #endif
-import UIKit
+#if os(tvOS)
+    import UIKit
+#endif
 
 open class TraktManager: NetworkManager {
     
@@ -604,6 +608,7 @@ struct TraktContext: MapContext {}
 
 extension TraktManager {
     
+    #if os(iOS) || os(tvOS)
     /**
      First part of the Trakt authentication process.
      
@@ -621,6 +626,7 @@ extension TraktManager {
             return TraktAuthenticationViewController(nibName: "TraktAuthenticationViewController", bundle: TraktAuthenticationViewController.bundle)
         #endif
     }
+    #endif
     
     /**
      Logout of Trakt.

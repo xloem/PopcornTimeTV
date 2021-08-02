@@ -15,7 +15,7 @@
 		232BB5212694512C005448AE /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = 232BB5202694512C005448AE /* Alamofire */; };
 		232BB5242694562C005448AE /* PopcornTorrent in Frameworks */ = {isa = PBXBuildFile; productRef = 232BB5232694562C005448AE /* PopcornTorrent */; };
 		232BB527269456BF005448AE /* Kingfisher in Frameworks */ = {isa = PBXBuildFile; productRef = 232BB526269456BF005448AE /* Kingfisher */; };
-		23313B00267E374F00774A85 /* PopcornTimetvOS_SwiftUIApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23313AFF267E374F00774A85 /* PopcornTimetvOS_SwiftUIApp.swift */; };
+		23313B00267E374F00774A85 /* App.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23313AFF267E374F00774A85 /* App.swift */; };
 		23313B07267E375100774A85 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 23313B06267E375100774A85 /* Preview Assets.xcassets */; };
 		23313B0E267E388C00774A85 /* LoadingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23313B0D267E388C00774A85 /* LoadingView.swift */; };
 		23313B10267E39B400774A85 /* TabBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23313B0F267E39B400774A85 /* TabBarView.swift */; };
@@ -469,7 +469,7 @@
 		23025D92267E71BA00229559 /* MovieView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovieView.swift; sourceTree = "<group>"; };
 		2304530A26B541900050BCB8 /* SettingsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewModel.swift; sourceTree = "<group>"; };
 		23313AFD267E374F00774A85 /* PopcornTimetvOS SwiftUI.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "PopcornTimetvOS SwiftUI.app"; sourceTree = BUILT_PRODUCTS_DIR; };
-		23313AFF267E374F00774A85 /* PopcornTimetvOS_SwiftUIApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PopcornTimetvOS_SwiftUIApp.swift; sourceTree = "<group>"; };
+		23313AFF267E374F00774A85 /* App.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = App.swift; sourceTree = "<group>"; };
 		23313B03267E375100774A85 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		23313B06267E375100774A85 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		23313B08267E375100774A85 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -881,8 +881,8 @@
 		23313AFE267E374F00774A85 /* PopcornTimetvOS SwiftUI */ = {
 			isa = PBXGroup;
 			children = (
+				23313AFF267E374F00774A85 /* App.swift */,
 				23313B0C267E384C00774A85 /* Flows */,
-				23313AFF267E374F00774A85 /* PopcornTimetvOS_SwiftUIApp.swift */,
 				23313B42267E3DCD00774A85 /* Model */,
 				23313B43267E3DD700774A85 /* Access */,
 				23446AC4267F26E60049CC72 /* Views */,
@@ -2045,7 +2045,7 @@
 				2391BE7B2684759000576CAD /* DownloadButton.swift in Sources */,
 				23313B48267E3DF600774A85 /* JSONDecoder+KeyPath.swift in Sources */,
 				2343A75F268861C800B824E7 /* ExtendedSubtitlesView.swift in Sources */,
-				23313B00267E374F00774A85 /* PopcornTimetvOS_SwiftUIApp.swift in Sources */,
+				23313B00267E374F00774A85 /* App.swift in Sources */,
 				23446AD82680BD7B0049CC72 /* UIFont+Style.swift in Sources */,
 				23313B4D267E48C300774A85 /* MoviesViewModel.swift in Sources */,
 				23313B10267E39B400774A85 /* TabBarView.swift in Sources */,
