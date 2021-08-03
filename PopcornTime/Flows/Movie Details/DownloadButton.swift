@@ -13,6 +13,7 @@ import PopcornKit
 struct DownloadButton: View {
     @StateObject var viewModel: DownloadButtonViewModel
     var onFocus: () -> Void = {}
+    @State var showPlayer = false
     
     var body: some View {
         switch viewModel.state {
@@ -45,23 +46,12 @@ struct DownloadButton: View {
     
     var downloadedButton: some View {
         Group {
-            switch viewModel.selection {
-            case .some(.preload):
-                NavigationLink(
-                    destination: PreloadTorrentView(viewModel: viewModel.preloadTorrentModel!),
-                    tag: .preload,
-                    selection: $viewModel.selection) {
-                        EmptyView()
-                }
-            case .some(.play):
-                NavigationLink(
-                    destination: PlayerView().environmentObject(viewModel.playerModel!),
-                    tag: .play,
-                    selection: $viewModel.selection) {
-                        EmptyView()
-                    }
-            case nil: EmptyView()
-            }
+            NavigationLink(destination: TorrentPlayerView(torrent: viewModel.torrent ?? Torrent(), media: viewModel.media),
+                           isActive: $showPlayer,
+                           label: {
+                EmptyView()
+            })
+            .hidden()
             
             Button(action: {
                 viewModel.showDownloadedActionSheet = true
@@ -79,7 +69,7 @@ struct DownloadButton: View {
                             message: nil,
                             buttons: [
                                 .default(Text("Play".localized)) {
-                                    viewModel.play()
+                                    showPlayer = true
                                 },
                                 .destructive(Text("Delete Download".localized)) {
                                     viewModel.deleteDownload()

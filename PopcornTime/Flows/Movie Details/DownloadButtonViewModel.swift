@@ -22,17 +22,6 @@ class DownloadButtonViewModel: NSObject, ObservableObject {
     @Published var showDownloadedActionSheet = false
     @Published var downloadError: Error?
     @Published var downloadProgress: Float = 0
-    #if os(tvOS)
-    var playerModel: PlayerViewModel?
-    var preloadTorrentModel: PreloadTorrentViewModel?
-    #endif
-    @Published var selection: Selection? = nil
-    
-    enum Selection: Int, Identifiable {
-        case preload = 2
-        case play = 3
-        var id: Int { return rawValue }
-    }
     
     enum State: CaseIterable {
         case normal
@@ -77,20 +66,6 @@ class DownloadButtonViewModel: NSObject, ObservableObject {
         guard let download = download else { return }
         PTTorrentDownloadManager.shared().stop(download)
         state = .normal
-    }
-    
-    func play() {
-        #if os(tvOS)
-        guard let download = download else { return }
-        
-        let media: Media = Movie(download.mediaMetadata) ?? Episode(download.mediaMetadata)!
-        // No torrent metadata necessary, media
-        self.preloadTorrentModel = PreloadTorrentViewModel(torrent: Torrent(), media: media, onReadyToPlay: { [weak self] playerModel in
-            self?.playerModel = playerModel
-            self?.selection = .play
-        })
-        self.selection = .preload
-        #endif
     }
     
     func deleteDownload() {

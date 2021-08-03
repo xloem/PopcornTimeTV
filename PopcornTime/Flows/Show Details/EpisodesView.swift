@@ -16,30 +16,24 @@ struct EpisodesView: View {
     var currentSeason: Int
     @State var currentEpisode: Episode?
     
-    @State var preloadTorrentModel: PreloadTorrentViewModel?
-    @State var playerModel: PlayerViewModel?
-    
     @State var torrent: Torrent?
+    @State var showPlayer = false
     
-    @State var selection: Selection? = nil
-    enum Selection: Int, Identifiable {
-        case preload = 2
-        case play = 3
-        
-        var id: Int { return rawValue }
-    }
     var onFocus: () -> Void = {}
     
     var body: some View {
         return VStack(alignment: .leading) {
-            navigationLinks
+            navigationLink
+                .hidden()
             titleView
             episodesCountView
             ScrollView(.horizontal) {
                 LazyHStack {
                     ForEach(episodes, id: \.self) { episode in
                         SelectTorrentQualityButton(media: episode, action: { torrent in
-                            playTorrent(torrent, episode: episode)
+                            self.torrent = torrent
+                            self.currentEpisode = episode
+                            showPlayer = true
                         }, label: {
                            EpisodeView(episode: episode)
                         }, onFocus: {
@@ -67,25 +61,13 @@ struct EpisodesView: View {
     }
     
     @ViewBuilder
-    var navigationLinks: some View {
-        if let _ = torrent {
-            switch selection {
-            case .some(.preload):
-                NavigationLink(
-                    destination: PreloadTorrentView(viewModel: preloadTorrentModel!),
-                    tag: Selection.preload,
-                    selection: $selection) {
-                        EmptyView()
-                }
-            case .some(.play):
-                NavigationLink(
-                    destination: PlayerView().environmentObject(playerModel!),
-                    tag: Selection.play,
-                    selection: $selection) {
-                        EmptyView()
-                    }
-            case nil: EmptyView()
-            }
+    var navigationLink: some View {
+        if let torrent = torrent, let episode = currentEpisode {
+            NavigationLink(destination: TorrentPlayerView(torrent: torrent, media: episode),
+                           isActive: $showPlayer,
+                           label: {
+                EmptyView()
+            })
         }
     }
     
@@ -134,15 +116,6 @@ struct EpisodesView: View {
             .frame(height: 400)
             .padding([.leading, .trailing], 250)
         }
-    }
-    
-    func playTorrent(_ torrent: Torrent, episode: Episode) {
-        self.torrent = torrent
-        self.preloadTorrentModel = PreloadTorrentViewModel(torrent: torrent, media: episode, onReadyToPlay: { playerModel in
-            self.playerModel = playerModel
-            selection = .play
-        })
-        selection = .preload
     }
 }
 

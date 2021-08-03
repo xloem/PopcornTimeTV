@@ -44,7 +44,12 @@ class PreloadTorrentViewModel: ObservableObject {
     }
     
     func playTorrent() {
-        watchedProgress = WatchedlistManager<Movie>.movie.currentProgress(media.id)
+        if let _ = media as? Movie {
+            watchedProgress = WatchedlistManager<Movie>.movie.currentProgress(media.id)
+        } else if let _ = media as? Episode {
+            watchedProgress = WatchedlistManager<Episode>.episode.currentProgress(media.id)
+        }
+        
         
         UIApplication.shared.isIdleTimerDisabled = true
         let finishedLoading: () -> Void = {

@@ -22,17 +22,6 @@ class DownloadViewModel: NSObject, ObservableObject {
     @Published var status: PTTorrentStatus
     var observation: NSKeyValueObservation?
     
-    var playerModel: PlayerViewModel?
-    var preloadTorrentModel: PreloadTorrentViewModel?
-    
-    @Published var selection: Selection? = nil
-    
-    enum Selection: Int, Identifiable {
-        case preload = 2
-        case play = 3
-        var id: Int { return rawValue }
-    }
-    
     init(download: PTTorrentDownload) {
         self.download = download
         status = download.torrentStatus
@@ -51,15 +40,11 @@ class DownloadViewModel: NSObject, ObservableObject {
         }
     }
     
-    func play() {
+    lazy var media: Media = {
         let media: Media = Movie(download.mediaMetadata) ?? Episode(download.mediaMetadata)!
-        // No torrent metadata necessary, media
-        self.preloadTorrentModel = PreloadTorrentViewModel(torrent: Torrent(), media: media, onReadyToPlay: { [weak self] playerModel in
-            self?.playerModel = playerModel
-            self?.selection = .play
-        })
-        self.selection = .preload
-    }
+        return media
+    }()
+    var torrent = Torrent() // No torrent metadata necessary, media
     
     func continueDownload() {
         PTTorrentDownloadManager.shared().resumeDownload(download)

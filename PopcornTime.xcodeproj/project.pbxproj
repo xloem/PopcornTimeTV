@@ -128,6 +128,7 @@
 		23989FAA2687574F00FEDA41 /* AVAudioRoute.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4DF394311E96BA3300DFCEC6 /* AVAudioRoute.swift */; };
 		23989FAC2687706C00FEDA41 /* IfModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23989FAB2687706C00FEDA41 /* IfModifier.swift */; };
 		23989FAD2687B83C00FEDA41 /* NSNotificationName+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4DE6FDEE1F04256B00A7F274 /* NSNotificationName+Extension.swift */; };
+		23B0A01626B9818100844309 /* TorrentPlayerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23B0A01526B9818100844309 /* TorrentPlayerView.swift */; };
 		23C96EE22685B40E0056455E /* DownloadProgressView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23C96EE12685B40E0056455E /* DownloadProgressView.swift */; };
 		23C96EE42685DBC40056455E /* RotateAnimation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23C96EE32685DBC40056455E /* RotateAnimation.swift */; };
 		23D2B398269586810077BBED /* Reachability in Frameworks */ = {isa = PBXBuildFile; productRef = 23D2B397269586810077BBED /* Reachability */; };
@@ -268,6 +269,7 @@
 		2391BE80268496E300576CAD /* Media + Download.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Media + Download.swift"; sourceTree = "<group>"; };
 		23989FA626865A3500FEDA41 /* PlayerOptionsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerOptionsView.swift; sourceTree = "<group>"; };
 		23989FAB2687706C00FEDA41 /* IfModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IfModifier.swift; sourceTree = "<group>"; };
+		23B0A01526B9818100844309 /* TorrentPlayerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TorrentPlayerView.swift; sourceTree = "<group>"; };
 		23C96EE12685B40E0056455E /* DownloadProgressView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DownloadProgressView.swift; sourceTree = "<group>"; };
 		23C96EE32685DBC40056455E /* RotateAnimation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RotateAnimation.swift; sourceTree = "<group>"; };
 		23D2B39F26959C910077BBED /* StarRatingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StarRatingView.swift; sourceTree = "<group>"; };
@@ -487,6 +489,7 @@
 				23446AC5267FAD000049CC72 /* PreloadTorrentViewModel.swift */,
 				2391BE7E26847B9800576CAD /* SelectTorrentQualityButton.swift */,
 				237F28692693503D00FE036C /* ActorsCrewView.swift */,
+				23B0A01526B9818100844309 /* TorrentPlayerView.swift */,
 			);
 			path = "Movie Details";
 			sourceTree = "<group>";
@@ -994,6 +997,7 @@
 				2343A7692688AEFC00B824E7 /* ShowsViewModel.swift in Sources */,
 				2343A76C2688BE3F00B824E7 /* SiriRemoteGestureRecogniser.swift in Sources */,
 				2388FD5B268F871F00B51201 /* BannerView.swift in Sources */,
+				23B0A01626B9818100844309 /* TorrentPlayerView.swift in Sources */,
 				23446AD226806FD20049CC72 /* Media + Subtitles.swift in Sources */,
 				23446AC3267F24740049CC72 /* VisualEffectBlur.swift in Sources */,
 				23313B1A267E3A9200774A85 /* LeftSidePanelView.swift in Sources */,

@@ -16,50 +16,52 @@ struct DownloadView: View {
     @State var showDeleteActionSheet = false
     @State var showActionSheet: Bool = false
     
+    @State var torrent: Torrent?
+    @State var showPlayer = false
+    
     var body: some View {
-        Group {
-            navigationLink
-            
-            Button(action: {
-                showActionSheet = true
-            }, label: {
-                VStack {
-                    ZStack (alignment: .bottom) {
-                        KFImage(URL(string: imageUrl))
-                            .resizable()
-                            .placeholder {
-                                Image(placeholderImage)
-                                    .resizable()
-                                    .aspectRatio(contentMode: .fit)
-                            }
-                            .aspectRatio(contentMode: .fit)
-                            .cornerRadius(10)
-                            .shadow(radius: 5)
-                        if viewModel.download.downloadStatus == .downloading {
-                            ProgressView(value: viewModel.download.torrentStatus.totalProgress)
-                                .padding([.leading, .trailing, .bottom], 15)
+        Button(action: {
+            showActionSheet = true
+        }, label: {
+            VStack {
+                ZStack (alignment: .bottom) {
+                    navigationLink
+                        .hidden()
+                    
+                    KFImage(URL(string: imageUrl))
+                        .resizable()
+                        .placeholder {
+                            Image(placeholderImage)
+                                .resizable()
+                                .aspectRatio(contentMode: .fit)
                         }
+                        .aspectRatio(contentMode: .fit)
+                        .cornerRadius(10)
+                        .shadow(radius: 5)
+                    if viewModel.download.downloadStatus == .downloading {
+                        ProgressView(value: viewModel.download.torrentStatus.totalProgress)
+                            .padding([.leading, .trailing, .bottom], 15)
                     }
-        //                .padding(.bottom, 5)
-                    Text(title)
-                        .font(.system(size: 28, weight: .medium))
-                        .multilineTextAlignment(.center)
-                        .lineLimit(1)
-                        .shadow(color: .init(white: 0, opacity: 0.6), radius: 2, x: 0, y: 1)
-                        .padding(0)
-                        .zIndex(10)
-        //                .frame(height: 80)
-                    Text(detailText)
-                        .font(.system(size: 20, weight: .medium))
-                        .multilineTextAlignment(.center)
-                        .lineLimit(1)
-                        .shadow(color: .init(white: 0, opacity: 0.6), radius: 2, x: 0, y: 1)
-                        .padding(0)
-                        .zIndex(10)
                 }
-            })
-            .buttonStyle(PlainNavigationLinkButtonStyle())
-        }
+    //                .padding(.bottom, 5)
+                Text(title)
+                    .font(.system(size: 28, weight: .medium))
+                    .multilineTextAlignment(.center)
+                    .lineLimit(1)
+                    .shadow(color: .init(white: 0, opacity: 0.6), radius: 2, x: 0, y: 1)
+                    .padding(0)
+                    .zIndex(10)
+    //                .frame(height: 80)
+                Text(detailText)
+                    .font(.system(size: 20, weight: .medium))
+                    .multilineTextAlignment(.center)
+                    .lineLimit(1)
+                    .shadow(color: .init(white: 0, opacity: 0.6), radius: 2, x: 0, y: 1)
+                    .padding(0)
+                    .zIndex(10)
+            }
+        })
+        .buttonStyle(PlainNavigationLinkButtonStyle())
         .actionSheet(isPresented: $showDeleteActionSheet) {
             deleteActionSheet
         }
@@ -70,23 +72,11 @@ struct DownloadView: View {
     
     @ViewBuilder
     var navigationLink: some View {
-        switch viewModel.selection {
-        case .some(.preload):
-            NavigationLink(
-                destination: PreloadTorrentView(viewModel: viewModel.preloadTorrentModel!),
-                tag: .preload,
-                selection: $viewModel.selection) {
-                    EmptyView()
-            }
-        case .some(.play):
-            NavigationLink(
-                destination: PlayerView().environmentObject(viewModel.playerModel!),
-                tag: .play,
-                selection: $viewModel.selection) {
-                    EmptyView()
-                }
-        case nil: EmptyView()
-        }
+        NavigationLink(destination: TorrentPlayerView(torrent: viewModel.torrent, media: viewModel.media),
+                       isActive: $showPlayer,
+                       label: {
+            EmptyView()
+        })
     }
     
     var placeholderImage: String {
@@ -154,7 +144,7 @@ struct DownloadView: View {
     var actionSheet: ActionSheet {
         var buttons: [ActionSheet.Button] = [
             .default(Text("Play".localized)) {
-                viewModel.play()
+                showPlayer = true
             }
         ]
         

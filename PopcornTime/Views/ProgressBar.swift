@@ -141,7 +141,7 @@ enum TransportBarHint: String {
     
     private let playbackPositionMarker = UIView()
     private let scrubbingPositionMarker = UIView()
-    private let bufferingIndicatorView = UIActivityIndicatorView(style: .large)
+    private let bufferingIndicatorView = UIActivityIndicatorView(style: .medium)
     
     private let leftHintImageView = UIImageView()
     private let rightHintImageView = UIImageView()
