@@ -11,7 +11,7 @@ import PopcornTorrent
 import PopcornKit
 
 struct DownloadButton: View {
-    @StateObject var viewModel: DownloadButtonViewModel
+    @ObservedObject var viewModel: DownloadButtonViewModel
     var onFocus: () -> Void = {}
     @State var showPlayer = false
     

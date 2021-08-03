@@ -49,7 +49,6 @@ class DownloadButtonViewModel: NSObject, ObservableObject {
         state = download.flatMap{ State($0.downloadStatus) } ?? .normal
         super.init()
         PTTorrentDownloadManager.shared().add(self)
-        print(self.media.title, "state: ", state)
     }
     
     deinit {

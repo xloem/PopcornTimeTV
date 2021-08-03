@@ -14,7 +14,12 @@ struct EpisodesView: View {
     var show: Show
     var episodes: [Episode]
     var currentSeason: Int
-    @State var currentEpisode: Episode?
+    @State var currentEpisode: Episode? {
+        didSet {
+            downloadModel = currentEpisode.flatMap{ DownloadButtonViewModel(media: $0)}
+        }
+    }
+    @State var downloadModel: DownloadButtonViewModel?
     
     @State var torrent: Torrent?
     @State var showPlayer = false
@@ -88,7 +93,7 @@ struct EpisodesView: View {
     
     @ViewBuilder
     var currentEpisodeView: some View {
-        if let episode = currentEpisode {
+        if let episode = currentEpisode, let downloadModel = downloadModel {
             let airDateString = DateFormatter.localizedString(from: episode.firstAirDate, dateStyle: .medium, timeStyle: .none)
             let showGenre = episode.show?.genres.first?.localizedCapitalized.localized ?? ""
             let infoText = "\(airDateString) \n \(showGenre)"
@@ -108,7 +113,7 @@ struct EpisodesView: View {
 //                            .lineLimit(6)
                             .padding(.bottom, 30)
                             .frame(minWidth: 600, maxWidth: 800)
-                        DownloadButton(viewModel: DownloadButtonViewModel(media: episode))
+                        DownloadButton(viewModel: downloadModel)
                             .buttonStyle(TVButtonStyle(onFocus: onFocus))
                     }
                 }
