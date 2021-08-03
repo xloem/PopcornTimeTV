@@ -39,13 +39,12 @@ class MovieDetailsViewModel: ObservableObject {
                 return
             }
             
+            self.isLoading = false
             let group = DispatchGroup()
                 
             group.enter()
             TraktManager.shared.getRelated(self.movie) {arg1,_ in
                 self.movie.related = arg1
-                print("related \n", arg1)
-                
                 group.leave()
             }
             
@@ -53,15 +52,11 @@ class MovieDetailsViewModel: ObservableObject {
             TraktManager.shared.getPeople(forMediaOfType: .movies, id: self.movie.id) {arg1,arg2,_ in
                 self.movie.actors = arg1
                 self.movie.crew = arg2
-                print("crew\n", self.movie.crew.toJSON())
-                print("actors\n", self.movie.actors.toJSON())
                 group.leave()
             }
             
             group.notify(queue: .main) {
                 self.didLoad = true
-                self.isLoading = false
-                print(self.movie.toJSON())
             }
         }
     }

@@ -33,14 +33,17 @@
 import SwiftUI
 
 struct PlainNavigationLinkButtonStyle: ButtonStyle {
+    var onFocus: () -> Void = {}
+    
   func makeBody(configuration: Self.Configuration) -> some View {
-    PlainNavigationLinkButton(configuration: configuration)
+    PlainNavigationLinkButton(configuration: configuration, onFocus: onFocus)
   }
 }
 
 struct PlainNavigationLinkButton: View {
   @Environment(\.isFocused) var focused: Bool
   let configuration: ButtonStyle.Configuration
+  var onFocus: () -> Void = {}
 
   var body: some View {
     configuration.label
@@ -48,6 +51,11 @@ struct PlainNavigationLinkButton: View {
       .foregroundColor(.init(white: 1, opacity: focused ? 1 : 0.667))
       .focusable(true)
       .animation(.easeOut, value: focused)
+        .onChange(of: focused) { newValue in
+          if newValue {
+              onFocus()
+          }
+        }
   }
 }
 
@@ -72,10 +80,10 @@ struct PlainButton: View {
       .scaleEffect(focused ? 1.1 : 1)
       .foregroundColor(.init(white: 1, opacity: focused ? 1 : 0.5))
       .animation(.easeOut, value: focused)
-        .onChange(of: focused) { newValue in
-            if newValue {
-                onFocus()
-            }
+      .onChange(of: focused) { newValue in
+        if newValue {
+            onFocus()
         }
+      }
   }
 }

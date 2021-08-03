@@ -24,55 +24,71 @@ struct ShowDetailsView: View {
         return viewModel.show
     }
     
+    @Namespace var section1
+    @Namespace var section2
+    @Namespace var section3
+    
     var body: some View {
         ZStack {
             backgroundImage
             Color(white: 0, opacity: 0.3)
                 .ignoresSafeArea()
-            ScrollView {
-                HStack {
-                    VStack() {
-                        Text(show.title)
-                            .font(.title)
-                            .padding(.bottom, 50)
-                            .padding(.top, 200)
-                        VStack(alignment: .leading, spacing: 50) {
-                            infoText
-                            Text(show.summary)
-                                .frame(width: 1200)
-                                .lineLimit(5)
-                            Spacer(minLength: 40)
-                            HStack(spacing: 24) {
-                                if viewModel.show.seasonNumbers.count > 1 {
-                                    seasonsButton
+            ScrollViewReader { scroll in
+                ScrollView {
+                    HStack {
+                        VStack() {
+                            Text(show.title)
+                                .font(.title)
+                                .padding(.bottom, 50)
+                                .padding(.top, 200)
+                            VStack(alignment: .leading, spacing: 50) {
+                                infoText
+                                Text(show.summary)
+                                    .lineLimit(5)
+                                    .frame(width: 1200, height: 200)
+                                HStack(spacing: 24) {
+                                    if viewModel.show.seasonNumbers.count > 1 {
+                                        seasonsButton
+                                    }
+                                    watchlistButton
+                                    if viewModel.isLoading {
+                                        ProgressView()
+                                            .padding(.leading, 50)
+                                            .padding(.bottom, 40)
+                                    }
                                 }
-                                watchlistButton
-                                if viewModel.isLoading {
-                                    ProgressView()
-                                        .padding(.leading, 50)
-                                        .padding(.bottom, 40)
-                                }
+                                .buttonStyle(TVButtonStyle(onFocus: {
+                                    withAnimation {
+                                        scroll.scrollTo(section1, anchor: .top)
+                                    }
+                                }))
+                                .padding(.top, 50)
+                                .padding(.bottom, 100)
                             }
-                            .buttonStyle(TVButtonStyle())
                         }
+                        .id(section1)
+                        .padding(.leading, 100)
                         Spacer()
                     }
-                    .padding(.leading, 100)
-                    Spacer()
-                }
-                
-                VStack {
-                    EpisodesView(show: viewModel.show, episodes: viewModel.seasonEpisodes(), currentSeason: viewModel.currentSeason)
-                    if show.related.count > 0 {
-                        alsoWatchedSection
+                    
+                    VStack {
+                        EpisodesView(show: viewModel.show, episodes: viewModel.seasonEpisodes(), currentSeason: viewModel.currentSeason, onFocus: {
+                            withAnimation() {
+                                scroll.scrollTo(section2, anchor: .top)
+                            }
+                        })
+                        if show.related.count > 0 {
+                            alsoWatchedSection(scroll: scroll)
+                        }
+                        if show.actors.count > 0 {
+                            ActorsCrewView(persons: show.actors + show.crew)
+                        }
                     }
-                    if show.actors.count > 0 {
-                        ActorsCrewView(persons: show.actors + show.crew)
-                    }
+                    .padding([.bottom, .top], 30)
+                    .background(Color.init(white: 0, opacity: 0.3))
+//                    .padding(.top, 50)
+                    .id(section2)
                 }
-                .padding([.bottom, .top], 30)
-                .background(Color.init(white: 0, opacity: 0.3))
-                .padding(.top, 50)
             }
             if let error = error {
                 BannerView(error: error)
@@ -170,7 +186,7 @@ struct ShowDetailsView: View {
         .frame(width: 142, height: 115)
     }
     
-    var alsoWatchedSection: some View {
+    func alsoWatchedSection(scroll: ScrollViewProxy) -> some View {
         VStack (alignment: .leading) {
             Text("Viewers Also Watched".localized)
                 .font(.callout)
@@ -186,7 +202,11 @@ struct ShowDetailsView: View {
                             label: {
                                 ShowView(show: show)
                             })
-                            .buttonStyle(PlainNavigationLinkButtonStyle())
+                            .buttonStyle(PlainNavigationLinkButtonStyle(onFocus: {
+                                withAnimation {
+                                    scroll.scrollTo(section3, anchor: .center)
+                                }
+                            }))
                             .frame(maxWidth: 200)
 //                            .padding([.leading, .trailing], 5)
                     }
@@ -199,6 +219,7 @@ struct ShowDetailsView: View {
 //        .background(Color.red)
         .frame(height: 380)
         .padding(0)
+        .id(section3)
     }
 }
 

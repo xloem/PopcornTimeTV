@@ -12,6 +12,7 @@ import PopcornKit
 
 struct DownloadButton: View {
     @StateObject var viewModel: DownloadButtonViewModel
+    var onFocus: () -> Void = {}
     
     var body: some View {
         switch viewModel.state {
@@ -38,7 +39,7 @@ struct DownloadButton: View {
                 }
                 Text("Download".localized)
             }
-        })
+        }, onFocus:onFocus)
         .frame(width: 142, height: 115)
     }
     

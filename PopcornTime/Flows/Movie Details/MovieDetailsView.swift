@@ -25,6 +25,7 @@ struct MovieDetailsView: View {
     var movie: Movie {
         return viewModel.movie
     }
+    @Namespace var section1
     
     var body: some View {
         ZStack {
@@ -35,66 +36,81 @@ struct MovieDetailsView: View {
             backgroundImage(size: UIScreen.main.bounds.size)
             Color(white: 0, opacity: 0.3)
                 .ignoresSafeArea()
-            ScrollView {
-                VStack {
-                    Text(movie.title)
-                        .font(.title)
-                        .padding(.bottom, 50)
-                        .padding(.top, 200)
-                    HStack(alignment: .top, spacing: 40) {
-                        VStack(alignment: .trailing, spacing: 40) {
-                            if let genre = movie.genres.first?.localizedCapitalized.localized {
-                                sectionText(title: "Genre".localized.localizedUppercase, description: [genre])
+            ScrollViewReader { scroll in
+                ScrollView {
+                    VStack {
+                        Text(movie.title)
+                            .font(.title)
+                            .padding(.bottom, 50)
+                            .padding(.top, 200)
+                        HStack(alignment: .top, spacing: 40) {
+                            VStack(alignment: .trailing, spacing: 40) {
+                                if let genre = movie.genres.first?.localizedCapitalized.localized {
+                                    sectionText(title: "Genre".localized.localizedUppercase, description: [genre])
+                                }
+                                
+                                if let directors: [String] = movie.crew.filter({$0.roleType == .director}).compactMap{String($0.name)},
+                                   directors.count > 0,
+                                   let isSingular = directors.count == 1 {
+                                    sectionText(title: (isSingular ? "Director".localized.localizedUppercase : "Directors".localized.localizedUppercase), description: directors)
+                                }
+                                
+                                let actors = movie.actors.prefix(5).compactMap{ String($0.name) }
+                                if !actors.isEmpty {
+                                    sectionText(title: "Starring".localized.localizedUppercase, description: actors)
+                                }
+                                
+                                if viewModel.isLoading {
+                                    ProgressView()
+                                }
                             }
-                            
-                            if let directors: [String] = movie.crew.filter({$0.roleType == .director}).compactMap{String($0.name)},
-                               directors.count > 0,
-                               let isSingular = directors.count == 1 {
-                                sectionText(title: (isSingular ? "Director".localized.localizedUppercase : "Directors".localized.localizedUppercase), description: directors)
+                            .frame(width: 340)
+                            VStack(alignment: .leading, spacing: 50) {
+                                infoText
+                                Text(movie.summary)
+                                    .frame(width: 920)
+                                    .lineLimit(5)
+                                Spacer(minLength: 40)
+                                HStack(spacing: 24) {
+                                    TrailerButton(viewModel: viewModel.trailerModel)
+                                    PlayButton(viewModel: viewModel) {
+                                        withAnimation {
+                                            scroll.scrollTo(section1, anchor: .top)
+                                        }
+                                    }
+                                    watchlistButton
+                                    watchedButton
+                                    DownloadButton(viewModel: viewModel.downloadModel, onFocus: {
+                                        withAnimation {
+                                            scroll.scrollTo(section1, anchor: .top)
+                                        }
+                                    })
+                                }
+                                .buttonStyle(TVButtonStyle(onFocus: {
+                                    withAnimation {
+                                        scroll.scrollTo(section1, anchor: .top)
+                                    }
+                                }))
                             }
-                            
-                            let actors = movie.actors.prefix(5).compactMap{ String($0.name) }
-                            if !actors.isEmpty {
-                                sectionText(title: "Starring".localized.localizedUppercase, description: actors)
-                            }
-                            
-                            if viewModel.isLoading {
-                                ProgressView()
-                            }
+                            Spacer()
                         }
-                        .frame(width: 340)
-                        VStack(alignment: .leading, spacing: 50) {
-                            infoText
-                            Text(movie.summary)
-                                .frame(width: 920)
-                                .lineLimit(5)
-                            Spacer(minLength: 40)
-                            HStack(spacing: 24) {
-                                TrailerButton(viewModel: viewModel.trailerModel)
-                                PlayButton(viewModel: viewModel)
-                                watchlistButton
-                                watchedButton
-                                DownloadButton(viewModel: viewModel.downloadModel)
-                            }
-                            .buttonStyle(TVButtonStyle())
+                        .padding(.leading, 10)
+                    }
+                    .padding(.leading, 100)
+                    .id(section1)
+                    
+                    VStack {
+                        if movie.related.count > 0 {
+                            alsoWatchedSection
                         }
-                        Spacer()
+                        if movie.actors.count > 0 {
+                            ActorsCrewView(persons: movie.actors + movie.crew)
+                        }
                     }
-                    .padding(.leading, 10)
+                    .padding([.bottom, .top], 30)
+                    .background(Color.init(white: 1, opacity: 0.3))
+                    .padding(.top, 50)
                 }
-                .padding(.leading, 100)
-                
-                VStack {
-                    if movie.related.count > 0 {
-                        alsoWatchedSection
-                    }
-                    if movie.actors.count > 0 {
-                        ActorsCrewView(persons: movie.actors + movie.crew)
-                    }
-                }
-                .padding([.bottom, .top], 30)
-                .background(Color.init(white: 1, opacity: 0.3))
-                .padding(.top, 50)
             }
             if let error = error {
                 BannerView(error: error)

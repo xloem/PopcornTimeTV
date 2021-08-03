@@ -28,6 +28,7 @@ struct PlayButton: View {
     var movie: Movie {
         return viewModel.movie
     }
+    var onFocus: () -> Void = {}
     
     var body: some View {
         Group {
@@ -51,16 +52,16 @@ struct PlayButton: View {
                 }
             }
             
-            SelectTorrentQualityButton(media: movie) { torrent in
+            SelectTorrentQualityButton(media: movie, action: { torrent in
                 playTorrent(torrent)
-            } label: {
+            }, label: {
                 VStack {
                     VisualEffectBlur() {
                         Image("Play")
                     }
                     Text("Play".localized)
                 }
-            }
+            }, onFocus: onFocus)
             .frame(width: 142, height: 115)
         }
     }

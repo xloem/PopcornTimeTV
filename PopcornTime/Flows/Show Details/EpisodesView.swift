@@ -28,6 +28,7 @@ struct EpisodesView: View {
         
         var id: Int { return rawValue }
     }
+    var onFocus: () -> Void = {}
     
     var body: some View {
         return VStack(alignment: .leading) {
@@ -43,6 +44,7 @@ struct EpisodesView: View {
                            EpisodeView(episode: episode)
                         }, onFocus: {
                             currentEpisode = episode
+                            onFocus()
                         })
                         .frame(width: 310, height: 215)
                     }
@@ -118,17 +120,18 @@ struct EpisodesView: View {
                 VStack(alignment: .leading) {
                     Text("\(episode.episode). " + episode.title)
                         .font(.headline)
-                    LazyHStack {
+                    HStack {
                         Text(episode.summary)
                             .multilineTextAlignment(.leading)
-                            .lineLimit(5)
+//                            .lineLimit(6)
                             .padding(.bottom, 30)
                             .frame(minWidth: 600, maxWidth: 800)
                         DownloadButton(viewModel: DownloadButtonViewModel(media: episode))
-                            .buttonStyle(TVButtonStyle())
+                            .buttonStyle(TVButtonStyle(onFocus: onFocus))
                     }
                 }
-            }.frame(height: 400)
+            }
+            .frame(height: 400)
             .padding([.leading, .trailing], 250)
         }
     }

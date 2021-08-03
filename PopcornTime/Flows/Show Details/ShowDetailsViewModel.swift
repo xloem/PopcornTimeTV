@@ -71,12 +71,12 @@ class ShowDetailsViewModel: ObservableObject {
             group.enter()
             self.loadEpisodeMetadata(for: show) { episodes in
                 self.show.episodes = episodes
+                self.isLoading = false
                 group.leave()
             }
             
             group.notify(queue: .main) {
                 self.didLoad = true
-                self.isLoading = false
             }
         }
     }
