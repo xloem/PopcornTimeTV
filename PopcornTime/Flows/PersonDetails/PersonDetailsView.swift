@@ -8,6 +8,7 @@
 
 import SwiftUI
 import PopcornKit
+import Kingfisher
 
 struct PersonDetailsView: View {
     @StateObject var viewModel: PersonDetailsViewModel
@@ -15,8 +16,19 @@ struct PersonDetailsView: View {
     var body: some View {
         ZStack {
             ScrollView {
-                Text(viewModel.person.name)
-                    .font(.title)
+                HStack {
+                    if let image = viewModel.person.mediumImage {
+                        KFImage(URL(string: image))
+                            .resizable()
+                            .loadImmediately()
+                            .aspectRatio(contentMode: .fill)
+                            .frame(width: 150, height: 150)
+                            .clipShape(Circle())
+                            .shadow(radius: 5)
+                    }
+                    Text(viewModel.person.name)
+                        .font(.title)
+                }
                 if viewModel.movies.count > 0 {
                     movieSection
                 }

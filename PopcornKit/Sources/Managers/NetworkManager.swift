@@ -76,7 +76,7 @@ public struct PopcornMovies {
 }
 
 public struct TMDB {
-    static let apiKey = "739eed14bc18a1d6f5dacd1ce6c2b29e"
+    static let apiKey = "ac92176abc89a80e6f5df9510e326601"
     static let base = "https://api.themoviedb.org/3"
     static let tv = "/tv"
     static let person = "/person"

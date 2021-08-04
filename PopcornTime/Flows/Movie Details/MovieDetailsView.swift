@@ -86,7 +86,6 @@ struct MovieDetailsView: View {
     }
     
     func backgroundImage(size: CGSize) -> some View {
-        print(size)
         return KFImage(viewModel.backgroundUrl)
             .resizable()
             .loadImmediately()

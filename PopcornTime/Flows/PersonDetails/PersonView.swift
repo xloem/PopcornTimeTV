@@ -25,13 +25,8 @@ struct PersonView: View {
                     if let image = person.mediumImage {
                         KFImage(URL(string: image))
                             .resizable()
-                            .placeholder {
-                                Image("Movie Placeholder")
-                                    .resizable()
-                                    .aspectRatio(contentMode: .fit)
-                            }
-                            .aspectRatio(contentMode: .fit)
-                            .cornerRadius(10)
+                            .aspectRatio(contentMode: .fill)
+                            .clipShape(Circle())
                             .shadow(radius: 5)
                     }
                 }
