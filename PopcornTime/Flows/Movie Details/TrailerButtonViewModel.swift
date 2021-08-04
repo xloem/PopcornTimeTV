@@ -59,30 +59,48 @@ class TrailerButtonViewModel: ObservableObject {
             return
         }
         
-        XCDYouTubeClient.default().getVideoWithIdentifier(id) { (video, error) in
-            guard let streamUrls = video?.streamURLs, let qualities = Array(streamUrls.keys) as? [UInt] else {
+        YoutubeApi.getVideo(id: id) { video, error in
+            if let error = error {
                 self.error.wrappedValue = error
-                return
-            }
-            
-            let preferredVideoQualities = [XCDYouTubeVideoQuality.HD720.rawValue, XCDYouTubeVideoQuality.medium360.rawValue, XCDYouTubeVideoQuality.small240.rawValue]
-            var videoUrl: URL? = nil
-            
-            for quality in preferredVideoQualities {
-                if let index = qualities.firstIndex(of: quality) {
-                    videoUrl = Array(streamUrls.values)[index]
-                    break
+            } else if let video = video {
+                let preferredVideoQualities = ["720p", "360p"]
+                let formats = video.streamingData.formats
+                for quality in preferredVideoQualities {
+                    if let index = formats.firstIndex(where: {$0.qualityLabel == quality}){
+                        self.trailerUrl = formats[index].url
+                        completion(self.trailerUrl!)
+                        return
+                    }
                 }
+            } else {
+                self.error.wrappedValue = NSError(domain: "popcorn", code: 2, userInfo: [NSLocalizedDescriptionKey: "Trailer not found!".localized])
             }
-            
-            guard let url = videoUrl else {
-                self.error.wrappedValue = error
-                return
-            }
-            
-            self.trailerUrl = url
-            completion(url)
         }
+        
+//        XCDYouTubeClient.default().getVideoWithIdentifier(id) { (video, error) in
+//            guard let streamUrls = video?.streamURLs, let qualities = Array(streamUrls.keys) as? [UInt] else {
+//                self.error.wrappedValue = error
+//                return
+//            }
+//
+//            let preferredVideoQualities = [XCDYouTubeVideoQuality.HD720.rawValue, XCDYouTubeVideoQuality.medium360.rawValue, XCDYouTubeVideoQuality.small240.rawValue]
+//            var videoUrl: URL? = nil
+//
+//            for quality in preferredVideoQualities {
+//                if let index = qualities.firstIndex(of: quality) {
+//                    videoUrl = Array(streamUrls.values)[index]
+//                    break
+//                }
+//            }
+//
+//            guard let url = videoUrl else {
+//                self.error.wrappedValue = error
+//                return
+//            }
+//
+//            self.trailerUrl = url
+//            completion(url)
+//        }
     }
     
     private func makeMetadataItem(_ identifier: String, value: Any) -> AVMetadataItem {
