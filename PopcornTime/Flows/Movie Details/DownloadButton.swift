@@ -114,19 +114,6 @@ struct DownloadButton: View {
                         ]
             )
         }
-//        .alert(isPresented: $viewModel.showStopDownloadAlert, content: {
-//            Alert(title: Text( "Stop Download".localized),
-//                  message: Text("Are you sure you want to stop the download?".localized),
-//                  primaryButton: .cancel(),
-//                  secondaryButton: .destructive(Text("Stop".localized)) {
-//                    self.viewModel.stopDownload()
-//                  })
-//        })
-//        .alert(isPresented: $viewModel.showDownloadFailedAlert, content: {
-//            Alert(title: Text( "Download Failed".localized),
-//                  message: Text(viewModel.downloadError?.localizedDescription ?? ""),
-//                  dismissButton: .default(Text("OK".localized)))
-//        })
     }
     
     var pausedButton: some View {

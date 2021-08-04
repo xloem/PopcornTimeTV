@@ -21,17 +21,7 @@ struct PreloadTorrentView: View {
                 Text(viewModel.media.title)
                     .font(.title3)
                     .padding(.bottom, 20)
-                if viewModel.isProcessing {
-                    ProgressView()
-                } else {
-                    VStack {
-                        ProgressView(value: $viewModel.progress.wrappedValue)
-                        Text(ByteCountFormatter.string(fromByteCount: Int64(viewModel.speed), countStyle: .binary) + "/s")
-                        Text("\(viewModel.seeds) " + "Seeds".localized.localizedLowercase)
-                    }
-                    .font(.system(size: 30, weight: .medium))
-                    .frame(width: 600)
-                }
+                progressView
                 Spacer()
             }.onAppear {
                 viewModel.playTorrent()
@@ -45,24 +35,23 @@ struct PreloadTorrentView: View {
                         presentationMode.wrappedValue.dismiss()
                       }))
             })
-//            .actionSheet(isPresented: $viewModel.showFileToPlay) {
-//                ActionSheet(title: Text("Select file to play".localized),
-//                            message: nil,
-//                            buttons: chooseTorrentsButtons + [.cancel()]
-//                )
-//            }
         }
     }
     
-//    var chooseFileButtons: [Alert.Button] {
-//        return viewModel.torrents
-//        for torrent in torrents{
-//            torrentSelection.addAction(UIAlertAction(title: torrent, style: .default, handler: { _ in
-//                selected = Int32(torrents.firstIndex(of:torrent) ?? -1)
-//            }))
-//        }
-//    }
-
+    @ViewBuilder
+    var progressView: some View {
+        if viewModel.isProcessing {
+            ProgressView()
+        } else {
+            VStack {
+                ProgressView(value: $viewModel.progress.wrappedValue)
+                Text(ByteCountFormatter.string(fromByteCount: Int64(viewModel.speed), countStyle: .binary) + "/s")
+                Text("\(viewModel.seeds) " + "Seeds".localized.localizedLowercase)
+            }
+            .font(.system(size: 30, weight: .medium))
+            .frame(width: 600)
+        }
+    }
 }
 
 struct PreloadTorrentView_Previews: PreviewProvider {
