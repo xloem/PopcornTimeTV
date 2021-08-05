@@ -12,30 +12,27 @@ struct TermsOfServiceView: View {
     @Binding var tosAccepted: Bool
     
     var body: some View {
-        VStack {
+        VStack(spacing: 50) {
             Text("Terms Of Service")
-            Spacer(minLength: 50)
             ScrollView {
                 Text(longText)
-                    .frame(width: 1200)
-                    .font(.system(size: 32))
+                    .frame(maxWidth: 1200)
+                    .font(.callout)
             }
-            Spacer(minLength: 50)
-            HStack(content: {
+            .padding()
+            HStack(spacing: 50) {
                 Button(action: {
                     exit(0)
                 }, label: {
                     Text("Leave")
                 })
-                .frame(width: 400, height: 80)
                 Button(action: {
                     Session.tosAccepted = true
                     tosAccepted = true
                 }, label: {
                     Text("Accept")
                 })
-                .frame(width: 400, height: 80)
-            })
+            }
         }
     }
     

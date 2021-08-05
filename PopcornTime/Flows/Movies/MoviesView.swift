@@ -9,12 +9,33 @@
 import SwiftUI
 import PopcornKit
 
+//#if os(tvOS)
+//let isTVOS = true
+//let isMacOS = false
+//#elseif os(macOS)
+//let isTVOS = false
+//let isMacOS = true
+//#endif
+func value<T>(tvOS: T, macOS: T) -> T {
+    #if os(tvOS)
+        return tvOS
+    #elseif os(macOS)
+        return macOS
+    #endif
+}
+
 struct MoviesView: View {
+    struct Theme {
+        let itemWidth: CGFloat = value(tvOS: 240, macOS: 120)
+        let itemSpacing: CGFloat = value(tvOS: 30, macOS: 20)
+        let columnSpacing: CGFloat = value(tvOS: 60, macOS: 30)
+    }
+    static let theme = Theme()
+    
     @StateObject var viewModel = MoviesViewModel()
+
     let columns = [
-        GridItem(.adaptive(minimum: 240))
-//        GridItem(.fixed(250), spacing: 80),
-//        GridItem(.fixed(250), spacing: 80),
+        GridItem(.adaptive(minimum: theme.itemWidth), spacing: theme.itemSpacing)
 //        GridItem(.flexible(), spacing: 80)
     ]
     
@@ -22,9 +43,8 @@ struct MoviesView: View {
         ZStack(alignment: .leading) {
             errorView
             ScrollView {
-                LazyVGrid(columns: columns, spacing: 60) {
+                LazyVGrid(columns: columns, spacing: MoviesView.theme.columnSpacing) {
                     ForEach(viewModel.movies, id: \.self) { movie in
-                        #if os(tvOS)
                         NavigationLink(
                             destination: MovieDetailsView(viewModel: MovieDetailsViewModel(movie: movie)),
                             label: {
@@ -32,10 +52,6 @@ struct MoviesView: View {
                             })
                             .buttonStyle(PlainNavigationLinkButtonStyle())
                             .padding([.leading, .trailing], 10)
-                        #endif
-                        #if os(macOS)
-                        MovieView(movie: movie)
-                        #endif
                     }
                     if (!viewModel.movies.isEmpty) {
                         loadingView

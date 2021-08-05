@@ -42,9 +42,11 @@ struct StarRatingView: View {
         var percentage: CGFloat
         
         func path(in rect: CGRect) -> Path {
-            let rect = rect.inset(by: .init(top: 0, left: 0, bottom: 0, right: rect.width - rect.width * percentage))
+            var newRect = rect
+            newRect.size.width = rect.width - rect.width * percentage
+//            let rect = rect.inset(by: .init(top: 0, left: 0, bottom: 0, right: rect.width - rect.width * percentage))
             
-            return Rectangle().path(in: rect)
+            return Rectangle().path(in: newRect)
         }
     }
 }

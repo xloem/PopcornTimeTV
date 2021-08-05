@@ -83,6 +83,7 @@ struct PersonDetailsView: View {
             ScrollView(.horizontal) {
                 HStack(spacing: 40) {
                     ForEach(viewModel.shows, id: \.self) { show in
+                        #if os(tvOS)
                         NavigationLink(
                             destination: ShowDetailsView(viewModel: ShowDetailsViewModel(show: show)),
                             label: {
@@ -91,6 +92,7 @@ struct PersonDetailsView: View {
                             })
                             .buttonStyle(PlainNavigationLinkButtonStyle())
 //                            .padding([.leading, .trailing], 10)
+                        #endif
                     }
                     .padding(20) // allow zoom
                 }.padding(.all, 0)

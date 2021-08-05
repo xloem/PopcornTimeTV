@@ -35,20 +35,22 @@ struct EpisodesView: View {
             ScrollView(.horizontal) {
                 LazyHStack {
                     ForEach(episodes, id: \.self) { episode in
+                        #if os(tvOS)
                         SelectTorrentQualityButton(media: episode, action: { torrent in
                             self.torrent = torrent
                             self.currentEpisode = episode
                             showPlayer = true
                         }, label: {
-                           EpisodeView(episode: episode)
+                            EpisodeView(episode: episode)
                         }, onFocus: {
                             currentEpisode = episode
                             onFocus()
                         })
                         .frame(width: 310, height: 215)
+                        #endif
                     }
                 }
-                .padding()
+                .padding([.top, .bottom], 20) // allow zooming to be visible
                 .padding(.leading, 90)
             }
             currentEpisodeView
@@ -67,6 +69,7 @@ struct EpisodesView: View {
     
     @ViewBuilder
     var navigationLink: some View {
+        #if os(tvOS)
         if let torrent = torrent, let episode = currentEpisode {
             NavigationLink(destination: TorrentPlayerView(torrent: torrent, media: episode),
                            isActive: $showPlayer,
@@ -74,6 +77,7 @@ struct EpisodesView: View {
                 EmptyView()
             })
         }
+        #endif
     }
     
     @ViewBuilder
@@ -112,14 +116,22 @@ struct EpisodesView: View {
                             .multilineTextAlignment(.leading)
 //                            .lineLimit(6)
                             .padding(.bottom, 30)
-                            .frame(minWidth: 600, maxWidth: 800)
+//                            .frame(minWidth: 600, maxWidth: 800)
+                            .frame(width: 800)
+                        #if os(tvOS)
                         DownloadButton(viewModel: downloadModel)
                             .buttonStyle(TVButtonStyle(onFocus: onFocus))
+                        #endif
                     }
+//                    .background(Color.red)
                 }
+//                .background(Color.blue)
             }
-            .frame(height: 400)
+            .padding(0)
+            .frame(height: 350)
+//            .frame(maxWidth: .infinity)
             .padding([.leading, .trailing], 250)
+//            .background(Color.gray)
         }
     }
 }

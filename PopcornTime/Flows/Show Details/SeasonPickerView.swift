@@ -14,7 +14,9 @@ struct SeasonPickerView: View {
     @Binding var selectedSeasonNumber: Int
     @Environment(\.presentationMode) var presentationMode
     @Namespace var namespace
+    #if os(tvOS)
     @Environment(\.resetFocus) var resetFocus
+    #endif
     
     var body: some View {
         ZStack {
@@ -35,18 +37,28 @@ struct SeasonPickerView: View {
                                     SeasonView(season: season)
                                 })
                                 .buttonStyle(PlainButtonStyle(onFocus: {}))
-                                .prefersDefaultFocus(season.number == selectedSeasonNumber, in: namespace)
+                                .modify(modifier: {
+                                    #if os(tvOS)
+                                        $0.prefersDefaultFocus(season.number == selectedSeasonNumber, in: namespace)
+                                    #endif
+                                })
                                 .id(season.number)
                             }
                         }
                         .padding()
                     }.onAppear {
                         scroll.scrollTo(selectedSeasonNumber, anchor: .leading)
+                        #if os(tvOS)
                         resetFocus(in: namespace)
+                        #endif
                     }
                 }
             }
-            .focusScope(namespace)
+            .modify(modifier: {
+                #if os(tvOS)
+                    $0.focusScope(namespace)
+                #endif
+            })
         }
         .onAppear {
             viewModel.load()

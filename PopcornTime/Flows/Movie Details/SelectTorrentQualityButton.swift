@@ -20,7 +20,7 @@ struct SelectTorrentQualityButton<Label>: View where Label : View {
     var onFocus: () -> Void = {}
     
     var body: some View {
-        Button(action: {
+        return Button(action: {
             if UIDevice.current.hasCellularCapabilites &&
                 Session.reachability.connection != .wifi && !Session.streamOnCellular {
                 self.showStreamOnCellularAlert = true

@@ -12,13 +12,15 @@ import Kingfisher
 
 struct PersonView: View {
     var person: Person
+    let radius: CGFloat = 220
     
     var body: some View {
         VStack(spacing: 0) {
-            HStack(alignment: .top, spacing:0) {
+            HStack(alignment: .center, spacing:0) {
                 ZStack() {
                     Circle()
                         .foregroundColor(Color(white: 0.8, opacity: 0.667))
+                        .frame(width: radius, height: radius)
                     Text(person.initials)
                         .foregroundColor(Color.black)
                         .font(.system(size: 100, weight: .regular))
@@ -26,6 +28,7 @@ struct PersonView: View {
                         KFImage(URL(string: image))
                             .resizable()
                             .aspectRatio(contentMode: .fill)
+                            .frame(width: radius, height: radius)
                             .clipShape(Circle())
                             .shadow(radius: 5)
                     }
@@ -33,6 +36,7 @@ struct PersonView: View {
             }
             Text(person.name)
                 .font(.system(size: 30, weight: .medium))
+                .padding(.top, 10)
             if let actor = person as? Actor {
                 Text(actor.characterName.uppercased())
                     .font(.system(size: 26, weight: .bold))
@@ -49,8 +53,20 @@ struct PersonView: View {
 
 struct PersonView_Previews: PreviewProvider {
     static var previews: some View {
-        var actor = Actor(name: "Chuck Norris", imdbId: "23", tmdbId: 2, largeImage: nil)
-        return PersonView(person: actor)
+        let actor1 = Actor(name: "Chuck Norris", imdbId: "23", tmdbId: 2, largeImage: nil)
+        
+        let actor2 = Actor(name: "Chuck Norris", imdbId: "23", tmdbId: 2, largeImage: "https://image.tmdb.org/t/p/w780/cgoy7t5Ve075naBPcewZrc08qGw.jpg")
+        let actor3 = Actor(name: "Chuck Norris", imdbId: "23", tmdbId: 2, largeImage: "https://image.tmdb.org/t/p/w780/cgoy7t5Ve075naBPcewZrc08qGw.jpg", characterName: "The kill")
+        HStack {
+            PersonView(person: actor1)
             .frame(width: 220, height: 321, alignment: .leading)
+            
+            PersonView(person: actor2)
+            .frame(width: 220, height: 321, alignment: .leading)
+            
+            PersonView(person: actor3)
+            .frame(width: 220, height: 321, alignment: .leading)
+        }
+            .previewLayout(.sizeThatFits)
     }
 }

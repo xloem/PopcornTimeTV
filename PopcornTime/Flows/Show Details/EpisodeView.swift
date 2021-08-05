@@ -12,11 +12,18 @@ import Kingfisher
 
 struct EpisodeView: View {
     var episode: Episode
+    let imageUrl: String
+    
+    init(episode: Episode) {
+        self.episode = episode
+        self.imageUrl = episode.smallBackgroundImage ?? ""
+    }
     
     var body: some View {
         VStack {
-            KFImage(URL(string: episode.smallBackgroundImage ?? ""))
+            KFImage(URL(string: imageUrl))
                 .resizable()
+//                .loadImmediately()
                 .placeholder {
                     Image("Episode Placeholder")
                         .resizable()

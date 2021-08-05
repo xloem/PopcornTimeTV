@@ -39,7 +39,12 @@ struct PopcornTime: App {
                     
 //                    PlayerView_Previews.dummyPreview
                 }
+                #if os(macOS)
+                    Spacer()
+                #endif
             }
+            
+//            .navigationViewStyle(StackNavigationViewStyle())
         }
     }
     

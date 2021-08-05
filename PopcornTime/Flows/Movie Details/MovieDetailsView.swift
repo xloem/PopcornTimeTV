@@ -54,6 +54,11 @@ struct MovieDetailsView: View {
                         VStack {
                             if movie.related.count > 0 {
                                 alsoWatchedSection
+                                    .background(
+                                        Color.init(white: 0, opacity: 0.3)
+                                            .padding([.bottom], -10)
+                                            .padding([.top], -30)
+                                    )
                             }
                             if movie.actors.count > 0 {
                                 ActorsCrewView(persons: movie.actors + movie.crew)
@@ -130,18 +135,22 @@ struct MovieDetailsView: View {
             Spacer(minLength: 40)
             HStack(spacing: 24) {
                 TrailerButton(viewModel: viewModel.trailerModel)
+                #if os(tvOS)
                 PlayButton(viewModel: viewModel) {
                     withAnimation {
                         scroll.scrollTo(section1, anchor: .top)
                     }
                 }
+                #endif
                 watchlistButton
                 watchedButton
+                #if os(tvOS)
                 DownloadButton(viewModel: viewModel.downloadModel, onFocus: {
                     withAnimation {
                         scroll.scrollTo(section1, anchor: .top)
                     }
                 })
+                #endif
             }
             .buttonStyle(TVButtonStyle(onFocus: {
                 withAnimation {
@@ -241,26 +250,32 @@ struct MovieDetailsView: View {
                 .padding(.leading, 90)
                 .padding(.top, 14)
             ScrollView(.horizontal, showsIndicators: false) {
-                HStack() {
+//                Spacer() // on focus zoom will not be clipped
+//                    .frame(height: 30)
+                LazyHStack(alignment: .center, spacing: 90) {
                     Spacer(minLength: 90)
                     ForEach(movie.related, id: \.self) { movie in
                         NavigationLink(
                             destination: MovieDetailsView(viewModel: MovieDetailsViewModel(movie: movie)),
                             label: {
                                 MovieView(movie: movie, lineLimit: 1)
+                                    .frame(width: 220)
                             })
                             .buttonStyle(PlainNavigationLinkButtonStyle())
-                            .frame(maxWidth: 200)
+//                            .frame(width: 220)
 //                            .padding([.leading, .trailing], 5)
                     }
                 }
-//                .padding() // on focus zoom will not be clipped
+                .padding([.top, .bottom], 30) // on focus zoom will not be clipped
+//                Spacer()
+//                    .frame(height: 30)
+//                .padding()
 //                .background(Color.blue)
             }
 //            .background(Color.gray)
         }
 //        .background(Color.red)
-        .frame(height: 380)
+        .frame(height: 450)
         .padding(0)
     }
 }

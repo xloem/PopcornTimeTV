@@ -15,11 +15,11 @@ struct TabBarView: View {
                 .tabItem {
                     Text("Movies")
                 }
-            #if os(tvOS)
             ShowsView()
                 .tabItem {
                     Text("Shows")
                 }
+            #if os(tvOS)
             WatchlistView()
                 .tabItem {
                     Text("Watchlist")

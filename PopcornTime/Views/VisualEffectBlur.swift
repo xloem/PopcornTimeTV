@@ -8,7 +8,7 @@
 import SwiftUI
 
 public struct VisualEffectBlur<Content: View>: View {
-    /// Defaults to .regular
+    #if os(tvOS)
     var blurStyle: UIBlurEffect.Style
 
     var content: Content
@@ -18,16 +18,31 @@ public struct VisualEffectBlur<Content: View>: View {
         self.blurStyle = blurStyle
         self.content = content()
     }
-
+    
     public var body: some View {
         Representable(blurStyle: blurStyle, content: ZStack { content })
             .cornerRadius(cornerRadius)
             .accessibility(hidden: Content.self == EmptyView.self)
     }
+    #elseif os(macOS)
+    var content: Content
+    var cornerRadius: CGFloat = 6.0
+
+    public init(@ViewBuilder content: () -> Content) {
+        self.content = content()
+    }
+    
+    public var body: some View {
+        Representable(material: .contentBackground, blendingMode: .withinWindow, content: ZStack { content })
+            .cornerRadius(cornerRadius)
+            .accessibility(hidden: Content.self == EmptyView.self)
+    }
+    #endif
 }
 
 // MARK: - Representable
 extension VisualEffectBlur {
+    #if os(tvOS)
     struct Representable<Content: View>: UIViewRepresentable {
         var blurStyle: UIBlurEffect.Style
         var vibrancyEffect: UIVibrancyEffect?
@@ -45,8 +60,29 @@ extension VisualEffectBlur {
             Coordinator(content: content)
         }
     }
+    #elseif os(macOS)
+    struct Representable<Content: View>: NSViewRepresentable {
+        let material: NSVisualEffectView.Material
+        let blendingMode: NSVisualEffectView.BlendingMode
+        var content: Content
+        
+        func makeNSView(context: Context) -> NSVisualEffectView {
+            let visualEffectView = NSVisualEffectView()
+            visualEffectView.material = material
+            visualEffectView.blendingMode = blendingMode
+            visualEffectView.state = NSVisualEffectView.State.active
+            return visualEffectView
+        }
+
+        func updateNSView(_ visualEffectView: NSVisualEffectView, context: Context) {
+            visualEffectView.material = material
+            visualEffectView.blendingMode = blendingMode
+        }
+    }
+    #endif
 }
 
+#if os(tvOS)
 // MARK: - Coordinator
 extension VisualEffectBlur.Representable {
     class Coordinator {
@@ -84,3 +120,13 @@ public extension VisualEffectBlur where Content == EmptyView {
         }
     }
 }
+#elseif os(macOS)
+// MARK: - Content-less Initializer
+public extension VisualEffectBlur where Content == EmptyView {
+    init() {
+        self.init() {
+            EmptyView()
+        }
+    }
+}
+#endif

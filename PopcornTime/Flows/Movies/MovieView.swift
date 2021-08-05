@@ -11,6 +11,11 @@ import Kingfisher
 import PopcornKit
 
 struct MovieView: View {
+    struct Theme {
+        let fontSize: CGFloat = value(tvOS: 28, macOS: 18)
+    }
+    static let theme = Theme()
+    
     var movie: Movie
     var lineLimit = 1
     
@@ -28,7 +33,7 @@ struct MovieView: View {
                 .shadow(radius: 5)
 //                .padding(.bottom, 5)
             Text(movie.title)
-                .font(.system(size: 28, weight: .medium))
+                .font(.system(size: MovieView.theme.fontSize, weight: .medium))
                 .multilineTextAlignment(.center)
                 .lineLimit(lineLimit)
                 .shadow(color: .init(white: 0, opacity: 0.6), radius: 2, x: 0, y: 1)

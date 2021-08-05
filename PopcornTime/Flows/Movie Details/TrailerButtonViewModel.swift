@@ -31,6 +31,7 @@ class TrailerButtonViewModel: ObservableObject {
         let media = self.movie
         let player = AVPlayer(url: url)
         
+        #if os(tvOS)
         let title = self.makeMetadataItem(AVMetadataIdentifier.commonIdentifierArtwork.rawValue, value: media.title)
         let summary = self.makeMetadataItem(AVMetadataIdentifier.commonIdentifierDescription.rawValue, value: media.summary)
         player.currentItem?.externalMetadata = [title, summary]
@@ -41,6 +42,7 @@ class TrailerButtonViewModel: ObservableObject {
             let image = self.makeMetadataItem(AVMetadataIdentifier.commonIdentifierArtwork.rawValue, value: data as NSData)
             player.currentItem?.externalMetadata.append(image)
         }
+        #endif
         
         _trailerVidePlayer = player
         

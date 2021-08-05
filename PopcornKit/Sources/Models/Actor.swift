@@ -42,9 +42,17 @@ public struct Actor: Person, Equatable {
         self.tmdbId = try map.value("person.ids.tmdb")
     }
     
-    public init(name: String = "Unknown", imdbId: String = "nm0000000", tmdbId: Int = 0000000, largeImage: String? = nil) {
+    public init(name: String, imdbId: String, tmdbId: Int, largeImage: String?) {
         self.name = name
         self.characterName = ""
+        self.largeImage = largeImage
+        self.imdbId = imdbId
+        self.tmdbId = tmdbId
+    }
+    
+    public init(name: String = "Unknown", imdbId: String = "nm0000000", tmdbId: Int = 0000000, largeImage: String? = nil, characterName: String = "") {
+        self.name = name
+        self.characterName = characterName
         self.largeImage = largeImage
         self.imdbId = imdbId
         self.tmdbId = tmdbId

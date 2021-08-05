@@ -20,30 +20,30 @@ struct ActorsCrewView: View {
                 .padding(.leading, 90)
                 .padding(.top, 14)
             ScrollView(.horizontal, showsIndicators: false) {
-                HStack(alignment: .center, spacing: 90) {
+                Spacer()
+                     .frame(height: 30) // on focus zoom will not be clipped
+                LazyHStack(alignment: .center, spacing: 90) {
                     Spacer(minLength: 90)
                     ForEach(0..<persons.count, id: \.self) { index in
-                        NavigationLink(
-                            destination: PersonDetailsView(viewModel: PersonDetailsViewModel(person: persons[index])),
-                            label: {
-                                PersonView(person: persons[index])
-                                    .frame(width: 220)
-//                                    .background(Color.blue)
-                            })
-                            .buttonStyle(PlainNavigationLinkButtonStyle())
+                        personView(person: persons[index])
                     }
-//                    Spacer()
                 }
-                .padding() // on focus zoom will not be clipped
-//                .frame(height: 321)
-//                .background(Color.blue)
                 Spacer()
             }
             .frame(height: 321)
-//            .background(Color.gray)
         }
-//        .background(Color.red)
         .padding(0)
+    }
+    
+    @ViewBuilder
+    func personView(person: Person) -> some View {
+        NavigationLink(
+            destination: PersonDetailsView(viewModel: PersonDetailsViewModel(person: person)),
+            label: {
+                PersonView(person: person)
+                    .frame(width: 220)
+            })
+            .buttonStyle(PlainNavigationLinkButtonStyle())
     }
 }
 
@@ -51,5 +51,6 @@ struct ActorsCrewView_Previews: PreviewProvider {
     static var previews: some View {
         let show = Show.dummy()
         ActorsCrewView(persons: show.actors + show.crew)
+            .previewLayout(.sizeThatFits)
     }
 }

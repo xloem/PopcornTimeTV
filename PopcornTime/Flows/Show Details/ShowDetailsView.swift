@@ -71,7 +71,7 @@ struct ShowDetailsView: View {
                         Spacer()
                     }
                     
-                    VStack {
+                    VStack(alignment: .center) {
                         EpisodesView(show: viewModel.show, episodes: viewModel.seasonEpisodes(), currentSeason: viewModel.currentSeason, onFocus: {
                             withAnimation() {
                                 scroll.scrollTo(section2, anchor: .top)
@@ -79,6 +79,10 @@ struct ShowDetailsView: View {
                         })
                         if show.related.count > 0 {
                             alsoWatchedSection(scroll: scroll)
+                                .background(
+                                    Color.init(white: 0, opacity: 0.3)
+                                        .padding([.top, .bottom], -10)
+                                )
                         }
                         if show.actors.count > 0 {
                             ActorsCrewView(persons: show.actors + show.crew)
@@ -115,7 +119,12 @@ struct ShowDetailsView: View {
             .aspectRatio(contentMode: .fill)
             .padding(0)
             .ignoresSafeArea()
-            .frame(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height)
+            .modify(modifier: {
+                #if os(tvOS)
+                    $0.frame(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height)
+                #endif
+            })
+            
     }
     
     
@@ -194,30 +203,29 @@ struct ShowDetailsView: View {
                 .padding(.leading, 90)
                 .padding(.top, 14)
             ScrollView(.horizontal, showsIndicators: false) {
-                HStack() {
+                LazyHStack(alignment: .center, spacing: 90) {
                     Spacer(minLength: 90)
                     ForEach(show.related, id: \.self) { show in
                         NavigationLink(
                             destination: ShowDetailsView(viewModel: ShowDetailsViewModel(show: show)),
                             label: {
                                 ShowView(show: show)
+                                    .frame(width: 220, height: 420)
                             })
                             .buttonStyle(PlainNavigationLinkButtonStyle(onFocus: {
-                                withAnimation {
-                                    scroll.scrollTo(section3, anchor: .center)
-                                }
+//                                withAnimation {
+//                                    scroll.scrollTo(section3, anchor: .top)
+//                                }
                             }))
-                            .frame(maxWidth: 200)
-//                            .padding([.leading, .trailing], 5)
                     }
                 }
-                .padding() // on focus zoom will not be clipped
+                .padding([.top, .bottom], 30) // on focus zoom will not be clipped
 //                .background(Color.blue)
             }
 //            .background(Color.gray)
         }
 //        .background(Color.red)
-        .frame(height: 380)
+        .frame(height: 500)
         .padding(0)
         .id(section3)
     }
