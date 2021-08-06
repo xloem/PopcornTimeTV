@@ -181,9 +181,3 @@ extension Episode: Hashable {
         hasher.combine(id.hashValue)
     }
 }
-
-// MARK: Equatable
-
-public func ==(lhs: Episode, rhs: Episode) -> Bool {
-    return lhs.id == rhs.id
-}

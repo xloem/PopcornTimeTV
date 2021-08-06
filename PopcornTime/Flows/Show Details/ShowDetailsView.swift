@@ -47,10 +47,10 @@ struct ShowDetailsView: View {
                                     .lineLimit(5)
                                     .frame(width: 1200, height: 200)
                                 HStack(spacing: 24) {
+                                    watchlistButton
                                     if viewModel.show.seasonNumbers.count > 1 {
                                         seasonsButton
                                     }
-                                    watchlistButton
                                     if viewModel.isLoading {
                                         ProgressView()
                                             .padding(.leading, 50)
@@ -110,6 +110,7 @@ struct ShowDetailsView: View {
         }.onDisappear {
             viewModel.stopTheme()
         }
+        .environmentObject(viewModel)
     }
     
     var backgroundImage: some View {

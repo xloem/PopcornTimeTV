@@ -44,7 +44,7 @@ class ShowDetailsViewModel: ObservableObject {
             
             self.show = show
             
-            guard let season = show.latestUnwatchedEpisode()?.season ?? show.seasonNumbers.first else {
+            guard let season = show.latestUnwatchedEpisode()?.season ?? show.seasonNumbers.last else {
                 let error = NSError(domain: "com.popcorntimetv.popcorntime.error", code: -243, userInfo:
                                         [NSLocalizedDescriptionKey: "There are no seasons available for the selected show. Please try again later.".localized])
                 self.error = error
@@ -52,53 +52,33 @@ class ShowDetailsViewModel: ObservableObject {
                 return
             }
             self.currentSeason = season
+            self.isLoading = false
             
             let group = DispatchGroup()
                 
             group.enter()
-            TraktManager.shared.getRelated(self.show) {arg1, _ in
-                self.show.related = arg1
+            TraktManager.shared.getRelated(self.show) { related, _ in
+                self.show.related = related
                 group.leave()
             }
             
             group.enter()
-            TraktManager.shared.getPeople(forMediaOfType: .shows, id: self.show.id) {arg1,arg2,_ in
-                self.show.actors = arg1
-                self.show.crew = arg2
+            TraktManager.shared.getPeople(forMediaOfType: .shows, id: self.show.id) { actors, crew, _ in
+                self.show.actors = actors
+                self.show.crew = crew
                 group.leave()
             }
             
-            group.enter()
-            self.loadEpisodeMetadata(for: show) { episodes in
-                self.show.episodes = episodes
-                self.isLoading = false
-                group.leave()
-            }
+//            group.enter()
+//            self.loadEpisodeMetadata(for: show) { episodes in
+//                self.show.episodes = episodes
+//                self.isLoading = false
+//                group.leave()
+//            }
             
             group.notify(queue: .main) {
                 self.didLoad = true
             }
-        }
-    }
-    
-    func loadEpisodeMetadata(for show: Show, completion: @escaping ([Episode]) -> Void) {
-        let group = DispatchGroup()
-        
-        var episodes = [Episode]()
-        
-        for var episode in show.episodes {
-            group.enter()
-            TMDBManager.shared.getEpisodeScreenshots(forShowWithImdbId: show.id, orTMDBId: show.tmdbId, season: episode.season, episode: episode.episode, completion: { (tmdbId, image, error) in
-                if let image = image { episode.largeBackgroundImage = image }
-                if let tmdbId = tmdbId { episode.show?.tmdbId = tmdbId }
-                episodes.append(episode)
-                group.leave()
-            })
-        }
-        
-        group.notify(queue: .main) {
-            episodes.sort(by: { $0.episode < $1.episode })
-            completion(episodes)
         }
     }
     
@@ -115,4 +95,40 @@ class ShowDetailsViewModel: ObservableObject {
     func seasonEpisodes() -> [Episode] {
         return show.episodes.filter({$0.season == currentSeason}).sorted(by: {$0.episode < $1.episode})
     }
+    
+    func loadImageIfMissing(episode: Episode) {
+        guard episode.smallBackgroundImage == nil else { return }
+        
+        TMDBManager.shared.getEpisodeScreenshots(forShowWithImdbId: show.id, orTMDBId: show.tmdbId, season: episode.season, episode: episode.episode, completion: { (tmdbId, image, error) in
+//            print("episode image", image ?? "None")
+            var episode = episode
+            episode.largeBackgroundImage = image ?? ""
+            if let tmdbId = tmdbId { episode.show?.tmdbId = tmdbId }
+            
+            if let index = self.show.episodes.firstIndex(where: {$0.id == episode.id }) {
+                self.show.episodes[index] = episode
+            }
+        })
+    }
+    
+//    func loadEpisodeMetadata(for show: Show, completion: @escaping ([Episode]) -> Void) {
+//        let group = DispatchGroup()
+//        
+//        var episodes = [Episode]()
+//        
+//        for var episode in show.episodes {
+//            group.enter()
+//            TMDBManager.shared.getEpisodeScreenshots(forShowWithImdbId: show.id, orTMDBId: show.tmdbId, season: episode.season, episode: episode.episode, completion: { (tmdbId, image, error) in
+//                if let image = image { episode.largeBackgroundImage = image }
+//                if let tmdbId = tmdbId { episode.show?.tmdbId = tmdbId }
+//                episodes.append(episode)
+//                group.leave()
+//            })
+//        }
+//        
+//        group.notify(queue: .main) {
+//            episodes.sort(by: { $0.episode < $1.episode })
+//            completion(episodes)
+//        }
+//    }
 }

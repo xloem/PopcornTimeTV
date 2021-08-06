@@ -12,33 +12,31 @@ import Kingfisher
 
 struct EpisodeView: View {
     var episode: Episode
-    let imageUrl: String
-    
-    init(episode: Episode) {
-        self.episode = episode
-        self.imageUrl = episode.smallBackgroundImage ?? ""
-    }
+    @EnvironmentObject var viewModel: ShowDetailsViewModel
     
     var body: some View {
         VStack {
-            KFImage(URL(string: imageUrl))
+            KFImage(URL(string: episode.smallBackgroundImage ?? ""))
                 .resizable()
-//                .loadImmediately()
+                .loadImmediately()
                 .placeholder {
                     Image("Episode Placeholder")
                         .resizable()
                         .aspectRatio(contentMode: .fill)
                 }
                 .aspectRatio(contentMode: .fill)
-//                .cornerRadius(10)
-//                .shadow(radius: 5)
-                        .frame(width: 310, height: 174)
+                .cornerRadius(10)
+                .shadow(radius: 5)
+                .frame(width: 310, height: 174)
                 .padding(.bottom, 5)
                 .clipped()
             Text("\(episode.episode). " + episode.title)
                 .lineLimit(1)
         }
         .frame(width: 310, height: 215)
+        .onAppear {
+            viewModel.loadImageIfMissing(episode: episode)
+        }
     }
 }
 
