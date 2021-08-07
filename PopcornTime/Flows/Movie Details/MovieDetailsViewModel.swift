@@ -31,12 +31,24 @@ class MovieDetailsViewModel: ObservableObject {
             return
         }
         
+        if movie.ratings == nil {
+            OMDbManager.shared.loadCachedInfo(imdbId: movie.id) { info, error in
+                if let info = info {
+                    self.movie.ratings = info.transform()
+                }
+            }
+        }
+        
         isLoading = true
         PopcornKit.getMovieInfo(movie.id) { (movie, error) in
             if let error = error {
                 self.error = error
                 self.isLoading = false
                 return
+            }
+            if var movie = movie {
+                movie.ratings = self.movie.ratings
+                self.movie = movie
             }
             
             self.isLoading = false

@@ -155,6 +155,8 @@
 		23A2BD8126BC5AD2004B864E /* OperatingSystem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23A2BD8026BC5AD2004B864E /* OperatingSystem.swift */; };
 		23A2BD8226BC5AD2004B864E /* OperatingSystem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23A2BD8026BC5AD2004B864E /* OperatingSystem.swift */; };
 		23A2BD8326BC5AD2004B864E /* OperatingSystem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23A2BD8026BC5AD2004B864E /* OperatingSystem.swift */; };
+		23A2BD8526BE9A2E004B864E /* MediaRatingsLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23A2BD8426BE9A2E004B864E /* MediaRatingsLoader.swift */; };
+		23A2BD8626BE9A2E004B864E /* MediaRatingsLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23A2BD8426BE9A2E004B864E /* MediaRatingsLoader.swift */; };
 		23B0A01626B9818100844309 /* TorrentPlayerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23B0A01526B9818100844309 /* TorrentPlayerView.swift */; };
 		23C96EE22685B40E0056455E /* DownloadProgressView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23C96EE12685B40E0056455E /* DownloadProgressView.swift */; };
 		23C96EE42685DBC40056455E /* RotateAnimation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23C96EE32685DBC40056455E /* RotateAnimation.swift */; };
@@ -302,6 +304,7 @@
 		23989FA626865A3500FEDA41 /* PlayerOptionsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerOptionsView.swift; sourceTree = "<group>"; };
 		23989FAB2687706C00FEDA41 /* IfModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IfModifier.swift; sourceTree = "<group>"; };
 		23A2BD8026BC5AD2004B864E /* OperatingSystem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OperatingSystem.swift; sourceTree = "<group>"; };
+		23A2BD8426BE9A2E004B864E /* MediaRatingsLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MediaRatingsLoader.swift; sourceTree = "<group>"; };
 		23B0A01526B9818100844309 /* TorrentPlayerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TorrentPlayerView.swift; sourceTree = "<group>"; };
 		23C96EE12685B40E0056455E /* DownloadProgressView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DownloadProgressView.swift; sourceTree = "<group>"; };
 		23C96EE32685DBC40056455E /* RotateAnimation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RotateAnimation.swift; sourceTree = "<group>"; };
@@ -485,6 +488,7 @@
 				23313B40267E3DC100774A85 /* UserDefault.swift */,
 				23313B4A267E409700774A85 /* Result.swift */,
 				238F78CE26BADCFF00C4A4E9 /* YoutubeApi.swift */,
+				23A2BD8426BE9A2E004B864E /* MediaRatingsLoader.swift */,
 			);
 			path = Access;
 			sourceTree = "<group>";
@@ -1138,6 +1142,7 @@
 				23313B36267E3C1400774A85 /* PlayerView.swift in Sources */,
 				23446ADA2680C1110049CC72 /* NowPlayingController.swift in Sources */,
 				23446ABB267F168F0049CC72 /* MovieDetailsViewModel.swift in Sources */,
+				23A2BD8526BE9A2E004B864E /* MediaRatingsLoader.swift in Sources */,
 				23446ADF2680E8600049CC72 /* ProgressBarView.swift in Sources */,
 				23C96EE22685B40E0056455E /* DownloadProgressView.swift in Sources */,
 				23989FA92687572B00FEDA41 /* AVSpeakerManager.swift in Sources */,
@@ -1182,6 +1187,7 @@
 				23A2BD7B26BC5930004B864E /* SeasonPickerViewModel.swift in Sources */,
 				237ECA1C26B8482700EE8B46 /* MoviesView.swift in Sources */,
 				237ECA1B26B8481800EE8B46 /* TabBarView.swift in Sources */,
+				23A2BD8626BE9A2E004B864E /* MediaRatingsLoader.swift in Sources */,
 				2383A13726BC3D2200A0346C /* ActorsCrewView.swift in Sources */,
 				237ECA2826B8485F00EE8B46 /* Show+Extension.swift in Sources */,
 				237ECA4426B84A4500EE8B46 /* FileManager+Extension.swift in Sources */,

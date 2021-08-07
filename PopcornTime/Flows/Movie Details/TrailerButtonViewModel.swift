@@ -32,14 +32,14 @@ class TrailerButtonViewModel: ObservableObject {
         let player = AVPlayer(url: url)
         
         #if os(tvOS)
-        let title = self.makeMetadataItem(AVMetadataIdentifier.commonIdentifierArtwork.rawValue, value: media.title)
-        let summary = self.makeMetadataItem(AVMetadataIdentifier.commonIdentifierDescription.rawValue, value: media.summary)
+        let title = self.makeMetadataItem(.commonIdentifierArtwork, value: media.title)
+        let summary = self.makeMetadataItem(.commonIdentifierDescription, value: media.summary)
         player.currentItem?.externalMetadata = [title, summary]
         
         if let string = media.mediumCoverImage,
             let url = URL(string: string),
             let data = try? Data(contentsOf: url) {
-            let image = self.makeMetadataItem(AVMetadataIdentifier.commonIdentifierArtwork.rawValue, value: data as NSData)
+            let image = self.makeMetadataItem(.commonIdentifierArtwork, value: data as NSData)
             player.currentItem?.externalMetadata.append(image)
         }
         #endif
@@ -65,7 +65,7 @@ class TrailerButtonViewModel: ObservableObject {
             if let error = error {
                 self.error.wrappedValue = error
             } else if let video = video {
-                let preferredVideoQualities = ["720p", "360p"]
+                let preferredVideoQualities = ["1080p", "720p", "360p"]
                 let formats = video.streamingData.formats
                 for quality in preferredVideoQualities {
                     if let index = formats.firstIndex(where: {$0.qualityLabel == quality}){
@@ -105,9 +105,9 @@ class TrailerButtonViewModel: ObservableObject {
 //        }
     }
     
-    private func makeMetadataItem(_ identifier: String, value: Any) -> AVMetadataItem {
+    private func makeMetadataItem(_ identifier: AVMetadataIdentifier, value: Any) -> AVMetadataItem {
         let item = AVMutableMetadataItem()
-        item.identifier = AVMetadataIdentifier(rawValue: identifier)
+        item.identifier = identifier
         item.value = value as? NSCopying & NSObjectProtocol
         item.extendedLanguageTag = "und"
         return item.copy() as! AVMetadataItem

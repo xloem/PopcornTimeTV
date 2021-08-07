@@ -117,6 +117,9 @@ public struct Movie: Media, Equatable {
     /// The genres associated with the movie.
     public var genres = [String]()
     
+    /// populated later from other sources
+    public var ratings: Ratings?
+    
     public init?(map: Map) {
         do { self = try Movie(map) }
         catch { return nil }
@@ -233,8 +236,23 @@ extension Movie: Hashable {
     }
 }
 
-// MARK: Equatable
+//// MARK: Equatable
+//
+//public func ==(lhs: Movie, rhs: Movie) -> Bool {
+//    return lhs.id == rhs.id
+//}
 
-public func ==(lhs: Movie, rhs: Movie) -> Bool {
-    return lhs.id == rhs.id
+
+public struct Ratings: Equatable {
+    public var awards: String?
+    public var imdbRating: String?
+    public var metascore: String?
+    public var rottenTomatoes: String?
+    
+    public init(awards: String?, imdbRating: String?, metascore: String?, rottenTomatoes: String?) {
+        self.awards = awards != "N/A" ? awards : nil
+        self.imdbRating = imdbRating != "N/A" ? imdbRating : nil
+        self.metascore = metascore != "N/A" ? metascore : nil
+        self.rottenTomatoes = rottenTomatoes
+    }
 }

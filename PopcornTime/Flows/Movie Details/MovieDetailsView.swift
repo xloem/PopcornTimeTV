@@ -129,10 +129,15 @@ struct MovieDetailsView: View {
     func rightSection(scroll: ScrollViewProxy) -> some View {
         VStack(alignment: .leading, spacing: 50) {
             infoText
+            ratings()
             Text(movie.summary)
                 .frame(width: 920)
                 .lineLimit(6)
-            Spacer(minLength: 40)
+            awards()
+            if viewModel.movie.ratings?.awards == nil {
+                Spacer()
+                    .frame(height: 40)
+            }
             HStack(spacing: 24) {
                 TrailerButton(viewModel: viewModel.trailerModel)
                 #if os(tvOS)
@@ -277,6 +282,51 @@ struct MovieDetailsView: View {
 //        .background(Color.red)
         .frame(height: 450)
         .padding(0)
+    }
+    
+    @ViewBuilder
+    func awards() -> some View {
+        if let awards = movie.ratings?.awards {
+            Text("Awards: " + awards)
+                .font(.caption)
+        }
+    }
+    
+    @ViewBuilder
+    func ratings() -> some View {
+        if let ratings = movie.ratings {
+            HStack(spacing: 25) {
+                if let metascore = ratings.metascore {
+                    HStack(spacing: 8) {
+                        Image("metacritic")
+                            .resizable()
+                            .aspectRatio(contentMode: .fit)
+                            .frame(height: 32)
+                        Text(metascore)
+                    }
+                }
+                if let imdb = ratings.imdbRating {
+                    HStack(spacing: 4) {
+                        Image("imdb")
+                            .resizable()
+                            .aspectRatio(contentMode: .fit)
+                            .frame(height: 32)
+                        Text(imdb)
+                    }
+                }
+                if let rotten = ratings.rottenTomatoes {
+                    HStack(spacing: 4) {
+                        Image("rotten-tomatoes")
+                            .resizable()
+                            .aspectRatio(contentMode: .fit)
+                            .frame(height: 32)
+                        Text(rotten)
+                    }
+                }
+            }
+            .font(.caption)
+            .lineLimit(1)
+        }
     }
 }
 

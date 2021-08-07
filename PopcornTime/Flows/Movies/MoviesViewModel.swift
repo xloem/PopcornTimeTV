@@ -9,7 +9,7 @@
 import Foundation
 import PopcornKit
 
-class MoviesViewModel: ObservableObject {
+class MoviesViewModel: ObservableObject, MovieRatingsLoader {
     @Published var isLoading = false
     var page = 1
     @Published var hasNextPage = false

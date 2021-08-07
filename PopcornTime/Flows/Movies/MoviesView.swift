@@ -48,7 +48,7 @@ struct MoviesView: View {
                         NavigationLink(
                             destination: MovieDetailsView(viewModel: MovieDetailsViewModel(movie: movie)),
                             label: {
-                                MovieView(movie: movie)
+                                MovieView(movie: movie, ratingsLoader: viewModel)
                             })
                             .buttonStyle(PlainNavigationLinkButtonStyle())
                             .padding([.leading, .trailing], 10)

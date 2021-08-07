@@ -112,6 +112,15 @@ public struct OpenSubtitles {
     static let defaultHeaders = ["User-Agent": OpenSubtitles.userAgent]
 }
 
+public struct OMDb {
+    static let apiKey = "19f23577"
+    static let base = "http://www.omdbapi.com"
+    static let info = "i"
+    
+    static let defaultParameters = ["apikey": OMDb.apiKey]
+}
+
+
 open class NetworkManager: NSObject {
     internal let manager: SessionManager = {
         var configuration = URLSessionConfiguration.default
