@@ -19,11 +19,11 @@ struct TabBarView: View {
                 .tabItem {
                     Text("Shows")
                 }
-            #if os(tvOS)
             WatchlistView()
                 .tabItem {
                     Text("Watchlist")
                 }
+            #if os(tvOS)
             SearchView()
                 .tabItem {
                     Text("🔍")

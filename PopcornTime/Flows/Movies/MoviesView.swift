@@ -21,6 +21,8 @@ func value<T>(tvOS: T, macOS: T) -> T {
         return tvOS
     #elseif os(macOS)
         return macOS
+    #elseif os(iOS)
+        return macOS
     #endif
 }
 

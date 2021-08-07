@@ -12,7 +12,8 @@ import PopcornKit
 struct TorrentPlayerView: View {
     var torrent: Torrent
     var media: Media
-    
+
+    #if os(tvOS)
     enum State_ {
         case none
         case preload(PreloadTorrentViewModel)
@@ -39,6 +40,11 @@ struct TorrentPlayerView: View {
             self.state = .play(playerModel)
         }))
     }
+    #else
+    var body: some View {
+        Text("Not implemented")
+    }
+    #endif
 }
 
 struct MediaPlayerView_Previews: PreviewProvider {

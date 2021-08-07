@@ -88,6 +88,6 @@ struct SelectTorrentQualityAction_Previews: PreviewProvider {
             print("selected: ", torrent)
         }, label: {
             Text("Play")
-        }).focusable()
+        })
     }
 }

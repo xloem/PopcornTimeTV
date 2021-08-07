@@ -31,7 +31,6 @@ struct TrailerButton: View {
             Button(action: {
                 viewModel.loadTrailerUrl { url in
                     self.selection = Selection.trailer.rawValue
-                    viewModel.trailerVidePlayer?.play()
                 }
             }, label: {
                 VStack {
@@ -48,11 +47,13 @@ struct TrailerButton: View {
     var trailerVideo: some View {
         VideoPlayer(player: viewModel.trailerVidePlayer)
             .onAppear {
-                viewModel.trailerVidePlayer?.play()
+                DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+                    viewModel.trailerVidePlayer?.play()
+                }
+                
                 self.playerObservation = NotificationCenter.default.addObserver(forName:.AVPlayerItemDidPlayToEndTime, object:nil, queue: .main, using: {_ in
                     self.selection = nil
                 })
-                
             }.onDisappear {
                 viewModel.trailerVidePlayer?.pause()
                 viewModel.trailerVidePlayer?.seek(to: .zero)

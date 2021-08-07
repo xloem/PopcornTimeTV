@@ -37,6 +37,17 @@ public struct VisualEffectBlur<Content: View>: View {
             .cornerRadius(cornerRadius)
             .accessibility(hidden: Content.self == EmptyView.self)
     }
+    #elseif os(iOS)
+    var content: Content
+    var cornerRadius: CGFloat = 6.0
+
+    public init(@ViewBuilder content: () -> Content) {
+        self.content = content()
+    }
+    
+    public var body: some View {
+        content
+    }
     #endif
 }
 

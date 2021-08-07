@@ -43,6 +43,7 @@ struct PopcornTime: App {
                     Spacer()
                 #endif
             }
+            .preferredColorScheme(.dark)
             
 //            .navigationViewStyle(StackNavigationViewStyle())
         }

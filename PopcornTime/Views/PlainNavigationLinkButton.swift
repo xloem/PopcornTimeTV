@@ -45,18 +45,32 @@ struct PlainNavigationLinkButton: View {
   let configuration: ButtonStyle.Configuration
   var onFocus: () -> Void = {}
 
+#if os(iOS)
   var body: some View {
     configuration.label
       .scaleEffect(focused ? 1.1 : 1)
       .foregroundColor(.init(white: 1, opacity: focused ? 1 : 0.667))
-      .focusable(true)
       .animation(.easeOut, value: focused)
-        .onChange(of: focused) { newValue in
+      .onChange(of: focused) { newValue in
           if newValue {
               onFocus()
           }
-        }
+      }
   }
+#else
+    var body: some View {
+      configuration.label
+        .scaleEffect(focused ? 1.1 : 1)
+        .foregroundColor(.init(white: 1, opacity: focused ? 1 : 0.667))
+        .focusable(true)
+        .animation(.easeOut, value: focused)
+          .onChange(of: focused) { newValue in
+            if newValue {
+                onFocus()
+            }
+          }
+    }
+#endif
 }
 
 
