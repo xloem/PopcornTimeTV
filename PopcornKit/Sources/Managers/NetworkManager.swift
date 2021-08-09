@@ -126,9 +126,9 @@ open class NetworkManager: NSObject {
         var configuration = URLSessionConfiguration.default
         configuration.httpCookieAcceptPolicy = .never
         configuration.httpShouldSetCookies = false
-        configuration.urlCache = nil
+//        configuration.urlCache = nil
 //        configuration.requestCachePolicy = .reloadIgnoringCacheData
-        configuration.httpAdditionalHeaders = ["User-Agent": "Popcorn Time NodeJS"]
+        configuration.httpAdditionalHeaders = ["User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_16_0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.132 Safari/"]
         return Alamofire.SessionManager(configuration: configuration)
     }()
     

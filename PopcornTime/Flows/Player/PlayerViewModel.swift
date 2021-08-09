@@ -276,12 +276,14 @@ class PlayerViewModel: NSObject, ObservableObject, UIGestureRecognizerDelegate {
     }
     
     @objc func touchLocationDidChange(_ gesture: SiriRemoteGestureRecognizer) {
+        guard progress.isScrubbing && showControls && !progress.isBuffering else {
+            return
+        }
+        
         print("", gesture.touchLocation)
         
         progress.hint = .none
         resetIdleTimer()
-        guard progress.isScrubbing && showControls && !progress.isBuffering else { return }
-        print(progress)
         
         switch gesture.touchLocation {
         case .left:

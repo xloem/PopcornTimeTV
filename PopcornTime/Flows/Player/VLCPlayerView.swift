@@ -20,23 +20,16 @@ struct VLCPlayerView: UIViewRepresentable {
     var onTouchLocationDidChange: ((SiriRemoteGestureRecognizer) -> Void)?
     var onPositionSliderDrag: ((Float) -> Void)?
     var onExit: (() -> Void)?
-    var focused = true
     
-    func makeUIView(context: Context) -> FocusedView {
-        let view = FocusedView()
+    func makeUIView(context: Context) -> UIView {
+        let view = UIView()
         mediaplayer.drawable = view
         context.coordinator.addGestures(view: view)
         return view
     }
     
-    func updateUIView(_ uiView: FocusedView, context: Context) {
+    func updateUIView(_ uiView: UIView, context: Context) {
         mediaplayer.drawable = uiView
-        if (uiView.shouldFocus != focused) {
-//            uiView.shouldFocus = context.environment.isFocused
-            uiView.shouldFocus = focused
-//            uiView.setNeedsFocusUpdate()
-//            uiView.updateFocusIfNeeded()
-        }
     }
     
     func makeCoordinator() -> VLCPlayerCoordinator {
@@ -51,15 +44,6 @@ struct VLCPlayerView: UIViewRepresentable {
         coordinator.onPositionSliderDrag = onPositionSliderDrag
         return coordinator
     }
-    
-    class FocusedView: UIView {
-        var shouldFocus: Bool = true
-        
-//        override var canBecomeFocused: Bool {
-//            return shouldFocus
-//        }
-    }
-    
     
     class VLCPlayerCoordinator: NSObject, UIGestureRecognizerDelegate {
         var onPlayPause: (() -> Void)?

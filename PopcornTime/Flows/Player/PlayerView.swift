@@ -63,7 +63,7 @@ struct PlayerView: View {
                 viewModel.touchLocationDidChange(gesture)
             }, onPositionSliderDrag: { offset in
                 viewModel.handlePositionSliderDrag(offset: offset)
-            }, focused: !viewModel.showInfo)
+            })
 //            .focusScope(namespace)
             .prefersDefaultFocus(!viewModel.showInfo, in: namespace)
             .focusable(!viewModel.showInfo)
