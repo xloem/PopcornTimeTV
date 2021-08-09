@@ -16,6 +16,7 @@ class NowPlayingController {
     private (set) var mediaplayer: VLCMediaPlayer
     private (set) var media: Media
     private var imageGenerator: AVAssetImageGenerator
+    var onPlayPause: () -> Void = {}
     
     internal var nowPlayingInfo: [String: Any]? {
         get {
@@ -43,12 +44,12 @@ class NowPlayingController {
         let center = MPRemoteCommandCenter.shared()
             
         center.pauseCommand.addTarget { (event) -> MPRemoteCommandHandlerStatus in
-            self.playandPause()
+            self.onPlayPause()
             return self.mediaplayer.state == .paused ? .success : .commandFailed
         }
         
         center.playCommand.addTarget { (event) -> MPRemoteCommandHandlerStatus in
-            self.playandPause()
+            self.onPlayPause()
             return self.mediaplayer.state == .playing ? .success : .commandFailed
         }
         
@@ -102,20 +103,12 @@ class NowPlayingController {
                 }
             }
         }
-        
-        
-//        if let image = media.mediumCoverImage ?? media.mediumBackgroundImage, let request = try? URLRequest(url: image, method: .get) {
-//            ImageDownloader.default.download(request) { (response) in
-//                guard let image = response.result.value else { return }
-//                if #available(iOS 10.0, tvOS 10.0, *) {
-//                    self.nowPlayingInfo?[MPMediaItemPropertyArtwork] = MPMediaItemArtwork(boundsSize: image.size) { (_) -> UIImage in
-//                        return image
-//                    }
-//                } else {
-//                    self.nowPlayingInfo?[MPMediaItemPropertyArtwork] = MPMediaItemArtwork(image: image)
-//                }
-//            }
-//        }
+    }
+    
+    func configureNowPlayingPositions() {
+        nowPlayingInfo?[MPMediaItemPropertyPlaybackDuration] = TimeInterval(streamDuration/1000)
+        nowPlayingInfo?[MPNowPlayingInfoPropertyElapsedPlaybackTime] = mediaplayer.time.value.doubleValue/1000
+        nowPlayingInfo?[MPNowPlayingInfoPropertyPlaybackRate] = mediaplayer.rate
     }
     
     func remoteControlReceived(with event: UIEvent?) {
@@ -127,32 +120,18 @@ class NowPlayingController {
             case .remoteControlPause:
                 fallthrough
             case .remoteControlTogglePlayPause:
-                playandPause()
+                self.onPlayPause()
             case .remoteControlStop:
                 mediaplayer.stop()
             default:
                 break
         }
     }
-
-    @IBAction func playandPause() {
-        #if os(tvOS)
-            // Make fake gesture to trick clickGesture: into recognising the touch.
-//            let gesture = SiriRemoteGestureRecognizer(target: nil, action: nil)
-//            gesture.isClick = true
-//            gesture.state = .ended
-//            clickGesture(gesture)
-        #elseif os(iOS)
-            if mediaplayer.isPlaying {
-                mediaplayer.canPause ? mediaplayer.pause() : ()
-            } else {
-                mediaplayer.willPlay ? mediaplayer.play() : ()
-            }
-        #endif
-    }
     
     func screenshotAtTime(_ time: NSNumber) -> UIImage? {
-        guard let image = try? imageGenerator.copyCGImage(at: CMTimeMakeWithSeconds(time.doubleValue/1000.0, preferredTimescale: 1000), actualTime: nil) else { return nil }
+        guard let image = try? imageGenerator.copyCGImage(at: CMTimeMakeWithSeconds(time.doubleValue/1000.0, preferredTimescale: 1000), actualTime: nil) else {
+            return nil
+        }
         return UIImage(cgImage: image)
     }
     

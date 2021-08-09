@@ -53,9 +53,9 @@ enum TransportBarHint: String {
             screenshotImageView.layer.borderWidth = isImageHidden ? 0.0 : 1.0
             
             setNeedsLayout()
-            UIView.animate(withDuration: 0.3) {
+//            UIView.animate(withDuration: 0.3) {
                 self.layoutIfNeeded()
-            }
+//            }
         }
     }
     @IBInspectable var isScrubbing: Bool = false {
@@ -78,11 +78,11 @@ enum TransportBarHint: String {
                 frame.size = CGSize(width: 480, height: 270)
                 frame.origin.y = scrubbingPositionMarker.frame.origin.y - frame.size.height
                 
-                UIView.animate(withDuration: 0.3, animations: { 
+//                UIView.animate(withDuration: 0.3, animations: {
                     self.screenshotImageView.frame = frame
                     self.screenshotImageView.alpha = 1.0
                     self.layoutIfNeeded()
-                })
+//                })
             } else {
                 playbackPositionMarker.alpha = 1.0
                 elapsedTimeLabel.alpha = 1.0
@@ -93,14 +93,14 @@ enum TransportBarHint: String {
                 frame.origin.y = scrubbingPositionMarker.frame.origin.y
                 frame.size = .zero
                 
-                UIView.animate(withDuration: 0.3, animations: { 
+//                UIView.animate(withDuration: 0.3, animations: {
                     self.screenshotImageView.frame = frame
                     self.screenshotImageView.alpha = 0.0
                     self.layoutIfNeeded()
-                }, completion: { _ in
+//                }, completion: { _ in
                     self.screenshotImageView.isHidden = true
                     self.screenshotImageView.image = nil
-                })
+//                })
             }
             setNeedsLayout()
         }
@@ -279,9 +279,9 @@ enum TransportBarHint: String {
         let shouldHideRemainingTime = timeLabelIntersects || imageViewIntersects || bufferIndicatorIntersects
         let alpha: CGFloat = shouldHideRemainingTime ? 0.0 : isScrubbing ? 0.8 : 1.0
         
-        UIView.animate(withDuration: 0.15) {
+//        UIView.animate(withDuration: 0.15) {
             self.remainingTimeLabel.alpha = alpha
-        }
+//        }
     }
     
     

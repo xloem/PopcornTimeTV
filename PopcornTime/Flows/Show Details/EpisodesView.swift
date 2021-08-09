@@ -51,7 +51,7 @@ struct EpisodesView: View {
                     }
                 }
                 .padding([.top, .bottom], 20) // allow zooming to be visible
-                .padding(.leading, 90)
+                .padding([.leading, .trailing], 90)
             }
             currentEpisodeView
         }

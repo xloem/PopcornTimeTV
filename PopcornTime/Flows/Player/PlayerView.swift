@@ -71,8 +71,9 @@ struct PlayerView: View {
                 withAnimation(.spring()) {
                     if viewModel.showControls {
                         viewModel.clickGesture()
+                    } else {
+                        viewModel.toggleControlsVisible()
                     }
-                    viewModel.toggleControlsVisible()
                 }
             })
             .onPlayPauseCommand {

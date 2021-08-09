@@ -10,10 +10,9 @@ import SwiftUI
 
 struct ProgressBarView: UIViewRepresentable {
     var progress: PlayerViewModel.Progress
+    @State var view = ProgressBar()
     
     func makeUIView(context: Context) -> ProgressBar {
-        let view = ProgressBar()
-//        view.isUserInteractionEnabled = false
         return view
     }
     

@@ -88,10 +88,12 @@ class PlayerViewModel: NSObject, ObservableObject, UIGestureRecognizerDelegate {
         
         let imageGenerator = AVAssetImageGenerator(asset: AVAsset(url: localUrl))
         self.nowPlaying = NowPlayingController(mediaplayer: mediaplayer, media: media, imageGenerator: imageGenerator)
-        
 
         
         super.init()
+        self.nowPlaying.onPlayPause = { [weak self] in
+            self?.playandPause()
+        }
         
         if (!testingMode) {
             prepare()
@@ -188,7 +190,7 @@ class PlayerViewModel: NSObject, ObservableObject, UIGestureRecognizerDelegate {
         idleWorkItem?.cancel()
     }
     
-    @objc func playandPause() {
+    func playandPause() {
         if isLoading {
             return
         }
@@ -365,7 +367,7 @@ class PlayerViewModel: NSObject, ObservableObject, UIGestureRecognizerDelegate {
     }
 
     
-    func saveProgress(status: Trakt.WatchedStatus) {
+    func saveMediaProgress(status: Trakt.WatchedStatus) {
         if let movie = media as? Movie {
             WatchedlistManager<Movie>.movie.setCurrentProgress(progress.progress, for: movie.id, with: status)
         } else if let episode = media as? Episode {
@@ -396,7 +398,7 @@ class PlayerViewModel: NSObject, ObservableObject, UIGestureRecognizerDelegate {
         
         streamer.cancelStreamingAndDeleteData(Session.removeCacheOnPlayerExit)
         
-        saveProgress(status: .finished)
+        saveMediaProgress(status: .finished)
         NotificationCenter.default.removeObserver(self, name: .PTTorrentStatusDidChange, object: nil)
         
         presentationMode?.wrappedValue.dismiss()
@@ -414,6 +416,8 @@ extension PlayerViewModel: VLCMediaPlayerDelegate {
             nowPlaying.configureNowPlayingInfo()
 
             resetIdleTimer()
+        } else {
+            nowPlaying.configureNowPlayingPositions()
         }
         
         if resumePlayback && mediaplayer.isSeekable {
@@ -441,9 +445,9 @@ extension PlayerViewModel: VLCMediaPlayerDelegate {
     }
     
     func mediaPlayerStateChanged(_ aNotification: Notification!) {
+        nowPlaying.configureNowPlayingPositions()
         resetIdleTimer()
         progress.isBuffering = false
-        nowPlaying.nowPlayingInfo?[MPNowPlayingInfoPropertyElapsedPlaybackTime] = (mediaplayer.time.value?.doubleValue ?? 0)/1000
         switch mediaplayer.state {
         case .error:
             fallthrough
@@ -452,18 +456,18 @@ extension PlayerViewModel: VLCMediaPlayerDelegate {
         case .stopped:
             didFinishPlaying()
         case .paused:
-            saveProgress(status: .paused)
-//            playPauseButton?.setImage(UIImage(named: "Play"), for: .normal)
+            saveMediaProgress(status: .paused)
             isPlaying = false
-            nowPlaying.nowPlayingInfo?[MPNowPlayingInfoPropertyPlaybackRate] = 0.0
         case .playing:
-//            playPauseButton?.setImage(UIImage(named: "Pause"), for: .normal)
             isPlaying = true
-            saveProgress(status: .watching)
-            nowPlaying.nowPlayingInfo?[MPNowPlayingInfoPropertyPlaybackRate] = Double(mediaplayer.rate)
+            saveMediaProgress(status: .watching)
         case .buffering:
             progress.isBuffering = true
-        default:
+        case .opening:
+            break
+        case .esAdded:
+            break
+        @unknown default:
             break
         }
     }

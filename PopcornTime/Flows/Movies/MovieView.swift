@@ -12,7 +12,7 @@ import PopcornKit
 
 struct MovieView: View {
     struct Theme {
-        let fontSize: CGFloat = value(tvOS: 28, macOS: 18)
+        let fontSize: CGFloat = value(tvOS: 28, macOS: 16)
     }
     static let theme = Theme()
     
@@ -37,6 +37,7 @@ struct MovieView: View {
 //                .padding(.bottom, 5)
             Text(movie.title)
                 .font(.system(size: MovieView.theme.fontSize, weight: .medium))
+//                .font(.caption)
                 .multilineTextAlignment(.center)
                 .lineLimit(lineLimit)
                 .shadow(color: .init(white: 0, opacity: 0.6), radius: 2, x: 0, y: 1)
