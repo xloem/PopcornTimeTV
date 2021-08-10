@@ -30,10 +30,14 @@ struct SubtitlesView: View {
             Spacer()
             languageSection
                 .frame(width: 390)
+                .focusSection()
             delaySection
+                .focusSection()
             encodingSection
+                .focusSection()
             Spacer()
         }
+        .focusSection()
         .frame(maxHeight: 300)
     }
     
@@ -49,9 +53,11 @@ struct SubtitlesView: View {
                 } else {
                     ScrollViewReader { scroll in
                         ScrollView {
-                            VStack(alignment: .leading, spacing: 15) {
+                            LazyVStack(alignment: .leading, spacing: 15) {
                                 ForEach(subtitlesInView) { subtitle in
-                                    button(text: subtitle.language, isSelected: subtitle.language == currentSubtitle?.language) {
+                                    button(text: subtitle.language, isSelected: subtitle.language == currentSubtitle?.language, onFocus: {
+                                        scroll.scrollTo(subtitle.language, anchor: .center)
+                                    }) {
                                         if subtitle.language == selectOther {
                                             self.showExtendedSubtitles = true
                                         } else {
@@ -88,13 +94,18 @@ struct SubtitlesView: View {
             sectionHeader(text: "Delay")
             ScrollViewReader { scroll in
                 ScrollView {
-                    VStack(alignment: .leading, spacing: 15) {
+                    LazyVStack(alignment: .leading, spacing: 15) {
                         ForEach(delays) { delay in
-                            button(text: delayText(delay: delay), isSelected: delay == currentDelay) {
+                            button(text: delayText(delay: delay), isSelected: delay == currentDelay, onFocus: {
+                                withAnimation {
+                                    scroll.scrollTo(delay, anchor: .center)
+                                }
+                            }) {
                                 self.currentDelay = delay
                                 self.triggerRefresh.toggle()
                             }
                             .id(delay)
+//                            .prefersDefaultFocus(delay == currentDelay, in: delayNamespace)
                         }
                     }
                 }
@@ -103,6 +114,7 @@ struct SubtitlesView: View {
                 })
             }
         }
+//        .focusScope(delayNamespace)
     }
     
     var encodingSection: some View {
@@ -110,13 +122,18 @@ struct SubtitlesView: View {
             sectionHeader(text: "Encoding")
             ScrollViewReader { scroll in
                 ScrollView {
-                    VStack(alignment: .leading, spacing: 15) {
+                    LazyVStack(alignment: .leading, spacing: 15) {
                         ForEach(encodingsKeys, id: \.self) { key in
-                            button(text: key, isSelected: currentEncoding == encodings[key]) {
+                            button(text: key, isSelected: currentEncoding == encodings[key], onFocus: {
+                                withAnimation {
+                                    scroll.scrollTo(encodings[key], anchor: .center)
+                                }
+                            }) {
                                 self.currentEncoding = encodings[key]!
                                 self.triggerRefresh.toggle()
                             }
                             .id(encodings[key])
+//                            .prefersDefaultFocus(encodings[key] == currentEncoding, in: encodingNamespace)
                         }
                     }
                 }
@@ -141,6 +158,7 @@ struct SubtitlesView: View {
 //                })
 //            }
         }
+//        .focusScope(encodingNamespace)
     }
     
     func delayText(delay: Int) -> String {
@@ -154,7 +172,7 @@ struct SubtitlesView: View {
             .padding(.leading, 100)
     }
     
-    func button(text: String, isSelected: Bool, action: @escaping () -> Void) -> some View {
+    func button(text: String, isSelected: Bool, onFocus: @escaping () -> Void, action: @escaping () -> Void) -> some View {
         Button(action: {
             action()
         }, label: {
@@ -169,7 +187,7 @@ struct SubtitlesView: View {
             }
         })
         .padding([.leading, .trailing], 50)
-        .buttonStyle(PlainButtonStyle(onFocus: {}))
+        .buttonStyle(PlainButtonStyle(onFocus: onFocus))
     }
     
     func generateSubtitles() -> [Subtitle] {

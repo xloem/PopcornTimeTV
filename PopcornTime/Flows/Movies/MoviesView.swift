@@ -9,13 +9,6 @@
 import SwiftUI
 import PopcornKit
 
-//#if os(tvOS)
-//let isTVOS = true
-//let isMacOS = false
-//#elseif os(macOS)
-//let isTVOS = false
-//let isMacOS = true
-//#endif
 func value<T>(tvOS: T, macOS: T) -> T {
     #if os(tvOS)
         return tvOS

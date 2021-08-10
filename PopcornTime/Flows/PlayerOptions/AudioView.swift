@@ -46,12 +46,16 @@ struct AudioView: View {
             Spacer()
             delaySection
                 .frame(width: 390)
+                .focusSection()
             soundSection
                 .frame(width: 400)
+                .focusSection()
             speakerSection
                 .frame(width: 500)
+                .focusSection()
             Spacer()
         }
+        .focusSection()
         .frame(maxHeight: 300)
     }
     
@@ -60,9 +64,13 @@ struct AudioView: View {
             sectionHeader(text: "Delay")
             ScrollViewReader { scroll in
                 ScrollView {
-                    VStack(alignment: .leading, spacing: 15) {
+                    LazyVStack(alignment: .leading, spacing: 15) {
                         ForEach(delays) { delay in
-                            button(text: delayText(delay: delay), isSelected: delay == currentDelay) {
+                            button(text: delayText(delay: delay), isSelected: delay == currentDelay, onFocus: {
+                                withAnimation {
+                                    scroll.scrollTo(delay, anchor: .center)
+                                }
+                            }) {
                                 self.currentDelay = delay
                                 self.triggerRefresh.toggle()
                             }
@@ -83,12 +91,13 @@ struct AudioView: View {
             sectionHeader(text: "Sound")
             VStack(alignment: .leading, spacing: 15) {
                 ForEach(sounds) { item in
-                    button(text: item.localizedString, isSelected: item == currentSound) {
+                    button(text: item.localizedString, isSelected: item == currentSound, onFocus: {}) {
                         currentSound = item
                         self.triggerRefresh.toggle()
                     }
                 }
             }
+            Spacer()
         }
     }
     
@@ -97,13 +106,14 @@ struct AudioView: View {
             sectionHeader(text: "Speakers")
             VStack(alignment: .leading, spacing: 15) {
                 ForEach(0..<manager.speakerRoutes.count, id: \.self) { item in
-                    button(text: manager.speakerRoutes[item].name, isSelected: manager.speakerRoutes[item].isSelected) {
+                    button(text: manager.speakerRoutes[item].name, isSelected: manager.speakerRoutes[item].isSelected, onFocus: {}) {
                         let route = manager.speakerRoutes[item]
                         manager.select(route: route)
                         triggerRefresh.toggle()
                     }
                 }
             }
+            Spacer()
         }
     }
     
@@ -118,7 +128,7 @@ struct AudioView: View {
             .padding(.leading, 50)
     }
     
-    func button(text: String, isSelected: Bool, action: @escaping () -> Void) -> some View {
+    func button(text: String, isSelected: Bool, onFocus: @escaping () -> Void, action: @escaping () -> Void) -> some View {
         Button(action: {
             action()
         }, label: {
@@ -131,7 +141,7 @@ struct AudioView: View {
                 Text(text)
                     .font(.system(size: 31, weight: .medium))
             }
-        }).buttonStyle(PlainButtonStyle(onFocus: {}))
+        }).buttonStyle(PlainButtonStyle(onFocus: onFocus))
     }
 }
 

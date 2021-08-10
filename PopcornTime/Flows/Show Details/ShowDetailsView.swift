@@ -70,6 +70,9 @@ struct ShowDetailsView: View {
                         .padding(.leading, 100)
                         Spacer()
                     }
+                    #if os(tvOS)
+                    .focusSection()
+                    #endif
                     
                     VStack(alignment: .center) {
                         EpisodesView(show: viewModel.show, episodes: viewModel.seasonEpisodes(), currentSeason: viewModel.currentSeason, onFocus: {
@@ -77,15 +80,25 @@ struct ShowDetailsView: View {
                                 scroll.scrollTo(section2, anchor: .top)
                             }
                         })
+                        #if os(tvOS)
+                        .focusSection()
+                        #endif
+                        
                         if show.related.count > 0 {
                             alsoWatchedSection(scroll: scroll)
                                 .background(
                                     Color.init(white: 0, opacity: 0.3)
                                         .padding([.top, .bottom], -10)
                                 )
+                                #if os(tvOS)
+                                .focusSection()
+                                #endif
                         }
                         if show.actors.count > 0 {
                             ActorsCrewView(persons: show.actors + show.crew)
+                            #if os(tvOS)
+                            .focusSection()
+                            #endif
                         }
                     }
                     .padding([.bottom, .top], 30)
@@ -120,11 +133,9 @@ struct ShowDetailsView: View {
             .aspectRatio(contentMode: .fill)
             .padding(0)
             .ignoresSafeArea()
-            .modify(modifier: {
-                #if os(tvOS)
-                    $0.frame(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height)
-                #endif
-            })
+            #if os(tvOS)
+            .frame(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height)
+            #endif
             
     }
     

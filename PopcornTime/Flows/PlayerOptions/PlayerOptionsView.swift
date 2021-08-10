@@ -14,12 +14,16 @@ struct PlayerOptionsView: View {
     var media: Media?
     var mediaplayer: VLCMediaPlayer?
     let height: CGFloat = 440
-    @State var selectedTab = 0
+    @State var selectedTab = Selection.info
     @Binding var audioDelay: Int
     @Binding var audioProfile: EqualizerProfiles
     @Binding var subtitleDelay: Int
     @Binding var subtitleEncoding: String
     @Binding var subtitle: Subtitle?
+    
+    enum Selection: Int {
+        case info = 0, subtitles, audio
+    }
     
     var body: some View {
         TabView(selection: $selectedTab) {
@@ -27,19 +31,19 @@ struct PlayerOptionsView: View {
                 .tabItem {
                     Text("Info".localized)
                 }
-                .tag(0)
+                .tag(Selection.info)
             SubtitlesView(currentDelay: $subtitleDelay, currentEncoding: $subtitleEncoding, currentSubtitle: $subtitle, subtitles: media?.subtitles ?? [:])
                 .tabItem {
                     Text("Subtitles".localized)
                 }
-                .tag(1)
+                .tag(Selection.subtitles)
             AudioView(
                 currentDelay: $audioDelay,
                 currentSound: $audioProfile)
                 .tabItem {
                     Text("Audio".localized)
                 }
-                .tag(2)
+                .tag(Selection.audio)
         }
         .ignoresSafeArea(.all)
         .frame(maxHeight: height)
@@ -47,7 +51,6 @@ struct PlayerOptionsView: View {
         .background(VisualEffectBlur().cornerRadius(60).padding(.top, 100))
         .padding([.leading, .trailing], 120)
         .padding([.top], 30)
-        
     }
 }
 
@@ -68,7 +71,7 @@ struct PlayerOptionsView_Previews: PreviewProvider {
             
             VStack {
                 PlayerOptionsView(media: Movie.dummy(),
-                                  selectedTab: 2,
+                                  selectedTab: PlayerOptionsView.Selection.subtitles,
                                   audioDelay: .constant(0),
                                   audioProfile: .constant(.fullDynamicRange),
                                   subtitleDelay: .constant(0),
@@ -81,7 +84,7 @@ struct PlayerOptionsView_Previews: PreviewProvider {
             
             VStack {
                 PlayerOptionsView(media: Movie.dummy(),
-                                  selectedTab: 1,
+                                  selectedTab: PlayerOptionsView.Selection.audio,
                                   audioDelay: .constant(0),
                                   audioProfile: .constant(.fullDynamicRange),
                                   subtitleDelay: .constant(0),

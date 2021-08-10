@@ -8,7 +8,6 @@
 
 import SwiftUI
 import PopcornKit
-import SwiftUIFocusGuide
 
 struct LeftSidePanelView: View {
     var sortFilters = NetworkManager.Filters.allCases
@@ -19,44 +18,31 @@ struct LeftSidePanelView: View {
     @Binding var currentSort: MovieManager.Filters
     @Binding var currentGenre: NetworkManager.Genres
     
-    enum Selection {
+    enum Selection: Hashable {
         case sort
         case genre
     }
     @State var selection: Selection?
-    @StateObject var focusBag = SwiftUIFocusBag()
+    @FocusState private var focusedFilter: String?
+    @FocusState private var focusedType: Selection?
     
     var body: some View {
         HStack(spacing: 0) {
             VStack {
                 Spacer()
-                Button(action: /*@START_MENU_TOKEN@*/{}/*@END_MENU_TOKEN@*/, label: {
-                    Image(systemName: "arrow.up.arrow.down")
-                })
-                .buttonStyle(PlainButtonStyle(onFocus: {
-                    selection = .sort
-                }))
-                .addFocusGuide(using: focusBag, name: "Sort", destinations: [.bottom: "Genre", .right: "Filters"])
-                .frame(height: 70)
-                .ignoresSafeArea()
-                Button(action: /*@START_MENU_TOKEN@*/{}/*@END_MENU_TOKEN@*/, label: {
-                    Image(systemName: "film")
-                })
-                .buttonStyle(PlainButtonStyle(onFocus: {
-                    selection = .genre
-                }))
-                .addFocusGuide(using: focusBag, name: "Genre", destinations: [.top: "Sort", .right: "Filters"])
-                .frame(height: 70)
+                sortButton
+                genreButton
                 Spacer()
             }
+            .focusSection()
             .ignoresSafeArea()
-//            .addFocusGuide(using: focusBag, name: "Filter", destinations: [.right: "Filters"])
             .frame(width: 50)
             .frame(maxHeight: .infinity)
+            
             filterView
-                .addFocusGuide(using: focusBag, name: "Filters", destinations: [.left: selection == .genre ? "Genre" : "Sort"])
                 .frame(width: 350)
                 .frame(maxHeight: .infinity)
+                .focusSection()
                 .onMoveCommand(perform: { direction in
                     if direction == .right {
                         selection = nil
@@ -75,9 +61,40 @@ struct LeftSidePanelView: View {
     }
     
     @ViewBuilder
+    var sortButton: some View {
+        Button(action: {
+            selection = nil
+        }, label: {
+            Image(systemName: "arrow.up.arrow.down")
+        })
+        .buttonStyle(PlainButtonStyle(onFocus: {
+            selection = .sort
+        }))
+        .frame(height: 70)
+        .ignoresSafeArea()
+        .focused($focusedType, equals: .sort)
+    }
+    
+    @ViewBuilder
+    var genreButton: some View {
+        Button(action: {
+            selection = nil
+        }, label: {
+            Image(systemName: "film")
+        })
+        .buttonStyle(PlainButtonStyle(onFocus: {
+            selection = .genre
+        }))
+        .frame(height: 70)
+        .focused($focusedType, equals: .genre)
+    }
+    
+    @ViewBuilder
     var filterView: some View {
-        switch selection {
-        case .sort:
+        let focused: Any? = focusedType ?? focusedFilter
+        
+        switch (selection, focused) {
+        case (.sort, .some(_)):
             VStack(alignment: .leading, spacing: 15) {
                 Spacer()
                 ForEach(sortFilters, id: \.self) { sort in
@@ -88,9 +105,7 @@ struct LeftSidePanelView: View {
                 Spacer()
             }
 //            .frame(maxWidth: 350, maxHeight: .infinity)
-//            .addFocusGuide(using: focusBag, name: "SortFilters", destinations: [.left: "Sort"], debug: true)
-//            .frame(maxWidth: 350, maxHeight: .infinity)
-        case .genre:
+        case (.genre, .some(_)):
 //            VStack(spacing: 0) {
                 ScrollViewReader { scroll in
                     ScrollView {
@@ -107,8 +122,6 @@ struct LeftSidePanelView: View {
                     })
                 }
 //            .frame(maxWidth: 350, maxHeight: .infinity)
-//            .addFocusGuide(using: focusBag, name: "GenreFilters", destinations: [.left: "Genre", .right: "Genre"], debug: true)
-//            .frame(maxWidth: 350, maxHeight: .infinity)
         default:
             EmptyView()
         }
@@ -116,7 +129,7 @@ struct LeftSidePanelView: View {
     
     @ViewBuilder
     var backgroundView: some View {
-        if selection != nil {
+        if selection != nil || focusedFilter != nil {
             VisualEffectBlur()
                 .mask(gradient)
         }
@@ -141,6 +154,7 @@ struct LeftSidePanelView: View {
         })
 //        .padding([.leading, .trailing], 20)
         .buttonStyle(PlainButtonStyle(onFocus: {}))
+        .focused($focusedFilter, equals: text)
     }
     
     let gradient = LinearGradient(

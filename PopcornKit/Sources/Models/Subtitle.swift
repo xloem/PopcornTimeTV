@@ -69,9 +69,3 @@ public struct Subtitle: Equatable,Mappable {
         self.rating = rating
     }
 }
-
-
-
-public func ==(lhs: Subtitle, rhs: Subtitle) -> Bool {
-    return lhs.link == rhs.link
-}

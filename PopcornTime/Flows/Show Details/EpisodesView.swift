@@ -35,25 +35,16 @@ struct EpisodesView: View {
             ScrollView(.horizontal) {
                 LazyHStack {
                     ForEach(episodes, id: \.self) { episode in
-                        #if os(tvOS)
-                        SelectTorrentQualityButton(media: episode, action: { torrent in
-                            self.torrent = torrent
-                            self.currentEpisode = episode
-                            showPlayer = true
-                        }, label: {
-                            EpisodeView(episode: episode)
-                        }, onFocus: {
-                            currentEpisode = episode
-                            onFocus()
-                        })
-                        .frame(width: 310, height: 215)
-                        #endif
+                        episodeView(episode: episode)
                     }
                 }
                 .padding([.top, .bottom], 20) // allow zooming to be visible
                 .padding([.leading, .trailing], 90)
             }
             currentEpisodeView
+            #if os(tvOS)
+                .focusSection()
+            #endif
         }
     }
     
@@ -77,6 +68,23 @@ struct EpisodesView: View {
                 EmptyView()
             })
         }
+        #endif
+    }
+    
+    @ViewBuilder
+    func episodeView(episode: Episode) -> some View {
+        #if os(tvOS)
+        SelectTorrentQualityButton(media: episode, action: { torrent in
+            self.torrent = torrent
+            self.currentEpisode = episode
+            showPlayer = true
+        }, label: {
+            EpisodeView(episode: episode)
+        }, onFocus: {
+            currentEpisode = episode
+            onFocus()
+        })
+        .frame(width: 310, height: 215)
         #endif
     }
     

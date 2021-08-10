@@ -9,7 +9,7 @@ import Foundation
 public class OpenSubtitlesHash: NSObject {
     private static let chunkSize: Int = 65536
     
-    public struct VideoHash {
+    public struct VideoHash: Equatable {
         var fileHash: String
         var fileSize: UInt64
     }

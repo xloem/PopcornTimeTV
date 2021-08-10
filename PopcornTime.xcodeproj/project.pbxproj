@@ -59,6 +59,8 @@
 		23313B53267E4A6600774A85 /* libc++.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 4D9CED361DD278BD005ABC0A /* libc++.tbd */; };
 		23313B54267E4A7100774A85 /* libiconv.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 4D9CED381DD278F1005ABC0A /* libiconv.tbd */; };
 		23313B55267E4EF900774A85 /* Array+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4DDBD9081E0EDA2E00CEA1B1 /* Array+Extension.swift */; };
+		234180A126C29F7D00C32083 /* WatchlistView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23313B15267E3A7100774A85 /* WatchlistView.swift */; };
+		234180A226C29F8600C32083 /* WatchlistViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 237F286B269359C600FE036C /* WatchlistViewModel.swift */; };
 		2343A75F268861C800B824E7 /* ExtendedSubtitlesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2343A75E268861C800B824E7 /* ExtendedSubtitlesView.swift */; };
 		2343A7612688718300B824E7 /* Subtitle + Identifiable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2343A7602688718300B824E7 /* Subtitle + Identifiable.swift */; };
 		2343A7642688A8DF00B824E7 /* SearchWrapperView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2343A7632688A8DF00B824E7 /* SearchWrapperView.swift */; };
@@ -137,7 +139,6 @@
 		2391BE7D268475A200576CAD /* DownloadButtonViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2391BE7C268475A200576CAD /* DownloadButtonViewModel.swift */; };
 		2391BE7F26847B9800576CAD /* SelectTorrentQualityButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2391BE7E26847B9800576CAD /* SelectTorrentQualityButton.swift */; };
 		2391BE81268496E300576CAD /* Media + Download.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2391BE80268496E300576CAD /* Media + Download.swift */; };
-		2394540626960FA300D0B80D /* SwiftUIFocusGuide in Frameworks */ = {isa = PBXBuildFile; productRef = 2394540526960FA300D0B80D /* SwiftUIFocusGuide */; };
 		23989FA726865A3500FEDA41 /* PlayerOptionsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23989FA626865A3500FEDA41 /* PlayerOptionsView.swift */; };
 		23989FA92687572B00FEDA41 /* AVSpeakerManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4DF3942E1E96B5B600DFCEC6 /* AVSpeakerManager.swift */; };
 		23989FAA2687574F00FEDA41 /* AVAudioRoute.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4DF394311E96BA3300DFCEC6 /* AVAudioRoute.swift */; };
@@ -432,7 +433,6 @@
 			files = (
 				23313B53267E4A6600774A85 /* libc++.tbd in Frameworks */,
 				232BB5212694512C005448AE /* Alamofire in Frameworks */,
-				2394540626960FA300D0B80D /* SwiftUIFocusGuide in Frameworks */,
 				23507DC8269483310098CC12 /* ObjectMapper in Frameworks */,
 				23E8172D26950B56003258CC /* PopcornKit in Frameworks */,
 				232BB527269456BF005448AE /* Kingfisher in Frameworks */,
@@ -848,7 +848,6 @@
 				23507DC7269483310098CC12 /* ObjectMapper */,
 				23E8172C26950B56003258CC /* PopcornKit */,
 				23D2B397269586810077BBED /* Reachability */,
-				2394540526960FA300D0B80D /* SwiftUIFocusGuide */,
 			);
 			productName = "PopcornTimetvOS SwiftUI";
 			productReference = 23313AFD267E374F00774A85 /* PopcornTime (tvOS).app */;
@@ -979,7 +978,6 @@
 				23D2B396269586810077BBED /* XCRemoteSwiftPackageReference "Reachability" */,
 				23D2B399269587BE0077BBED /* XCRemoteSwiftPackageReference "MarqueeLabel" */,
 				23D2B39C269588370077BBED /* XCRemoteSwiftPackageReference "TvOSMoreButton" */,
-				2394540426960FA300D0B80D /* XCRemoteSwiftPackageReference "SwiftUIFocusGuide" */,
 			);
 			productRefGroup = 287B85351C9873A200EEF5C8 /* Products */;
 			projectDirPath = "";
@@ -1356,6 +1354,7 @@
 				2383A13726BC3D2200A0346C /* ActorsCrewView.swift in Sources */,
 				237ECA2826B8485F00EE8B46 /* Show+Extension.swift in Sources */,
 				237ECA4426B84A4500EE8B46 /* FileManager+Extension.swift in Sources */,
+				234180A226C29F8600C32083 /* WatchlistViewModel.swift in Sources */,
 				23A2BD7A26BC5930004B864E /* SeasonPickerView.swift in Sources */,
 				2304532526BAFB0F0050BCB8 /* VisualEffectBlur.swift in Sources */,
 				237ECA1D26B8482700EE8B46 /* MovieView.swift in Sources */,
@@ -1372,6 +1371,7 @@
 				2304531E26BAFACF0050BCB8 /* BannerView.swift in Sources */,
 				2304531926BAFA8D0050BCB8 /* MovieDetailsView.swift in Sources */,
 				237ECA3E26B84A3600EE8B46 /* CodableCaching.swift in Sources */,
+				234180A126C29F7D00C32083 /* WatchlistView.swift in Sources */,
 				2304531F26BAFAEA0050BCB8 /* StarRatingView.swift in Sources */,
 				2304531B26BAFA9B0050BCB8 /* TrailerButton.swift in Sources */,
 				23A2BD7D26BC5930004B864E /* ShowDetailsViewModel.swift in Sources */,
@@ -1448,7 +1448,7 @@
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 3;
-				TVOS_DEPLOYMENT_TARGET = 14.5;
+				TVOS_DEPLOYMENT_TARGET = 15.0;
 				VALIDATE_WORKSPACE = YES_ERROR;
 			};
 			name = Debug;
@@ -1488,7 +1488,7 @@
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 3;
-				TVOS_DEPLOYMENT_TARGET = 14.5;
+				TVOS_DEPLOYMENT_TARGET = 15.0;
 				VALIDATE_PRODUCT = YES;
 				VALIDATE_WORKSPACE = YES_ERROR;
 			};
@@ -1765,14 +1765,14 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = appletvos;
 				SWIFT_OBJC_BRIDGING_HEADER = "";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				TARGETED_DEVICE_FAMILY = 3;
-				TVOS_DEPLOYMENT_TARGET = 9.0;
+				TVOS_DEPLOYMENT_TARGET = 15.0;
 			};
 			name = Debug;
 		};
@@ -1814,14 +1814,14 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = appletvos;
 				SWIFT_COMPILATION_MODE = wholemodule;
 				SWIFT_OBJC_BRIDGING_HEADER = "";
 				SWIFT_OPTIMIZATION_LEVEL = "-O";
 				TARGETED_DEVICE_FAMILY = 3;
-				TVOS_DEPLOYMENT_TARGET = 9.0;
+				TVOS_DEPLOYMENT_TARGET = 15.0;
 			};
 			name = Release;
 		};
@@ -1904,7 +1904,7 @@
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/alextud/PopcornTorrent";
 			requirement = {
-				branch = spm;
+				branch = spm_ios15;
 				kind = branch;
 			};
 		};
@@ -1922,14 +1922,6 @@
 			requirement = {
 				kind = upToNextMajorVersion;
 				minimumVersion = 4.2.0;
-			};
-		};
-		2394540426960FA300D0B80D /* XCRemoteSwiftPackageReference "SwiftUIFocusGuide" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/rmnblm/SwiftUIFocusGuide";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 0.1.0;
 			};
 		};
 		23D2B396269586810077BBED /* XCRemoteSwiftPackageReference "Reachability" */ = {
@@ -2007,11 +1999,6 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 232BB51C269450B3005448AE /* XCRemoteSwiftPackageReference "XCDYouTubeKit" */;
 			productName = XCDYouTubeKit;
-		};
-		2394540526960FA300D0B80D /* SwiftUIFocusGuide */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 2394540426960FA300D0B80D /* XCRemoteSwiftPackageReference "SwiftUIFocusGuide" */;
-			productName = SwiftUIFocusGuide;
 		};
 		23A2BDB126BEDA5F004B864E /* PopcornKit */ = {
 			isa = XCSwiftPackageProductDependency;

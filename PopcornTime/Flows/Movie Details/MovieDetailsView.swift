@@ -50,6 +50,9 @@ struct MovieDetailsView: View {
                         }
                         .padding(.leading, 100)
                         .id(section1)
+                        #if os(tvOS)
+                        .focusSection()
+                        #endif
                         
                         VStack {
                             if movie.related.count > 0 {
@@ -59,9 +62,15 @@ struct MovieDetailsView: View {
                                             .padding([.bottom], -10)
                                             .padding([.top], -30)
                                     )
+                                    #if os(tvOS)
+                                    .focusSection()
+                                    #endif
                             }
                             if movie.actors.count > 0 {
                                 ActorsCrewView(persons: movie.actors + movie.crew)
+                                #if os(tvOS)
+                                .focusSection()
+                                #endif
                             }
                         }
                         .padding([.bottom, .top], 30)

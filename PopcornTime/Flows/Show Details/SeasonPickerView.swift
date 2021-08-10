@@ -37,11 +37,9 @@ struct SeasonPickerView: View {
                                     SeasonView(season: season)
                                 })
                                 .buttonStyle(PlainButtonStyle(onFocus: {}))
-                                .modify(modifier: {
-                                    #if os(tvOS)
-                                        $0.prefersDefaultFocus(season.number == selectedSeasonNumber, in: namespace)
-                                    #endif
-                                })
+                                #if os(tvOS)
+                                .prefersDefaultFocus(season.number == selectedSeasonNumber, in: namespace)
+                                #endif
                                 .id(season.number)
                             }
                         }
@@ -54,11 +52,9 @@ struct SeasonPickerView: View {
                     }
                 }
             }
-            .modify(modifier: {
-                #if os(tvOS)
-                    $0.focusScope(namespace)
-                #endif
-            })
+            #if os(tvOS)
+            .focusScope(namespace)
+            #endif
         }
         .onAppear {
             viewModel.load()
