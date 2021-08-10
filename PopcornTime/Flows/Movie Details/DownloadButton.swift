@@ -44,40 +44,34 @@ struct DownloadButton: View {
         .frame(width: 142, height: 115)
     }
     
-    var downloadedButton: some View {
-        Group {
-            NavigationLink(destination: TorrentPlayerView(torrent: viewModel.torrent ?? Torrent(), media: viewModel.media),
-                           isActive: $showPlayer,
-                           label: {
-                EmptyView()
-            })
-            .hidden()
-            
-            Button(action: {
-                viewModel.showDownloadedActionSheet = true
-            }, label: {
-                VStack {
-                    VisualEffectBlur() {
-                        Image("Download Progress Finished")
-                    }
-                    Text("Options".localized)
+    var downloadedButton: some View {    
+        Button(action: {
+            viewModel.showDownloadedActionSheet = true
+        }, label: {
+            VStack {
+                VisualEffectBlur() {
+                    Image("Download Progress Finished")
                 }
-            })
-            .frame(width: 142, height: 115)
-            .actionSheet(isPresented: $viewModel.showDownloadedActionSheet) {
-                ActionSheet(title: Text(""),
-                            message: nil,
-                            buttons: [
-                                .default(Text("Play".localized)) {
-                                    showPlayer = true
-                                },
-                                .destructive(Text("Delete Download".localized)) {
-                                    viewModel.deleteDownload()
-                                },
-                                .cancel()
-                            ]
-                )
+                Text("Options".localized)
             }
+        })
+        .frame(width: 142, height: 115)
+        .actionSheet(isPresented: $viewModel.showDownloadedActionSheet) {
+            ActionSheet(title: Text(""),
+                        message: nil,
+                        buttons: [
+                            .default(Text("Play".localized)) {
+                                showPlayer = true
+                            },
+                            .destructive(Text("Delete Download".localized)) {
+                                viewModel.deleteDownload()
+                            },
+                            .cancel()
+                        ]
+            )
+        }
+        .fullScreenCover(isPresented: $showPlayer) {
+            TorrentPlayerView(torrent: viewModel.torrent ?? Torrent(), media: viewModel.media)
         }
     }
     

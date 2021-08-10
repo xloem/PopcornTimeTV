@@ -16,6 +16,7 @@ struct PreloadTorrentView: View {
     
     var body: some View {
         ZStack {
+            Color.black
             VStack {
                 Spacer()
                 Text(viewModel.media.title)

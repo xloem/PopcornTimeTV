@@ -13,34 +13,24 @@ import PopcornKit
 struct TrailerButton: View {
     var viewModel: TrailerButtonViewModel
     @State var playerObservation: Any?
-    @State var selection: Int? = nil
+    @State var showPlayer = false
     
-    enum Selection: Int {
-        case trailer = 1
-    }
-    
-    var body: some View {
-        Group {
-            NavigationLink(
-                destination: trailerVideo,
-                tag: Selection.trailer.rawValue,
-                selection: $selection) {
-                    EmptyView()
+    var body: some View {    
+        Button(action: {
+            viewModel.loadTrailerUrl { url in
+                self.showPlayer = true
+            }
+        }, label: {
+            VStack {
+                VisualEffectBlur() {
+                    Image("Preview")
                 }
-            
-            Button(action: {
-                viewModel.loadTrailerUrl { url in
-                    self.selection = Selection.trailer.rawValue
-                }
-            }, label: {
-                VStack {
-                    VisualEffectBlur() {
-                        Image("Preview")
-                    }
-                    Text("Trailer".localized)
-                }
-            })
-            .frame(width: 142, height: 115)
+                Text("Trailer".localized)
+            }
+        })
+        .frame(width: 142, height: 115)
+        .fullScreenCover(isPresented: $showPlayer) {
+            trailerVideo
         }
     }
     
@@ -52,7 +42,7 @@ struct TrailerButton: View {
                 }
                 
                 self.playerObservation = NotificationCenter.default.addObserver(forName:.AVPlayerItemDidPlayToEndTime, object:nil, queue: .main, using: {_ in
-                    self.selection = nil
+                    self.showPlayer = false
                 })
             }.onDisappear {
                 viewModel.trailerVidePlayer?.pause()

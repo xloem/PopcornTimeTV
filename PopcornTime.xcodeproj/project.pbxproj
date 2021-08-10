@@ -61,6 +61,9 @@
 		23313B55267E4EF900774A85 /* Array+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4DDBD9081E0EDA2E00CEA1B1 /* Array+Extension.swift */; };
 		234180A126C29F7D00C32083 /* WatchlistView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23313B15267E3A7100774A85 /* WatchlistView.swift */; };
 		234180A226C29F8600C32083 /* WatchlistViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 237F286B269359C600FE036C /* WatchlistViewModel.swift */; };
+		234180A426C2D38500C32083 /* PlayButtonModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 234180A326C2D38500C32083 /* PlayButtonModel.swift */; };
+		234180A526C2D38500C32083 /* PlayButtonModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 234180A326C2D38500C32083 /* PlayButtonModel.swift */; };
+		234180A626C2D38500C32083 /* PlayButtonModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 234180A326C2D38500C32083 /* PlayButtonModel.swift */; };
 		2343A75F268861C800B824E7 /* ExtendedSubtitlesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2343A75E268861C800B824E7 /* ExtendedSubtitlesView.swift */; };
 		2343A7612688718300B824E7 /* Subtitle + Identifiable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2343A7602688718300B824E7 /* Subtitle + Identifiable.swift */; };
 		2343A7642688A8DF00B824E7 /* SearchWrapperView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2343A7632688A8DF00B824E7 /* SearchWrapperView.swift */; };
@@ -339,6 +342,7 @@
 		23313B46267E3DF600774A85 /* CodableCaching.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CodableCaching.swift; sourceTree = "<group>"; };
 		23313B4A267E409700774A85 /* Result.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Result.swift; sourceTree = "<group>"; };
 		23313B4C267E48C300774A85 /* MoviesViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoviesViewModel.swift; sourceTree = "<group>"; };
+		234180A326C2D38500C32083 /* PlayButtonModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayButtonModel.swift; sourceTree = "<group>"; };
 		2343A75E268861C800B824E7 /* ExtendedSubtitlesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExtendedSubtitlesView.swift; sourceTree = "<group>"; };
 		2343A7602688718300B824E7 /* Subtitle + Identifiable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Subtitle + Identifiable.swift"; sourceTree = "<group>"; };
 		2343A7632688A8DF00B824E7 /* SearchWrapperView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchWrapperView.swift; sourceTree = "<group>"; };
@@ -605,6 +609,7 @@
 				23446AC926804AD20049CC72 /* TrailerButton.swift */,
 				23446ACB26804AE80049CC72 /* TrailerButtonViewModel.swift */,
 				23446ACD26804F9F0049CC72 /* PlayButton.swift */,
+				234180A326C2D38500C32083 /* PlayButtonModel.swift */,
 				2391BE7A2684759000576CAD /* DownloadButton.swift */,
 				2391BE7C268475A200576CAD /* DownloadButtonViewModel.swift */,
 				23313B37267E3C2700774A85 /* PreloadTorrentView.swift */,
@@ -1174,6 +1179,7 @@
 				23313B2E267E3BD500774A85 /* InfoView.swift in Sources */,
 				23446ADB2680E7BB0049CC72 /* ProgressBar.swift in Sources */,
 				23446ACE26804F9F0049CC72 /* PlayButton.swift in Sources */,
+				234180A426C2D38500C32083 /* PlayButtonModel.swift in Sources */,
 				23313B41267E3DC100774A85 /* UserDefault.swift in Sources */,
 				23F15C8F26B1A8F800E0FE60 /* ErrorView.swift in Sources */,
 				23989FAD2687B83C00FEDA41 /* NSNotificationName+Extension.swift in Sources */,
@@ -1306,6 +1312,7 @@
 				23A2BD9E26BEDA0C004B864E /* ShowDetailsView.swift in Sources */,
 				23A2BDBE26BEDBC2004B864E /* StarRatingView.swift in Sources */,
 				23A2BDA726BEDA11004B864E /* PersonView.swift in Sources */,
+				234180A526C2D38500C32083 /* PlayButtonModel.swift in Sources */,
 				23A2BD8C26BED9F6004B864E /* MoviesView.swift in Sources */,
 				23A2BD9626BEDA07004B864E /* SelectTorrentQualityButton.swift in Sources */,
 				23A2BDC426BEDBDB004B864E /* NSNotificationName+Extension.swift in Sources */,
@@ -1342,6 +1349,7 @@
 				2304532726BB30C60050BCB8 /* ShowsViewModel.swift in Sources */,
 				23A2BD8326BC5AD2004B864E /* OperatingSystem.swift in Sources */,
 				237ECA4026B84A3600EE8B46 /* UserDefault.swift in Sources */,
+				234180A626C2D38500C32083 /* PlayButtonModel.swift in Sources */,
 				237ECA4326B84A4200EE8B46 /* Locale+Langs.swift in Sources */,
 				237ECA1926B8481800EE8B46 /* TermsOfServiceView.swift in Sources */,
 				23A2BD7826BC5923004B864E /* ShowView.swift in Sources */,

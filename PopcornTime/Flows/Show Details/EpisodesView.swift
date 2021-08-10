@@ -46,6 +46,11 @@ struct EpisodesView: View {
                 .focusSection()
             #endif
         }
+        .fullScreenCover(isPresented: $showPlayer) {
+            if let torrent = torrent, let episode = currentEpisode {
+                TorrentPlayerView(torrent: torrent, media: episode)
+            }
+        }
     }
     
     @ViewBuilder

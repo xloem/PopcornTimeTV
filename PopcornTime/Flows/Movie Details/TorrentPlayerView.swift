@@ -24,14 +24,17 @@ struct TorrentPlayerView: View {
     var body: some View {
         switch state {
         case .none:
-            Color.clear
+            Color.black
                 .onAppear{
                     load()
                 }
         case .preload(let preloadModel):
             PreloadTorrentView(viewModel: preloadModel)
+                .background(Color.black)
         case .play(let playerModel):
-            PlayerView().environmentObject(playerModel)
+            PlayerView()
+                .environmentObject(playerModel)
+                .background(Color.black)
         }
     }
     

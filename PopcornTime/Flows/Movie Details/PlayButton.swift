@@ -13,6 +13,7 @@ import Combine
 struct PlayButton: View {
     var viewModel: MovieDetailsViewModel
     
+    @StateObject var buttonModel = PlayButtonModel()
     @State var torrent: Torrent?
     @State var showPlayer = false
     
@@ -24,10 +25,11 @@ struct PlayButton: View {
     var body: some View {
         SelectTorrentQualityButton(media: movie, action: { torrent in
             self.torrent = torrent
+            self.buttonModel.torrent = torrent
             self.showPlayer = true
         }, label: {
-            navigationLink
-                .hidden()
+//            navigationLink
+//                .hidden()
             
             VStack {
                 VisualEffectBlur() {
@@ -37,16 +39,24 @@ struct PlayButton: View {
             }
         }, onFocus: onFocus)
         .frame(width: 142, height: 115)
+        .fullScreenCover(isPresented: $showPlayer) {
+            torrentView()
+        }
     }
     
     @ViewBuilder
     var navigationLink: some View {
         if let torrent = torrent {
-            NavigationLink(destination: TorrentPlayerView(torrent: torrent, media: movie),
-                           isActive: $showPlayer,
-                           label: {
-                EmptyView()
-            })
+            NavigationLink(isActive: $showPlayer,
+                           destination: { TorrentPlayerView(torrent: torrent, media: movie) },
+                           label: { EmptyView() })
+        }
+    }
+    
+    @ViewBuilder
+    func torrentView() -> some View {
+        if let torrent = buttonModel.torrent {
+            TorrentPlayerView(torrent: torrent, media: movie)
         }
     }
 }
