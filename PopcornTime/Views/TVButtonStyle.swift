@@ -18,29 +18,20 @@ struct TVButtonStyle: ButtonStyle {
 }
 
 struct TVButton: View {
+    struct Theme {
+        let fontSize: CGFloat = value(tvOS: 23, macOS: 16)
+    }
+    let theme = Theme()
+    
     @Environment(\.isFocused) var focused: Bool
     let configuration: ButtonStyle.Configuration
     var onFocus: () -> Void = {}
 
-    #if os(iOS)
-    var body: some View {
-        return configuration.label
-            .scaleEffect(focused ? 1.1 : 1)
-            .font(.system(size: 23, weight: .medium))
-            .foregroundColor(focused ? .white : Color(white: 1, opacity: 0.6))
-            .animation(.easeOut, value: focused)
-            .onChange(of: focused) { newValue in
-                if newValue {
-                    onFocus()
-                }
-            }
-    }
-    #else
     var body: some View {
         return configuration.label
             .scaleEffect(focused ? 1.1 : 1)
             .focusable(true)
-            .font(.system(size: 23, weight: .medium))
+            .font(.system(size: theme.fontSize, weight: .medium))
             .foregroundColor(focused ? .white : Color(white: 1, opacity: 0.6))
             .animation(.easeOut, value: focused)
             .onChange(of: focused) { newValue in
@@ -49,5 +40,4 @@ struct TVButton: View {
                 }
             }
     }
-    #endif
 }

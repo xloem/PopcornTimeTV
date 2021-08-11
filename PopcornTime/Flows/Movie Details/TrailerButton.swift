@@ -11,6 +11,12 @@ import AVKit
 import PopcornKit
 
 struct TrailerButton: View {
+    struct Theme {
+        let buttonWidth: CGFloat = value(tvOS: 142, macOS: 100)
+        let buttonHeight: CGFloat = value(tvOS: 115, macOS: 81)
+    }
+    let theme = Theme()
+    
     var viewModel: TrailerButtonViewModel
     @State var playerObservation: Any?
     @State var showPlayer = false
@@ -28,10 +34,12 @@ struct TrailerButton: View {
                 Text("Trailer".localized)
             }
         })
-        .frame(width: 142, height: 115)
+        .frame(width: theme.buttonWidth, height: theme.buttonHeight)
+        #if os(tvOS)
         .fullScreenCover(isPresented: $showPlayer) {
             trailerVideo
         }
+        #endif
     }
     
     var trailerVideo: some View {

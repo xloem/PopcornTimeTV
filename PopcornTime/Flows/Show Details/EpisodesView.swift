@@ -46,11 +46,13 @@ struct EpisodesView: View {
                 .focusSection()
             #endif
         }
+        #if os(tvOS)
         .fullScreenCover(isPresented: $showPlayer) {
             if let torrent = torrent, let episode = currentEpisode {
                 TorrentPlayerView(torrent: torrent, media: episode)
             }
         }
+        #endif
     }
     
     @ViewBuilder

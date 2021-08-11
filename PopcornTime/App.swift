@@ -33,6 +33,9 @@ struct PopcornTime: App {
                         #endif
                         
                         TabBarView()
+                        #if os(macOS)
+                            .padding(.top, 15)
+                        #endif
                     }.onOpenURL { url in
                         openUrl(url: url)
                     }
@@ -44,7 +47,6 @@ struct PopcornTime: App {
                 #endif
             }
             .preferredColorScheme(.dark)
-            
 //            .navigationViewStyle(StackNavigationViewStyle())
         }
     }

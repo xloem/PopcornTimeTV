@@ -11,6 +11,12 @@ import PopcornKit
 import Combine
 
 struct PlayButton: View {
+    struct Theme {
+        let buttonWidth: CGFloat = value(tvOS: 142, macOS: 100)
+        let buttonHeight: CGFloat = value(tvOS: 115, macOS: 81)
+    }
+    let theme = Theme()
+    
     var viewModel: MovieDetailsViewModel
     
     @StateObject var buttonModel = PlayButtonModel()
@@ -38,7 +44,7 @@ struct PlayButton: View {
                 Text("Play".localized)
             }
         }, onFocus: onFocus)
-        .frame(width: 142, height: 115)
+        .frame(width: theme.buttonWidth, height: theme.buttonHeight)
         .fullScreenCover(isPresented: $showPlayer) {
             torrentView()
         }

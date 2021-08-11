@@ -11,8 +11,15 @@ import PopcornKit
 import Kingfisher
 
 struct PersonView: View {
+    struct Theme {
+        let initalsTitleSize: CGFloat = value(tvOS: 100, macOS: 50)
+        let nameSize: CGFloat = value(tvOS: 30, macOS: 16)
+        let characterNameSize: CGFloat = value(tvOS: 26, macOS: 13)
+    }
+    let theme = Theme()
+    
     var person: Person
-    let radius: CGFloat = 220
+    var radius: CGFloat = 220
     
     var body: some View {
         VStack(spacing: 0) {
@@ -23,7 +30,7 @@ struct PersonView: View {
                         .frame(width: radius, height: radius)
                     Text(person.initials)
                         .foregroundColor(Color.black)
-                        .font(.system(size: 100, weight: .regular))
+                        .font(.system(size: theme.initalsTitleSize, weight: .regular))
                     if let image = person.mediumImage {
                         KFImage(URL(string: image))
                             .resizable()
@@ -35,14 +42,14 @@ struct PersonView: View {
                 }
             }
             Text(person.name)
-                .font(.system(size: 30, weight: .medium))
+                .font(.system(size: theme.nameSize, weight: .medium))
                 .padding(.top, 10)
             if let actor = person as? Actor {
                 Text(actor.characterName.uppercased())
-                    .font(.system(size: 26, weight: .bold))
+                    .font(.system(size: theme.characterNameSize, weight: .bold))
             } else if let crew = person as? Crew {
                 Text(crew.job.uppercased())
-                    .font(.system(size: 26, weight: .bold))
+                    .font(.system(size: theme.characterNameSize, weight: .bold))
             }
         }
         .multilineTextAlignment(.center)

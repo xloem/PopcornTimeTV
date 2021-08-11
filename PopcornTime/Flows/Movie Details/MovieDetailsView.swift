@@ -14,6 +14,21 @@ import UIKit
 #endif
 
 struct MovieDetailsView: View {
+    struct Theme {
+        let buttonWidth: CGFloat = value(tvOS: 142, macOS: 100)
+        let buttonHeight: CGFloat = value(tvOS: 115, macOS: 81)
+        let leftSectionTitle: CGFloat = value(tvOS: 24, macOS: 16)
+        let leftSectionTitleContent: CGFloat = value(tvOS: 31, macOS: 18)
+        let leftSectionWidth: CGFloat = value(tvOS: 340, macOS: 200)
+        let leftSectionLeading: CGFloat = value(tvOS: 100, macOS: 30)
+        let starHeight: CGFloat = value(tvOS: 33, macOS: 18)
+        let ratingHeight: CGFloat = value(tvOS: 32, macOS: 24)
+        let watchedSection: (height: CGFloat, cellWidth: CGFloat, spacing: CGFloat) = (height: value(tvOS: 450, macOS: 240),
+                                                                                        cellWidth: value(tvOS: 220, macOS: 150),
+                                                                                        spacing: value(tvOS: 90, macOS: 30))
+    }
+    let theme = Theme()
+    
     @StateObject var viewModel: MovieDetailsViewModel
     @State var showPlayer: Bool = false
     @State var error: Error?
@@ -48,7 +63,7 @@ struct MovieDetailsView: View {
                             }
                             .padding(.leading, 10)
                         }
-                        .padding(.leading, 100)
+                        .padding(.leading, theme.leftSectionLeading)
                         .id(section1)
                         #if os(tvOS)
                         .focusSection()
@@ -60,7 +75,9 @@ struct MovieDetailsView: View {
                                     .background(
                                         Color.init(white: 0, opacity: 0.3)
                                             .padding([.bottom], -10)
+                                        #if os(tvOS)
                                             .padding([.top], -30)
+                                        #endif
                                     )
                                     #if os(tvOS)
                                     .focusSection()
@@ -73,7 +90,9 @@ struct MovieDetailsView: View {
                                 #endif
                             }
                         }
+                        #if os(tvOS)
                         .padding([.bottom, .top], 30)
+                        #endif
                         .background(Color.init(white: 1, opacity: 0.3))
                         .padding(.top, 50)
                     }
@@ -131,7 +150,7 @@ struct MovieDetailsView: View {
                 ProgressView()
             }
         }
-        .frame(width: 340)
+        .frame(width: theme.leftSectionWidth)
     }
     
     @ViewBuilder
@@ -140,8 +159,10 @@ struct MovieDetailsView: View {
             infoText
             ratings()
             Text(movie.summary)
+            #if os(tvOS)
                 .frame(width: 920)
                 .lineLimit(6)
+            #endif
             awards()
             if viewModel.movie.ratings?.awards == nil {
                 Spacer()
@@ -191,7 +212,7 @@ struct MovieDetailsView: View {
             }
             
             StarRatingView(rating: movie.rating / 20)
-                .frame(height: 33)
+                .frame(height: theme.starHeight)
                 .padding(.top, -8)
         }
     }
@@ -200,12 +221,12 @@ struct MovieDetailsView: View {
     func sectionText(title: String, description: [String]) -> some View {
         VStack(alignment: .trailing) {
             Text(title)
-                .font(.system(size: 24, weight: .bold))
+                .font(.system(size: theme.leftSectionTitle, weight: .bold))
                 .foregroundColor(isDark ? Color(white: 1, opacity: 0.8) : Color(white: 0, opacity: 0.8))
             ForEach(description, id: \.self) { item in
                 Text(item)
             }
-            .font(.system(size: 31, weight: .medium))
+            .font(.system(size: theme.leftSectionTitleContent, weight: .medium))
             .foregroundColor(isDark ? Color(white: 1, opacity: 0.5) : Color(white: 0, opacity: 0.5))
         }
     }
@@ -223,7 +244,7 @@ struct MovieDetailsView: View {
                 Text("Series".localized)
             }
         })
-        .frame(width: 142, height: 115)
+        .frame(width: theme.buttonWidth, height: theme.buttonHeight)
     }
     
     var watchlistButton: some View {
@@ -238,7 +259,7 @@ struct MovieDetailsView: View {
                 Text("Watchlist".localized)
             }
         })
-        .frame(width: 142, height: 115)
+        .frame(width: theme.buttonWidth, height: theme.buttonHeight)
     }
     
     var watchedButton: some View {
@@ -253,7 +274,7 @@ struct MovieDetailsView: View {
                 Text("Watched".localized)
             }
         })
-        .frame(width: 142, height: 115)
+        .frame(width: theme.buttonWidth, height: theme.buttonHeight)
     }
     
     var alsoWatchedSection: some View {
@@ -261,35 +282,27 @@ struct MovieDetailsView: View {
             Text("Viewers Also Watched".localized)
                 .font(.callout)
                 .foregroundColor(.init(white: 1.0, opacity: 0.667)) // light text color
-                .padding(.leading, 90)
+                .padding(.leading, theme.watchedSection.spacing)
                 .padding(.top, 14)
             ScrollView(.horizontal, showsIndicators: false) {
-//                Spacer() // on focus zoom will not be clipped
-//                    .frame(height: 30)
-                LazyHStack(alignment: .center, spacing: 90) {
-                    Spacer(minLength: 90)
+                LazyHStack(alignment: .center, spacing: theme.watchedSection.spacing) {
+                    Spacer(minLength: theme.watchedSection.spacing)
                     ForEach(movie.related, id: \.self) { movie in
                         NavigationLink(
                             destination: MovieDetailsView(viewModel: MovieDetailsViewModel(movie: movie)),
                             label: {
                                 MovieView(movie: movie, lineLimit: 1)
-                                    .frame(width: 220)
+                                    .frame(width: theme.watchedSection.cellWidth)
                             })
                             .buttonStyle(PlainNavigationLinkButtonStyle())
-//                            .frame(width: 220)
-//                            .padding([.leading, .trailing], 5)
                     }
                 }
+                #if os(tvOS)
                 .padding([.top, .bottom], 30) // on focus zoom will not be clipped
-//                Spacer()
-//                    .frame(height: 30)
-//                .padding()
-//                .background(Color.blue)
+                #endif
             }
-//            .background(Color.gray)
         }
-//        .background(Color.red)
-        .frame(height: 450)
+        .frame(height: theme.watchedSection.height)
         .padding(0)
     }
     
@@ -306,35 +319,30 @@ struct MovieDetailsView: View {
         if let ratings = movie.ratings {
             HStack(spacing: 25) {
                 if let metascore = ratings.metascore {
-                    HStack(spacing: 8) {
-                        Image("metacritic")
-                            .resizable()
-                            .aspectRatio(contentMode: .fit)
-                            .frame(height: 32)
-                        Text(metascore)
-                    }
+                    ratingItem(image: "metacritic", value: metascore)
                 }
                 if let imdb = ratings.imdbRating {
-                    HStack(spacing: 4) {
-                        Image("imdb")
-                            .resizable()
-                            .aspectRatio(contentMode: .fit)
-                            .frame(height: 32)
-                        Text(imdb)
-                    }
+                    ratingItem(image: "imdb", value: imdb)
                 }
                 if let rotten = ratings.rottenTomatoes {
-                    HStack(spacing: 4) {
-                        Image("rotten-tomatoes")
-                            .resizable()
-                            .aspectRatio(contentMode: .fit)
-                            .frame(height: 32)
-                        Text(rotten)
-                    }
+                    ratingItem(image: "rotten-tomatoes", value: rotten)
                 }
             }
             .font(.caption)
             .lineLimit(1)
+        }
+    }
+    
+    func ratingItem(image: String, value: String) -> some View {
+        HStack(spacing: 4) {
+            Image(image)
+                .resizable()
+                .aspectRatio(contentMode: .fit)
+                .frame(height: theme.ratingHeight)
+            Text(value)
+            #if os(macOS)
+                .font(.title2)
+            #endif
         }
     }
 }

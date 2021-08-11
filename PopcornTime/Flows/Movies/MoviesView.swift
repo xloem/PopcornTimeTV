@@ -9,16 +9,6 @@
 import SwiftUI
 import PopcornKit
 
-func value<T>(tvOS: T, macOS: T) -> T {
-    #if os(tvOS)
-        return tvOS
-    #elseif os(macOS)
-        return macOS
-    #elseif os(iOS)
-        return macOS
-    #endif
-}
-
 struct MoviesView: View {
     struct Theme {
         let itemWidth: CGFloat = value(tvOS: 240, macOS: 120)
@@ -41,7 +31,7 @@ struct MoviesView: View {
                 LazyVGrid(columns: columns, spacing: MoviesView.theme.columnSpacing) {
                     ForEach(viewModel.movies, id: \.self) { movie in
                         NavigationLink(
-                            destination: MovieDetailsView(viewModel: MovieDetailsViewModel(movie: movie)),
+                            destination: { MovieDetailsView(viewModel: MovieDetailsViewModel(movie: movie)) },
                             label: {
                                 MovieView(movie: movie, ratingsLoader: viewModel)
                             })

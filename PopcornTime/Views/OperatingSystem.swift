@@ -28,6 +28,16 @@ enum OperatingSystem {
     #endif
 }
 
+func value<T>(tvOS: T, macOS: T) -> T {
+    #if os(tvOS)
+        return tvOS
+    #elseif os(macOS)
+        return macOS
+    #elseif os(iOS)
+        return macOS
+    #endif
+}
+
 extension View {
     /**
     Conditionally apply modifiers depending on the target operating system.
