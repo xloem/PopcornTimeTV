@@ -32,7 +32,9 @@ enum EqualizerProfiles: UInt32, CaseIterable, Identifiable {
 struct AudioView: View {
     @Binding var currentDelay: Int
     @Binding var currentSound: EqualizerProfiles
+    #if os(tvOS)
     @State var manager = AVSpeakerManager()
+    #endif
     @State var triggerRefresh = false
 //    @State var routesDidChange = NotificationCenter.default.publisher(for: .AVSpeakerManagerPickableRoutesDidChange).sink { _ in
 //        self.triggerRefresh = true
@@ -46,16 +48,24 @@ struct AudioView: View {
             Spacer()
             delaySection
                 .frame(width: 390)
+                #if os(tvOS)
                 .focusSection()
+                #endif
             soundSection
                 .frame(width: 400)
+                #if os(tvOS)
                 .focusSection()
+                #endif
             speakerSection
                 .frame(width: 500)
+                #if os(tvOS)
                 .focusSection()
+                #endif
             Spacer()
         }
+        #if os(tvOS)
         .focusSection()
+        #endif
         .frame(maxHeight: 300)
     }
     
@@ -105,6 +115,7 @@ struct AudioView: View {
         VStack(alignment: .leading, spacing: 10) {
             sectionHeader(text: "Speakers")
             VStack(alignment: .leading, spacing: 15) {
+                #if os(tvOS)
                 ForEach(0..<manager.speakerRoutes.count, id: \.self) { item in
                     button(text: manager.speakerRoutes[item].name, isSelected: manager.speakerRoutes[item].isSelected, onFocus: {}) {
                         let route = manager.speakerRoutes[item]
@@ -112,6 +123,7 @@ struct AudioView: View {
                         triggerRefresh.toggle()
                     }
                 }
+                #endif
             }
             Spacer()
         }

@@ -73,5 +73,6 @@ struct PlayButton_Previews: PreviewProvider {
             .buttonStyle(TVButtonStyle())
             .padding(40)
             .previewLayout(.fixed(width: 300, height: 300))
+            .preferredColorScheme(.dark)
     }
 }

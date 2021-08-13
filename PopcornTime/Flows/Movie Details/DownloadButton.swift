@@ -11,6 +11,12 @@ import PopcornTorrent
 import PopcornKit
 
 struct DownloadButton: View {
+    struct Theme {
+        let buttonWidth: CGFloat = value(tvOS: 142, macOS: 100)
+        let buttonHeight: CGFloat = value(tvOS: 115, macOS: 81)
+    }
+    let theme = Theme()
+    
     @ObservedObject var viewModel: DownloadButtonViewModel
     var onFocus: () -> Void = {}
     @State var showPlayer = false
@@ -41,7 +47,7 @@ struct DownloadButton: View {
                 Text("Download".localized)
             }
         }, onFocus:onFocus)
-        .frame(width: 142, height: 115)
+        .frame(width: theme.buttonWidth, height: theme.buttonHeight)
     }
     
     var downloadedButton: some View {    
@@ -55,7 +61,8 @@ struct DownloadButton: View {
                 Text("Options".localized)
             }
         })
-        .frame(width: 142, height: 115)
+        .frame(width: theme.buttonWidth, height: theme.buttonHeight)
+#if os(tvOS) || os(iOS)
         .actionSheet(isPresented: $viewModel.showDownloadedActionSheet) {
             ActionSheet(title: Text(""),
                         message: nil,
@@ -70,9 +77,12 @@ struct DownloadButton: View {
                         ]
             )
         }
+#endif
+        #if os(tvOS) || os(iOS)
         .fullScreenCover(isPresented: $showPlayer) {
             TorrentPlayerView(torrent: viewModel.torrent ?? Torrent(), media: viewModel.media)
         }
+        #endif
     }
     
     var downloadingButton: some View {
@@ -88,7 +98,8 @@ struct DownloadButton: View {
                 Text("Downloading".localized)
             }
         })
-        .frame(width: 142, height: 115)
+        .frame(width: theme.buttonWidth, height: theme.buttonHeight)
+#if os(tvOS) || os(iOS)
         .actionSheet(isPresented: $viewModel.showStopDownloadAlert) {
             ActionSheet(title: Text( "Stop Download".localized),
                         message: Text("Are you sure you want to stop the download?".localized),
@@ -108,6 +119,7 @@ struct DownloadButton: View {
                         ]
             )
         }
+#endif
     }
     
     var pausedButton: some View {
@@ -121,7 +133,7 @@ struct DownloadButton: View {
                 Text("Paused".localized)
             }
         })
-        .frame(width: 142, height: 115)
+        .frame(width: theme.buttonWidth, height: theme.buttonHeight)
     }
     
     var pendingButton: some View {
@@ -136,7 +148,7 @@ struct DownloadButton: View {
                 Text("Pending".localized)
             }
         })
-        .frame(width: 142, height: 115)
+        .frame(width: theme.buttonWidth, height: theme.buttonHeight)
     }
 }
 
@@ -152,6 +164,7 @@ struct DownloadButton_Previews: PreviewProvider {
         .padding(20)
         .buttonStyle(TVButtonStyle())
         .previewLayout(.fixed(width: 300, height: 750))
+        .preferredColorScheme(.dark)
     }
     
     static func model(state: DownloadButtonViewModel.State) -> DownloadButtonViewModel {

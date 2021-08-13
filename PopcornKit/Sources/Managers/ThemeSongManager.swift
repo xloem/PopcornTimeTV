@@ -53,11 +53,10 @@ public class ThemeSongManager: NSObject, AVAudioPlayerDelegate {
                     #if os(iOS) || os(tvOS)
                     try AVAudioSession.sharedInstance().setCategory(AVAudioSession.Category.playback, mode: AVAudioSession.Mode.default)
                     #endif
-                    
+
                     let adjustedVolume = Session.themeSongVolume * 0.25
-                    
                     if adjustedVolume > 0 {
-                    let player = try AVAudioPlayer(data: data)
+                        let player = try AVAudioPlayer(data: data)
                         player.volume = 0
                         player.numberOfLoops = NSNotFound
                         player.delegate = self
@@ -68,8 +67,6 @@ public class ThemeSongManager: NSObject, AVAudioPlayerDelegate {
                         
                         self.player = player
                     }
-                    
-                    
                 }
             } catch let error {
                 print(error)

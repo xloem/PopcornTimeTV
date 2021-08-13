@@ -62,21 +62,25 @@ struct DownloadView: View {
             }
         })
         .buttonStyle(PlainNavigationLinkButtonStyle())
+        #if os(tvOS) || os(iOS)
         .actionSheet(isPresented: $showDeleteActionSheet) {
             deleteActionSheet
         }
         .actionSheet(isPresented: $showActionSheet) {
             actionSheet
         }
+        #endif
     }
     
     @ViewBuilder
     var navigationLink: some View {
+        #if os(tvOS) || os(iOS)
         NavigationLink(destination: TorrentPlayerView(torrent: viewModel.torrent, media: viewModel.media),
                        isActive: $showPlayer,
                        label: {
             EmptyView()
         })
+        #endif
     }
     
     var placeholderImage: String {
@@ -128,7 +132,8 @@ struct DownloadView: View {
         
         return download.downloadStatus == .paused ?  "Paused".localized : ByteCountFormatter.string(fromByteCount: Int64(download.torrentStatus.downloadSpeed), countStyle: .binary) + "/s" + speed
     }
-    
+  
+#if os(tvOS) || os(iOS)
     var deleteActionSheet: ActionSheet {
         ActionSheet(title: Text("Delete Download".localized),
                     message: Text("Are you sure you want to delete the download?".localized),
@@ -175,6 +180,7 @@ struct DownloadView: View {
                     ]
         )
     }
+    #endif
 }
 
 struct DownloadView_Previews: PreviewProvider {

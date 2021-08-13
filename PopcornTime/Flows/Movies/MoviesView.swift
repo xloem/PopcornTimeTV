@@ -87,6 +87,7 @@ struct MoviesView_Previews: PreviewProvider {
     static var previews: some View {
         let model = MoviesViewModel()
         model.movies = Movie.dummiesFromJSON()
-        return MoviesView().environmentObject(model)
+        return MoviesView(viewModel: model)
+            .preferredColorScheme(.dark)
     }
 }

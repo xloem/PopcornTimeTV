@@ -11,6 +11,12 @@ import PopcornKit
 import Kingfisher
 
 struct EpisodeView: View {
+    struct Theme {
+        let imageWidth: CGFloat = value(tvOS: 310, macOS: 217)
+        let imageHeight: CGFloat = value(tvOS: 174, macOS: 121)
+    }
+    let theme = Theme()
+    
     var episode: Episode
     @EnvironmentObject var viewModel: ShowDetailsViewModel
     
@@ -27,13 +33,12 @@ struct EpisodeView: View {
                 .aspectRatio(contentMode: .fill)
                 .cornerRadius(10)
                 .shadow(radius: 5)
-                .frame(width: 310, height: 174)
+                .frame(width: theme.imageWidth, height: theme.imageHeight)
                 .padding(.bottom, 5)
                 .clipped()
             Text("\(episode.episode). " + episode.title)
                 .lineLimit(1)
         }
-        .frame(width: 310, height: 215)
         .onAppear {
             viewModel.loadImageIfMissing(episode: episode)
         }

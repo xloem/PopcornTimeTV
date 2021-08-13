@@ -93,6 +93,20 @@
 		23446ADF2680E8600049CC72 /* ProgressBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23446ADE2680E8600049CC72 /* ProgressBarView.swift */; };
 		23507DC8269483310098CC12 /* ObjectMapper in Frameworks */ = {isa = PBXBuildFile; productRef = 23507DC7269483310098CC12 /* ObjectMapper */; };
 		2364708B2694B76E008743CB /* ObjectMapper in Frameworks */ = {isa = PBXBuildFile; productRef = 2364708A2694B76E008743CB /* ObjectMapper */; };
+		236A11B426C6772E00AFF1FD /* PreloadTorrentViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23446AC5267FAD000049CC72 /* PreloadTorrentViewModel.swift */; };
+		236A11B526C6773200AFF1FD /* PreloadTorrentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23313B37267E3C2700774A85 /* PreloadTorrentView.swift */; };
+		236A11B626C6774500AFF1FD /* PlayerViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23446ACF268054EF0049CC72 /* PlayerViewModel.swift */; };
+		236A11B826C677AD00AFF1FD /* VLCMediaPlayer+VLCFontAppearance.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4DCB39301E843C0200388374 /* VLCMediaPlayer+VLCFontAppearance.swift */; };
+		236A11B926C6783800AFF1FD /* NowPlayingController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23446AD92680C1110049CC72 /* NowPlayingController.swift */; };
+		236A11BA26C6784C00AFF1FD /* PlayerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23313B35267E3C1400774A85 /* PlayerView.swift */; };
+		236A11BB26C6786200AFF1FD /* VLCPlayerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23446AD62680BBE80049CC72 /* VLCPlayerView.swift */; };
+		236A11BC26C678BD00AFF1FD /* ProgressBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23446ADE2680E8600049CC72 /* ProgressBarView.swift */; };
+		236A11BD26C678E100AFF1FD /* SiriRemoteGestureRecogniser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4DD6E4D61DFB315100818A2C /* SiriRemoteGestureRecogniser.swift */; };
+		236A11BE26C678F600AFF1FD /* AudioView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23313B31267E3BF700774A85 /* AudioView.swift */; };
+		236A11BF26C6790000AFF1FD /* PlayerOptionsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23989FA626865A3500FEDA41 /* PlayerOptionsView.swift */; };
+		236A11C026C6791800AFF1FD /* InfoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23313B2D267E3BD500774A85 /* InfoView.swift */; };
+		236A11C126C6792900AFF1FD /* SubtitlesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23313B2F267E3BE200774A85 /* SubtitlesView.swift */; };
+		236A11C226C67FB100AFF1FD /* ExtendedSubtitlesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2343A75E268861C800B824E7 /* ExtendedSubtitlesView.swift */; };
 		23793D9D26AD950D0094FFA0 /* DownloadView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23793D9C26AD950D0094FFA0 /* DownloadView.swift */; };
 		237EC9F526B842F300EE8B46 /* MPMediaType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 237EC9F426B842F300EE8B46 /* MPMediaType.swift */; };
 		237ECA1526B847C100EE8B46 /* App.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23313AFF267E374F00774A85 /* App.swift */; };
@@ -147,6 +161,15 @@
 		23989FAA2687574F00FEDA41 /* AVAudioRoute.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4DF394311E96BA3300DFCEC6 /* AVAudioRoute.swift */; };
 		23989FAC2687706C00FEDA41 /* IfModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23989FAB2687706C00FEDA41 /* IfModifier.swift */; };
 		23989FAD2687B83C00FEDA41 /* NSNotificationName+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4DE6FDEE1F04256B00A7F274 /* NSNotificationName+Extension.swift */; };
+		23A10F3D26C699CD0062D9CE /* DownloadsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23313B1B267E3AAB00774A85 /* DownloadsView.swift */; };
+		23A10F3E26C699D00062D9CE /* DownloadsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23F0856D269787B300B341D0 /* DownloadsViewModel.swift */; };
+		23A10F3F26C699D20062D9CE /* DownloadDetailsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23313B1F267E3AF200774A85 /* DownloadDetailsView.swift */; };
+		23A10F4026C699D50062D9CE /* DownloadView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23793D9C26AD950D0094FFA0 /* DownloadView.swift */; };
+		23A10F4126C699D80062D9CE /* DownloadViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23DBB51C26ADBF1400AAF824 /* DownloadViewModel.swift */; };
+		23A10F4226C69AD60062D9CE /* DownloadButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2391BE7A2684759000576CAD /* DownloadButton.swift */; };
+		23A10F4326C69AFC0062D9CE /* DownloadProgressView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23C96EE12685B40E0056455E /* DownloadProgressView.swift */; };
+		23A10F4426C69B090062D9CE /* RotateAnimation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23C96EE32685DBC40056455E /* RotateAnimation.swift */; };
+		23A10F4526C69C190062D9CE /* SelectTorrentQualityButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2391BE7E26847B9800576CAD /* SelectTorrentQualityButton.swift */; };
 		23A2BD7726BC5923004B864E /* ShowsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23313B13267E3A4500774A85 /* ShowsView.swift */; };
 		23A2BD7826BC5923004B864E /* ShowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2343A76A2688AF1100B824E7 /* ShowView.swift */; };
 		23A2BD7926BC5930004B864E /* EpisodeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2388FD662692019E00B51201 /* EpisodeView.swift */; };
@@ -867,7 +890,6 @@
 				237EC9FB26B8478100EE8B46 /* Frameworks */,
 				237EC9FC26B8478100EE8B46 /* Resources */,
 				0127197A2A6702D9BA09FCBF /* [CP] Embed Pods Frameworks */,
-				A4C971D2343A102E880F0C62 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -893,6 +915,7 @@
 				237ECA0126B8478100EE8B46 /* Sources */,
 				237ECA0226B8478100EE8B46 /* Frameworks */,
 				237ECA0326B8478100EE8B46 /* Resources */,
+				22840304009B13AE618331ED /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -1093,6 +1116,23 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
+		22840304009B13AE618331ED /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-PopcornTime (macOS)/Pods-PopcornTime (macOS)-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-PopcornTime (macOS)/Pods-PopcornTime (macOS)-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-PopcornTime (macOS)/Pods-PopcornTime (macOS)-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
 		558B5A179F438D5312C5F1AE /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -1108,23 +1148,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-PopcornTime (tvOS)/Pods-PopcornTime (tvOS)-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		A4C971D2343A102E880F0C62 /* [CP] Copy Pods Resources */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-PopcornTime (iOS)/Pods-PopcornTime (iOS)-resources-${CONFIGURATION}-input-files.xcfilelist",
-			);
-			name = "[CP] Copy Pods Resources";
-			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-PopcornTime (iOS)/Pods-PopcornTime (iOS)-resources-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-PopcornTime (iOS)/Pods-PopcornTime (iOS)-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		E63BABF237AFCD35D039AD49 /* [CP] Check Pods Manifest.lock */ = {
@@ -1258,19 +1281,23 @@
 			buildActionMask = 2147483647;
 			files = (
 				23A2BDA526BEDA11004B864E /* PersonDetailsViewModel.swift in Sources */,
+				236A11B926C6783800AFF1FD /* NowPlayingController.swift in Sources */,
 				23A2BDC026BEDBC2004B864E /* ProgressBar.swift in Sources */,
 				23A2BD9826BEDA07004B864E /* TorrentPlayerView.swift in Sources */,
 				23A2BDC726BEDBE5004B864E /* Locale+Langs.swift in Sources */,
 				23A2BDA926BEDA19004B864E /* DownloadsViewModel.swift in Sources */,
 				23A2BDD226BEDC3E004B864E /* MPMediaType.swift in Sources */,
 				23A2BD8226BC5AD2004B864E /* OperatingSystem.swift in Sources */,
+				236A11C126C6792900AFF1FD /* SubtitlesView.swift in Sources */,
 				23A2BDCA26BEDBEF004B864E /* AVSpeakerManager.swift in Sources */,
 				23A2BDD626BEDC50004B864E /* CodableCaching.swift in Sources */,
+				236A11B426C6772E00AFF1FD /* PreloadTorrentViewModel.swift in Sources */,
 				23A2BD8D26BED9FA004B864E /* ShowsView.swift in Sources */,
 				23A2BDCC26BEDBF7004B864E /* AVAudioRoute.swift in Sources */,
 				23A2BDC226BEDBC2004B864E /* RotateAnimation.swift in Sources */,
 				23A2BDD426BEDC3E004B864E /* Media + Download.swift in Sources */,
 				23A2BDA826BEDA19004B864E /* DownloadDetailsView.swift in Sources */,
+				236A11BF26C6790000AFF1FD /* PlayerOptionsView.swift in Sources */,
 				23A2BDA326BEDA0C004B864E /* EpisodeView.swift in Sources */,
 				23A2BDDB26BEDC50004B864E /* UserDefault.swift in Sources */,
 				23A2BDB926BEDB58004B864E /* BannerView.swift in Sources */,
@@ -1287,6 +1314,7 @@
 				23A2BDDA26BEDC50004B864E /* JSONCache.swift in Sources */,
 				23A2BD9726BEDA07004B864E /* MovieDetailsView.swift in Sources */,
 				23A2BDAA26BEDA19004B864E /* DownloadsView.swift in Sources */,
+				236A11C226C67FB100AFF1FD /* ExtendedSubtitlesView.swift in Sources */,
 				23A2BDC326BEDBC2004B864E /* BufferingBar.swift in Sources */,
 				23A2BDBB26BEDBB2004B864E /* PlainNavigationLinkButton.swift in Sources */,
 				23A2BDB026BEDA2A004B864E /* SettingsViewModel.swift in Sources */,
@@ -1296,12 +1324,14 @@
 				23A2BD9D26BEDA07004B864E /* MovieDetailsViewModel.swift in Sources */,
 				23A2BDD826BEDC50004B864E /* JSONDecoder+KeyPath.swift in Sources */,
 				23A2BD9A26BEDA07004B864E /* PlayButton.swift in Sources */,
+				236A11BD26C678E100AFF1FD /* SiriRemoteGestureRecogniser.swift in Sources */,
 				23A2BD9926BEDA07004B864E /* DownloadButtonViewModel.swift in Sources */,
 				23A2BDAF26BEDA2A004B864E /* SettingsView.swift in Sources */,
 				23A2BDC626BEDBE2004B864E /* Array+Extension.swift in Sources */,
 				23A2BD8B26BED9F6004B864E /* MovieView.swift in Sources */,
 				23A2BD9F26BEDA0C004B864E /* ShowDetailsViewModel.swift in Sources */,
 				23A2BD9B26BEDA07004B864E /* ActorsCrewView.swift in Sources */,
+				236A11BB26C6786200AFF1FD /* VLCPlayerView.swift in Sources */,
 				23A2BD8726BED9E8004B864E /* App.swift in Sources */,
 				23A2BDA626BEDA11004B864E /* PersonDetailsView.swift in Sources */,
 				23A2BDD926BEDC50004B864E /* Result.swift in Sources */,
@@ -1309,14 +1339,18 @@
 				23A2BD9326BEDA07004B864E /* TrailerButton.swift in Sources */,
 				23A2BDC926BEDBEA004B864E /* UIColor+Extension.swift in Sources */,
 				23A2BD8926BED9EE004B864E /* TabBarView.swift in Sources */,
+				236A11B826C677AD00AFF1FD /* VLCMediaPlayer+VLCFontAppearance.swift in Sources */,
 				23A2BD9E26BEDA0C004B864E /* ShowDetailsView.swift in Sources */,
 				23A2BDBE26BEDBC2004B864E /* StarRatingView.swift in Sources */,
+				236A11B526C6773200AFF1FD /* PreloadTorrentView.swift in Sources */,
 				23A2BDA726BEDA11004B864E /* PersonView.swift in Sources */,
 				234180A526C2D38500C32083 /* PlayButtonModel.swift in Sources */,
 				23A2BD8C26BED9F6004B864E /* MoviesView.swift in Sources */,
 				23A2BD9626BEDA07004B864E /* SelectTorrentQualityButton.swift in Sources */,
 				23A2BDC426BEDBDB004B864E /* NSNotificationName+Extension.swift in Sources */,
 				23A2BDCB26BEDBF5004B864E /* SubtitleSettings.swift in Sources */,
+				236A11C026C6791800AFF1FD /* InfoView.swift in Sources */,
+				236A11BE26C678F600AFF1FD /* AudioView.swift in Sources */,
 				23A2BD8826BED9EB004B864E /* TermsOfServiceView.swift in Sources */,
 				23A2BDBD26BEDBBB004B864E /* VisualEffectBlur.swift in Sources */,
 				23A2BDD526BEDC50004B864E /* YoutubeApi.swift in Sources */,
@@ -1324,9 +1358,12 @@
 				23A2BDC126BEDBC2004B864E /* UIDevice+cellular.swift in Sources */,
 				23A2BD8A26BED9F6004B864E /* MoviesViewModel.swift in Sources */,
 				23A2BDBA26BEDB73004B864E /* DownloadProgressView.swift in Sources */,
+				236A11B626C6774500AFF1FD /* PlayerViewModel.swift in Sources */,
+				236A11BA26C6784C00AFF1FD /* PlayerView.swift in Sources */,
 				23A2BDCF26BEDC3E004B864E /* Show+Extension.swift in Sources */,
 				23A2BDA426BEDA0C004B864E /* SeasonPickerViewModel.swift in Sources */,
 				23A2BDA226BEDA0C004B864E /* EpisodesView.swift in Sources */,
+				236A11BC26C678BD00AFF1FD /* ProgressBarView.swift in Sources */,
 				23A2BD9026BEDA00004B864E /* WatchlistView.swift in Sources */,
 				23A2BDD126BEDC3E004B864E /* Session.swift in Sources */,
 				23A2BDC826BEDBE7004B864E /* FileManager+Extension.swift in Sources */,
@@ -1343,6 +1380,7 @@
 				23A2BD7E26BC5930004B864E /* SeasonView.swift in Sources */,
 				2304531A26BAFA900050BCB8 /* MovieDetailsViewModel.swift in Sources */,
 				23A2BD7C26BC5930004B864E /* ShowDetailsView.swift in Sources */,
+				23A10F4226C69AD60062D9CE /* DownloadButton.swift in Sources */,
 				23A2BD7726BC5923004B864E /* ShowsView.swift in Sources */,
 				2304531C26BAFAA40050BCB8 /* TrailerButtonViewModel.swift in Sources */,
 				237ECA4826B84ED400EE8B46 /* PlainNavigationLinkButton.swift in Sources */,
@@ -1358,6 +1396,7 @@
 				23A2BD7B26BC5930004B864E /* SeasonPickerViewModel.swift in Sources */,
 				237ECA1C26B8482700EE8B46 /* MoviesView.swift in Sources */,
 				237ECA1B26B8481800EE8B46 /* TabBarView.swift in Sources */,
+				23A10F3F26C699D20062D9CE /* DownloadDetailsView.swift in Sources */,
 				23A2BD8626BE9A2E004B864E /* MediaRatingsLoader.swift in Sources */,
 				2383A13726BC3D2200A0346C /* ActorsCrewView.swift in Sources */,
 				237ECA2826B8485F00EE8B46 /* Show+Extension.swift in Sources */,
@@ -1366,8 +1405,10 @@
 				23A2BD7A26BC5930004B864E /* SeasonPickerView.swift in Sources */,
 				2304532526BAFB0F0050BCB8 /* VisualEffectBlur.swift in Sources */,
 				237ECA1D26B8482700EE8B46 /* MovieView.swift in Sources */,
+				23A10F4326C69AFC0062D9CE /* DownloadProgressView.swift in Sources */,
 				237ECA1526B847C100EE8B46 /* App.swift in Sources */,
 				237ECA3D26B84A3600EE8B46 /* JSONCache.swift in Sources */,
+				23A10F4126C699D80062D9CE /* DownloadViewModel.swift in Sources */,
 				2383A13926BC3D4600A0346C /* PersonDetailsView.swift in Sources */,
 				237ECA2926B8485F00EE8B46 /* Media + Subtitles.swift in Sources */,
 				238F78D026BADCFF00C4A4E9 /* YoutubeApi.swift in Sources */,
@@ -1377,8 +1418,12 @@
 				237ECA4226B84A3F00EE8B46 /* Array+Extension.swift in Sources */,
 				237ECA4126B84A3600EE8B46 /* Result.swift in Sources */,
 				2304531E26BAFACF0050BCB8 /* BannerView.swift in Sources */,
+				23A10F4026C699D50062D9CE /* DownloadView.swift in Sources */,
 				2304531926BAFA8D0050BCB8 /* MovieDetailsView.swift in Sources */,
+				23A10F4426C69B090062D9CE /* RotateAnimation.swift in Sources */,
 				237ECA3E26B84A3600EE8B46 /* CodableCaching.swift in Sources */,
+				23A10F3E26C699D00062D9CE /* DownloadsViewModel.swift in Sources */,
+				23A10F3D26C699CD0062D9CE /* DownloadsView.swift in Sources */,
 				234180A126C29F7D00C32083 /* WatchlistView.swift in Sources */,
 				2304531F26BAFAEA0050BCB8 /* StarRatingView.swift in Sources */,
 				2304531B26BAFA9B0050BCB8 /* TrailerButton.swift in Sources */,
@@ -1387,6 +1432,7 @@
 				237ECA2426B8485300EE8B46 /* Session.swift in Sources */,
 				237ECA2526B8485F00EE8B46 /* MPMediaType.swift in Sources */,
 				2304531D26BAFAC30050BCB8 /* TVButtonStyle.swift in Sources */,
+				23A10F4526C69C190062D9CE /* SelectTorrentQualityButton.swift in Sources */,
 				237ECA1E26B8482700EE8B46 /* MoviesViewModel.swift in Sources */,
 				237ECA3F26B84A3600EE8B46 /* JSONDecoder+KeyPath.swift in Sources */,
 				2383A13A26BC3D4600A0346C /* PersonDetailsViewModel.swift in Sources */,
@@ -1528,7 +1574,7 @@
 					"$(inherited)",
 				);
 				INFOPLIST_FILE = iOS/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -1541,7 +1587,7 @@
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 2;
 			};
 			name = Debug;
 		};
@@ -1566,7 +1612,7 @@
 				ENABLE_PREVIEWS = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				INFOPLIST_FILE = iOS/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -1576,7 +1622,7 @@
 				PRODUCT_NAME = PopcornTime;
 				SDKROOT = iphoneos;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 2;
 				VALIDATE_PRODUCT = YES;
 			};
 			name = Release;

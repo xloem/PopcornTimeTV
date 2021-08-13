@@ -30,14 +30,22 @@ struct SubtitlesView: View {
             Spacer()
             languageSection
                 .frame(width: 390)
+                #if os(tvOS)
                 .focusSection()
+                #endif
             delaySection
+                #if os(tvOS)
                 .focusSection()
+                #endif
             encodingSection
+                #if os(tvOS)
                 .focusSection()
+                #endif
             Spacer()
         }
+        #if os(tvOS)
         .focusSection()
+        #endif
         .frame(maxHeight: 300)
     }
     

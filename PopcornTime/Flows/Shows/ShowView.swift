@@ -49,5 +49,6 @@ struct ShowView_Previews: PreviewProvider {
             .background(Color.red)
             .frame(width: 250, height: 460, alignment: .center)
             .previewLayout(.sizeThatFits)
+            .preferredColorScheme(.dark)
     }
 }

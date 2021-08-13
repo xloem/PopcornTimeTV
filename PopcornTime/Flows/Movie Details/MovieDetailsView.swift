@@ -62,6 +62,10 @@ struct MovieDetailsView: View {
                                 Spacer()
                             }
                             .padding(.leading, 10)
+                            #if os(iOS)
+                            actionButtons(scroll: nil)
+                            .padding(.top, 10)
+                            #endif
                         }
                         .padding(.leading, theme.leftSectionLeading)
                         .id(section1)
@@ -92,6 +96,8 @@ struct MovieDetailsView: View {
                         }
                         #if os(tvOS)
                         .padding([.bottom, .top], 30)
+                        #else
+                        .padding([.bottom], 30)
                         #endif
                         .background(Color.init(white: 1, opacity: 0.3))
                         .padding(.top, 50)
@@ -168,31 +174,36 @@ struct MovieDetailsView: View {
                 Spacer()
                     .frame(height: 40)
             }
-            HStack(spacing: 24) {
-                TrailerButton(viewModel: viewModel.trailerModel)
-                #if os(tvOS)
-                PlayButton(viewModel: viewModel) {
-                    withAnimation {
-                        scroll.scrollTo(section1, anchor: .top)
-                    }
-                }
-                #endif
-                watchlistButton
-                watchedButton
-                #if os(tvOS)
-                DownloadButton(viewModel: viewModel.downloadModel, onFocus: {
-                    withAnimation {
-                        scroll.scrollTo(section1, anchor: .top)
-                    }
-                })
-                #endif
-            }
-            .buttonStyle(TVButtonStyle(onFocus: {
-                withAnimation {
-                    scroll.scrollTo(section1, anchor: .top)
-                }
-            }))
+            #if os(tvOS) || os(macOS)
+            actionButtons(scroll: scroll)
+            #endif
         }
+    }
+    
+    @ViewBuilder
+    func actionButtons(scroll: ScrollViewProxy?) -> some View {
+        HStack(spacing: 24) {
+            TrailerButton(viewModel: viewModel.trailerModel)
+            #if os(tvOS) || os(iOS)
+            PlayButton(viewModel: viewModel, onFocus: {
+                withAnimation {
+                    scroll?.scrollTo(section1, anchor: .top)
+                }
+            })
+            #endif
+            watchlistButton
+            watchedButton
+            DownloadButton(viewModel: viewModel.downloadModel, onFocus: {
+                withAnimation {
+                    scroll?.scrollTo(section1, anchor: .top)
+                }
+            })
+        }
+        .buttonStyle(TVButtonStyle(onFocus: {
+            withAnimation {
+                scroll?.scrollTo(section1, anchor: .top)
+            }
+        }))
     }
     
     var infoText: some View {
@@ -351,8 +362,12 @@ struct DetailView_Previews: PreviewProvider {
     static var previews: some View {
         MovieDetailsView(viewModel: MovieDetailsViewModel(movie: Movie.dummy()))
 //            .frame(height: 2000)
+        #if os(tvOS)
             .previewLayout(.fixed(width: 2000, height: 2000))
+        #endif
+            .preferredColorScheme(.dark)
         
         MovieDetailsView(viewModel: MovieDetailsViewModel(movie: Movie.dummy()), error: NSError(domain: "", code: 1, userInfo: [NSLocalizedDescriptionKey: "This is an error text example"]))
+            .preferredColorScheme(.dark)
     }
 }

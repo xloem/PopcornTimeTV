@@ -8,7 +8,11 @@
 
 import Foundation
 import MediaPlayer
+#if os(tvOS)
 import TVVLCKit
+#elseif os(iOS)
+import MobileVLCKit
+#endif
 import PopcornKit
 import Kingfisher
 

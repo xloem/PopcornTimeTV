@@ -30,7 +30,9 @@ struct TVButton: View {
     var body: some View {
         return configuration.label
             .scaleEffect(focused ? 1.1 : 1)
+        #if os(tvOS)
             .focusable(true)
+        #endif
             .font(.system(size: theme.fontSize, weight: .medium))
             .foregroundColor(focused ? .white : Color(white: 1, opacity: 0.6))
             .animation(.easeOut, value: focused)

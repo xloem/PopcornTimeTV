@@ -11,6 +11,20 @@ import PopcornKit
 import Kingfisher
 
 struct ShowDetailsView: View {
+    struct Theme {
+        let buttonWidth: CGFloat = value(tvOS: 142, macOS: 100)
+        let buttonHeight: CGFloat = value(tvOS: 115, macOS: 81)
+        
+        let starHeight: CGFloat = value(tvOS: 33, macOS: 18)
+        let ratingHeight: CGFloat = value(tvOS: 32, macOS: 24)
+        let watchedSection: (height: CGFloat, cellWidth: CGFloat, cellHeight: CGFloat, spacing: CGFloat)
+            = (height: value(tvOS: 450, macOS: 240),
+               cellWidth: value(tvOS: 220, macOS: 150),
+               cellHeight: value(tvOS: 460, macOS: 180),
+               spacing: value(tvOS: 90, macOS: 30))
+    }
+    let theme = Theme()
+    
     @StateObject var viewModel: ShowDetailsViewModel
     @State var showPlayer: Bool = false
     @State var error: Error?
@@ -29,8 +43,9 @@ struct ShowDetailsView: View {
     @Namespace var section3
     
     var body: some View {
+        GeometryReader { geometry in
         ZStack {
-            backgroundImage
+            backgroundImage(size: geometry.size)
             Color(white: 0, opacity: 0.3)
                 .ignoresSafeArea()
             ScrollViewReader { scroll in
@@ -45,7 +60,9 @@ struct ShowDetailsView: View {
                                 infoText
                                 Text(show.summary)
                                     .lineLimit(5)
+                                #if os(tvOS)
                                     .frame(width: 1200, height: 200)
+                                #endif
                                 HStack(spacing: 24) {
                                     watchlistButton
                                     if viewModel.show.seasonNumbers.count > 1 {
@@ -62,12 +79,20 @@ struct ShowDetailsView: View {
                                         scroll.scrollTo(section1, anchor: .top)
                                     }
                                 }))
+                                #if os(tvOS)
                                 .padding(.top, 50)
                                 .padding(.bottom, 100)
+                                #else
+                                .padding(.bottom, 20)
+                                #endif
                             }
                         }
                         .id(section1)
+                        #if os(tvOS)
                         .padding(.leading, 100)
+                        #else
+                        .padding([.leading, .trailing], 50)
+                        #endif
                         Spacer()
                     }
                     #if os(tvOS)
@@ -124,19 +149,17 @@ struct ShowDetailsView: View {
             viewModel.stopTheme()
         }
         .environmentObject(viewModel)
+        }
     }
     
-    var backgroundImage: some View {
-        KFImage(viewModel.backgroundUrl)
+    func backgroundImage(size: CGSize) -> some View {
+        return KFImage(viewModel.backgroundUrl)
             .resizable()
             .loadImmediately()
             .aspectRatio(contentMode: .fill)
             .padding(0)
             .ignoresSafeArea()
-            #if os(tvOS)
-            .frame(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height)
-            #endif
-            
+            .frame(width: size.width, height: size.height)
     }
     
     
@@ -167,7 +190,8 @@ struct ShowDetailsView: View {
             }
             Text(watchOn)
                 .foregroundColor(Color.init(white: 1, opacity: 0.67))
-        }.font(.system(size: 31, weight: .medium))
+        }
+        .font(.system(size: 31, weight: .medium))
     }
     
     var seasonsButton: some View {
@@ -185,11 +209,11 @@ struct ShowDetailsView: View {
                 VStack {
                     VisualEffectBlur() {
                         Image("Seasons")
-                    }.cornerRadius(6)
+                    }
                     Text("Series".localized)
                 }
             })
-            .frame(width: 142, height: 115)
+            .frame(width: theme.buttonWidth, height: theme.buttonHeight)
         }
     }
     
@@ -204,7 +228,7 @@ struct ShowDetailsView: View {
                 Text("Watchlist".localized)
             }
         })
-        .frame(width: 142, height: 115)
+        .frame(width: theme.buttonWidth, height: theme.buttonHeight)
     }
     
     func alsoWatchedSection(scroll: ScrollViewProxy) -> some View {
@@ -212,17 +236,17 @@ struct ShowDetailsView: View {
             Text("Viewers Also Watched".localized)
                 .font(.callout)
                 .foregroundColor(.init(white: 1.0, opacity: 0.667)) // light text color
-                .padding(.leading, 90)
+                .padding(.leading, theme.watchedSection.spacing)
                 .padding(.top, 14)
             ScrollView(.horizontal, showsIndicators: false) {
-                LazyHStack(alignment: .center, spacing: 90) {
-                    Spacer(minLength: 90)
+                LazyHStack(alignment: .center, spacing: theme.watchedSection.spacing) {
+                    Spacer(minLength: theme.watchedSection.spacing)
                     ForEach(show.related, id: \.self) { show in
                         NavigationLink(
                             destination: ShowDetailsView(viewModel: ShowDetailsViewModel(show: show)),
                             label: {
                                 ShowView(show: show)
-                                    .frame(width: 220, height: 420)
+                                    .frame(width: theme.watchedSection.cellWidth, height: theme.watchedSection.cellHeight)
                             })
                             .buttonStyle(PlainNavigationLinkButtonStyle(onFocus: {
 //                                withAnimation {
@@ -237,7 +261,7 @@ struct ShowDetailsView: View {
 //            .background(Color.gray)
         }
 //        .background(Color.red)
-        .frame(height: 500)
+        .frame(height: theme.watchedSection.height)
         .padding(0)
         .id(section3)
     }
@@ -250,6 +274,11 @@ struct ShowDetailsView_Previews: PreviewProvider {
         model.currentSeason = show.latestUnwatchedEpisode()?.season ?? show.seasonNumbers.first ?? -1
             
         return ShowDetailsView(viewModel: model)
+            #if os(tvOS)
             .previewLayout(.fixed(width: 2000, height: 1800))
+            #else
+            .previewLayout(.fixed(width: 1024, height: 1800))
+            #endif
+            .preferredColorScheme(.dark)
     }
 }

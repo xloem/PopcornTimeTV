@@ -1,7 +1,13 @@
 
 
 import Foundation
+#if os(tvOS)
 import TVVLCKit
+#elseif os(iOS)
+import MobileVLCKit
+#elseif os(macOS)
+import VLCKit
+#endif
 
 /**
  Protocol wrapper for private subtitle appearance API in MobileVLCKit. Can be toll free bridged from VLCMediaPlayer. Example for changing font:

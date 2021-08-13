@@ -10,16 +10,23 @@ import SwiftUI
 import PopcornKit
 
 struct ShowsView: View {
+    struct Theme {
+        let itemWidth: CGFloat = value(tvOS: 240, macOS: 120)
+        let itemSpacing: CGFloat = value(tvOS: 30, macOS: 20)
+        let columnSpacing: CGFloat = value(tvOS: 60, macOS: 30)
+    }
+    static let theme = Theme()
+    
     @StateObject var viewModel = ShowsViewModel()
     let columns = [
-        GridItem(.adaptive(minimum: 240))
+        GridItem(.adaptive(minimum: theme.itemWidth), spacing: theme.itemSpacing)
     ]
     
     var body: some View {
         ZStack(alignment: .leading) {
             errorView
             ScrollView {
-                LazyVGrid(columns: columns, spacing: 60) {
+                LazyVGrid(columns: columns, spacing: ShowsView.theme.columnSpacing) {
                     ForEach(viewModel.shows, id: \.self) { show in
                         NavigationLink(
                             destination: ShowDetailsView(viewModel: ShowDetailsViewModel(show: show)),
@@ -79,5 +86,7 @@ struct ShowsView_Previews: PreviewProvider {
         let model = ShowsViewModel()
         model.shows = Show.dummiesFromJSON()
         return ShowsView(viewModel: model)
+            .preferredColorScheme(.dark)
+//            .previewInterfaceOrientation(.landscapeLeft)
     }
 }

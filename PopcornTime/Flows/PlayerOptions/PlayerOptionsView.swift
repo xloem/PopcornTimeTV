@@ -8,7 +8,11 @@
 
 import SwiftUI
 import PopcornKit
+#if os(tvOS)
 import TVVLCKit
+#elseif os(iOS)
+import MobileVLCKit
+#endif
 
 struct PlayerOptionsView: View {
     var media: Media?

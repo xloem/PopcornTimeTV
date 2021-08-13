@@ -21,10 +21,15 @@ struct SelectTorrentQualityButton<Label>: View where Label : View {
     
     var body: some View {
         return Button(action: {
+            #if os(iOS)
             if UIDevice.current.hasCellularCapabilites &&
                 Session.reachability.connection != .wifi && !Session.streamOnCellular {
                 self.showStreamOnCellularAlert = true
-            } else if media.torrents.count == 0 {
+                return
+            }
+            #endif
+            
+            if media.torrents.count == 0 {
                 self.noTorrentsFoundAlert = true
             } else if let torrent = autoSelectTorrent {
                 action(torrent)
@@ -32,14 +37,15 @@ struct SelectTorrentQualityButton<Label>: View where Label : View {
                 showChooseQualityActionSheet = true
             }
         }, label: label)
-        .frame(width: 142, height: 115)
         .buttonStyle(TVButtonStyle(onFocus: onFocus))
+#if os(iOS) || os(tvOS)
         .actionSheet(isPresented: $showChooseQualityActionSheet) {
             ActionSheet(title: Text("Choose Quality".localized),
                         message: nil,
                         buttons: chooseTorrentsButtons + [.cancel()]
             )
         }
+#endif
         .alert(isPresented: $noTorrentsFoundAlert, content: {
             Alert(title: Text("No torrents found".localized),
                   message: Text("Torrents could not be found for the specified media.".localized),
@@ -67,7 +73,7 @@ struct SelectTorrentQualityButton<Label>: View where Label : View {
         
         return nil
     }
-    
+#if os(iOS) || os(tvOS)
     var chooseTorrentsButtons: [Alert.Button] {
         media.torrents.map { torrent in
             ActionSheet.Button.default(
@@ -80,6 +86,7 @@ struct SelectTorrentQualityButton<Label>: View where Label : View {
             }
         }
     }
+#endif
 }
 
 struct SelectTorrentQualityAction_Previews: PreviewProvider {
@@ -89,5 +96,6 @@ struct SelectTorrentQualityAction_Previews: PreviewProvider {
         }, label: {
             Text("Play")
         })
+            .preferredColorScheme(.dark)
     }
 }

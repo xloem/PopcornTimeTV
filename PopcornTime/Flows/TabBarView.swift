@@ -28,10 +28,12 @@ struct TabBarView: View {
                 .tabItem {
                     Text("🔍")
                 }
+            #endif
             DownloadsView()
                 .tabItem {
                     Text("Downloads")
                 }
+            #if os(tvOS) || os(iOS)
             SettingsView()
                 .tabItem {
                     Text("Settings")

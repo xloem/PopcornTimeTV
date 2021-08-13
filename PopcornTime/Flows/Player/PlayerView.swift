@@ -8,6 +8,7 @@
 
 import SwiftUI
 import PopcornKit
+
 struct PlayerView: View {
     @EnvironmentObject var viewModel: PlayerViewModel
     @Environment(\.presentationMode) var presentationMode
@@ -15,7 +16,9 @@ struct PlayerView: View {
 //    @GestureState var isDetectingLongPress = false
     
     @Namespace private var namespace
+    #if os(tvOS)
     @Environment(\.resetFocus) var resetFocus
+    #endif
     
     var body: some View {
         ZStack {
@@ -31,6 +34,7 @@ struct PlayerView: View {
 //                    viewModel.playandPause()
 //                }
             }, onMove:  { direction in
+                #if os(tvOS)
                 switch direction {
                 case .down:
 //                    withAnimation(.spring()) {
@@ -51,6 +55,7 @@ struct PlayerView: View {
                 @unknown default:
                     break
                 }
+                #endif
             }, onSwipeUp: {
                 withAnimation {
                     viewModel.showControls = true
@@ -64,9 +69,11 @@ struct PlayerView: View {
             }, onPositionSliderDrag: { offset in
                 viewModel.handlePositionSliderDrag(offset: offset)
             })
+            #if os(tvOS)
 //            .focusScope(namespace)
             .prefersDefaultFocus(!viewModel.showInfo, in: namespace)
             .focusable(!viewModel.showInfo)
+            #endif
             .onLongPressGesture(minimumDuration: 0.01, perform: {
                 withAnimation(.spring()) {
                     if viewModel.showControls {
@@ -76,6 +83,7 @@ struct PlayerView: View {
                     }
                 }
             })
+            #if os(tvOS)
             .onPlayPauseCommand {
                 withAnimation {
                     viewModel.playandPause()
@@ -110,7 +118,7 @@ struct PlayerView: View {
 //                    viewModel.showInfo = true
 //                }
             }
-            
+            #endif
 //            dimmerView
             controlsView
                 .transition(.move(edge: .bottom))
@@ -128,6 +136,7 @@ struct PlayerView: View {
                                       subtitle: viewModel.subtitleBinding)
 //                    .focusScope(namespace)
 //                    .focusable()
+                    #if os(tvOS)
                     .prefersDefaultFocus(in: namespace)
                     .onExitCommand(perform: {
                         withAnimation(.spring()) {
@@ -137,15 +146,18 @@ struct PlayerView: View {
                     .onPlayPauseCommand {
                         viewModel.playandPause()
                     }
+                    #endif
                     Spacer()
                 }
                 .zIndex(1)
                 .transition(.move(edge: .top))
+                #if os(tvOS)
                 .onAppear {
                     DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
                         resetFocus(in: namespace)
                     }
                 }
+                #endif
             }
         }
         .onAppear {
@@ -154,7 +166,9 @@ struct PlayerView: View {
         }.onDisappear {
             
         }
+        #if os(tvOS)
         .focusScope(namespace)
+        #endif
         .ignoresSafeArea()
         .actionSheet(isPresented: $viewModel.resumePlaybackAlert, content: {
             ActionSheet(title: Text(""),

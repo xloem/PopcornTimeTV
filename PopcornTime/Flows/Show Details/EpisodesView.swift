@@ -11,6 +11,15 @@ import PopcornKit
 import Combine
 
 struct EpisodesView: View {
+    struct Theme {
+        let episodeWidth: CGFloat = value(tvOS: 310, macOS: 217)
+        let episodeHeight: CGFloat = value(tvOS: 215, macOS: 150)
+        let currentEpisode: (padding: CGFloat, height: CGFloat) =
+                        (padding: value(tvOS: 250, macOS: 100),
+                         height: value(tvOS: 350, macOS: 250))
+    }
+    let theme = Theme()
+    
     var show: Show
     var episodes: [Episode]
     var currentSeason: Int
@@ -27,7 +36,7 @@ struct EpisodesView: View {
     var onFocus: () -> Void = {}
     
     var body: some View {
-        return VStack(alignment: .leading) {
+        VStack(alignment: .leading) {
             navigationLink
                 .hidden()
             titleView
@@ -53,6 +62,11 @@ struct EpisodesView: View {
             }
         }
         #endif
+        .onChange(of: episodes) { newValue in
+            if currentEpisode == nil {
+                currentEpisode = newValue.first
+            }
+        }
     }
     
     @ViewBuilder
@@ -67,7 +81,7 @@ struct EpisodesView: View {
     
     @ViewBuilder
     var navigationLink: some View {
-        #if os(tvOS)
+        #if os(tvOS) || os(iOS)
         if let torrent = torrent, let episode = currentEpisode {
             NavigationLink(destination: TorrentPlayerView(torrent: torrent, media: episode),
                            isActive: $showPlayer,
@@ -80,7 +94,6 @@ struct EpisodesView: View {
     
     @ViewBuilder
     func episodeView(episode: Episode) -> some View {
-        #if os(tvOS)
         SelectTorrentQualityButton(media: episode, action: { torrent in
             self.torrent = torrent
             self.currentEpisode = episode
@@ -91,8 +104,7 @@ struct EpisodesView: View {
             currentEpisode = episode
             onFocus()
         })
-        .frame(width: 310, height: 215)
-        #endif
+        .frame(width: theme.episodeWidth, height: theme.episodeHeight)
     }
     
     @ViewBuilder
@@ -132,20 +144,22 @@ struct EpisodesView: View {
 //                            .lineLimit(6)
                             .padding(.bottom, 30)
 //                            .frame(minWidth: 600, maxWidth: 800)
-                            .frame(width: 800)
                         #if os(tvOS)
+                            .frame(width: 800)
+                        #endif
                         DownloadButton(viewModel: downloadModel)
                             .buttonStyle(TVButtonStyle(onFocus: onFocus))
-                        #endif
                     }
 //                    .background(Color.red)
                 }
 //                .background(Color.blue)
             }
             .padding(0)
-            .frame(height: 350)
+            .frame(height: theme.currentEpisode.height)
+//            #if os(tvOS)
 //            .frame(maxWidth: .infinity)
-            .padding([.leading, .trailing], 250)
+            .padding([.leading, .trailing], theme.currentEpisode.padding)
+//            #endif
 //            .background(Color.gray)
         }
     }
@@ -155,17 +169,5 @@ struct EpisodesView_Previews: PreviewProvider {
     static var previews: some View {
         let show = Show.dummy()
         EpisodesView(show: show, episodes: show.episodes, currentSeason: 0, currentEpisode: show.episodes.first)
-    }
-}
-
-
-struct FocusedEpisode: FocusedValueKey {
-    typealias Value = Binding<Media>
-}
-
-extension FocusedValues {
-    var episodeBinding: FocusedEpisode.Value? {
-        get { self[FocusedEpisode.self] }
-        set { self[FocusedEpisode.self] = newValue }
     }
 }

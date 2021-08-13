@@ -37,10 +37,13 @@ class TrailerButtonViewModel: ObservableObject {
         player.currentItem?.externalMetadata = [title, summary]
         
         if let string = media.mediumCoverImage,
-            let url = URL(string: string),
-            let data = try? Data(contentsOf: url) {
-            let image = self.makeMetadataItem(.commonIdentifierArtwork, value: data as NSData)
-            player.currentItem?.externalMetadata.append(image)
+            let url = URL(string: string) {
+            Task {
+                if let (data, _) = try? await URLSession.shared.data(from: url) {
+                    let image = self.makeMetadataItem(.commonIdentifierArtwork, value: data as NSData)
+                    player.currentItem?.externalMetadata.append(image)
+                }
+            }
         }
         #endif
         

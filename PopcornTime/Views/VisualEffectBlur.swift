@@ -8,7 +8,7 @@
 import SwiftUI
 
 public struct VisualEffectBlur<Content: View>: View {
-    #if os(tvOS)
+    #if os(tvOS) || os(iOS)
     var blurStyle: UIBlurEffect.Style
 
     var content: Content
@@ -39,23 +39,12 @@ public struct VisualEffectBlur<Content: View>: View {
             .cornerRadius(cornerRadius)
             .accessibility(hidden: Content.self == EmptyView.self)
     }
-    #elseif os(iOS)
-    var content: Content
-    var cornerRadius: CGFloat = 6.0
-
-    public init(@ViewBuilder content: () -> Content) {
-        self.content = content()
-    }
-    
-    public var body: some View {
-        content
-    }
     #endif
 }
 
 // MARK: - Representable
 extension VisualEffectBlur {
-    #if os(tvOS)
+    #if os(tvOS)  || os(iOS)
     struct Representable<Content: View>: UIViewRepresentable {
         var blurStyle: UIBlurEffect.Style
         var vibrancyEffect: UIVibrancyEffect?
@@ -104,7 +93,7 @@ extension VisualEffectBlur {
     #endif
 }
 
-#if os(tvOS)
+#if os(tvOS)  || os(iOS)
 // MARK: - Coordinator
 extension VisualEffectBlur.Representable {
     class Coordinator {

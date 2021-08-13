@@ -13,7 +13,7 @@ struct TorrentPlayerView: View {
     var torrent: Torrent
     var media: Media
 
-    #if os(tvOS)
+    #if os(tvOS) || os(iOS)
     enum State_ {
         case none
         case preload(PreloadTorrentViewModel)
@@ -53,5 +53,6 @@ struct TorrentPlayerView: View {
 struct MediaPlayerView_Previews: PreviewProvider {
     static var previews: some View {
         TorrentPlayerView(torrent: Torrent(), media: Movie.dummy())
+            .preferredColorScheme(.dark)
     }
 }
