@@ -25,9 +25,6 @@ struct DownloadView: View {
         }, label: {
             VStack {
                 ZStack (alignment: .bottom) {
-                    navigationLink
-                        .hidden()
-                    
                     KFImage(URL(string: imageUrl))
                         .resizable()
                         .placeholder {
@@ -69,17 +66,9 @@ struct DownloadView: View {
         .actionSheet(isPresented: $showActionSheet) {
             actionSheet
         }
-        #endif
-    }
-    
-    @ViewBuilder
-    var navigationLink: some View {
-        #if os(tvOS) || os(iOS)
-        NavigationLink(destination: TorrentPlayerView(torrent: viewModel.torrent, media: viewModel.media),
-                       isActive: $showPlayer,
-                       label: {
-            EmptyView()
-        })
+        .fullScreenCover(isPresented: $showPlayer) {
+            TorrentPlayerView(torrent: viewModel.torrent, media: viewModel.media)
+        }
         #endif
     }
     

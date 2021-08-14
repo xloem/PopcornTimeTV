@@ -48,15 +48,17 @@ class YoutubeApi {
             request.addValue("application/json", forHTTPHeaderField: "Content-Type")
             
             URLSession.shared.dataTask(with: request) { data, response, error in
-                do {
-                    if let data = data {
-                        let video = try JSONDecoder().decode(Video.self, from: data)
-                        completion(video, nil)
-                    } else {
-                        completion(nil, unknowError)
+                DispatchQueue.main.async {
+                    do {
+                        if let data = data {
+                            let video = try JSONDecoder().decode(Video.self, from: data)
+                            completion(video, nil)
+                        } else {
+                            completion(nil, unknowError)
+                        }
+                    } catch let error {
+                        completion(nil, error)
                     }
-                } catch let error {
-                    completion(nil, error)
                 }
             }.resume()
         } else {

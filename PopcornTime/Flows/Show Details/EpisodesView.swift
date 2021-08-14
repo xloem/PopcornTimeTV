@@ -37,8 +37,6 @@ struct EpisodesView: View {
     
     var body: some View {
         VStack(alignment: .leading) {
-            navigationLink
-                .hidden()
             titleView
             episodesCountView
             ScrollView(.horizontal) {
@@ -55,7 +53,7 @@ struct EpisodesView: View {
                 .focusSection()
             #endif
         }
-        #if os(tvOS)
+        #if os(tvOS) || os(iOS)
         .fullScreenCover(isPresented: $showPlayer) {
             if let torrent = torrent, let episode = currentEpisode {
                 TorrentPlayerView(torrent: torrent, media: episode)
@@ -77,19 +75,6 @@ struct EpisodesView: View {
                 .font(.title2)
             Spacer()
         }
-    }
-    
-    @ViewBuilder
-    var navigationLink: some View {
-        #if os(tvOS) || os(iOS)
-        if let torrent = torrent, let episode = currentEpisode {
-            NavigationLink(destination: TorrentPlayerView(torrent: torrent, media: episode),
-                           isActive: $showPlayer,
-                           label: {
-                EmptyView()
-            })
-        }
-        #endif
     }
     
     @ViewBuilder

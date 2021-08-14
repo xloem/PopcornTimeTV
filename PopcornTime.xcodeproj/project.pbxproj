@@ -268,6 +268,7 @@
 		23C96EE42685DBC40056455E /* RotateAnimation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23C96EE32685DBC40056455E /* RotateAnimation.swift */; };
 		23D2B398269586810077BBED /* Reachability in Frameworks */ = {isa = PBXBuildFile; productRef = 23D2B397269586810077BBED /* Reachability */; };
 		23D2B3A026959C910077BBED /* StarRatingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23D2B39F26959C910077BBED /* StarRatingView.swift */; };
+		23D4606926C7C1DD00D56978 /* MacModalWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23D4606826C7C1DC00D56978 /* MacModalWindow.swift */; };
 		23DBB51D26ADBF1400AAF824 /* DownloadViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23DBB51C26ADBF1400AAF824 /* DownloadViewModel.swift */; };
 		23E4976726947E1300175DEE /* TVServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 002682111CD0B76200F51D31 /* TVServices.framework */; };
 		23E4976A26947E1300175DEE /* ContentProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23E4976926947E1300175DEE /* ContentProvider.swift */; };
@@ -416,6 +417,7 @@
 		23C96EE12685B40E0056455E /* DownloadProgressView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DownloadProgressView.swift; sourceTree = "<group>"; };
 		23C96EE32685DBC40056455E /* RotateAnimation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RotateAnimation.swift; sourceTree = "<group>"; };
 		23D2B39F26959C910077BBED /* StarRatingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StarRatingView.swift; sourceTree = "<group>"; };
+		23D4606826C7C1DC00D56978 /* MacModalWindow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MacModalWindow.swift; sourceTree = "<group>"; };
 		23DBB51C26ADBF1400AAF824 /* DownloadViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DownloadViewModel.swift; sourceTree = "<group>"; };
 		23E4976626947E1300175DEE /* TopShelf.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = TopShelf.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		23E4976926947E1300175DEE /* ContentProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentProvider.swift; sourceTree = "<group>"; };
@@ -659,6 +661,7 @@
 				4DD6E4D11DFB197E00818A2C /* BufferingBar.swift */,
 				4DD6E4CF1DFB17B400818A2C /* ProgressBar.swift */,
 				23A2BD8026BC5AD2004B864E /* OperatingSystem.swift */,
+				23D4606826C7C1DC00D56978 /* MacModalWindow.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -1411,6 +1414,7 @@
 				23A10F4126C699D80062D9CE /* DownloadViewModel.swift in Sources */,
 				2383A13926BC3D4600A0346C /* PersonDetailsView.swift in Sources */,
 				237ECA2926B8485F00EE8B46 /* Media + Subtitles.swift in Sources */,
+				23D4606926C7C1DD00D56978 /* MacModalWindow.swift in Sources */,
 				238F78D026BADCFF00C4A4E9 /* YoutubeApi.swift in Sources */,
 				2383A13826BC3D3F00A0346C /* PersonView.swift in Sources */,
 				23A2BD7926BC5930004B864E /* EpisodeView.swift in Sources */,

@@ -35,10 +35,20 @@ struct TrailerButton: View {
             }
         })
         .frame(width: theme.buttonWidth, height: theme.buttonHeight)
-        #if os(tvOS)
+        #if os(tvOS) || os(iOS)
         .fullScreenCover(isPresented: $showPlayer) {
             trailerVideo
         }
+        #elseif os(macOS)
+        .fullScreenModal(isActive: $showPlayer, title: viewModel.movie.title, modalView: {
+            trailerVideo
+        })
+        .onChange(of: showPlayer, perform: { showPlayer in
+            if showPlayer {
+            } else {
+                onPlayerClose()
+            }
+        })
         #endif
     }
     
@@ -52,11 +62,17 @@ struct TrailerButton: View {
                 self.playerObservation = NotificationCenter.default.addObserver(forName:.AVPlayerItemDidPlayToEndTime, object:nil, queue: .main, using: {_ in
                     self.showPlayer = false
                 })
-            }.onDisappear {
-                viewModel.trailerVidePlayer?.pause()
-                viewModel.trailerVidePlayer?.seek(to: .zero)
-                self.playerObservation = nil
-            }.ignoresSafeArea()
+            }
+            .onDisappear {
+                onPlayerClose()
+            }
+            .ignoresSafeArea()
+    }
+    
+    func onPlayerClose() {
+        viewModel.trailerVidePlayer?.pause()
+        viewModel.trailerVidePlayer?.seek(to: .zero)
+        self.playerObservation = nil
     }
 }
 
