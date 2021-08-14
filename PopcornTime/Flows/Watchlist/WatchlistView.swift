@@ -10,6 +10,12 @@ import SwiftUI
 import PopcornKit
 
 struct WatchlistView: View {
+    struct Theme {
+        let itemWidth: CGFloat = value(tvOS: 240, macOS: 160)
+        let itemSpacing: CGFloat = value(tvOS: 40, macOS: 20)
+    }
+    let theme = Theme()
+    
     @StateObject var viewModel = WatchlistViewModel()
     
     var body: some View {
@@ -30,6 +36,7 @@ struct WatchlistView: View {
                 viewModel.load()
             }
         }
+        .navigationBarHidden(true)
     }
     
     @ViewBuilder
@@ -40,13 +47,13 @@ struct WatchlistView: View {
                 .foregroundColor(.init(white: 1.0, opacity: 0.667)) // light text color
                 .padding(.top, 14)
             ScrollView(.horizontal) {
-                HStack(spacing: 40) {
+                HStack(spacing: theme.itemSpacing) {
                     ForEach(viewModel.movies, id: \.self) { movie in
                         NavigationLink(
                             destination: MovieDetailsView(viewModel: MovieDetailsViewModel(movie: movie)),
                             label: {
                                 MovieView(movie: movie)
-                                    .frame(width: 240)
+                                    .frame(width: theme.itemWidth)
                             })
                             .buttonStyle(PlainNavigationLinkButtonStyle())
 //                            .padding([.leading, .trailing], 10)
@@ -65,13 +72,13 @@ struct WatchlistView: View {
                 .foregroundColor(.init(white: 1.0, opacity: 0.667)) // light text color
                 .padding(.top, 14)
             ScrollView(.horizontal) {
-                HStack(spacing: 40) {
+                HStack(spacing: theme.itemSpacing) {
                     ForEach(viewModel.shows, id: \.self) { show in
                         NavigationLink(
                             destination: ShowDetailsView(viewModel: ShowDetailsViewModel(show: show)),
                             label: {
                                 ShowView(show: show)
-                                    .frame(width: 240)
+                                    .frame(width: theme.itemWidth)
                             })
                             .buttonStyle(PlainNavigationLinkButtonStyle())
 //                            .padding([.leading, .trailing], 10)

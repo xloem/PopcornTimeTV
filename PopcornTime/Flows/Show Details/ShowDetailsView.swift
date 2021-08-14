@@ -160,6 +160,7 @@ struct ShowDetailsView: View {
             .padding(0)
             .ignoresSafeArea()
             .frame(width: size.width, height: size.height)
+            .clipped()
     }
     
     

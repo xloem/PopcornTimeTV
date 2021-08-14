@@ -11,7 +11,7 @@ import PopcornKit
 
 struct ShowsView: View {
     struct Theme {
-        let itemWidth: CGFloat = value(tvOS: 240, macOS: 120)
+        let itemWidth: CGFloat = value(tvOS: 240, macOS: 160)
         let itemSpacing: CGFloat = value(tvOS: 30, macOS: 20)
         let columnSpacing: CGFloat = value(tvOS: 60, macOS: 30)
     }

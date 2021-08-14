@@ -10,6 +10,13 @@ import SwiftUI
 import PopcornKit
 
 struct SettingsView: View {
+    struct Theme {
+        let fontSize: CGFloat = value(tvOS: 38, macOS: 20)
+        let hStackSpacing: CGFloat = value(tvOS: 300, macOS: 50)
+        let iconLeading: CGFloat = value(tvOS: 100, macOS: 50)
+    }
+    let theme = Theme()
+    
     let subtitleSettings = SubtitleSettings.shared
     @StateObject var viewModel = SettingsViewModel()
     
@@ -29,9 +36,11 @@ struct SettingsView: View {
     
     
     var body: some View {
-        HStack (spacing: 300) {
+        HStack (spacing: theme.hStackSpacing) {
+            #if os(tvOS) || os(iOS)
             Image("Icon")
-                .padding(.leading, 100)
+                .padding(.leading, theme.iconLeading)
+            #endif
             List() {
                 Section(header: sectionHeader("Player")) {
                     themeSongVolumeButton
@@ -63,7 +72,9 @@ struct SettingsView: View {
                 }
             }
             .listStyle(GroupedListStyle())
+            .padding(.trailing, theme.iconLeading)
         }
+        .navigationBarHidden(true)
     }
     
     @ViewBuilder
@@ -365,7 +376,7 @@ struct SettingsView: View {
                 Text(value)
                     .multilineTextAlignment(.trailing)
             }
-            .font(.system(size: 38, weight: .medium))
+            .font(.system(size: theme.fontSize, weight: .medium))
         })
     }
     
