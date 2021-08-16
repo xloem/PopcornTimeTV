@@ -27,6 +27,7 @@ struct MovieDetailsView: View {
         let watchedSection: (height: CGFloat, cellWidth: CGFloat, spacing: CGFloat) = (height: value(tvOS: 450, macOS: 240),
                                                                                         cellWidth: value(tvOS: 220, macOS: 150),
                                                                                         spacing: value(tvOS: 90, macOS: 30))
+        let backgroundOpacity = value(tvOS: 0.3, macOS: 0.5)
     }
     let theme = Theme()
     
@@ -48,7 +49,7 @@ struct MovieDetailsView: View {
             ZStack {
                 backgroundImage(size: geometry.size)
 //                backgroundImage(size: UIScreen.main.bounds.size)
-                Color(white: 0, opacity: 0.3)
+                Color(white: 0, opacity: theme.backgroundOpacity)
                     .ignoresSafeArea()
                 ScrollViewReader { scroll in
                     ScrollView {

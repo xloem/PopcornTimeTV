@@ -23,6 +23,7 @@ struct ShowDetailsView: View {
                cellWidth: value(tvOS: 220, macOS: 150),
                cellHeight: value(tvOS: 460, macOS: 180),
                spacing: value(tvOS: 90, macOS: 30))
+        let backgroundOpacity = value(tvOS: 0.3, macOS: 0.5)
     }
     let theme = Theme()
     
@@ -47,7 +48,7 @@ struct ShowDetailsView: View {
         GeometryReader { geometry in
         ZStack {
             backgroundImage(size: geometry.size)
-            Color(white: 0, opacity: 0.3)
+            Color(white: 0, opacity: theme.backgroundOpacity)
                 .ignoresSafeArea()
             ScrollViewReader { scroll in
                 ScrollView {
