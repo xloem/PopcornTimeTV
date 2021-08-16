@@ -35,21 +35,9 @@ struct TrailerButton: View {
             }
         })
         .frame(width: theme.buttonWidth, height: theme.buttonHeight)
-        #if os(tvOS) || os(iOS)
-        .fullScreenCover(isPresented: $showPlayer) {
+        .fullScreenContent(isPresented: $showPlayer, title: viewModel.movie.title) {
             trailerVideo
         }
-        #elseif os(macOS)
-        .fullScreenModal(isActive: $showPlayer, title: viewModel.movie.title, modalView: {
-            trailerVideo
-        })
-        .onChange(of: showPlayer, perform: { showPlayer in
-            if showPlayer {
-            } else {
-                onPlayerClose()
-            }
-        })
-        #endif
     }
     
     var trailerVideo: some View {

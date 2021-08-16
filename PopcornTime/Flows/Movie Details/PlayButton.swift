@@ -34,9 +34,6 @@ struct PlayButton: View {
             self.buttonModel.torrent = torrent
             self.showPlayer = true
         }, label: {
-//            navigationLink
-//                .hidden()
-            
             VStack {
                 VisualEffectBlur() {
                     Image("Play")
@@ -45,17 +42,8 @@ struct PlayButton: View {
             }
         }, onFocus: onFocus)
         .frame(width: theme.buttonWidth, height: theme.buttonHeight)
-        .fullScreenCover(isPresented: $showPlayer) {
+        .fullScreenContent(isPresented: $showPlayer, title: viewModel.downloadModel.media.title) {
             torrentView()
-        }
-    }
-    
-    @ViewBuilder
-    var navigationLink: some View {
-        if let torrent = torrent {
-            NavigationLink(isActive: $showPlayer,
-                           destination: { TorrentPlayerView(torrent: torrent, media: movie) },
-                           label: { EmptyView() })
         }
     }
     

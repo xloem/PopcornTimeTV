@@ -12,6 +12,8 @@ import MediaPlayer
 import TVVLCKit
 #elseif os(iOS)
 import MobileVLCKit
+#elseif os(macOS)
+import VLCKit
 #endif
 import PopcornKit
 import Kingfisher
@@ -85,7 +87,9 @@ class NowPlayingController {
     
     func removeRemoteCommandCenterHandlers() {
         nowPlayingInfo = nil
+        #if os(iOS) || os(tvOS)
         UIApplication.shared.endReceivingRemoteControlEvents()
+        #endif
     }
     
     func configureNowPlayingInfo() {
@@ -102,9 +106,7 @@ class NowPlayingController {
                     return
                 }
 
-                self.nowPlayingInfo?[MPMediaItemPropertyArtwork] = MPMediaItemArtwork(boundsSize: image.size) { (_) -> UIImage in
-                    return image
-                }
+                self.nowPlayingInfo?[MPMediaItemPropertyArtwork] = MPMediaItemArtwork(boundsSize: image.size) { _ in image }
             }
         }
     }
@@ -115,6 +117,7 @@ class NowPlayingController {
         nowPlayingInfo?[MPNowPlayingInfoPropertyPlaybackRate] = mediaplayer.rate
     }
     
+    #if os(iOS) || os(tvOS)
     func remoteControlReceived(with event: UIEvent?) {
         guard let event = event else { return }
         
@@ -131,15 +134,16 @@ class NowPlayingController {
                 break
         }
     }
+    #endif
     
-    func screenshotAtTime(_ time: NSNumber) -> UIImage? {
+    func screenshotAtTime(_ time: NSNumber) -> CGImage? {
         guard let image = try? imageGenerator.copyCGImage(at: CMTimeMakeWithSeconds(time.doubleValue/1000.0, preferredTimescale: 1000), actualTime: nil) else {
             return nil
         }
-        return UIImage(cgImage: image)
+        return image
     }
     
-    func screenshot(at progress: Float) -> UIImage? {
+    func screenshot(at progress: Float) -> CGImage? {
         let currentTime = NSNumber(value: progress * streamDuration)
         return screenshotAtTime(currentTime)
     }

@@ -1,7 +1,9 @@
 
 
 import Foundation
+#if canImport(UIKit)
 import UIKit
+#endif
 
 extension UIColor {
     func hexString() -> String {
@@ -72,7 +74,11 @@ extension UIColor {
     }
     
     @nonobjc static var app: UIColor {
-        return UIDevice.current.userInterfaceIdiom == .tv ? .white : UIColor(red: 0.37, green: 0.41, blue: 0.91, alpha: 1.0)
+        #if os(tvOS)
+        return .white
+        #else
+        return UIColor(red: 0.37, green: 0.41, blue: 0.91, alpha: 1.0)
+        #endif
     }
     
     @nonobjc static let dark = UIColor(red: 28.0/255.0, green: 28.0/255.0, blue: 28.0/255.0, alpha: 1.0)

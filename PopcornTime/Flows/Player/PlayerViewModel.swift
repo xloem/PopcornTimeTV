@@ -12,6 +12,9 @@ import PopcornKit
 import TVVLCKit
 #elseif os(iOS)
 import MobileVLCKit
+#elseif os(macOS)
+import VLCKit
+typealias SiriRemoteGestureRecognizer = Any
 #endif
 import PopcornTorrent
 import AVKit
@@ -19,8 +22,16 @@ import MediaPlayer
 import SwiftUI
 
 
+enum TransportBarHint: String {
+    case none
+    case fastForward = "ScanForward"
+    case rewind = "ScanBackward"
+    case jumpForward30 = "SkipForward30"
+    case jumpBackward30 = "SkipBack30"
+}
 
-class PlayerViewModel: NSObject, ObservableObject, UIGestureRecognizerDelegate {
+
+class PlayerViewModel: NSObject, ObservableObject {
     var media: Media
     private (set) var url: URL
     private (set) var mediaplayer = VLCMediaPlayer()
@@ -78,7 +89,7 @@ class PlayerViewModel: NSObject, ObservableObject, UIGestureRecognizerDelegate {
         var remainingTime: String = ""
         var elapsedTime: String = ""
         var scrubbingTime: String = ""
-        var screenshot: UIImage?
+        var screenshot: CGImage?
         var hint: TransportBarHint = .none
     }
     @Published var progress = Progress()
@@ -159,16 +170,18 @@ class PlayerViewModel: NSObject, ObservableObject, UIGestureRecognizerDelegate {
             self.currentSubtitle = subtitles[preferredLanguage]?.first
         }
         let vlcAppearance = mediaplayer as VLCFontAppearance
-        vlcAppearance.setTextRendererFontSize!(NSNumber(value: settings.size.rawValue))
-        vlcAppearance.setTextRendererFontColor!(NSNumber(value: settings.color.hexInt()))
-        vlcAppearance.setTextRendererFont!(settings.font.fontName as NSString)
-        vlcAppearance.setTextRendererFontForceBold!(NSNumber(booleanLiteral: settings.style == .bold || settings.style == .boldItalic))
+        vlcAppearance.setTextRendererFontSize?(NSNumber(value: settings.size.rawValue))
+        vlcAppearance.setTextRendererFontColor?(NSNumber(value: settings.color.hexInt()))
+        vlcAppearance.setTextRendererFont?(settings.font.fontName as NSString)
+        vlcAppearance.setTextRendererFontForceBold?(NSNumber(booleanLiteral: settings.style == .bold || settings.style == .boldItalic))
         
         mediaplayer.media.addOptions([vlcSettingTextEncoding: settings.encoding])
         
+        #if os(iOS) || os(tvOS)
         try? AVAudioSession.sharedInstance().setCategory(.playback, mode: .moviePlayback, options: [.allowBluetoothA2DP,.allowAirPlay])
         
         didSelectEqualizerProfile(.fullDynamicRange)
+        #endif
     }
     
     func playOnAppear() {
@@ -274,7 +287,7 @@ class PlayerViewModel: NSObject, ObservableObject, UIGestureRecognizerDelegate {
             return
         }
         
-        print("", gesture.touchLocation)
+//        print("", gesture.touchLocation)
         
 //        progress.hint = .none
 //        resetIdleTimer()
@@ -377,7 +390,11 @@ class PlayerViewModel: NSObject, ObservableObject, UIGestureRecognizerDelegate {
             }
         }
         
-        let delay: TimeInterval = UIDevice.current.userInterfaceIdiom == .tv ? 3 : 5
+        #if os(tvOS)
+        let delay: TimeInterval = 3
+        #else
+        let delay: TimeInterval = 5
+        #endif
         DispatchQueue.main.asyncAfter(deadline: .now() + delay, execute: idleWorkItem!)
     }
     

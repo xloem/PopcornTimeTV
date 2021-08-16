@@ -48,13 +48,17 @@ struct ExtendedSubtitlesView: View {
         }
         .font(.system(size: 38, weight: .regular))
         .foregroundColor(.init(white: 1, opacity: 0.5))
+        #if os(iOS) || os(tvOS)
         .actionSheet(isPresented: $showLanguageAlert, content: {
             ActionSheet(title: Text("Select Language".localized),
                         message: nil,
                         buttons: languageButtons + [.cancel()])
-        }).padding()
+        })
+        #endif
+        .padding()
     }
     
+    #if os(iOS) || os(tvOS)
     var languageButtons: [ActionSheet.Button] {
         Array(subtitles.keys).sorted().map({ language in
             ActionSheet.Button.default(Text(language)) {
@@ -62,6 +66,7 @@ struct ExtendedSubtitlesView: View {
             }
         })
     }
+    #endif
     
     var subtitlesSection: some View {
         VStack(alignment: .leading, spacing: 10) {

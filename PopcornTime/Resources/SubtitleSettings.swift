@@ -1,7 +1,14 @@
 
 
 import Foundation
+#if canImport(UIKit)
 import UIKit
+#else
+import AppKit
+typealias UIColor = NSColor
+typealias UIFont = NSFont
+typealias UIFontDescriptor = NSFontDescriptor
+#endif
 
 class SubtitleSettings: NSObject, NSCoding {
     
@@ -77,7 +84,7 @@ class SubtitleSettings: NSObject, NSCoding {
     var encoding: String = "UTF-8"
     var language: String? = nil
     var font: UIFont = UIFont.systemFont(ofSize: CGFloat(Size.medium.rawValue))
-    var style: UIFont.Style = .normal
+    var style: FontStyle = .normal
     var subtitlesSelectedForVideo: [Any] = Array()
     
     static let shared = SubtitleSettings()
@@ -105,12 +112,17 @@ class SubtitleSettings: NSObject, NSCoding {
             let encoding = aDecoder.decodeObject(of: NSString.self, forKey: "encoding") as String?,
             let descriptor = aDecoder.decodeObject(of: UIFontDescriptor.self, forKey: "font"),
             let rawValue = aDecoder.decodeObject(of: NSString.self, forKey: "style") as String?,
-            let style = UIFont.Style(rawValue: rawValue) else { return nil }
+            let style = FontStyle(rawValue: rawValue) else { return nil }
         self.size = size
         self.color = color
         self.encoding = encoding
         self.language = aDecoder.decodeObject(of: NSString.self, forKey: "language") as String?
-        self.font = UIFont(descriptor: descriptor, size: CGFloat(size.rawValue))
+        let font = UIFont(descriptor: descriptor, size: CGFloat(size.rawValue))
+        #if canImport(UIKit)
+        self.font = font
+        #else
+        self.font = font!
+        #endif
         self.style = style
     }
     

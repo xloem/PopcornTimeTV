@@ -9,7 +9,7 @@
 import SwiftUI
 
 struct MacModalWindow<Content: View, Modal: View>: View {
-    @Binding var isActive: Bool
+    @Binding var isPresented: Bool
     var title: String
     var content: Content
     var modalView: () -> Modal
@@ -19,7 +19,7 @@ struct MacModalWindow<Content: View, Modal: View>: View {
     
     var body: some View {
         content
-            .onChange(of: isActive) { newValue in
+            .onChange(of: isPresented) { newValue in
                 if newValue {
                     showWindow()
                 } else {
@@ -30,7 +30,7 @@ struct MacModalWindow<Content: View, Modal: View>: View {
     
     func showWindow() {
         window = NSWindow(contentRect: NSRect(x: 0, y: 0, width: 1280, height: 720), styleMask: [.titled, .closable, .miniaturizable, .resizable, .fullSizeContentView],  backing: .buffered, defer: false)
-        viewModel.isActive = $isActive
+        viewModel.isPresented = $isPresented
         guard let window = window else {
             return
         }
@@ -49,6 +49,7 @@ struct MacModalWindow<Content: View, Modal: View>: View {
     }
     
     func closeWindow() {
+        window?.contentView = nil
         window?.close()
         window = nil
     }
@@ -56,16 +57,16 @@ struct MacModalWindow<Content: View, Modal: View>: View {
 
 extension View {
     @ViewBuilder
-    func fullScreenModal<Content: View>(isActive: Binding<Bool>, title: String, modalView: @escaping () -> Content) -> some View {
-        MacModalWindow(isActive: isActive, title: title, content: self, modalView:modalView)
+    func fullScreenModal<Content: View>(isPresented: Binding<Bool>, title: String, modalView: @escaping () -> Content) -> some View {
+        MacModalWindow(isPresented: isPresented, title: title, content: self, modalView:modalView)
     }
 }
 
 class MacModalWindowModel: NSObject, ObservableObject, NSWindowDelegate {
     
-    var isActive: Binding<Bool> = .constant(false)
+    var isPresented: Binding<Bool> = .constant(false)
     
     func windowWillClose(_ notification: Notification) {
-        isActive.wrappedValue = false
+        isPresented.wrappedValue = false
     }
 }

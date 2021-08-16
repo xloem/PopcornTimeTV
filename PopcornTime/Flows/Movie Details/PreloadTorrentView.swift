@@ -72,7 +72,7 @@ struct PreloadTorrentView: View {
             }
         } label: {
             Text("CANCEL".localized)
-                .foregroundColor(.indigo)
+                .foregroundColor(.blue)
         }
 
     }

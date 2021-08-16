@@ -14,6 +14,7 @@ struct EpisodesView: View {
     struct Theme {
         let episodeWidth: CGFloat = value(tvOS: 310, macOS: 217)
         let episodeHeight: CGFloat = value(tvOS: 215, macOS: 150)
+        let episodeSpacing: CGFloat = value(tvOS: 0, macOS: 20)
         let currentEpisode: (padding: CGFloat, height: CGFloat) =
                         (padding: value(tvOS: 250, macOS: 100),
                          height: value(tvOS: 350, macOS: 250))
@@ -40,7 +41,7 @@ struct EpisodesView: View {
             titleView
             episodesCountView
             ScrollView(.horizontal) {
-                LazyHStack {
+                LazyHStack(spacing: theme.episodeSpacing) {
                     ForEach(episodes, id: \.self) { episode in
                         episodeView(episode: episode)
                     }
@@ -53,17 +54,20 @@ struct EpisodesView: View {
                 .focusSection()
             #endif
         }
-        #if os(tvOS) || os(iOS)
-        .fullScreenCover(isPresented: $showPlayer) {
-            if let torrent = torrent, let episode = currentEpisode {
-                TorrentPlayerView(torrent: torrent, media: episode)
-            }
-        }
-        #endif
+        .fullScreenContent(isPresented: $showPlayer, title: show.title, content: {
+            torrentView()
+        })
         .onChange(of: episodes) { newValue in
             if currentEpisode == nil {
                 currentEpisode = newValue.first
             }
+        }
+    }
+    
+    @ViewBuilder
+    func torrentView() -> some View {
+        if let torrent = torrent, let episode = currentEpisode {
+            TorrentPlayerView(torrent: torrent, media: episode)
         }
     }
     

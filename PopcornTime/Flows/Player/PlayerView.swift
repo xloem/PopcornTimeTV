@@ -97,6 +97,7 @@ struct PlayerView: View {
         .focusScope(namespace)
         .ignoresSafeArea()
         #endif
+        #if os(tvOS) || os(iOS)
         .actionSheet(isPresented: $viewModel.resumePlaybackAlert, content: {
             ActionSheet(title: Text(""),
                         message: nil,
@@ -109,14 +110,7 @@ struct PlayerView: View {
                             }
                         ])
         })
-    }
-    
-    @ViewBuilder
-    var dimmerView: some View {
-        if viewModel.showControls {
-            Color(white: 0, opacity: 0.3)
-                .ignoresSafeArea()
-        }
+        #endif
     }
     
     @ViewBuilder
@@ -140,7 +134,7 @@ struct PlayerView: View {
                 }
             }
                 .transition(.move(edge: .bottom))
-            #elseif os(iOS)
+            #elseif os(iOS) || os(macOS)
             PlayerControlsView()
                 .transition(.opacity)
             #endif

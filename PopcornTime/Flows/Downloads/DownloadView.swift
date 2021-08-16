@@ -72,10 +72,10 @@ struct DownloadView: View {
         .actionSheet(isPresented: $showActionSheet) {
             actionSheet
         }
-        .fullScreenCover(isPresented: $showPlayer) {
+        #endif
+        .fullScreenContent(isPresented: $showPlayer, title: viewModel.media.title) {
             TorrentPlayerView(torrent: viewModel.torrent, media: viewModel.media)
         }
-        #endif
     }
     
     var placeholderImage: String {

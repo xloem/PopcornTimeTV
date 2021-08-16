@@ -186,13 +186,11 @@ struct MovieDetailsView: View {
     func actionButtons(scroll: ScrollViewProxy?) -> some View {
         HStack(spacing: 24) {
             TrailerButton(viewModel: viewModel.trailerModel)
-            #if os(tvOS) || os(iOS)
             PlayButton(viewModel: viewModel, onFocus: {
                 withAnimation {
                     scroll?.scrollTo(section1, anchor: .top)
                 }
             })
-            #endif
             watchlistButton
             watchedButton
             DownloadButton(viewModel: viewModel.downloadModel, onFocus: {

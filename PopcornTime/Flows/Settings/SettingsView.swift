@@ -266,7 +266,7 @@ struct SettingsView: View {
     }
     
     var subtitleFontStyleAlert: ActionSheet {
-        let values = UIFont.Style.arrayValue
+        let values = FontStyle.arrayValue
         let actions = values.map ({ style -> Alert.Button in
             return Alert.Button.default(Text(style.localizedString)) {
                 subtitleSettings.style = style

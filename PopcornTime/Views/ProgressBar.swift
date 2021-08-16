@@ -3,14 +3,6 @@
 import Foundation
 import UIKit
 
-enum TransportBarHint: String {
-    case none
-    case fastForward = "ScanForward"
-    case rewind = "ScanBackward"
-    case jumpForward30 = "SkipForward30"
-    case jumpBackward30 = "SkipBack30"
-}
-
 @IBDesignable class ProgressBar: UIView {
     
     @IBInspectable var progress: Float = 0.0 {

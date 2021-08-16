@@ -9,8 +9,10 @@
 import Foundation
 import PopcornKit
 import PopcornTorrent
-import UIKit
 import MediaPlayer.MPMediaItem
+#if canImport(UIKit)
+import UIKit
+#endif
 
 class PreloadTorrentViewModel: ObservableObject {
     var torrent: Torrent
@@ -50,12 +52,15 @@ class PreloadTorrentViewModel: ObservableObject {
             watchedProgress = WatchedlistManager<Episode>.episode.currentProgress(media.id)
         }
         
-        
+        #if os(iOS) || os(tvOS)
         UIApplication.shared.isIdleTimerDisabled = true
         let finishedLoading: () -> Void = {
             UIApplication.shared.isIdleTimerDisabled = false
 //            let flag = UIDevice.current.userInterfaceIdiom != .tv
         }
+        #else
+        let finishedLoading: () -> Void = { }
+        #endif
         
         self.media.getSubtitles { [unowned self] subtitles in
             media.subtitles = subtitles

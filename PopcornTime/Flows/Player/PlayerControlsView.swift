@@ -24,6 +24,7 @@ struct PlayerControlsView: View {
     
     @ViewBuilder
     var topView: some View {
+        #if os(iOS)
         HStack(alignment: .center, spacing: 0) {
             closeButton
                 .background(.regularMaterial)
@@ -36,6 +37,9 @@ struct PlayerControlsView: View {
         }
         .frame(height: 46)
         .padding(.top, 10)
+        #else
+        EmptyView()
+        #endif
     }
     
     @ViewBuilder
@@ -47,22 +51,30 @@ struct PlayerControlsView: View {
             forwardButton
                 .padding(.leading, 10)
             Text(viewModel.progress.isScrubbing ? viewModel.progress.scrubbingTime : viewModel.progress.elapsedTime)
+            #if os(iOS)
                 .monospacedDigit()
+            #endif
                 .foregroundColor(.gray)
                 .frame(minWidth: 40)
             progressView
             Text(viewModel.progress.remainingTime)
+            #if os(iOS)
                 .monospacedDigit()
+            #endif
                 .foregroundColor(.gray)
                 .frame(minWidth: 40)
 //            AirplayView()
 //                .frame(width: 40)
             subtitlesButton
         }
+        #if os(iOS)
         .tint(.white)
+        #endif
         .frame(height: 45)
         .padding([.leading, .trailing], 10)
+        #if os(iOS)
         .background(.regularMaterial)
+        #endif
         .padding(.bottom, 10)
     }
     
@@ -80,7 +92,9 @@ struct PlayerControlsView: View {
                 ProgressView(value: viewModel.progress.bufferProgress)
                     .padding(.top, 1)
                     .padding([.leading, .trailing], 1)
+                #if os(iOS)
                     .tint(.gray)
+                #endif
                 Slider(value: Binding(get: {
                     viewModel.progress.isScrubbing ? viewModel.progress.scrubbingProgress : viewModel.progress.progress
                 }, set: { value in
@@ -108,6 +122,7 @@ struct PlayerControlsView: View {
     
     @ViewBuilder
     var ratioButton: some View {
+        #if os(iOS)
         Button {
             viewModel.switchVideoDimensions()
         } label: {
@@ -121,6 +136,9 @@ struct PlayerControlsView: View {
                 }
         }
         .frame(width: 46)
+        #else
+        EmptyView()
+        #endif
     }
     
     @ViewBuilder
@@ -165,7 +183,9 @@ struct PlayerControlsView: View {
     @ViewBuilder
     var airplayButton: some View {
         Image("AirPlay")
+        #if os(iOS)
         .tint(.gray)
+        #endif
         .frame(width: 32)
     }
     
@@ -176,7 +196,9 @@ struct PlayerControlsView: View {
         } label: {
             Image("Subtitles")
         }
+        #if os(iOS)
         .tint(.gray)
+        #endif
         .frame(width: 32)
     }
 }

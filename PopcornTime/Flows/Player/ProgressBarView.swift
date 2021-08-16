@@ -23,7 +23,7 @@ struct ProgressBarView: UIViewRepresentable {
         uiView.isScrubbing = progress.isScrubbing
         uiView.progress = progress.progress
         uiView.remainingTimeLabel.text = progress.remainingTime
-        uiView.screenshot = progress.screenshot
+        uiView.screenshot = progress.screenshot.flatMap{ UIImage(cgImage: $0)}
         uiView.scrubbingProgress = progress.scrubbingProgress
         uiView.scrubbingTimeLabel.text = progress.scrubbingTime
         uiView.hint = progress.hint

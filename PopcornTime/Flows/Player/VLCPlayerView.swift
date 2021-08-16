@@ -13,10 +13,30 @@ typealias VLCPlayerView = VLCPlayerView_tvOS
 #elseif os(iOS)
 import MobileVLCKit
 typealias VLCPlayerView = VLCPlayerView_iOS
+#elseif os(macOS)
+import VLCKit
+typealias VLCPlayerView = VLCPlayerView_MAC
 #endif
 
 
+#if os(macOS)
+struct VLCPlayerView_MAC: NSViewRepresentable {
+    var mediaplayer = VLCMediaPlayer()
+    
+    func makeNSView(context: Context) -> NSView {
+        let view = NSView()
+        view.autoresizingMask = [.width, .height]
+        mediaplayer.drawable = view
+        return view
+    }
+    
+    func updateNSView(_ uiView: NSView, context: Context) {
+        mediaplayer.drawable = uiView
+    }
+}
+#endif
 
+#if os(iOS)
 struct VLCPlayerView_iOS: UIViewRepresentable {
     var mediaplayer = VLCMediaPlayer()
     
@@ -30,7 +50,10 @@ struct VLCPlayerView_iOS: UIViewRepresentable {
         mediaplayer.drawable = uiView
     }
 }
+#endif
 
+
+#if os(tvOS)
 struct VLCPlayerView_tvOS: UIViewRepresentable {
     var mediaplayer = VLCMediaPlayer()
     
@@ -133,6 +156,7 @@ struct VLCPlayerView_tvOS: UIViewRepresentable {
         }
     }
 }
+#endif
 
 #if os(tvOS)
 extension VLCPlayerView_tvOS {

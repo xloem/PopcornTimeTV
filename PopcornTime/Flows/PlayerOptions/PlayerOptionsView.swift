@@ -12,6 +12,8 @@ import PopcornKit
 import TVVLCKit
 #elseif os(iOS)
 import MobileVLCKit
+#elseif os(macOS)
+import VLCKit
 #endif
 
 struct PlayerOptionsView: View {

@@ -78,11 +78,9 @@ struct DownloadButton: View {
             )
         }
 #endif
-        #if os(tvOS) || os(iOS)
-        .fullScreenCover(isPresented: $showPlayer) {
+        .fullScreenContent(isPresented: $showPlayer, title: viewModel.media.title) {
             TorrentPlayerView(torrent: viewModel.torrent ?? Torrent(), media: viewModel.media)
         }
-        #endif
     }
     
     var downloadingButton: some View {
@@ -111,15 +109,20 @@ struct DownloadButton: View {
                         ]
             )
         }
-        .actionSheet(isPresented: $viewModel.showDownloadFailedAlert) {
-            ActionSheet(title: Text( "Download Failed".localized),
-                        message: Text(viewModel.downloadError?.localizedDescription ?? ""),
-                        buttons: [
-                            .default(Text("OK".localized))
-                        ]
-            )
-        }
+//        .actionSheet(isPresented: $viewModel.showDownloadFailedAlert) {
+//            ActionSheet(title: Text( "Download Failed".localized),
+//                        message: Text(viewModel.downloadError?.localizedDescription ?? ""),
+//                        buttons: [
+//                            .default(Text("OK".localized))
+//                        ]
+//            )
+//        }
 #endif
+        .alert(isPresented: $viewModel.showDownloadFailedAlert, content: {
+            Alert(title: Text( "Download Failed".localized),
+                  message: Text(viewModel.downloadError?.localizedDescription ?? ""),
+                  dismissButton: .cancel(Text("OK".localized)))
+        })
     }
     
     var pausedButton: some View {
