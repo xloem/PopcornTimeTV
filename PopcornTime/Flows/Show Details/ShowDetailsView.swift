@@ -15,7 +15,8 @@ struct ShowDetailsView: View {
         let buttonWidth: CGFloat = value(tvOS: 142, macOS: 100)
         let buttonHeight: CGFloat = value(tvOS: 115, macOS: 81)
         
-        let starHeight: CGFloat = value(tvOS: 33, macOS: 18)
+        let starSize: CGSize = value(tvOS: CGSize(width: 220, height: 40), macOS: CGSize(width: 110, height: 20))
+        let starOffset: CGFloat = value(tvOS: -8, macOS: -4)
         let ratingHeight: CGFloat = value(tvOS: 32, macOS: 24)
         let watchedSection: (height: CGFloat, cellWidth: CGFloat, cellHeight: CGFloat, spacing: CGFloat)
             = (height: value(tvOS: 450, macOS: 240),
@@ -186,8 +187,8 @@ struct ShowDetailsView: View {
                     items[item]
                 }
                 StarRatingView(rating: show.rating / 20)
-                    .frame(height: 33)
-                    .padding(.top, -8)
+                    .frame(width: theme.starSize.width, height: theme.starSize.height)
+                    .padding(.top, theme.starOffset)
             }
             Text(watchOn)
                 .foregroundColor(Color.init(white: 1, opacity: 0.67))

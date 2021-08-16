@@ -19,13 +19,17 @@ struct StarRatingView: View {
                 switch index {
                 case ..<intRating:
                     Image("Star Full")
+                        .resizable()
                 case intRating:
                     Image("Star Empty")
+                        .resizable()
                         .overlay(clippedImage)
                 case intRating...:
                     Image("Star Empty")
+                        .resizable()
                 default:
                     Image("Star Empty")
+                        .resizable()
                 }
             }
         }
@@ -35,6 +39,7 @@ struct StarRatingView: View {
     var clippedImage: some View {
         let percentage = CGFloat(rating - floor(rating))
         Image("Star Full")
+            .resizable()
             .clipShape(MaskShape(percentage: percentage))
     }
     
@@ -54,6 +59,11 @@ struct StarRatingView: View {
 struct StarRatingView_Previews: PreviewProvider {
     static var previews: some View {
         StarRatingView(rating: 2.4)
+            .frame(width: 220, height: 40)
+            .previewLayout(.sizeThatFits)
+        
+        StarRatingView(rating: 2.4)
+            .frame(width: 110, height: 20)
             .previewLayout(.sizeThatFits)
     }
 }

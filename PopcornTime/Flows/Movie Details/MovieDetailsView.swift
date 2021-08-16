@@ -21,7 +21,8 @@ struct MovieDetailsView: View {
         let leftSectionTitleContent: CGFloat = value(tvOS: 31, macOS: 18)
         let leftSectionWidth: CGFloat = value(tvOS: 340, macOS: 200)
         let leftSectionLeading: CGFloat = value(tvOS: 100, macOS: 30)
-        let starHeight: CGFloat = value(tvOS: 33, macOS: 18)
+        let starSize: CGSize = value(tvOS: CGSize(width: 220, height: 40), macOS: CGSize(width: 110, height: 20))
+        let starOffset: CGFloat = value(tvOS: -8, macOS: -4)
         let ratingHeight: CGFloat = value(tvOS: 32, macOS: 24)
         let watchedSection: (height: CGFloat, cellWidth: CGFloat, spacing: CGFloat) = (height: value(tvOS: 450, macOS: 240),
                                                                                         cellWidth: value(tvOS: 220, macOS: 150),
@@ -224,8 +225,8 @@ struct MovieDetailsView: View {
             }
             
             StarRatingView(rating: movie.rating / 20)
-                .frame(height: theme.starHeight)
-                .padding(.top, -8)
+                .frame(width: theme.starSize.width, height: theme.starSize.height)
+                .padding(.top, theme.starOffset)
         }
     }
     

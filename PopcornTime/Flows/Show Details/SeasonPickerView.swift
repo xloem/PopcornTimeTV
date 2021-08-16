@@ -13,9 +13,8 @@ struct SeasonPickerView: View {
     @StateObject var viewModel: SeasonPickerViewModel
     @Binding var selectedSeasonNumber: Int
     @Environment(\.presentationMode) var presentationMode
-    @Namespace var namespace
     #if os(tvOS)
-    @Environment(\.resetFocus) var resetFocus
+    @FocusState var focusedField: Int?
     #endif
     
     var body: some View {
@@ -38,26 +37,24 @@ struct SeasonPickerView: View {
                                 })
                                 .buttonStyle(PlainButtonStyle(onFocus: {}))
                                 #if os(tvOS)
-                                .prefersDefaultFocus(season.number == selectedSeasonNumber, in: namespace)
+                                .focused($focusedField, equals: season.number)
                                 #endif
-                                .id(season.number)
                             }
                         }
                         .padding()
                     }.onAppear {
-                        scroll.scrollTo(selectedSeasonNumber, anchor: .leading)
-                        #if os(tvOS)
-                        resetFocus(in: namespace)
-                        #endif
+                        scroll.scrollTo(selectedSeasonNumber, anchor: .center)
                     }
                 }
             }
-            #if os(tvOS)
-            .focusScope(namespace)
-            #endif
         }
         .onAppear {
             viewModel.load()
+            #if os(tvOS)
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                self.focusedField = selectedSeasonNumber
+            }
+            #endif
         }
     }
 }
