@@ -13,8 +13,6 @@ struct PlayerView: View {
     @EnvironmentObject var viewModel: PlayerViewModel
     @Environment(\.presentationMode) var presentationMode
     
-//    @GestureState var isDetectingLongPress = false
-    
     @Namespace private var namespace
     #if os(tvOS)
     @Environment(\.resetFocus) var resetFocus
@@ -22,154 +20,83 @@ struct PlayerView: View {
     
     var body: some View {
         ZStack {
-            VLCPlayerView(mediaplayer: viewModel.mediaplayer, onTap: {
-                withAnimation(.spring()) {
-                    if viewModel.showControls {
-                        viewModel.clickGesture()
-                    }
-                    viewModel.toggleControlsVisible()
-                }
-            }, onPlayPause: {
-//                withAnimation {
-//                    viewModel.playandPause()
-//                }
-            }, onMove:  { direction in
-                #if os(tvOS)
-                switch direction {
-                case .down:
-//                    withAnimation(.spring()) {
+            VLCPlayerView(mediaplayer: viewModel.mediaplayer)
+            #if os(tvOS)
+                .addGestures(onSwipeDown: {
+                    withAnimation {
                         viewModel.showInfo = true
-//                    }
-                case .up:
-                    withAnimation(.spring()) {
+                    }
+                }, onSwipeUp: {
+                    withAnimation {
                         viewModel.showControls = true
                     }
-                case .left:
-                    viewModel.rewind()
-                    viewModel.progress.hint = .rewind
-                    viewModel.resetIdleTimer()
-                case .right:
-                    viewModel.fastForward()
-                    viewModel.progress.hint = .fastForward
-                    viewModel.resetIdleTimer()
-                @unknown default:
-                    break
+                }, onTouchLocationDidChange: { gesture in
+                    viewModel.touchLocationDidChange(gesture)
+                }, onPositionSliderDrag: { offset in
+                    viewModel.handlePositionSliderDrag(offset: offset)
+                })
+                .prefersDefaultFocus(!viewModel.showInfo, in: namespace)
+                .focusable(!viewModel.showInfo)
+                .onLongPressGesture(minimumDuration: 0.01, perform: {
+                    withAnimation {
+                        if viewModel.showControls {
+                            viewModel.clickGesture()
+                        } else {
+                            viewModel.toggleControlsVisible()
+                        }
+                    }
+                })
+                .onPlayPauseCommand {
+                    withAnimation {
+                        viewModel.playandPause()
+                    }
                 }
-                #endif
-            }, onSwipeUp: {
-                withAnimation {
-                    viewModel.showControls = true
+                .onMoveCommand(perform: { direction in
+                    switch direction {
+                    case .down:
+                        withAnimation(.spring()) {
+                            viewModel.showInfo = true
+                        }
+                    case .up:
+                        withAnimation(.spring()) {
+                            viewModel.showControls = true
+                        }
+                    case .left:
+                        viewModel.rewind()
+                        viewModel.progress.hint = .rewind
+                        viewModel.resetIdleTimer()
+                    case .right:
+                        viewModel.fastForward()
+                        viewModel.progress.hint = .fastForward
+                        viewModel.resetIdleTimer()
+                    @unknown default:
+                        break
+                    }
+                })
+                .onExitCommand {
+                    viewModel.stop()
+                    presentationMode.wrappedValue.dismiss()
                 }
-            }, onSwipeDown: {
-                withAnimation {
-                    viewModel.showInfo = true
-                }
-            }, onTouchLocationDidChange: { gesture in
-                viewModel.touchLocationDidChange(gesture)
-            }, onPositionSliderDrag: { offset in
-                viewModel.handlePositionSliderDrag(offset: offset)
-            })
-            #if os(tvOS)
-//            .focusScope(namespace)
-            .prefersDefaultFocus(!viewModel.showInfo, in: namespace)
-            .focusable(!viewModel.showInfo)
-            #endif
-            .onLongPressGesture(minimumDuration: 0.01, perform: {
-                withAnimation(.spring()) {
-                    if viewModel.showControls {
-                        viewModel.clickGesture()
-                    } else {
+            #else
+                .onTapGesture {
+                    withAnimation {
                         viewModel.toggleControlsVisible()
                     }
                 }
-            })
-            #if os(tvOS)
-            .onPlayPauseCommand {
-                withAnimation {
-                    viewModel.playandPause()
-                }
-            }
-            .onMoveCommand(perform: { direction in
-                switch direction {
-                case .down:
-                    withAnimation(.spring()) {
-                        viewModel.showInfo = true
-                    }
-                case .up:
-                    withAnimation(.spring()) {
-                        viewModel.showControls = true
-                    }
-                case .left:
-                    viewModel.rewind()
-                    viewModel.progress.hint = .rewind
-                    viewModel.resetIdleTimer()
-                case .right:
-                    viewModel.fastForward()
-                    viewModel.progress.hint = .fastForward
-                    viewModel.resetIdleTimer()
-                @unknown default:
-                    break
-                }
-            })
-            .onExitCommand {
-                viewModel.stop()
-                presentationMode.wrappedValue.dismiss()
-//                withAnimation {
-//                    viewModel.showInfo = true
-//                }
-            }
             #endif
-//            dimmerView
             controlsView
-                .transition(.move(edge: .bottom))
-            
-            if viewModel.isLoading {
-//                ProgressView()
-            }
-            if viewModel.showInfo {
-                VStack {
-                    PlayerOptionsView(media: viewModel.media,
-                                      audioDelay: viewModel.audioDelayBinding,
-                                      audioProfile: viewModel.audioProfileBinding,
-                                      subtitleDelay: viewModel.subtitleDelayBinding,
-                                      subtitleEncoding: viewModel.subtitleEncodingBinding,
-                                      subtitle: viewModel.subtitleBinding)
-//                    .focusScope(namespace)
-//                    .focusable()
-                    #if os(tvOS)
-                    .prefersDefaultFocus(in: namespace)
-                    .onExitCommand(perform: {
-                        withAnimation(.spring()) {
-                            viewModel.showInfo = false
-                        }
-                    })
-                    .onPlayPauseCommand {
-                        viewModel.playandPause()
-                    }
-                    #endif
-                    Spacer()
-                }
-                .zIndex(1)
-                .transition(.move(edge: .top))
-                #if os(tvOS)
-                .onAppear {
-                    DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
-                        resetFocus(in: namespace)
-                    }
-                }
-                #endif
-            }
+            showInfoView
         }
         .onAppear {
             viewModel.playOnAppear()
-            viewModel.presentationMode = presentationMode // this screen can dismissed from viewmodel
+            viewModel.presentationMode = presentationMode // this screen can dismissed from viewModel
         }.onDisappear {
-            
+            viewModel.stop()
         }
         #if os(tvOS)
         .focusScope(namespace)
-        #endif
         .ignoresSafeArea()
+        #endif
         .actionSheet(isPresented: $viewModel.resumePlaybackAlert, content: {
             ActionSheet(title: Text(""),
                         message: nil,
@@ -195,6 +122,7 @@ struct PlayerView: View {
     @ViewBuilder
     var controlsView: some View {
         if !viewModel.isLoading && viewModel.showControls {
+            #if os(tvOS)
             VStack {
 //                if viewModel.showInfo {
 //                    Image("Now Playing Info")
@@ -207,20 +135,52 @@ struct PlayerView: View {
                         .background(LinearGradient(gradient: Gradient(colors: [.clear, .black]), startPoint: .top, endPoint: .bottom))
                         .frame(height: 190)
                     ProgressBarView(progress: viewModel.progress)
-//                    ProgressView(value: viewModel.progress.progress)
                         .frame(height: 10)
                         .padding([.leading, .trailing], 90)
                 }
             }
+                .transition(.move(edge: .bottom))
+            #elseif os(iOS)
+            PlayerControlsView()
+                .transition(.opacity)
+            #endif
         }
     }
     
-//     var longPress: some Gesture {
-//         LongPressGesture(minimumDuration: 3)
-//             .updating($isDetectingLongPress) { currentState, gestureState, transaction in
-//                 gestureState = currentState
-//             }
-//     }
+    @ViewBuilder
+    var showInfoView: some View {
+        if viewModel.showInfo {
+            VStack {
+                PlayerOptionsView(media: viewModel.media,
+                                  audioDelay: viewModel.audioDelayBinding,
+                                  audioProfile: viewModel.audioProfileBinding,
+                                  subtitleDelay: viewModel.subtitleDelayBinding,
+                                  subtitleEncoding: viewModel.subtitleEncodingBinding,
+                                  subtitle: viewModel.subtitleBinding)
+                #if os(tvOS)
+                .prefersDefaultFocus(in: namespace)
+                .onExitCommand(perform: {
+                    withAnimation(.spring()) {
+                        viewModel.showInfo = false
+                    }
+                })
+                .onPlayPauseCommand {
+                    viewModel.playandPause()
+                }
+                #endif
+                Spacer()
+            }
+            .zIndex(1)
+            .transition(.move(edge: .top))
+            #if os(tvOS)
+            .onAppear {
+                DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+                    resetFocus(in: namespace)
+                }
+            }
+            #endif
+        }
+    }
 }
 
 struct PlayerView_Previews: PreviewProvider {
@@ -252,7 +212,7 @@ struct PlayerView_Previews: PreviewProvider {
         showControlsModel.showControls = false
         showControlsModel.showInfo = false
         showControlsModel.isPlaying = true
-        showControlsModel.progress = .init(progress: 0.2, isBuffering: false, bufferProgress: 0.7, isScrubbing: false, scrubbingProgress: 0, remainingTime: "03 min", elapsedTime: "05 min", scrubbing: "la la", screenshot: nil, hint: .none)
+        showControlsModel.progress = .init(progress: 0.2, isBuffering: false, bufferProgress: 0.7, isScrubbing: false, scrubbingProgress: 0, remainingTime: "03 min", elapsedTime: "05 min", scrubbingTime: "la la", screenshot: nil, hint: .none)
         
         
         return Group {

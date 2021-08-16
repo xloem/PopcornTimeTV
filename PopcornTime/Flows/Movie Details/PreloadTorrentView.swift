@@ -23,6 +23,10 @@ struct PreloadTorrentView: View {
                     .font(.title3)
                     .padding(.bottom, 20)
                 progressView
+                #if os(iOS)
+                cancelButton
+                    .padding(.top, 20)
+                #endif
                 Spacer()
             }.onAppear {
                 viewModel.playTorrent()
@@ -37,6 +41,7 @@ struct PreloadTorrentView: View {
                       }))
             })
         }
+        .accentColor(.white)
     }
     
     @ViewBuilder
@@ -49,9 +54,27 @@ struct PreloadTorrentView: View {
                 Text(ByteCountFormatter.string(fromByteCount: Int64(viewModel.speed), countStyle: .binary) + "/s")
                 Text("\(viewModel.seeds) " + "Seeds".localized.localizedLowercase)
             }
+            .foregroundColor(.gray)
+            #if os(tvOS)
             .font(.system(size: 30, weight: .medium))
             .frame(width: 600)
+            #else
+            .frame(width: 350)
+            #endif
         }
+    }
+    
+    @ViewBuilder
+    var cancelButton: some View {
+        Button {
+            withAnimation {
+                presentationMode.wrappedValue.dismiss()
+            }
+        } label: {
+            Text("CANCEL".localized)
+                .foregroundColor(.indigo)
+        }
+
     }
 }
 
@@ -59,5 +82,18 @@ struct PreloadTorrentView_Previews: PreviewProvider {
     static var previews: some View {
         let model = PreloadTorrentViewModel(torrent: Torrent(), media: Movie.dummy(), onReadyToPlay: {_ in })
         PreloadTorrentView(viewModel: model)
+            .preferredColorScheme(.dark)
+        
+        PreloadTorrentView(viewModel: progressModel)
+            .preferredColorScheme(.dark)
+    }
+    
+    static var progressModel: PreloadTorrentViewModel {
+        let progressModel = PreloadTorrentViewModel(torrent: Torrent(), media: Movie.dummy(), onReadyToPlay: {_ in })
+        progressModel.progress = 0.4
+        progressModel.speed = 20000
+        progressModel.seeds = 10
+        progressModel.isProcessing = false
+        return progressModel
     }
 }

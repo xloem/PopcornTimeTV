@@ -9,26 +9,35 @@
 import SwiftUI
 #if os(tvOS)
 import TVVLCKit
+typealias VLCPlayerView = VLCPlayerView_tvOS
 #elseif os(iOS)
 import MobileVLCKit
+typealias VLCPlayerView = VLCPlayerView_iOS
 #endif
 
-struct VLCPlayerView: UIViewRepresentable {
+
+
+struct VLCPlayerView_iOS: UIViewRepresentable {
     var mediaplayer = VLCMediaPlayer()
     
-    var onTap: (() -> Void)?
-    var onPlayPause: (() -> Void)?
-    #if os(tvOS)
-    var onMove: ((_ direction: MoveCommandDirection) -> Void)?
-    #else
-    var onMove: ((_ direction: Any) -> Void)?
-    #endif
+    func makeUIView(context: Context) -> UIView {
+        let view = UIView()
+        mediaplayer.drawable = view
+        return view
+    }
+    
+    func updateUIView(_ uiView: UIView, context: Context) {
+        mediaplayer.drawable = uiView
+    }
+}
+
+struct VLCPlayerView_tvOS: UIViewRepresentable {
+    var mediaplayer = VLCMediaPlayer()
     
     var onSwipeUp: (() -> Void)?
     var onSwipeDown: (() -> Void)?
     var onTouchLocationDidChange: ((SiriRemoteGestureRecognizer) -> Void)?
     var onPositionSliderDrag: ((Float) -> Void)?
-    var onExit: (() -> Void)?
     
     func makeUIView(context: Context) -> UIView {
         let view = UIView()
@@ -43,30 +52,20 @@ struct VLCPlayerView: UIViewRepresentable {
     
     func makeCoordinator() -> VLCPlayerCoordinator {
         let coordinator = VLCPlayerCoordinator()
-        coordinator.onPlayPause = onPlayPause
-        coordinator.onExit = onExit
         coordinator.onSwipeDown = onSwipeDown
         coordinator.onSwipeUp = onSwipeUp
-        coordinator.onTap = onTap
-        #if os(tvOS)
-        coordinator.onMove = onMove
-        #endif
         coordinator.onTouchLocationDidChange = onTouchLocationDidChange
         coordinator.onPositionSliderDrag = onPositionSliderDrag
         return coordinator
     }
     
     class VLCPlayerCoordinator: NSObject, UIGestureRecognizerDelegate {
-        var onPlayPause: (() -> Void)?
         var onExit: (() -> Void)?
-        #if os(tvOS)
-        var onMove: ((_ direction: MoveCommandDirection) -> Void)?
-        #endif
         var onSwipeUp: (() -> Void)?
         var onSwipeDown: (() -> Void)?
-        var onTap: (() -> Void)?
         var onTouchLocationDidChange: ((SiriRemoteGestureRecognizer) -> Void)?
         var onPositionSliderDrag: ((Float) -> Void)?
+
         var lastTranslation: CGFloat = .zero
         var progressBarWidth: CGFloat = 1000.0
         
@@ -88,20 +87,6 @@ struct VLCPlayerView: UIViewRepresentable {
 //            gesture.require(toFail: swipeUpGesture)
             view.addGestureRecognizer(gesture)
             
-            let menuGesture = SiriRemoteButtonRecognizer(target: self, action: #selector(onMenuAction), allowedPressTypes: [.menu])
-            menuGesture.delegate = self
-            view.addGestureRecognizer(menuGesture)
-            
-
-            let playPause = SiriRemoteButtonRecognizer(target: self, action: #selector(onPlayPauseAction), allowedPressTypes: [.playPause])
-            playPause.delegate = self
-            view.addGestureRecognizer(playPause)
-
-            #if os(tvOS)
-            let moveDirection = SiriRemoteButtonRecognizer(target: self, action: #selector(onMoveAction(gesture:)), allowedPressTypes: [.downArrow, .leftArrow, .rightArrow, .upArrow])
-            view.addGestureRecognizer(moveDirection)
-            #endif
-            
             let panGesture = UIPanGestureRecognizer(target: self, action: #selector(onPanGestureAction(gesture:)))
             gesture.delegate = self
             gesture.requiresExclusiveTouchType = false
@@ -109,11 +94,11 @@ struct VLCPlayerView: UIViewRepresentable {
         }
         
         @objc func touchLocationDidChange(_ gesture: SiriRemoteGestureRecognizer) {
-            if (gesture.touchLocation == .unknown && gesture.isClick && gesture.state == .ended) {
-                onTap?()
-            } else {
-                onTouchLocationDidChange?(gesture)
-            }
+//            if (gesture.touchLocation == .unknown && gesture.isClick && gesture.state == .ended) {
+//                onTap?()
+//            } else {
+//                onTouchLocationDidChange?(gesture)
+//            }
         }
         
         @objc func swipeUpGesture() {
@@ -123,31 +108,6 @@ struct VLCPlayerView: UIViewRepresentable {
         @objc func swipeDownGesture() {
             onSwipeDown?()
         }
-        
-        @objc func onPlayPauseAction() {
-            onPlayPause?()
-        }
-        
-        @objc func onMenuAction() {
-            onExit?()
-        }
-        
-        @objc func onTapAction() {
-            onTap?()
-        }
-        
-        #if os(tvOS)
-        @objc func onMoveAction(gesture: SiriRemoteButtonRecognizer) {
-            switch gesture.detectedType {
-            case .downArrow: onMove?(.down)
-            case .leftArrow: onMove?(.left)
-            case .upArrow: onMove?(.up)
-            case .rightArrow: onMove?(.right)
-            default:
-                break
-            }
-        }
-        #endif
         
         @objc func onPanGestureAction(gesture: UIPanGestureRecognizer) {
             let translation = gesture.translation(in: gesture.view)
@@ -173,3 +133,17 @@ struct VLCPlayerView: UIViewRepresentable {
         }
     }
 }
+
+#if os(tvOS)
+extension VLCPlayerView_tvOS {
+    
+    func addGestures(onSwipeDown: @escaping () -> Void,
+                             onSwipeUp: @escaping () -> Void,
+                             onTouchLocationDidChange: @escaping (SiriRemoteGestureRecognizer) -> Void,
+                             onPositionSliderDrag: @escaping (Float) -> Void) -> Self {
+
+        return Self.init(mediaplayer: mediaplayer, onSwipeUp: onSwipeUp, onSwipeDown: onSwipeDown, onTouchLocationDidChange: onTouchLocationDidChange, onPositionSliderDrag: onPositionSliderDrag)
+    }
+}
+
+#endif

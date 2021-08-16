@@ -12,6 +12,12 @@ import PopcornKit
 import Kingfisher
 
 struct DownloadView: View {
+    struct Theme {
+        let titleSize: CGFloat = value(tvOS: 28, macOS: 20)
+        let detailSize: CGFloat = value(tvOS: 20, macOS: 16)
+    }
+    let theme = Theme()
+    
     @StateObject var viewModel: DownloadViewModel
     @State var showDeleteActionSheet = false
     @State var showActionSheet: Bool = false
@@ -42,7 +48,7 @@ struct DownloadView: View {
                 }
     //                .padding(.bottom, 5)
                 Text(title)
-                    .font(.system(size: 28, weight: .medium))
+                    .font(.system(size: theme.titleSize, weight: .medium))
                     .multilineTextAlignment(.center)
                     .lineLimit(1)
                     .shadow(color: .init(white: 0, opacity: 0.6), radius: 2, x: 0, y: 1)
@@ -50,7 +56,7 @@ struct DownloadView: View {
                     .zIndex(10)
     //                .frame(height: 80)
                 Text(detailText)
-                    .font(.system(size: 20, weight: .medium))
+                    .font(.system(size: theme.detailSize, weight: .medium))
                     .multilineTextAlignment(.center)
                     .lineLimit(1)
                     .shadow(color: .init(white: 0, opacity: 0.6), radius: 2, x: 0, y: 1)

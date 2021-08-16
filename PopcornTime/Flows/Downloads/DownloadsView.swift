@@ -11,6 +11,14 @@ import PopcornKit
 import PopcornTorrent
 
 struct DownloadsView: View {
+    struct Theme {
+        let itemWidth: CGFloat = value(tvOS: 240, macOS: 200)
+        let itemHeight: CGFloat = value(tvOS: 420, macOS: 350)
+        let downloadingWidth: CGFloat = value(tvOS: 500, macOS: 300)
+        let itemSpacing: CGFloat = value(tvOS: 40, macOS: 30)
+    }
+    let theme = Theme()
+    
     @StateObject var viewModel = DownloadsViewModel()
     
     var body: some View {
@@ -61,10 +69,10 @@ struct DownloadsView: View {
                 .foregroundColor(.init(white: 1.0, opacity: 0.667)) // light text color
                 .padding(.top, 14)
             ScrollView(.horizontal) {
-                HStack(spacing: 40) {
+                HStack(spacing: theme.itemSpacing) {
                     ForEach(viewModel.downloading, id: \.self) { download in
                         DownloadView(viewModel: DownloadViewModel(download: download))
-                            .frame(width: 500)
+                            .frame(width: theme.downloadingWidth)
 //                            .background(Color.red)
 //                            .padding([.leading, .trailing], 10)
                     }
@@ -82,10 +90,10 @@ struct DownloadsView: View {
                 .foregroundColor(.init(white: 1.0, opacity: 0.667)) // light text color
                 .padding(.top, 14)
             ScrollView(.horizontal) {
-                HStack(spacing: 40) {
+                HStack(spacing: theme.itemSpacing) {
                     ForEach(viewModel.completedMovies, id: \.self) { download in
                         DownloadView(viewModel: DownloadViewModel(download: download))
-                            .frame(width: 240, height: 420)
+                            .frame(width: theme.itemWidth, height: theme.itemHeight)
 //                            .padding([.leading, .trailing], 10)
                     }
                     .padding(20) // allow zoom
@@ -102,10 +110,10 @@ struct DownloadsView: View {
                 .foregroundColor(.init(white: 1.0, opacity: 0.667)) // light text color
                 .padding(.top, 14)
             ScrollView(.horizontal) {
-                HStack(spacing: 40) {
+                HStack(spacing: theme.itemSpacing) {
                     ForEach(viewModel.completedEpisodes, id: \.self) { download in
                         DownloadView(viewModel: DownloadViewModel(download: download))
-                            .frame(width: 240, height: 420)
+                            .frame(width: theme.itemWidth, height: theme.itemHeight)
                     }
                     .padding(20) // allow zoom
                 }.padding(.all, 0)

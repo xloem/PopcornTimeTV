@@ -36,7 +36,7 @@ struct WatchlistView: View {
                 viewModel.load()
             }
         }
-        .navigationBarHidden(true)
+//        .navigationBarHidden(true)
     }
     
     @ViewBuilder

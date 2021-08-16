@@ -74,7 +74,7 @@ struct SettingsView: View {
             .listStyle(GroupedListStyle())
             .padding(.trailing, theme.iconLeading)
         }
-        .navigationBarHidden(true)
+//        .navigationBarHidden(true)
     }
     
     @ViewBuilder

@@ -77,7 +77,7 @@ class PlayerViewModel: NSObject, ObservableObject, UIGestureRecognizerDelegate {
         var scrubbingProgress: Float = 0
         var remainingTime: String = ""
         var elapsedTime: String = ""
-        var scrubbing: String = ""
+        var scrubbingTime: String = ""
         var screenshot: UIImage?
         var hint: TransportBarHint = .none
     }
@@ -199,7 +199,11 @@ class PlayerViewModel: NSObject, ObservableObject, UIGestureRecognizerDelegate {
             return
         }
         
+        #if os(tvOS)
         self.clickGesture()
+        #else
+        isPlaying ? mediaplayer.pause() : mediaplayer.play()
+        #endif
     }
     
     func fastForward() {
@@ -221,49 +225,33 @@ class PlayerViewModel: NSObject, ObservableObject, UIGestureRecognizerDelegate {
         }
     }
     
-    func fastForwardHeld(_ sender: UIGestureRecognizer) {
-        switch sender.state {
-        case .began:
-            fallthrough
-        case .changed:
+    func fastForwardHeld(_ starded: Bool) {
+        if starded {
             progress.hint = .fastForward
-            guard mediaplayer.rate == 1.0 else { break }
-            mediaplayer.fastForward(atRate: 20.0)
-        case .cancelled:
-            fallthrough
-        case .failed:
-            fallthrough
-        case .ended:
+            if mediaplayer.rate == 1.0 {
+                mediaplayer.fastForward(atRate: 20.0)
+            }
+        } else {
             progress.hint = .none
             mediaplayer.rate = 1.0
             resetIdleTimer()
-        default:
-            break
         }
     }
     
-    func rewindHeld(_ sender: UIGestureRecognizer) {
-        switch sender.state {
-        case .began:
-            fallthrough
-        case .changed:
+    func rewindHeld(_ starded: Bool) {
+        if starded {
             progress.hint = .rewind
-            guard mediaplayer.rate == 1.0 else { break }
-            mediaplayer.rewind(atRate: 20.0)
-        case .cancelled:
-            fallthrough
-        case .failed:
-            fallthrough
-        case .ended:
+            if mediaplayer.rate == 1.0 {
+                mediaplayer.rewind(atRate: 20.0)
+            }
+        } else {
             progress.hint = .none
             mediaplayer.rate = 1.0
             resetIdleTimer()
-        default:
-            break
         }
     }
     
-    @objc func clickGesture() {
+    func clickGesture() {
         if progress.isScrubbing {
             endScrubbing()
 
@@ -274,7 +262,7 @@ class PlayerViewModel: NSObject, ObservableObject, UIGestureRecognizerDelegate {
                 mediaplayer.time = VLCTime(number: time)
                 // Force a progress change rather than waiting for VLCKit's delegate call to.
                 progress.progress = progress.scrubbingProgress
-                progress.elapsedTime = progress.scrubbing
+                progress.elapsedTime = progress.scrubbingTime
             }
         } else {
             startScrubbing()
@@ -288,32 +276,32 @@ class PlayerViewModel: NSObject, ObservableObject, UIGestureRecognizerDelegate {
         
         print("", gesture.touchLocation)
         
-        progress.hint = .none
-        resetIdleTimer()
-        
-        switch gesture.touchLocation {
-        case .left:
-            if gesture.isClick && gesture.state == .ended {
-                rewind()
-                progress.hint = .none
-            }
-            if gesture.isLongPress {
-                rewindHeld(gesture)
-            } else if gesture.state != .ended {
-                progress.hint = .jumpBackward30
-            }
-        case .right:
-            if gesture.isClick && gesture.state == .ended {
-                fastForward()
-                progress.hint = .none
-            }
-            if gesture.isLongPress {
-                fastForwardHeld(gesture)
-            } else if gesture.state != .ended {
-                progress.hint = .jumpForward30
-            }
-        default: return
-        }
+//        progress.hint = .none
+//        resetIdleTimer()
+//        
+//        switch gesture.touchLocation {
+//        case .left:
+//            if gesture.isClick && gesture.state == .ended {
+//                rewind()
+//                progress.hint = .none
+//            }
+//            if gesture.isLongPress {
+//                rewindHeld(gesture)
+//            } else if gesture.state != .ended {
+//                progress.hint = .jumpBackward30
+//            }
+//        case .right:
+//            if gesture.isClick && gesture.state == .ended {
+//                fastForward()
+//                progress.hint = .none
+//            }
+//            if gesture.isLongPress {
+//                fastForwardHeld(gesture)
+//            } else if gesture.state != .ended {
+//                progress.hint = .jumpForward30
+//            }
+//        default: return
+//        }
     }
     
     func handlePositionSliderDrag(offset: Float) {
@@ -330,7 +318,7 @@ class PlayerViewModel: NSObject, ObservableObject, UIGestureRecognizerDelegate {
         let time = NSNumber(value: progress.scrubbingProgress * streamDuration)
         let remainingTime = NSNumber(value: time.floatValue - streamDuration)
         progress.remainingTime = VLCTime(number: remainingTime).stringValue
-        progress.scrubbing = VLCTime(number: time).stringValue
+        progress.scrubbingTime = VLCTime(number: time).stringValue
         workItem?.cancel()
         workItem = DispatchWorkItem { [weak self] in
             self?.progress.screenshot = self?.nowPlaying.screenshotAtTime(time)
@@ -406,6 +394,24 @@ class PlayerViewModel: NSObject, ObservableObject, UIGestureRecognizerDelegate {
         NotificationCenter.default.removeObserver(self, name: .PTTorrentStatusDidChange, object: nil)
         
         presentationMode?.wrappedValue.dismiss()
+    }
+    
+    @Published var videoAspectRatio: SwiftUI.ContentMode = .fit
+    func switchVideoDimensions() {
+        #if os(iOS)
+        resetIdleTimer()
+        if mediaplayer.videoCropGeometry == nil // Change to aspect to scale to fill
+        {
+            let screen =  UIScreen.screens.count > 1 ? UIScreen.screens[1] : UIScreen.main
+            mediaplayer.videoCropGeometry = UnsafeMutablePointer<Int8>(mutating: (screen.aspectRatio as NSString).utf8String)
+//            screenshotImageView!.contentMode = .scaleAspectFill
+        } else // Change aspect ratio to scale to fit
+        {
+            mediaplayer.videoAspectRatio = nil
+            mediaplayer.videoCropGeometry = nil
+//            screenshotImageView!.contentMode = .scaleAspectFit
+        }
+        #endif
     }
 }
 
