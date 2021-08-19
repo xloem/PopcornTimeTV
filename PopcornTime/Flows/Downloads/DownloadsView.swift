@@ -14,7 +14,7 @@ struct DownloadsView: View {
     struct Theme {
         let itemWidth: CGFloat = value(tvOS: 240, macOS: 200)
         let itemHeight: CGFloat = value(tvOS: 420, macOS: 350)
-        let downloadingWidth: CGFloat = value(tvOS: 500, macOS: 300)
+        let downloadingSize: CGSize = value(tvOS: CGSize(width: 500, height: 400) , macOS: CGSize(width: 300, height: 200))
         let itemSpacing: CGFloat = value(tvOS: 40, macOS: 30)
     }
     let theme = Theme()
@@ -72,12 +72,11 @@ struct DownloadsView: View {
                 HStack(spacing: theme.itemSpacing) {
                     ForEach(viewModel.downloading, id: \.self) { download in
                         DownloadView(viewModel: DownloadViewModel(download: download))
-                            .frame(width: theme.downloadingWidth)
-//                            .background(Color.red)
-//                            .padding([.leading, .trailing], 10)
+                            .frame(width: theme.downloadingSize.width, height: theme.downloadingSize.height)
                     }
                     .padding(30) // allow zoom
-                }.padding(.all, 0)
+                }
+                .padding(.all, 0)
             }
         }
     }
@@ -125,14 +124,25 @@ struct DownloadsView: View {
 struct DownloadsView_Previews: PreviewProvider {
     static var previews: some View {
         activeDownloadsView
-//        DownloadsView()
+        completedDownloadsView
+        DownloadsView()
     }
     
     static var activeDownloadsView: some View {
         let viewModel = DownloadsViewModel()
         return DownloadsView(viewModel: viewModel)
             .onAppear {
-//                viewModel.downloading = [.dummy(status: .downloading), .dummy(status: .downloading)]
+                viewModel.downloading = [
+                    .dummy(status: .downloading),
+                    .dummyEpisode(status: .downloading)
+                ]
+            }
+    }
+    
+    static var completedDownloadsView: some View {
+        let viewModel = DownloadsViewModel()
+        return DownloadsView(viewModel: viewModel)
+            .onAppear {
                 viewModel.completedMovies = [.dummy(status: .finished)]
                 viewModel.completedEpisodes = [.dummyEpisode(status: .finished)]
             }

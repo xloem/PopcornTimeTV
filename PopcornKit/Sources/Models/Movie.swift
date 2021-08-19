@@ -255,4 +255,8 @@ public struct Ratings: Equatable {
         self.metascore = metascore != "N/A" ? metascore : nil
         self.rottenTomatoes = rottenTomatoes
     }
+    
+    public var hasValue: Bool {
+        return imdbRating != nil || metascore != nil || rottenTomatoes != nil
+    }
 }

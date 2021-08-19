@@ -54,11 +54,12 @@ class MoviesViewModel: ObservableObject, MovieRatingsLoader {
 
 
 extension Movie {
-    static func dummy() -> Self {
+    static func dummy(ratings: Ratings? = nil) -> Self {
         var movie = Movie.dummiesFromJSON()[0]
         movie.actors = .init(JSONArray: movieActorsJSON)
         movie.crew = .init(JSONArray: movieCrewJSON)
         movie.related = .init(JSONArray: movieRelatedJSON)
+        movie.ratings = ratings
         return movie
     }
     

@@ -45,11 +45,8 @@ struct ShowDetailsView: View {
     @Namespace var section3
     
     var body: some View {
-        GeometryReader { geometry in
         ZStack {
-            backgroundImage(size: geometry.size)
-            Color(white: 0, opacity: theme.backgroundOpacity)
-                .ignoresSafeArea()
+            backgroundImage()
             ScrollViewReader { scroll in
                 ScrollView {
                     HStack {
@@ -151,21 +148,23 @@ struct ShowDetailsView: View {
             viewModel.stopTheme()
         }
         .environmentObject(viewModel)
-        }
+        .ignoresSafeArea()
     }
     
-    func backgroundImage(size: CGSize) -> some View {
-        return KFImage(viewModel.backgroundUrl)
-            .resizable()
-            .loadImmediately()
-            .aspectRatio(contentMode: .fill)
-            .padding(0)
-            .ignoresSafeArea()
-            .frame(width: size.width, height: size.height)
+    func backgroundImage() -> some View {
+        Color.clear
+            .background(
+                KFImage(viewModel.backgroundUrl)
+                    .resizable()
+                    .loadImmediately()
+                    .aspectRatio(contentMode: .fill)
+                    .padding(0)
+            )
+            .overlay(
+                Color(white: 0, opacity: theme.backgroundOpacity))
             .clipped()
     }
-    
-    
+
     var infoText: some View {
         let localizedSeason = NumberFormatter.localizedString(from: NSNumber(value: viewModel.currentSeason), number: .none)
         let title = "Season".localized + " \(localizedSeason)"

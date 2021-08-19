@@ -30,38 +30,38 @@ struct DownloadView: View {
             showActionSheet = true
         }, label: {
             VStack {
-                ZStack (alignment: .bottom) {
-                    KFImage(URL(string: imageUrl))
-                        .resizable()
-                        .placeholder {
-                            Image(placeholderImage)
-                                .resizable()
-                                .aspectRatio(contentMode: .fit)
-                        }
-                        .aspectRatio(contentMode: .fit)
-                        .cornerRadius(10)
-                        .shadow(radius: 5)
-                    if viewModel.download.downloadStatus == .downloading {
-                        ProgressView(value: viewModel.download.torrentStatus.totalProgress)
-                            .padding([.leading, .trailing, .bottom], 15)
+                Color.clear
+                    .background {
+                        KFImage(URL(string: imageUrl))
+                            .resizable()
+                            .placeholder {
+                                Image(placeholderImage)
+                                    .resizable()
+                                    .aspectRatio(contentMode: .fill)
+                            }
+                            .aspectRatio(contentMode: .fill)
                     }
-                }
-    //                .padding(.bottom, 5)
+                    .overlay(alignment: .bottom) {
+                        if viewModel.download.downloadStatus == .downloading {
+                            ProgressView(value: viewModel.download.torrentStatus.totalProgress)
+                                .padding([.leading, .trailing, .bottom], 15)
+                        }
+                    }
+                    .clipped()
+                    .cornerRadius(10)
+                    .shadow(radius: 5)
+                
                 Text(title)
                     .font(.system(size: theme.titleSize, weight: .medium))
-                    .multilineTextAlignment(.center)
                     .lineLimit(1)
                     .shadow(color: .init(white: 0, opacity: 0.6), radius: 2, x: 0, y: 1)
                     .padding(0)
-                    .zIndex(10)
-    //                .frame(height: 80)
+                
                 Text(detailText)
                     .font(.system(size: theme.detailSize, weight: .medium))
-                    .multilineTextAlignment(.center)
                     .lineLimit(1)
                     .shadow(color: .init(white: 0, opacity: 0.6), radius: 2, x: 0, y: 1)
                     .padding(0)
-                    .zIndex(10)
             }
         })
         .buttonStyle(PlainNavigationLinkButtonStyle())
@@ -183,17 +183,27 @@ struct DownloadView_Previews: PreviewProvider {
         Group {
 //            DownloadView(viewModel: DownloadViewModel(download: PTTorrentDownload.dummy(status: .processing)))
 //                .previewDisplayName("Processing")
-//            DownloadView(download: PTTorrentDownload.dummy(status: .downloading))
-//                        .previewDisplayName("Downloading")
-//            DownloadView(download: PTTorrentDownload.dummy(status: .paused))
+
+//            DownloadView(viewModel: DownloadViewModel(download: PTTorrentDownload.dummyEpisode(status: .paused)))
 //                .frame(width: 310, height: 245)
-//            .previewDisplayName("Paused")
-//            DownloadView(download: PTTorrentDownload.dummy(status: .failed))
+//                .previewDisplayName("Paused")
+            
+//            DownloadView(viewModel: DownloadViewModel(download: PTTorrentDownload.dummy(status: .failed)))
+//                .frame(width: 500, height: 400)
 //                .previewDisplayName("Failed")
-            DownloadView(viewModel: DownloadViewModel(download: PTTorrentDownload.dummy(status: .finished)))
-                .frame(width: 250, height: 460, alignment: .center)
-                .previewDisplayName("Finished")
+            
+            DownloadView(viewModel: DownloadViewModel(download: PTTorrentDownload.dummyEpisode(status: .downloading)))
+                .previewDisplayName("Downloading")
+        
+//            DownloadView(viewModel: DownloadViewModel(download: PTTorrentDownload.dummy(status: .downloading)))
+//                .previewDisplayName("Downloading")
+            
+//            DownloadView(viewModel: DownloadViewModel(download: PTTorrentDownload.dummy(status: .finished)))
+//                .frame(width: 250, height: 460)
+//                .background(.blue)
+//                .previewDisplayName("Finished")
         }
+        .frame(width: 310, height: 245)
         .previewLayout(.sizeThatFits)
     }
 }

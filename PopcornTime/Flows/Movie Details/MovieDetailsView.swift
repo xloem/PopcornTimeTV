@@ -45,12 +45,8 @@ struct MovieDetailsView: View {
     @Namespace var section1
     
     var body: some View {
-        GeometryReader { geometry in
             ZStack {
-                backgroundImage(size: geometry.size)
-//                backgroundImage(size: UIScreen.main.bounds.size)
-                Color(white: 0, opacity: theme.backgroundOpacity)
-                    .ignoresSafeArea()
+                backgroundImage()
                 ScrollViewReader { scroll in
                     ScrollView {
                         VStack {
@@ -122,18 +118,20 @@ struct MovieDetailsView: View {
             }.onDisappear {
                 viewModel.stopTheme()
             }
-        }
         .ignoresSafeArea()
     }
     
-    func backgroundImage(size: CGSize) -> some View {
-        return KFImage(viewModel.backgroundUrl)
-            .resizable()
-            .loadImmediately()
-            .aspectRatio(contentMode: .fill)
-            .padding(0)
-            .ignoresSafeArea()
-            .frame(width: size.width, height: size.height)
+    func backgroundImage() -> some View {
+        Color.clear
+            .background(
+                KFImage(viewModel.backgroundUrl)
+                    .resizable()
+                    .loadImmediately()
+                    .aspectRatio(contentMode: .fill)
+                    .padding(0)
+            )
+            .overlay(
+                Color(white: 0, opacity: theme.backgroundOpacity))
             .clipped()
     }
     

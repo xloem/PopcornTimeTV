@@ -32,6 +32,12 @@ struct MovieView: View {
                         .aspectRatio(contentMode: .fit)
                 }
                 .aspectRatio(contentMode: .fit)
+                .overlay(alignment: .bottom) {
+                    if focused {
+                        ratings()
+                            .transition(.move(edge: .bottom))
+                    }
+                }
                 .cornerRadius(10)
                 .shadow(radius: 5)
 //                .padding(.bottom, 5)
@@ -43,10 +49,6 @@ struct MovieView: View {
                 .shadow(color: .init(white: 0, opacity: 0.6), radius: 2, x: 0, y: 1)
                 .padding(0)
                 .zIndex(10)
-            if focused {
-                ratings()
-            }
-//                .frame(height: 80)
         }
         .onAppear {
             ratingsLoader?.loadRatingIfMissing(movie: movie)
@@ -55,7 +57,7 @@ struct MovieView: View {
     
     @ViewBuilder
     func ratings() -> some View {
-        if let ratings = movie.ratings {
+        if let ratings = movie.ratings, ratings.hasValue {
             HStack(spacing: 15) {
                 if let metascore = ratings.metascore {
                     HStack(spacing: 4) {
@@ -87,6 +89,9 @@ struct MovieView: View {
             }
             .font(.caption)
             .lineLimit(1)
+            .frame(maxWidth: .infinity)
+            .padding([.top, .bottom])
+            .background(.regularMaterial)
         }
     }
 }
@@ -98,5 +103,12 @@ struct MovieView_Previews: PreviewProvider {
             .frame(width: 250, height: 460, alignment: .center)
             .previewLayout(.sizeThatFits)
             .preferredColorScheme(.dark)
+        
+//        MovieView(movie: Movie.dummy(ratings: .init(awards: nil, imdbRating: "24", metascore: "50", rottenTomatoes: "20")))
+//            .background(Color.red)
+//            .frame(width: 250, height: 460, alignment: .center)
+//            .previewLayout(.sizeThatFits)
+//            .preferredColorScheme(.dark)
+//            .previewDisplayName("Ratings")
     }
 }
