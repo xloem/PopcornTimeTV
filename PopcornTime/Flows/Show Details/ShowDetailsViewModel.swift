@@ -67,6 +67,8 @@ class ShowDetailsViewModel: ObservableObject {
                 self.show.actors = actors
                 self.show.crew = crew
                 group.leave()
+                
+                self.didLoad = true
             }
             
 //            group.enter()
@@ -75,10 +77,10 @@ class ShowDetailsViewModel: ObservableObject {
 //                self.isLoading = false
 //                group.leave()
 //            }
-            
-            group.notify(queue: .main) {
-                self.didLoad = true
-            }
+//
+//            group.notify(queue: .main) {
+//                self.didLoad = true
+//            }
         }
     }
     

@@ -14,7 +14,7 @@ struct EpisodesView: View {
     struct Theme {
         let episodeWidth: CGFloat = value(tvOS: 310, macOS: 217)
         let episodeHeight: CGFloat = value(tvOS: 215, macOS: 150)
-        let episodeSpacing: CGFloat = value(tvOS: 0, macOS: 20)
+        let episodeSpacing: CGFloat = value(tvOS: 40, macOS: 20)
         let currentEpisode: (padding: CGFloat, height: CGFloat) =
                         (padding: value(tvOS: 250, macOS: 100),
                          height: value(tvOS: 350, macOS: 250))
@@ -33,6 +33,7 @@ struct EpisodesView: View {
     
     @State var torrent: Torrent?
     @State var showPlayer = false
+    @FocusState var focusField: Int?
     
     var onFocus: () -> Void = {}
     
@@ -44,6 +45,7 @@ struct EpisodesView: View {
                 LazyHStack(spacing: theme.episodeSpacing) {
                     ForEach(episodes, id: \.self) { episode in
                         episodeView(episode: episode)
+                            .focused($focusField, equals: episode.episode)
                     }
                 }
                 .padding([.top, .bottom], 20) // allow zooming to be visible
@@ -62,6 +64,14 @@ struct EpisodesView: View {
                 currentEpisode = newValue.first
             }
         }
+//        .onChange(of: currentSeason) { [currentSeason] newValue in
+//            if currentSeason != -1 {
+//                DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+//                    onFocus()
+//                    $focusField.wrappedValue = 1
+//                }
+//            }
+//        }
     }
     
     @ViewBuilder
