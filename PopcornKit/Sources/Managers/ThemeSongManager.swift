@@ -45,34 +45,34 @@ public class ThemeSongManager: NSObject, AVAudioPlayerDelegate {
      - Parameter url: Valid url pointing to a track.
      */
     private func playTheme(_ url: String) {
-        if let player = player, player.isPlaying { player.stop() }
-        
-        self.task = URLSession.shared.dataTask(with: URL(string: url)!, completionHandler: { (data, response, error) in
-            do {
-                if let data = data {
-                    #if os(iOS) || os(tvOS)
-                    try AVAudioSession.sharedInstance().setCategory(AVAudioSession.Category.playback, mode: AVAudioSession.Mode.default)
-                    #endif
-
-                    let adjustedVolume = Session.themeSongVolume * 0.25
-                    if adjustedVolume > 0 {
-                        let player = try AVAudioPlayer(data: data)
-                        player.volume = 0
-                        player.numberOfLoops = NSNotFound
-                        player.delegate = self
-                        player.prepareToPlay()
-                        player.play()
-                        
-                        player.setVolume(adjustedVolume, fadeDuration: 3.0)
-                        
-                        self.player = player
-                    }
-                }
-            } catch let error {
-                print(error)
-            }
-        })
-        task?.resume()
+//        if let player = player, player.isPlaying { player.stop() }
+//        
+//        self.task = URLSession.shared.dataTask(with: URL(string: url)!, completionHandler: { (data, response, error) in
+//            do {
+//                if let data = data {
+//                    #if os(iOS) || os(tvOS)
+//                    try AVAudioSession.sharedInstance().setCategory(AVAudioSession.Category.playback, mode: AVAudioSession.Mode.default)
+//                    #endif
+//
+//                    let adjustedVolume = Session.themeSongVolume * 0.25
+//                    if adjustedVolume > 0 {
+//                        let player = try AVAudioPlayer(data: data)
+//                        player.volume = 0
+//                        player.numberOfLoops = NSNotFound
+//                        player.delegate = self
+//                        player.prepareToPlay()
+//                        player.play()
+//                        
+//                        player.setVolume(adjustedVolume, fadeDuration: 3.0)
+//                        
+//                        self.player = player
+//                    }
+//                }
+//            } catch let error {
+//                print(error)
+//            }
+//        })
+//        task?.resume()
     }
     
     /// Stops playing theme music, if previously playing.

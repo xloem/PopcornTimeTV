@@ -53,6 +53,7 @@ class ShowDetailsViewModel: ObservableObject {
             }
             self.currentSeason = season
             self.isLoading = false
+            self.didLoad = true
             
             let group = DispatchGroup()
                 
@@ -75,10 +76,10 @@ class ShowDetailsViewModel: ObservableObject {
 //                self.isLoading = false
 //                group.leave()
 //            }
-            
-            group.notify(queue: .main) {
-                self.didLoad = true
-            }
+//            
+//            group.notify(queue: .main) {
+//                self.didLoad = true
+//            }
         }
     }
     

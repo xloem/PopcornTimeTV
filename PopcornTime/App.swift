@@ -49,7 +49,7 @@ struct PopcornTime: App {
             .preferredColorScheme(.dark)
             #if os(iOS)
             .accentColor(.white)
-//            .navigationViewStyle(StackNavigationViewStyle())
+            .navigationViewStyle(StackNavigationViewStyle())
             #endif
         }
     }

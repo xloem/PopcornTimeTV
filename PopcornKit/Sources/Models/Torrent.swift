@@ -200,6 +200,12 @@ public func <(lhs: Torrent, rhs: Torrent) -> Bool {
     return false
 }
 
+extension Torrent: Identifiable {
+    public var id: String {
+        return url
+    }
+}
+
 public func == (lhs: Torrent, rhs: Torrent) -> Bool {
     return lhs.url == rhs.url
 }
