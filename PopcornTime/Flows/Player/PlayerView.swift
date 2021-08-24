@@ -59,7 +59,7 @@ struct PlayerView: View {
                             viewModel.showInfo = true
                         }
                     case .up:
-                        withAnimation(.spring()) {
+                        withAnimation {
                             viewModel.showControls = true
                         }
                     case .left:
@@ -108,20 +108,9 @@ struct PlayerView: View {
         .focusScope(namespace)
         .ignoresSafeArea()
         #endif
-        #if os(tvOS) || os(iOS)
-        .actionSheet(isPresented: $viewModel.resumePlaybackAlert, content: {
-            ActionSheet(title: Text(""),
-                        message: nil,
-                        buttons: [
-                            .default(Text("Resume Playing".localized)) {
-                              self.viewModel.play(resumePlayback: true)
-                            },
-                            .default(Text("Start from Beginning".localized)) {
-                              self.viewModel.play()
-                            }
-                        ])
+        .confirmationDialog("", isPresented: $viewModel.resumePlaybackAlert, actions: {
+            resumeActions
         })
-        #endif
     }
     
     @ViewBuilder
@@ -187,6 +176,21 @@ struct PlayerView: View {
             .zIndex(1)
             .transition(.move(edge: .top))
         }
+    }
+    
+    @ViewBuilder
+    var resumeActions: some View {
+        Button(action: {
+            self.viewModel.play(resumePlayback: true)
+        }, label: {
+            Text("Resume Playing")
+        })
+        
+        Button(role: .cancel, action: {
+            self.viewModel.play()
+        }, label: {
+            Text("Start from Beginning")
+        })
     }
 }
 
