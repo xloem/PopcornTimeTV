@@ -38,18 +38,9 @@ struct SelectTorrentQualityButton<Label>: View where Label : View {
             }
         }, label: label)
         .buttonStyle(TVButtonStyle(onFocus: onFocus))
-        #if os(iOS) || os(tvOS)
-        .actionSheet(isPresented: $showChooseQualityActionSheet) {
-            ActionSheet(title: Text("Choose Quality".localized),
-                        message: nil,
-                        buttons: chooseTorrentsButtons + [.cancel()]
-            )
-        }
-        #else
-        .confirmationDialog("Choose Quality", isPresented: $showChooseQualityActionSheet, actions: {
+        .confirmationDialog("Choose Quality", isPresented: $showChooseQualityActionSheet, titleVisibility: .visible, actions: {
             chooseTorrentsButtons
         })
-        #endif
         .alert(isPresented: $noTorrentsFoundAlert, content: {
             Alert(title: Text("No torrents found".localized),
                   message: Text("Torrents could not be found for the specified media.".localized),
@@ -78,20 +69,6 @@ struct SelectTorrentQualityButton<Label>: View where Label : View {
         return nil
     }
 
-#if os(iOS) || os(tvOS)
-    var chooseTorrentsButtons: [Alert.Button] {
-        media.torrents.map { torrent in
-            ActionSheet.Button.default(
-                Text(torrent.quality)
-//                + Text(" (Health - \(torrent.health.name))")
-                + Text(" (seeds: \(torrent.seeds) - peers: \(torrent.peers))")
-//                Text(Image(uiImage: torrent.health.image.withRenderingMode(.alwaysOriginal)))
-                ) {
-                action(torrent)
-            }
-        }
-    }
-#else
     @ViewBuilder
     var chooseTorrentsButtons: some View {
         ForEach(media.torrents) { torrent in
@@ -104,7 +81,6 @@ struct SelectTorrentQualityButton<Label>: View where Label : View {
             }
         }
     }
-#endif
 }
 
 struct SelectTorrentQualityAction_Previews: PreviewProvider {

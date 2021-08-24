@@ -19,7 +19,7 @@ struct ShowDetailsView: View {
         let starOffset: CGFloat = value(tvOS: -8, macOS: -4)
         let ratingHeight: CGFloat = value(tvOS: 32, macOS: 24)
         let watchedSection: (height: CGFloat, cellWidth: CGFloat, cellHeight: CGFloat, spacing: CGFloat)
-            = (height: value(tvOS: 450, macOS: 240),
+            = (height: value(tvOS: 475, macOS: 240),
                cellWidth: value(tvOS: 220, macOS: 150),
                cellHeight: value(tvOS: 460, macOS: 180),
                spacing: value(tvOS: 90, macOS: 30))
@@ -63,10 +63,10 @@ struct ShowDetailsView: View {
                                     .frame(width: 1200, height: 200)
                                 #endif
                                 HStack(spacing: 24) {
-                                    watchlistButton
                                     if viewModel.show.seasonNumbers.count > 1 {
                                         seasonsButton
                                     }
+                                    watchlistButton
                                     if viewModel.isLoading {
                                         ProgressView()
                                             .padding(.leading, 50)
@@ -142,10 +142,14 @@ struct ShowDetailsView: View {
                     }
             }
         }.onAppear {
-            viewModel.playSongTheme()
-            viewModel.load()
+            if !showSeasonPicker {
+                viewModel.playSongTheme()
+                viewModel.load()
+            }
         }.onDisappear {
-            viewModel.stopTheme()
+            if !showSeasonPicker {
+                viewModel.stopTheme()
+            }
         }
         .environmentObject(viewModel)
         .ignoresSafeArea()

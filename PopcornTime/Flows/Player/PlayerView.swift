@@ -16,6 +16,7 @@ struct PlayerView: View {
     @Namespace private var namespace
     #if os(tvOS)
     @Environment(\.resetFocus) var resetFocus
+    @State var playerHasFocus = true // workaround to make infoView to have focus on appear
     #endif
     
     var body: some View {
@@ -35,8 +36,8 @@ struct PlayerView: View {
                 }, onPositionSliderDrag: { offset in
                     viewModel.handlePositionSliderDrag(offset: offset)
                 })
+                .focusable(playerHasFocus)
                 .prefersDefaultFocus(!viewModel.showInfo, in: namespace)
-                .focusable(!viewModel.showInfo)
                 .onLongPressGesture(minimumDuration: 0.01, perform: {
                     withAnimation {
                         if viewModel.showControls {
@@ -74,8 +75,18 @@ struct PlayerView: View {
                     }
                 })
                 .onExitCommand {
-                    viewModel.stop()
-                    presentationMode.wrappedValue.dismiss()
+                    if viewModel.showInfo {
+                        withAnimation{
+                            viewModel.showInfo = false
+                        }
+                    } else if viewModel.showControls {
+                        withAnimation{
+                            viewModel.showControls = false
+                        }
+                    } else {
+                        viewModel.stop()
+                        presentationMode.wrappedValue.dismiss()
+                    }
                 }
             #else
                 .onTapGesture {
@@ -161,18 +172,20 @@ struct PlayerView: View {
                 .onPlayPauseCommand {
                     viewModel.playandPause()
                 }
+                .onAppear {
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                        resetFocus(in: namespace)
+                        playerHasFocus = false
+                    }
+                }
+                .onDisappear {
+                    playerHasFocus = true
+                }
                 #endif
                 Spacer()
             }
             .zIndex(1)
             .transition(.move(edge: .top))
-            #if os(tvOS)
-            .onAppear {
-                DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
-                    resetFocus(in: namespace)
-                }
-            }
-            #endif
         }
     }
 }

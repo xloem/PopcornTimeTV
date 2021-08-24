@@ -19,15 +19,15 @@ struct DownloadView: View {
     let theme = Theme()
     
     @StateObject var viewModel: DownloadViewModel
-    @State var showDeleteActionSheet = false
-    @State var showActionSheet: Bool = false
+    @State var showDeleteAction = false
+    @State var showActions = false
     
     @State var torrent: Torrent?
     @State var showPlayer = false
     
     var body: some View {
         Button(action: {
-            showActionSheet = true
+            showActions = true
         }, label: {
             VStack {
                 Color.clear
@@ -65,16 +65,22 @@ struct DownloadView: View {
             }
         })
         .buttonStyle(PlainNavigationLinkButtonStyle())
-        #if os(tvOS) || os(iOS)
-        .actionSheet(isPresented: $showDeleteActionSheet) {
-            deleteActionSheet
-        }
-        .actionSheet(isPresented: $showActionSheet) {
-            actionSheet
-        }
-        #endif
+        .confirmationDialog("Are you sure you want to delete the download?", isPresented: $showDeleteAction, titleVisibility: .visible, actions: {
+            deleteAction
+//                .disableObserverOnAppear(viewModel: viewModel)
+        })
+        .confirmationDialog("", isPresented: $showActions, actions: {
+            downloadActions
+//                .disableObserverOnAppear(viewModel: viewModel)
+        })
         .fullScreenContent(isPresented: $showPlayer, title: viewModel.media.title) {
             TorrentPlayerView(torrent: viewModel.torrent, media: viewModel.media)
+        }
+        .onAppear {
+            viewModel.addObserver()
+        }
+        .onDisappear {
+            viewModel.observation = nil
         }
     }
     
@@ -115,6 +121,9 @@ struct DownloadView: View {
             formatter.allowedUnits = [.hour, .minute]
             
             let remainingTime = sizeLeftToDownload/downloadSpeed
+            if remainingTime < 60 { // seconds
+                formatter.allowedUnits = [.second]
+            }
             
             if let formattedTime = formatter.string(from: remainingTime) {
                 speed = " • " + formattedTime
@@ -127,55 +136,63 @@ struct DownloadView: View {
         
         return download.downloadStatus == .paused ?  "Paused".localized : ByteCountFormatter.string(fromByteCount: Int64(download.torrentStatus.downloadSpeed), countStyle: .binary) + "/s" + speed
     }
-  
-#if os(tvOS) || os(iOS)
-    var deleteActionSheet: ActionSheet {
-        ActionSheet(title: Text("Delete Download".localized),
-                    message: Text("Are you sure you want to delete the download?".localized),
-                    buttons: [
-                        .destructive(Text("Delete".localized)) {
-                            viewModel.delete()
-                        },
-                        .cancel()
-                    ]
-        )
+    
+    @ViewBuilder
+    var deleteAction: some View {
+        Button(role: .destructive, action: {
+            viewModel.delete()
+        }, label: {
+            Text("Delete")
+        })
     }
     
-    var actionSheet: ActionSheet {
-        var buttons: [ActionSheet.Button] = [
-            .default(Text("Play".localized)) {
+    @ViewBuilder
+    var downloadActions: some View {
+        let deleteDownload = Button(role: .destructive, action: {
+            showDeleteAction = true
+        }, label: {
+            Text("Delete Download")
+        })
+        
+        switch viewModel.download.downloadStatus {
+        case .finished:
+            Button(action: {
                 showPlayer = true
-            }
-        ]
+            }, label: {
+                Text("Play")
+            })
+            
+            deleteDownload
+        case .downloading, .processing:
+            Button(action: {
+                viewModel.pause()
+            }, label: {
+                Text("Pause")
+            })
+        case .paused:
+            Button(action: {
+                viewModel.continueDownload()
+            }, label: {
+                Text("Continue Download")
+            })
         
-        if (viewModel.download.downloadStatus == .paused) {
-            buttons = [
-                .default(Text("Continue Download".localized)) {
-                    viewModel.continueDownload()
-                }
-            ]
+            deleteDownload
+        case .failed:
+            deleteDownload
+        @unknown default: EmptyView()
         }
-        
-        if (viewModel.download.downloadStatus == .downloading) {
-            buttons = [
-                .default(Text("Pause".localized)) {
-                    viewModel.pause()
-                }
-            ]
-        }
-        
-        return ActionSheet(title: Text(""),
-                    message: nil,
-                    buttons: buttons +
-                    [
-                        .destructive(Text("Delete Download".localized)) {
-                            viewModel.delete()
-                        },
-                        .cancel()
-                    ]
-        )
     }
-    #endif
+}
+
+extension View {
+    fileprivate func disableObserverOnAppear(viewModel: DownloadViewModel) -> some View {
+        onAppear {
+            viewModel.observation = nil
+        }
+        .onDisappear {
+            viewModel.addObserver()
+        }
+    }
 }
 
 struct DownloadView_Previews: PreviewProvider {

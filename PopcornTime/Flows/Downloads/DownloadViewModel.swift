@@ -14,22 +14,19 @@ import Combine
 
 class DownloadViewModel: NSObject, ObservableObject {
     var download: PTTorrentDownload
-    
-    @Published var showStopDownloadAlert = false
-    @Published var showDownloadFailedAlert = false
-    @Published var showDownloadedActionSheet = false
-    @Published var downloadError: Error?
     @Published var status: PTTorrentStatus
     var observation: NSKeyValueObservation?
     
     init(download: PTTorrentDownload) {
         self.download = download
         status = download.torrentStatus
-        super.init()
-        
+    }
+    
+    func addObserver() {
         observation = download.observe(\.torrentStatus) { [weak self] download, change in
             self?.status = download.torrentStatus
         }
+        status = download.torrentStatus
     }
     
     func delete() {
