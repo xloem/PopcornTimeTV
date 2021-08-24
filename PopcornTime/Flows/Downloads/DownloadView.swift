@@ -32,10 +32,11 @@ struct DownloadView: View {
             VStack {
                 Color.clear
                     .background {
-                        KFImage(URL(string: imageUrl))
+                        KFImage(URL(string: viewModel.imageUrl))
                             .resizable()
+                            .loadImmediately()
                             .placeholder {
-                                Image(placeholderImage)
+                                Image(viewModel.placeholderImage)
                                     .resizable()
                                     .aspectRatio(contentMode: .fill)
                             }
@@ -51,13 +52,13 @@ struct DownloadView: View {
                     .cornerRadius(10)
                     .shadow(radius: 5)
                 
-                Text(title)
+                Text(viewModel.title)
                     .font(.system(size: theme.titleSize, weight: .medium))
                     .lineLimit(1)
                     .shadow(color: .init(white: 0, opacity: 0.6), radius: 2, x: 0, y: 1)
                     .padding(0)
                 
-                Text(detailText)
+                Text(viewModel.detailText)
                     .font(.system(size: theme.detailSize, weight: .medium))
                     .lineLimit(1)
                     .shadow(color: .init(white: 0, opacity: 0.6), radius: 2, x: 0, y: 1)
@@ -67,11 +68,9 @@ struct DownloadView: View {
         .buttonStyle(PlainNavigationLinkButtonStyle())
         .confirmationDialog("Are you sure you want to delete the download?", isPresented: $showDeleteAction, titleVisibility: .visible, actions: {
             deleteAction
-//                .disableObserverOnAppear(viewModel: viewModel)
         })
-        .confirmationDialog("", isPresented: $showActions, actions: {
+        .confirmationDialog(viewModel.title, isPresented: $showActions, titleVisibility: .visible, actions: {
             downloadActions
-//                .disableObserverOnAppear(viewModel: viewModel)
         })
         .fullScreenContent(isPresented: $showPlayer, title: viewModel.media.title) {
             TorrentPlayerView(torrent: viewModel.torrent, media: viewModel.media)
@@ -82,59 +81,6 @@ struct DownloadView: View {
         .onDisappear {
             viewModel.observation = nil
         }
-    }
-    
-    var placeholderImage: String {
-        return viewModel.download.show != nil ? "Episode Placeholder" : "Movie Placeholder"
-    }
-    
-    var imageUrl: String {
-        return (viewModel.download.show != nil ? viewModel.download.show?.smallCoverImage : viewModel.download.smallCoverImage) ?? ""
-    }
-    
-    var title: String {
-        if let episode = Episode(viewModel.download.mediaMetadata) {
-            return "\(episode.episode). " + episode.title
-        } else {
-            return viewModel.download.title
-        }
-    }
-        
-    var detailText: String {
-        return viewModel.download.isCompleted ? viewModel.download.fileSize.stringValue : downloadingDetailText
-    }
-    var contentMode: SwiftUI.ContentMode {
-        viewModel.download.show != nil ? .fill : .fit
-    }
-    
-    var downloadingDetailText: String {
-        let download = viewModel.download
-        let speed: String
-        let downloadSpeed = TimeInterval(download.torrentStatus.downloadSpeed)
-        let sizeLeftToDownload = TimeInterval(download.fileSize.longLongValue - download.totalDownloaded.longLongValue)
-        
-        if downloadSpeed > 0 {
-            let formatter = DateComponentsFormatter()
-            formatter.unitsStyle = .full
-            formatter.includesTimeRemainingPhrase = true
-            formatter.includesApproximationPhrase = true
-            formatter.allowedUnits = [.hour, .minute]
-            
-            let remainingTime = sizeLeftToDownload/downloadSpeed
-            if remainingTime < 60 { // seconds
-                formatter.allowedUnits = [.second]
-            }
-            
-            if let formattedTime = formatter.string(from: remainingTime) {
-                speed = " • " + formattedTime
-            } else {
-                speed = ""
-            }
-        } else {
-            speed = ""
-        }
-        
-        return download.downloadStatus == .paused ?  "Paused".localized : ByteCountFormatter.string(fromByteCount: Int64(download.torrentStatus.downloadSpeed), countStyle: .binary) + "/s" + speed
     }
     
     @ViewBuilder
@@ -202,11 +148,9 @@ struct DownloadView_Previews: PreviewProvider {
 //                .previewDisplayName("Processing")
 
 //            DownloadView(viewModel: DownloadViewModel(download: PTTorrentDownload.dummyEpisode(status: .paused)))
-//                .frame(width: 310, height: 245)
 //                .previewDisplayName("Paused")
             
 //            DownloadView(viewModel: DownloadViewModel(download: PTTorrentDownload.dummy(status: .failed)))
-//                .frame(width: 500, height: 400)
 //                .previewDisplayName("Failed")
             
             DownloadView(viewModel: DownloadViewModel(download: PTTorrentDownload.dummyEpisode(status: .downloading)))
@@ -216,8 +160,6 @@ struct DownloadView_Previews: PreviewProvider {
 //                .previewDisplayName("Downloading")
             
 //            DownloadView(viewModel: DownloadViewModel(download: PTTorrentDownload.dummy(status: .finished)))
-//                .frame(width: 250, height: 460)
-//                .background(.blue)
 //                .previewDisplayName("Finished")
         }
         .frame(width: 310, height: 245)

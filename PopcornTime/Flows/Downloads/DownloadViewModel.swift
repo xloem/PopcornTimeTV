@@ -16,10 +16,14 @@ class DownloadViewModel: NSObject, ObservableObject {
     var download: PTTorrentDownload
     @Published var status: PTTorrentStatus
     var observation: NSKeyValueObservation?
+    var downloadManager = PTTorrentDownloadManager.shared()
+    var media: Media
+    var torrent = Torrent() // No torrent metadata necessary, media
     
     init(download: PTTorrentDownload) {
         self.download = download
         status = download.torrentStatus
+        media = Movie(download.mediaMetadata) ?? Episode(download.mediaMetadata)!
     }
     
     func addObserver() {
@@ -31,48 +35,84 @@ class DownloadViewModel: NSObject, ObservableObject {
     
     func delete() {
         if download.downloadStatus == .processing {
-            PTTorrentDownloadManager.shared().pause(download)
+            downloadManager.pause(download)
         } else {
-            PTTorrentDownloadManager.shared().delete(download)
+            downloadManager.delete(download)
         }
     }
     
-    lazy var media: Media = {
-        let media: Media = Movie(download.mediaMetadata) ?? Episode(download.mediaMetadata)!
-        return media
-    }()
-    var torrent = Torrent() // No torrent metadata necessary, media
-    
     func continueDownload() {
-        PTTorrentDownloadManager.shared().resumeDownload(download)
+        downloadManager.resumeDownload(download)
     }
     
     func pause() {
-        PTTorrentDownloadManager.shared().pause(download)
+        downloadManager.pause(download)
+    }
+    
+    var imageUrl: String {
+        let episode = media as? Episode
+        return episode?.show?.smallCoverImage ?? media.smallCoverImage ?? ""
+    }
+    
+    var placeholderImage: String {
+        return media is Episode ? "Episode Placeholder" : "Movie Placeholder"
+    }
+    
+    var title: String {
+        if let episode = media as? Episode {
+            return "\(episode.episode). " + episode.title
+        } else {
+            return media.title
+        }
+    }
+    
+    var detailText: String {
+        switch download.downloadStatus {
+        case .processing, .downloading:
+            return downloadingDetailText
+        case .paused:
+            return "Paused".localized
+        case .finished:
+            return download.fileSize.stringValue
+        case .failed:
+            return "Download Failed".localized
+        @unknown default:
+            return "N/A"
+        }
+    }
+    
+    var downloadingDetailText: String {
+        let speed: String
+        let downloadSpeed = TimeInterval(download.torrentStatus.downloadSpeed)
+        let sizeLeftToDownload = TimeInterval(download.fileSize.longLongValue - download.totalDownloaded.longLongValue)
+        
+        if downloadSpeed > 0 {
+            let formatter = DateComponentsFormatter()
+            formatter.unitsStyle = .full
+            formatter.includesTimeRemainingPhrase = true
+            formatter.includesApproximationPhrase = true
+            formatter.allowedUnits = [.hour, .minute]
+            
+            let remainingTime = sizeLeftToDownload/downloadSpeed
+            if remainingTime < 60 { // seconds
+                formatter.allowedUnits = [.second]
+            }
+            
+            if let formattedTime = formatter.string(from: remainingTime) {
+                speed = " • " + formattedTime
+            } else {
+                speed = ""
+            }
+        } else {
+            speed = ""
+        }
+        
+        return ByteCountFormatter.string(fromByteCount: Int64(download.torrentStatus.downloadSpeed), countStyle: .binary) + "/s" + speed
     }
 }
 
 
 extension PTTorrentDownload {
-    var title: String {
-        return mediaMetadata[MPMediaItemPropertyTitle] as? String ?? ""
-    }
-    
-    var smallCoverImage: String? {
-        return mediaMetadata[MPMediaItemPropertyBackgroundArtwork]  as? String
-    }
-    
-    var show: Show? {
-        Episode(mediaMetadata)?.show
-    }
-    
-    var isEpisode: Bool {
-        Episode(mediaMetadata)?.show != nil
-    }
-    
-    var isCompleted: Bool {
-        return downloadStatus == .finished
-    }
     
     static func dummy(status: PTTorrentDownloadStatus) -> PTTorrentDownload {
         return PTTorrentDownload(mediaMetadata: Movie.dummy().mediaItemDictionary, downloadStatus: status)
