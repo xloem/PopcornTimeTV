@@ -54,7 +54,7 @@ class PlayerViewModel: NSObject, ObservableObject {
     @Published var isPlaying = false
     @Published var showControls = false
     @Published var showInfo = false
-    var presentationMode: Binding<PresentationMode>?
+    var dismiss: DismissAction?
     
     var audioProfile: EqualizerProfiles = .fullDynamicRange
     var audioProfileBinding: Binding<EqualizerProfiles> = .constant(.fullDynamicRange)
@@ -410,7 +410,7 @@ class PlayerViewModel: NSObject, ObservableObject {
         saveMediaProgress(status: .finished)
         NotificationCenter.default.removeObserver(self, name: .PTTorrentStatusDidChange, object: nil)
         
-        presentationMode?.wrappedValue.dismiss()
+        dismiss?()
     }
     
     @Published var videoAspectRatio: SwiftUI.ContentMode = .fit

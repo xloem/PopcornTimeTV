@@ -11,7 +11,7 @@ import PopcornKit
 
 struct PlayerView: View {
     @EnvironmentObject var viewModel: PlayerViewModel
-    @Environment(\.presentationMode) var presentationMode
+    @Environment(\.dismiss) var dismiss
     
     @Namespace private var namespace
     #if os(tvOS)
@@ -85,7 +85,7 @@ struct PlayerView: View {
                         }
                     } else {
                         viewModel.stop()
-                        presentationMode.wrappedValue.dismiss()
+                        dismiss()
                     }
                 }
             #else
@@ -100,7 +100,7 @@ struct PlayerView: View {
         }
         .onAppear {
             viewModel.playOnAppear()
-            viewModel.presentationMode = presentationMode // this screen can dismissed from viewModel
+            viewModel.dismiss = dismiss // this screen can dismissed from viewModel
         }.onDisappear {
             viewModel.stop()
         }
@@ -108,7 +108,7 @@ struct PlayerView: View {
         .focusScope(namespace)
         .ignoresSafeArea()
         #endif
-        .confirmationDialog("", isPresented: $viewModel.resumePlaybackAlert, actions: {
+        .alert("", isPresented: $viewModel.resumePlaybackAlert, actions: {
             resumeActions
         })
     }
