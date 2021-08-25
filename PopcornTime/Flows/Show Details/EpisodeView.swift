@@ -35,7 +35,7 @@ struct EpisodeView: View {
                 .shadow(radius: 5)
                 .frame(width: theme.imageWidth, height: theme.imageHeight)
                 .overlay(alignment: .bottomTrailing) {
-                    if watched {
+                    if episode.isWatched {
                         Image("Episode Watched Indicator")
                     }
                 }
@@ -47,10 +47,6 @@ struct EpisodeView: View {
         .onAppear {
             viewModel.loadImageIfMissing(episode: episode)
         }
-    }
-    
-    var watched: Bool {
-        return WatchedlistManager<Episode>.episode.isAdded(episode.id)
     }
 }
 

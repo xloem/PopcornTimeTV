@@ -32,6 +32,11 @@ struct MovieView: View {
                         .aspectRatio(contentMode: .fit)
                 }
                 .aspectRatio(contentMode: .fit)
+                .overlay(alignment: .topTrailing) {
+                    if movie.isWatched {
+                        Image("Watched Indicator")
+                    }
+                }
                 .overlay(alignment: .bottom) {
                     if focused {
                         ratings()

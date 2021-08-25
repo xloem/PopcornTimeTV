@@ -49,7 +49,7 @@ class ShowDetailsViewModel: ObservableObject {
             
             self.show = show
             
-            guard let season = show.latestUnwatchedEpisode()?.season ?? show.seasonNumbers.last else {
+            guard let season = show.latestUnwatchedEpisode()?.season ?? show.seasonNumbers.first else {
                 let error = NSError(domain: "com.popcorntimetv.popcorntime.error", code: -243, userInfo:
                                         [NSLocalizedDescriptionKey: "There are no seasons available for the selected show. Please try again later.".localized])
                 self.error = error

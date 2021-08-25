@@ -63,13 +63,15 @@ struct ShowDetailsView: View {
                                     .frame(width: 1200, height: 200)
                                 #endif
                                 HStack(spacing: 24) {
-                                    if let episode = viewModel.nextEpisodeToWatch() {
-                                        PlayButton(viewModel: PlayButtonModel(media: episode))
+                                    if viewModel.didLoad {
+                                        if let episode = viewModel.nextEpisodeToWatch() {
+                                            PlayButton(viewModel: PlayButtonModel(media: episode))
+                                        }
+                                        if viewModel.show.seasonNumbers.count > 1 {
+                                            seasonsButton
+                                        }
+                                        watchlistButton
                                     }
-                                    if viewModel.show.seasonNumbers.count > 1 {
-                                        seasonsButton
-                                    }
-                                    watchlistButton
                                     if viewModel.isLoading {
                                         ProgressView()
                                             .padding(.leading, 50)
@@ -185,6 +187,7 @@ struct ShowDetailsView: View {
             }
         
         let watchOn: String = .localizedStringWithFormat("Watch %@ on %@".localized, show.title, show.network ?? "TV")
+        let runtime = "Run Time".localized + " \(show.runtime ?? 0) min"
         
         return VStack(alignment: .leading) {
             Text(title)
@@ -197,7 +200,10 @@ struct ShowDetailsView: View {
                     .frame(width: theme.starSize.width, height: theme.starSize.height)
                     .padding(.top, theme.starOffset)
             }
-            Text(watchOn)
+            Group {
+                Text(watchOn)
+//                Text(runtime)
+            }
                 .foregroundColor(Color.init(white: 1, opacity: 0.67))
         }
         .font(.system(size: 31, weight: .medium))
