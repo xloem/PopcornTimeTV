@@ -62,14 +62,19 @@ struct PlayerView: View {
                         withAnimation {
                             viewModel.showControls = true
                         }
+                        viewModel.resetIdleTimer()
                     case .left:
-                        viewModel.rewind()
-                        viewModel.progress.hint = .rewind
-                        viewModel.resetIdleTimer()
+                        if viewModel.showControls {
+                            viewModel.rewind()
+                            viewModel.progress.hint = .rewind
+                            viewModel.resetIdleTimer()
+                        }
                     case .right:
-                        viewModel.fastForward()
-                        viewModel.progress.hint = .fastForward
-                        viewModel.resetIdleTimer()
+                        if viewModel.showControls {
+                            viewModel.fastForward()
+                            viewModel.progress.hint = .fastForward
+                            viewModel.resetIdleTimer()
+                        }
                     @unknown default:
                         break
                     }

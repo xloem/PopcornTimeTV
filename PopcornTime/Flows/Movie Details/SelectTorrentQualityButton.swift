@@ -17,7 +17,6 @@ struct SelectTorrentQualityButton<Label>: View where Label : View {
     @State var showChooseQualityActionSheet = false
     @State var noTorrentsFoundAlert = false
     @State var showStreamOnCellularAlert = false
-    var onFocus: () -> Void = {}
     
     var body: some View {
         return Button(action: {
@@ -37,7 +36,6 @@ struct SelectTorrentQualityButton<Label>: View where Label : View {
                 showChooseQualityActionSheet = true
             }
         }, label: label)
-        .buttonStyle(TVButtonStyle(onFocus: onFocus))
         .confirmationDialog("Choose Quality", isPresented: $showChooseQualityActionSheet, titleVisibility: .visible, actions: {
             chooseTorrentsButtons
         })

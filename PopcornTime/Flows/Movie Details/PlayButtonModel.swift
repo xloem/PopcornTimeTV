@@ -10,5 +10,10 @@ import Foundation
 import PopcornKit
 
 class PlayButtonModel: ObservableObject {
+    var media: Media
     var torrent: Torrent?
+    
+    init(media: Media) {
+        self.media = media
+    }
 }

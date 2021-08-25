@@ -109,6 +109,14 @@ class DownloadViewModel: NSObject, ObservableObject {
         
         return ByteCountFormatter.string(fromByteCount: Int64(download.torrentStatus.downloadSpeed), countStyle: .binary) + "/s" + speed
     }
+    
+    var watched: Bool {
+        if let _ = media as? Episode {
+            return WatchedlistManager<Episode>.episode.isAdded(media.id)
+        } else {
+            return WatchedlistManager<Movie>.movie.isAdded(media.id)
+        }
+    }
 }
 
 

@@ -12,10 +12,15 @@ import SwiftUI
 class ShowDetailsViewModel: ObservableObject {
     @Published var show: Show
     var error: Error?
-    @Published var currentSeason = -1
+    @Published var currentSeason = -1 {
+        didSet {
+            latestUnwatchedEpisode = show.latestUnwatchedEpisode(from: self.seasonEpisodes())
+        }
+    }
     
     @Published var isLoading = false
     @Published var didLoad = false
+    var latestUnwatchedEpisode: Episode?
     
     init(show: Show) {
         self.show = show
@@ -97,6 +102,10 @@ class ShowDetailsViewModel: ObservableObject {
         return show.episodes.filter({$0.season == currentSeason}).sorted(by: {$0.episode < $1.episode})
     }
     
+    func nextEpisodeToWatch() -> Episode? {
+        return latestUnwatchedEpisode ?? seasonEpisodes().first
+    }
+    
     func loadImageIfMissing(episode: Episode) {
         guard episode.smallBackgroundImage == nil else { return }
         
@@ -111,25 +120,4 @@ class ShowDetailsViewModel: ObservableObject {
             }
         })
     }
-    
-//    func loadEpisodeMetadata(for show: Show, completion: @escaping ([Episode]) -> Void) {
-//        let group = DispatchGroup()
-//        
-//        var episodes = [Episode]()
-//        
-//        for var episode in show.episodes {
-//            group.enter()
-//            TMDBManager.shared.getEpisodeScreenshots(forShowWithImdbId: show.id, orTMDBId: show.tmdbId, season: episode.season, episode: episode.episode, completion: { (tmdbId, image, error) in
-//                if let image = image { episode.largeBackgroundImage = image }
-//                if let tmdbId = tmdbId { episode.show?.tmdbId = tmdbId }
-//                episodes.append(episode)
-//                group.leave()
-//            })
-//        }
-//        
-//        group.notify(queue: .main) {
-//            episodes.sort(by: { $0.episode < $1.episode })
-//            completion(episodes)
-//        }
-//    }
 }

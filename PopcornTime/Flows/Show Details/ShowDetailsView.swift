@@ -63,6 +63,9 @@ struct ShowDetailsView: View {
                                     .frame(width: 1200, height: 200)
                                 #endif
                                 HStack(spacing: 24) {
+                                    if let episode = viewModel.nextEpisodeToWatch() {
+                                        PlayButton(viewModel: PlayButtonModel(media: episode))
+                                    }
                                     if viewModel.show.seasonNumbers.count > 1 {
                                         seasonsButton
                                     }
@@ -201,13 +204,14 @@ struct ShowDetailsView: View {
     }
     
     var seasonsButton: some View {
-        Group {
+        ZStack {
             NavigationLink(
                 destination: SeasonPickerView(viewModel: SeasonPickerViewModel(show: show), selectedSeasonNumber: $viewModel.currentSeason),
                 isActive: $showSeasonPicker,
                 label: {
                     EmptyView()
                 })
+                .hidden()
             
             Button(action: {
                 showSeasonPicker = true

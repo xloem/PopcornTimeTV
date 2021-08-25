@@ -89,11 +89,12 @@ struct EpisodesView: View {
             showPlayer = true
         }, label: {
             EpisodeView(episode: episode)
-        }, onFocus: {
-            currentEpisode = episode
-            onFocus()
         })
         .frame(width: theme.episodeWidth, height: theme.episodeHeight)
+        .buttonStyle(TVButtonStyle(onFocus: {
+            currentEpisode = episode
+            onFocus()
+        }))
     }
     
     @ViewBuilder

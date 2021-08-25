@@ -18,7 +18,6 @@ struct DownloadButton: View {
     let theme = Theme()
     
     @ObservedObject var viewModel: DownloadButtonViewModel
-    var onFocus: () -> Void = {}
     @State var showPlayer = false
     
     var body: some View {
@@ -46,7 +45,7 @@ struct DownloadButton: View {
                 }
                 Text("Download".localized)
             }
-        }, onFocus:onFocus)
+        })
         .frame(width: theme.buttonWidth, height: theme.buttonHeight)
     }
     
@@ -160,8 +159,6 @@ struct DownloadButton_Previews: PreviewProvider {
         VStack(spacing: 24) {
             ForEach(DownloadButtonViewModel.State.allCases, id: \.self) { state in
                 DownloadButton(viewModel: self.model(state: state))
-                    .buttonStyle(TVButtonStyle())
-                    .background(Color.blue)
             }
         }
         .padding(20)

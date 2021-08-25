@@ -17,21 +17,12 @@ struct PlayButton: View {
     }
     let theme = Theme()
     
-    var viewModel: MovieDetailsViewModel
-    
-    @StateObject var buttonModel = PlayButtonModel()
-    @State var torrent: Torrent?
+    @StateObject var viewModel: PlayButtonModel
     @State var showPlayer = false
     
-    var movie: Movie {
-        return viewModel.movie
-    }
-    var onFocus: () -> Void = {}
-    
     var body: some View {
-        SelectTorrentQualityButton(media: movie, action: { torrent in
-            self.torrent = torrent
-            self.buttonModel.torrent = torrent
+        SelectTorrentQualityButton(media: viewModel.media, action: { torrent in
+            self.viewModel.torrent = torrent
             self.showPlayer = true
         }, label: {
             VStack {
@@ -40,24 +31,24 @@ struct PlayButton: View {
                 }
                 Text("Play".localized)
             }
-        }, onFocus: onFocus)
+        })
         .frame(width: theme.buttonWidth, height: theme.buttonHeight)
-        .fullScreenContent(isPresented: $showPlayer, title: viewModel.downloadModel.media.title) {
+        .fullScreenContent(isPresented: $showPlayer, title: viewModel.media.title) {
             torrentView()
         }
     }
     
     @ViewBuilder
     func torrentView() -> some View {
-        if let torrent = buttonModel.torrent {
-            TorrentPlayerView(torrent: torrent, media: movie)
+        if let torrent = viewModel.torrent {
+            TorrentPlayerView(torrent: torrent, media: viewModel.media)
         }
     }
 }
 
 struct PlayButton_Previews: PreviewProvider {
     static var previews: some View {
-        PlayButton(viewModel: MovieDetailsViewModel(movie: Movie.dummy()))
+        PlayButton(viewModel: PlayButtonModel(media: Movie.dummy()))
             .buttonStyle(TVButtonStyle())
             .padding(40)
             .previewLayout(.fixed(width: 300, height: 300))

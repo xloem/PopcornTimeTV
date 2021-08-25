@@ -41,6 +41,11 @@ struct DownloadView: View {
                                     .aspectRatio(contentMode: .fill)
                             }
                             .aspectRatio(contentMode: .fill)
+                            .overlay(alignment: .bottomTrailing) {
+                                if viewModel.watched {
+                                    Image("Episode Watched Indicator")
+                                }
+                            }
                     }
                     .overlay(alignment: .bottom) {
                         if viewModel.download.downloadStatus == .downloading {
