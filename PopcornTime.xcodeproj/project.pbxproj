@@ -289,6 +289,12 @@
 		23BE4BF626C814650081D2AA /* VolumeSlider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23BE4BF526C814650081D2AA /* VolumeSlider.swift */; };
 		23BE4BF826C815790081D2AA /* AirplayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23BE4BF726C815790081D2AA /* AirplayView.swift */; };
 		23BE4BFA26C8598C0081D2AA /* UIScreen+AspectRatio.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23BE4BF926C8598C0081D2AA /* UIScreen+AspectRatio.swift */; };
+		23BEFC9826D7952E008EDC44 /* PlayerAudioModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23BEFC9726D7952E008EDC44 /* PlayerAudioModel.swift */; };
+		23BEFC9926D7952E008EDC44 /* PlayerAudioModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23BEFC9726D7952E008EDC44 /* PlayerAudioModel.swift */; };
+		23BEFC9A26D7952E008EDC44 /* PlayerAudioModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23BEFC9726D7952E008EDC44 /* PlayerAudioModel.swift */; };
+		23BEFC9C26D79862008EDC44 /* PlayerSubtitleModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23BEFC9B26D79862008EDC44 /* PlayerSubtitleModel.swift */; };
+		23BEFC9D26D79862008EDC44 /* PlayerSubtitleModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23BEFC9B26D79862008EDC44 /* PlayerSubtitleModel.swift */; };
+		23BEFC9E26D79862008EDC44 /* PlayerSubtitleModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23BEFC9B26D79862008EDC44 /* PlayerSubtitleModel.swift */; };
 		23C96EE22685B40E0056455E /* DownloadProgressView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23C96EE12685B40E0056455E /* DownloadProgressView.swift */; };
 		23C96EE42685DBC40056455E /* RotateAnimation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23C96EE32685DBC40056455E /* RotateAnimation.swift */; };
 		23D2B398269586810077BBED /* Reachability in Frameworks */ = {isa = PBXBuildFile; productRef = 23D2B397269586810077BBED /* Reachability */; };
@@ -444,6 +450,8 @@
 		23BE4BF526C814650081D2AA /* VolumeSlider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VolumeSlider.swift; sourceTree = "<group>"; };
 		23BE4BF726C815790081D2AA /* AirplayView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AirplayView.swift; sourceTree = "<group>"; };
 		23BE4BF926C8598C0081D2AA /* UIScreen+AspectRatio.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIScreen+AspectRatio.swift"; sourceTree = "<group>"; };
+		23BEFC9726D7952E008EDC44 /* PlayerAudioModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerAudioModel.swift; sourceTree = "<group>"; };
+		23BEFC9B26D79862008EDC44 /* PlayerSubtitleModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerSubtitleModel.swift; sourceTree = "<group>"; };
 		23C96EE12685B40E0056455E /* DownloadProgressView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DownloadProgressView.swift; sourceTree = "<group>"; };
 		23C96EE32685DBC40056455E /* RotateAnimation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RotateAnimation.swift; sourceTree = "<group>"; };
 		23D2B39F26959C910077BBED /* StarRatingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StarRatingView.swift; sourceTree = "<group>"; };
@@ -755,6 +763,8 @@
 				23313B35267E3C1400774A85 /* PlayerView.swift */,
 				23446ACF268054EF0049CC72 /* PlayerViewModel.swift */,
 				23446AD92680C1110049CC72 /* NowPlayingController.swift */,
+				23BEFC9726D7952E008EDC44 /* PlayerAudioModel.swift */,
+				23BEFC9B26D79862008EDC44 /* PlayerSubtitleModel.swift */,
 				23446AD62680BBE80049CC72 /* VLCPlayerView.swift */,
 				23446ADE2680E8600049CC72 /* ProgressBarView.swift */,
 				23BE4BF326C7F57C0081D2AA /* PlayerControlsView.swift */,
@@ -1299,6 +1309,7 @@
 				2388FD5D2691C4E000B51201 /* PersonDetailsView.swift in Sources */,
 				23313B36267E3C1400774A85 /* PlayerView.swift in Sources */,
 				23446ADA2680C1110049CC72 /* NowPlayingController.swift in Sources */,
+				23BEFC9C26D79862008EDC44 /* PlayerSubtitleModel.swift in Sources */,
 				23446ABB267F168F0049CC72 /* MovieDetailsViewModel.swift in Sources */,
 				23A2BD8526BE9A2E004B864E /* MediaRatingsLoader.swift in Sources */,
 				23446ADF2680E8600049CC72 /* ProgressBarView.swift in Sources */,
@@ -1306,6 +1317,7 @@
 				23989FA92687572B00FEDA41 /* AVSpeakerManager.swift in Sources */,
 				237F28652692F6B900FE036C /* SeasonPickerViewModel.swift in Sources */,
 				238F78CF26BADCFF00C4A4E9 /* YoutubeApi.swift in Sources */,
+				23BEFC9826D7952E008EDC44 /* PlayerAudioModel.swift in Sources */,
 				23313B26267E3B6300774A85 /* SeasonPickerView.swift in Sources */,
 				23313B28267E3B6F00774A85 /* DescriptionView.swift in Sources */,
 				2391BE7F26847B9800576CAD /* SelectTorrentQualityButton.swift in Sources */,
@@ -1381,8 +1393,10 @@
 				23BE4BF626C814650081D2AA /* VolumeSlider.swift in Sources */,
 				23A2BD9326BEDA07004B864E /* TrailerButton.swift in Sources */,
 				23A2BDC926BEDBEA004B864E /* UIColor+Extension.swift in Sources */,
+				23BEFC9D26D79862008EDC44 /* PlayerSubtitleModel.swift in Sources */,
 				23A2BD8926BED9EE004B864E /* TabBarView.swift in Sources */,
 				236A11B826C677AD00AFF1FD /* VLCMediaPlayer+VLCFontAppearance.swift in Sources */,
+				23BEFC9926D7952E008EDC44 /* PlayerAudioModel.swift in Sources */,
 				23A2BD9E26BEDA0C004B864E /* ShowDetailsView.swift in Sources */,
 				23A2BDBE26BEDBC2004B864E /* StarRatingView.swift in Sources */,
 				236A11B526C6773200AFF1FD /* PreloadTorrentView.swift in Sources */,
@@ -1452,6 +1466,7 @@
 				237ECA1B26B8481800EE8B46 /* TabBarView.swift in Sources */,
 				23A10F3F26C699D20062D9CE /* DownloadDetailsView.swift in Sources */,
 				23A2BD8626BE9A2E004B864E /* MediaRatingsLoader.swift in Sources */,
+				23BEFC9E26D79862008EDC44 /* PlayerSubtitleModel.swift in Sources */,
 				2383A13726BC3D2200A0346C /* ActorsCrewView.swift in Sources */,
 				237ECA2826B8485F00EE8B46 /* Show+Extension.swift in Sources */,
 				237ECA4426B84A4500EE8B46 /* FileManager+Extension.swift in Sources */,
@@ -1464,6 +1479,7 @@
 				237ECA1526B847C100EE8B46 /* App.swift in Sources */,
 				237ECA3D26B84A3600EE8B46 /* JSONCache.swift in Sources */,
 				23B24D7526CA775800B8CD84 /* UIColor+Extension.swift in Sources */,
+				23BEFC9A26D7952E008EDC44 /* PlayerAudioModel.swift in Sources */,
 				23A10F4126C699D80062D9CE /* DownloadViewModel.swift in Sources */,
 				2383A13926BC3D4600A0346C /* PersonDetailsView.swift in Sources */,
 				237ECA2926B8485F00EE8B46 /* Media + Subtitles.swift in Sources */,

@@ -157,11 +157,11 @@ struct PlayerView: View {
         if viewModel.showInfo {
             VStack {
                 PlayerOptionsView(media: viewModel.media,
-                                  audioDelay: viewModel.audioDelayBinding,
-                                  audioProfile: viewModel.audioProfileBinding,
-                                  subtitleDelay: viewModel.subtitleDelayBinding,
-                                  subtitleEncoding: viewModel.subtitleEncodingBinding,
-                                  subtitle: viewModel.subtitleBinding)
+                                  audioDelay: viewModel.audioController.audioDelayBinding,
+                                  audioProfile: viewModel.audioController.audioProfileBinding,
+                                  subtitleDelay: viewModel.subtitleController.subtitleDelayBinding,
+                                  subtitleEncoding: viewModel.subtitleController.subtitleEncodingBinding,
+                                  subtitle: viewModel.subtitleController.subtitleBinding)
                 #if os(tvOS)
                 .prefersDefaultFocus(in: namespace)
                 .onExitCommand(perform: {
@@ -193,9 +193,10 @@ struct PlayerView: View {
 struct PlayerView_Previews: PreviewProvider {
     static var previews: some View {
         let url = URL(string: "http://www.youtube.com/watch?v=zI2qbr99H64")!
-        let loadingModel = PlayerViewModel(media: Movie.dummy(), fromUrl: url, localUrl: url, directory: url, streamer: .shared())
+        let directory = URL(fileURLWithPath: "/tmp")
+        let loadingModel = PlayerViewModel(media: Movie.dummy(), fromUrl: url, localUrl: directory, directory: directory, streamer: .shared())
         
-        let showControlsModel = PlayerViewModel(media: Movie.dummy(), fromUrl: url, localUrl: url, directory: url, streamer: .shared())
+        let showControlsModel = PlayerViewModel(media: Movie.dummy(), fromUrl: url, localUrl: directory, directory: directory, streamer: .shared())
         showControlsModel.isLoading = false
         showControlsModel.showControls = true
         showControlsModel.showInfo = true
@@ -211,23 +212,24 @@ struct PlayerView_Previews: PreviewProvider {
         }
     }
     
-    static var dummyPreview: some View {
-        let url = URL(string: "http://www.youtube.com/watch?v=zI2qbr99H64")!
-        
-        let showControlsModel = PlayerViewModel(media: Movie.dummy(), fromUrl: url, localUrl: url, directory: url, streamer: .shared(), testingMode: true)
-        showControlsModel.isLoading = false
-        showControlsModel.showControls = false
-        showControlsModel.showInfo = false
-        showControlsModel.isPlaying = true
-        showControlsModel.progress = .init(progress: 0.2, isBuffering: false, bufferProgress: 0.7, isScrubbing: false, scrubbingProgress: 0, remainingTime: "03 min", elapsedTime: "05 min", scrubbingTime: "la la", screenshot: nil, hint: .none)
-        
-        
-        return Group {
-            PlayerView()
-                .background(Color.blue)
-                .environmentObject(showControlsModel)
-        }
-    }
+//    static var dummyPreview: some View {
+//        let url = URL(string: "http://www.youtube.com/watch?v=zI2qbr99H64")!
+//        let directory = URL(fileURLWithPath: "/tmp")
+//        
+//        let showControlsModel = PlayerViewModel(media: Movie.dummy(), fromUrl: url, localUrl: directory, directory: directory, streamer: .shared(), testingMode: true)
+//        showControlsModel.isLoading = false
+//        showControlsModel.showControls = false
+//        showControlsModel.showInfo = false
+//        showControlsModel.isPlaying = true
+//        showControlsModel.progress = .init(progress: 0.2, isBuffering: false, bufferProgress: 0.7, isScrubbing: false, scrubbingProgress: 0, remainingTime: "03 min", elapsedTime: "05 min", scrubbingTime: "la la", screenshot: nil, hint: .none)
+//        
+//        
+//        return Group {
+//            PlayerView()
+//                .background(Color.blue)
+//                .environmentObject(showControlsModel)
+//        }
+//    }
 }
 
 

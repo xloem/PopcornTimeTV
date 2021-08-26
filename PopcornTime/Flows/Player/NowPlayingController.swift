@@ -32,17 +32,10 @@ class NowPlayingController {
         }
     }
     
-    internal var streamDuration: Float {
-        guard let remaining = mediaplayer.remainingTime?.value?.floatValue, let elapsed = mediaplayer.time?.value?.floatValue else {
-            return Float(CMTimeGetSeconds(imageGenerator.asset.duration) * 1000)
-        }
-        return fabsf(remaining) + elapsed
-    }
-    
-    init(mediaplayer: VLCMediaPlayer, media: Media, imageGenerator: AVAssetImageGenerator) {
+    init(mediaplayer: VLCMediaPlayer, media: Media, localPathToMedia: URL) {
         self.mediaplayer = mediaplayer
         self.media = media
-        self.imageGenerator = imageGenerator
+        self.imageGenerator = AVAssetImageGenerator(asset: AVAsset(url: localPathToMedia))
     }
     
     func addRemoteCommandCenterHandlers() {
@@ -135,6 +128,13 @@ class NowPlayingController {
         }
     }
     #endif
+    
+    internal var streamDuration: Float {
+        guard let remaining = mediaplayer.remainingTime?.value?.floatValue, let elapsed = mediaplayer.time?.value?.floatValue else {
+            return Float(CMTimeGetSeconds(imageGenerator.asset.duration) * 1000)
+        }
+        return fabsf(remaining) + elapsed
+    }
     
     func screenshotAtTime(_ time: NSNumber) -> CGImage? {
         guard let image = try? imageGenerator.copyCGImage(at: CMTimeMakeWithSeconds(time.doubleValue/1000.0, preferredTimescale: 1000), actualTime: nil) else {

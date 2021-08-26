@@ -33,20 +33,18 @@ enum TransportBarHint: String {
 
 class PlayerViewModel: NSObject, ObservableObject {
     var media: Media
-    private (set) var url: URL
     private (set) var mediaplayer = VLCMediaPlayer()
     private var nowPlaying: NowPlayingController
+    var audioController: PlayerAudioModel
+    var subtitleController: PlayerSubtitleModel
     
-    private (set) var directory: URL
-    private (set) var localPathToMedia: URL
     private (set) var streamer: PTTorrentStreamer
-    internal var nextEpisode: Episode?
-    internal var startPosition: Float = 0.0
+    
     private var idleWorkItem: DispatchWorkItem?
-    private let NSNotFound: Int32 = -1
     internal var workItem: DispatchWorkItem?
     internal var torrentStatusChangeObserver: AnyObject?
     
+    internal var startPosition: Float = 0.0
     var resumePlayback = false
     @Published var resumePlaybackAlert = false
     
@@ -55,31 +53,7 @@ class PlayerViewModel: NSObject, ObservableObject {
     @Published var showControls = false
     @Published var showInfo = false
     var presentationMode: Binding<PresentationMode>?
-    
-    var audioProfile: EqualizerProfiles = .fullDynamicRange
-    var audioProfileBinding: Binding<EqualizerProfiles> = .constant(.fullDynamicRange)
-    var audioDelayBinding: Binding<Int> = .constant(0)
-    var subtitleEncodingBinding: Binding<String> = .constant("")
-    var subtitleDelayBinding: Binding<Int> = .constant(0)
-    
-    var subtitles: Dictionary<String, [Subtitle]> {
-        return media.subtitles
-    }
-    var currentSubtitle: Subtitle? {
-        didSet {
-            if let subtitle = currentSubtitle {
-                PopcornKit.downloadSubtitleFile(subtitle.link, downloadDirectory: directory, completion: { (subtitlePath, error) in
-                    guard let subtitlePath = subtitlePath else { return }
-                    self.mediaplayer.addPlaybackSlave(subtitlePath, type: .subtitle, enforce: true)
-                })
-            } else {
-                mediaplayer.currentVideoSubTitleIndex = NSNotFound // Remove all subtitles
-            }
-        }
-    }
-    var subtitleBinding: Binding<Subtitle?> = .constant(nil)
-    
-    public let vlcSettingTextEncoding = "subsdec-encoding"
+
     struct Progress {
         var progress: Float = 0
         var isBuffering = false
@@ -94,65 +68,22 @@ class PlayerViewModel: NSObject, ObservableObject {
     }
     @Published var progress = Progress()
     
-    init(media: Media, fromUrl: URL, localUrl: URL, directory: URL, streamer: PTTorrentStreamer, testingMode: Bool = false) {
+    init(media: Media, fromUrl: URL, localUrl: URL, directory: URL, streamer: PTTorrentStreamer) {
         self.media = media
-        self.url = fromUrl
-        self.localPathToMedia = localUrl
-        self.directory = directory
         self.streamer = streamer
         
-        let imageGenerator = AVAssetImageGenerator(asset: AVAsset(url: localUrl))
-        self.nowPlaying = NowPlayingController(mediaplayer: mediaplayer, media: media, imageGenerator: imageGenerator)
-
+        mediaplayer.audio.passthrough = true
+        mediaplayer.media = VLCMedia(url: fromUrl)
+        
+        self.nowPlaying = NowPlayingController(mediaplayer: mediaplayer, media: media, localPathToMedia: localUrl)
+        self.audioController = PlayerAudioModel(mediaplayer: mediaplayer)
+        self.subtitleController = PlayerSubtitleModel(media: media, mediaplayer: mediaplayer, directory: directory, localPathToMedia: localUrl)
         
         super.init()
+        mediaplayer.delegate = self
         self.nowPlaying.onPlayPause = { [weak self] in
             self?.playandPause()
         }
-        
-        if (!testingMode) {
-            prepare()
-        }
-        
-        audioDelayBinding = Binding(get: { [unowned self] in
-            mediaplayer.currentAudioPlaybackDelay
-        }, set: { [unowned self] newDelay in
-            mediaplayer.currentAudioPlaybackDelay = newDelay
-        })
-        
-        audioProfileBinding = Binding(get: { [unowned self] in
-            return audioProfile
-        }, set: { [unowned self] profile in
-            audioProfile = profile
-            didSelectEqualizerProfile(profile)
-        })
-        
-        subtitleDelayBinding = Binding(get: { [unowned self] in
-            mediaplayer.currentVideoSubTitleDelay
-        }, set: { [unowned self] newDelay in
-            mediaplayer.currentVideoSubTitleDelay = newDelay
-        })
-        
-        subtitleEncodingBinding = Binding(get: {
-            SubtitleSettings.shared.encoding
-        }, set: { [unowned self] encoding in
-            let subtitle = SubtitleSettings.shared
-            subtitle.encoding = encoding
-            subtitle.save()
-            mediaplayer.media.addOptions([vlcSettingTextEncoding: encoding])
-        })
-        
-        subtitleBinding = Binding(get: { [unowned self] in
-            currentSubtitle
-        }, set: { [unowned self] subtitle in
-            currentSubtitle = subtitle
-        })
-    }
-    
-    func prepare() {
-        mediaplayer.delegate = self
-        mediaplayer.audio.passthrough = true
-        mediaplayer.media = VLCMedia(url: url)
         
         torrentStatusChangeObserver = NotificationCenter.default.addObserver(forName: .PTTorrentStatusDidChange, object: streamer, queue: nil) { [unowned self] notification in
             guard !resumePlaybackAlert else { // will trigger UI invalidation - and screen becomes unresponsive
@@ -160,28 +91,6 @@ class PlayerViewModel: NSObject, ObservableObject {
             }
             progress.bufferProgress = streamer.torrentStatus.totalProgress
         }
-        if media.subtitles.count == 0 {
-            media.getSubtitles(orWithFilePath: localPathToMedia, completion: { [unowned self] (subtitles) in
-                    return self.media.subtitles = subtitles
-                })
-        }
-        let settings = SubtitleSettings.shared
-        if let preferredLanguage = settings.language {
-            self.currentSubtitle = subtitles[preferredLanguage]?.first
-        }
-        let vlcAppearance = mediaplayer as VLCFontAppearance
-        vlcAppearance.setTextRendererFontSize?(NSNumber(value: settings.size.rawValue))
-        vlcAppearance.setTextRendererFontColor?(NSNumber(value: settings.color.hexInt()))
-        vlcAppearance.setTextRendererFont?(settings.font.fontName as NSString)
-        vlcAppearance.setTextRendererFontForceBold?(NSNumber(booleanLiteral: settings.style == .bold || settings.style == .boldItalic))
-        
-        mediaplayer.media.addOptions([vlcSettingTextEncoding: settings.encoding])
-        
-        #if os(iOS) || os(tvOS)
-        try? AVAudioSession.sharedInstance().setCategory(.playback, mode: .moviePlayback, options: [.allowBluetoothA2DP,.allowAirPlay])
-        
-        didSelectEqualizerProfile(.fullDynamicRange)
-        #endif
     }
     
     func playOnAppear() {
@@ -194,6 +103,7 @@ class PlayerViewModel: NSObject, ObservableObject {
             mediaplayer.play()
         }
     }
+    
     func play(resumePlayback:Bool = false) {
         if resumePlayback {
             self.resumePlayback = resumePlayback
@@ -365,11 +275,6 @@ class PlayerViewModel: NSObject, ObservableObject {
             progress.screenshot = image
         }
     }
-    
-    func didSelectEqualizerProfile(_ profile: EqualizerProfiles) {
-        mediaplayer.resetEqualizer(fromProfile: profile.rawValue)
-        mediaplayer.equalizerEnabled = true
-    }
 
     
     func saveMediaProgress(status: Trakt.WatchedStatus) {
@@ -457,7 +362,6 @@ extension PlayerViewModel: VLCMediaPlayerDelegate {
         }
         
         isPlaying = true
-//        playPauseButton?.setImage(UIImage(named: "Pause"), for: .normal)
         
         progress.isBuffering = false
         progress.remainingTime = mediaplayer.remainingTime.stringValue
