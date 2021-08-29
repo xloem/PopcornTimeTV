@@ -31,7 +31,9 @@ class TrailerButtonViewModel: ObservableObject {
         let media = self.movie
         let player = AVPlayer(url: url)
         
-        #if os(tvOS)
+        #if os(tvOS) || os(iOS)
+        try? AVAudioSession.sharedInstance().setCategory(.playback, mode: .moviePlayback, options: [.allowBluetoothA2DP, .allowAirPlay])
+        
         let title = self.makeMetadataItem(.commonIdentifierArtwork, value: media.title)
         let summary = self.makeMetadataItem(.commonIdentifierDescription, value: media.summary)
         player.currentItem?.externalMetadata = [title, summary]

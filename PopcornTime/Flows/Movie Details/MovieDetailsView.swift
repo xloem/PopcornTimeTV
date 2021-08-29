@@ -101,7 +101,7 @@ struct MovieDetailsView: View {
                         .padding(.top, 50)
                     }
                 }
-                if let error = error {
+                if let error = error ?? viewModel.error {
                     BannerView(error: error)
                         .padding([.top, .trailing], 60)
                         .transition(.move(edge: .top))
@@ -351,14 +351,39 @@ struct MovieDetailsView: View {
 
 struct DetailView_Previews: PreviewProvider {
     static var previews: some View {
-        MovieDetailsView(viewModel: MovieDetailsViewModel(movie: Movie.dummy()))
-//            .frame(height: 2000)
-        #if os(tvOS)
-            .previewLayout(.fixed(width: 2000, height: 2000))
-        #endif
-            .preferredColorScheme(.dark)
-        
-        MovieDetailsView(viewModel: MovieDetailsViewModel(movie: Movie.dummy()), error: NSError(domain: "", code: 1, userInfo: [NSLocalizedDescriptionKey: "This is an error text example"]))
-            .preferredColorScheme(.dark)
+        Group {
+            MovieDetailsView(viewModel: viewModel())
+            #if os(tvOS)
+                .previewLayout(.fixed(width: 2000, height: 1800))
+            #endif
+            
+            MovieDetailsView(viewModel: errorViewModel())
+                .previewDisplayName("Error")
+            
+            MovieDetailsView(viewModel: loadingViewModel())
+                .previewDisplayName("Loading")
+        }
+        .preferredColorScheme(.dark)
+    }
+    
+    static func viewModel() -> MovieDetailsViewModel {
+        let viewModel = MovieDetailsViewModel(movie: Movie.dummy())
+        viewModel.didLoad = true
+        return viewModel
+    }
+    
+    static func loadingViewModel() -> MovieDetailsViewModel {
+        let movie = Movie.dummiesFromJSON()[0]
+        let viewModel = MovieDetailsViewModel(movie: movie)
+        viewModel.isLoading = true
+        return viewModel
+    }
+    
+    static func errorViewModel() -> MovieDetailsViewModel {
+        let viewModel = MovieDetailsViewModel(movie: Movie.dummy())
+        let error = NSError(domain: "", code: 1, userInfo: [NSLocalizedDescriptionKey: "This is an error text example"])
+        viewModel.error = error
+        viewModel.didLoad = true
+        return viewModel
     }
 }

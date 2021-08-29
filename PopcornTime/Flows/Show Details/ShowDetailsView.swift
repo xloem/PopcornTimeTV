@@ -28,8 +28,6 @@ struct ShowDetailsView: View {
     let theme = Theme()
     
     @StateObject var viewModel: ShowDetailsViewModel
-    @State var showPlayer: Bool = false
-    @State var error: Error?
     @State var showSeasonPicker: Bool = false
     
     @Environment(\.colorScheme) var colorScheme
@@ -136,13 +134,13 @@ struct ShowDetailsView: View {
                     .id(section2)
                 }
             }
-            if let error = error {
+            if let error = viewModel.error {
                 BannerView(error: error)
                     .padding([.top, .trailing], 60)
                     .transition(.move(edge: .top))
                     .onAppear {
                         DispatchQueue.main.asyncAfter(deadline: .now() + 5) {
-                            self.error = nil
+                            viewModel.error = nil
                         }
                     }
             }
@@ -288,10 +286,11 @@ struct ShowDetailsView_Previews: PreviewProvider {
         let show = Show.dummy()
         let model = ShowDetailsViewModel(show: show)
         model.currentSeason = show.latestUnwatchedEpisode()?.season ?? show.seasonNumbers.first ?? -1
+        model.didLoad = true
             
         return ShowDetailsView(viewModel: model)
             #if os(tvOS)
-            .previewLayout(.fixed(width: 2000, height: 1800))
+            .previewLayout(.fixed(width: 2000, height: 2400))
             #else
             .previewLayout(.fixed(width: 1024, height: 1800))
             #endif

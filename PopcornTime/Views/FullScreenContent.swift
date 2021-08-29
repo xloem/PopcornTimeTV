@@ -32,9 +32,7 @@ extension View {
         self.fullScreenCover(isPresented: isPresented, content: content)
         #elseif os(iOS)
         self.fullScreenCover(isPresented: isPresented, content: {
-            NavigationView {
-                content()
-            }
+            content()
         })
         #elseif os(macOS)
         self.fullScreenModal(isPresented: isPresented, title: title, modalView: content)
