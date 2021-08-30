@@ -11,35 +11,43 @@ import PopcornKit
 
 struct PlayerControlsView: View {
     @EnvironmentObject var viewModel: PlayerViewModel
-    @Environment(\.presentationMode) var presentationMode
+    @Environment(\.dismiss) var dismiss
     
     var body: some View {
         VStack {
+            #if os(iOS)
             topView
+                .padding([.leading, .trailing], 20)
+            #endif
             Spacer()
             bottomView
+                .padding([.leading, .trailing], 20)
         }
         .accentColor(.white)
     }
     
     @ViewBuilder
     var topView: some View {
-        #if os(iOS)
         HStack(alignment: .center, spacing: 0) {
-            closeButton
-                .background(.regularMaterial)
-            ratioButton
-                .background(.regularMaterial)
+            HStack(spacing: 0) {
+                closeButton
+                    .background(.regularMaterial)
+                ratioButton
+            }
+            .background(.regularMaterial)
+            .cornerRadius(10)
+            
             Spacer()
+            #if os(iOS)
             VolumeButtonSlider()
                 .frame(width: 200)
+                .padding([.leading, .trailing], 10)
                 .background(.regularMaterial)
+                .cornerRadius(10)
+            #endif
         }
         .frame(height: 46)
-        .padding(.top, 10)
-        #else
-        EmptyView()
-        #endif
+        .padding(.top, 1)
     }
     
     @ViewBuilder
@@ -47,35 +55,37 @@ struct PlayerControlsView: View {
         HStack(spacing: 10) {
             rewindButton
             playButton
-                .padding(.leading, 10)
+                .padding([.leading, .trailing], 4)
             forwardButton
-                .padding(.leading, 10)
             Text(viewModel.progress.isScrubbing ? viewModel.progress.scrubbingTime : viewModel.progress.elapsedTime)
-            #if os(iOS)
                 .monospacedDigit()
-            #endif
                 .foregroundColor(.gray)
                 .frame(minWidth: 40)
             progressView
             Text(viewModel.progress.remainingTime)
-            #if os(iOS)
                 .monospacedDigit()
-            #endif
                 .foregroundColor(.gray)
                 .frame(minWidth: 40)
-//            AirplayView()
-//                .frame(width: 40)
+            AirplayView()
+                .frame(width: 40)
             subtitlesButton
         }
-        #if os(iOS)
         .tint(.white)
-        #endif
+        #if os(macOS)
+        .frame(height: 35)
+        #else
         .frame(height: 45)
-        .padding([.leading, .trailing], 10)
-        #if os(iOS)
-        .background(.regularMaterial)
         #endif
-        .padding(.bottom, 10)
+        .frame(maxWidth: 750)
+        .padding([.leading, .trailing], 10)
+        .background(.regularMaterial)
+        .cornerRadius(10)
+        .buttonStyle(.plain)
+        #if os(macOS)
+        .padding(.bottom, 20)
+        #else
+        .padding(.bottom, 1)
+        #endif
     }
     
     @ViewBuilder
@@ -90,11 +100,11 @@ struct PlayerControlsView: View {
                 }
             } else {
                 ProgressView(value: viewModel.progress.bufferProgress)
+                #if os(iOS)
                     .padding(.top, 1)
                     .padding([.leading, .trailing], 1)
-                #if os(iOS)
-                    .tint(.gray)
                 #endif
+                    .tint(.gray)
                 Slider(value: Binding(get: {
                     viewModel.progress.isScrubbing ? viewModel.progress.scrubbingProgress : viewModel.progress.progress
                 }, set: { value in
@@ -111,7 +121,7 @@ struct PlayerControlsView: View {
     var closeButton: some View {
         Button {
             withAnimation {
-                presentationMode.wrappedValue.dismiss()
+                dismiss()
             }
         } label: {
             Color.clear
@@ -180,14 +190,14 @@ struct PlayerControlsView: View {
         .frame(width: 32)
     }
     
-    @ViewBuilder
-    var airplayButton: some View {
-        Image("AirPlay")
-        #if os(iOS)
-        .tint(.gray)
-        #endif
-        .frame(width: 32)
-    }
+//    @ViewBuilder
+//    var airplayButton: some View {
+//        Image("AirPlay")
+//        #if os(iOS)
+//        .tint(.gray)
+//        #endif
+//        .frame(width: 32)
+//    }
     
     @ViewBuilder
     var subtitlesButton: some View {
@@ -196,9 +206,7 @@ struct PlayerControlsView: View {
         } label: {
             Image("Subtitles")
         }
-        #if os(iOS)
         .tint(.gray)
-        #endif
         .frame(width: 32)
     }
 }
@@ -207,7 +215,9 @@ struct PlayerControlsView_Previews: PreviewProvider {
     static var previews: some View {
         PlayerControlsView()
             .preferredColorScheme(.dark)
+            .background(.red)
             .environmentObject(playingPlayerModel)
+            .previewInterfaceOrientation(.landscapeLeft)
         
         PlayerControlsView()
             .preferredColorScheme(.dark)

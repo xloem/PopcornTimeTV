@@ -91,6 +91,7 @@
 		23446ADB2680E7BB0049CC72 /* ProgressBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4DD6E4CF1DFB17B400818A2C /* ProgressBar.swift */; };
 		23446ADC2680E7E40049CC72 /* BufferingBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4DD6E4D11DFB197E00818A2C /* BufferingBar.swift */; };
 		23446ADF2680E8600049CC72 /* ProgressBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23446ADE2680E8600049CC72 /* ProgressBarView.swift */; };
+		23461D9026DD3025007C6520 /* AirplayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23BE4BF726C815790081D2AA /* AirplayView.swift */; };
 		23507DC8269483310098CC12 /* ObjectMapper in Frameworks */ = {isa = PBXBuildFile; productRef = 23507DC7269483310098CC12 /* ObjectMapper */; };
 		2364708B2694B76E008743CB /* ObjectMapper in Frameworks */ = {isa = PBXBuildFile; productRef = 2364708A2694B76E008743CB /* ObjectMapper */; };
 		236A11B426C6772E00AFF1FD /* PreloadTorrentViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23446AC5267FAD000049CC72 /* PreloadTorrentViewModel.swift */; };
@@ -1479,6 +1480,7 @@
 				237ECA1526B847C100EE8B46 /* App.swift in Sources */,
 				237ECA3D26B84A3600EE8B46 /* JSONCache.swift in Sources */,
 				23B24D7526CA775800B8CD84 /* UIColor+Extension.swift in Sources */,
+				23461D9026DD3025007C6520 /* AirplayView.swift in Sources */,
 				23BEFC9A26D7952E008EDC44 /* PlayerAudioModel.swift in Sources */,
 				23A10F4126C699D80062D9CE /* DownloadViewModel.swift in Sources */,
 				2383A13926BC3D4600A0346C /* PersonDetailsView.swift in Sources */,

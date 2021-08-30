@@ -16,23 +16,24 @@ struct VolumeButtonSlider: View {
     
     var body: some View {
         HStack {
+            VolumeSlider(volume: $volume)
+                .padding(.top, 14)
+                .padding(.trailing, 10)
+            
             Button {
                 let value = volume
                 volume = previousValue != 0 ? 0 : previousValue
                 previousValue = value
             } label: {
-                Color.clear.overlay {
-                    Image(volume > 0 ? "Volume Maximum" : "Volume Minimum")
-                        .padding(.leading, maskValue)
-                        .mask(Rectangle().padding(.trailing, maskValue))
-                }
+                Color.clear
+                    .overlay {
+                        Image(volume > 0 ? "Volume Maximum" : "Volume Minimum")
+                            .padding(.leading, maskValue)
+                            .mask(Rectangle().padding(.trailing, maskValue))
+                    }
                 .clipped()
             }
             .frame(width: 41)
-            
-            VolumeSlider(volume: $volume)
-                .padding(.top, 14)
-                .padding(.trailing, 10)
         }
     }
     
@@ -57,6 +58,7 @@ struct VolumeSlider: UIViewRepresentable {
     
     func makeUIView(context: Context) -> MPVolumeView {
         let volumeView = MPVolumeView(frame: .zero)
+        volumeView.showsRouteButton = false
         if let slider = volumeView.subviews.compactMap({$0 as? UISlider}).first {
             context.coordinator.addObservers(slider: slider)
         }
@@ -88,10 +90,15 @@ struct VolumeSlider: UIViewRepresentable {
 
 struct VolumeSlider_Previews: PreviewProvider {
     static var previews: some View {
-        VolumeButtonSlider()
+        Group {
+            VolumeButtonSlider(volume: 0)
+            VolumeButtonSlider(volume: 0.3)
+            VolumeButtonSlider(volume: 0.50)
+            VolumeButtonSlider(volume: 1)
+        }
             .frame(width: 200, height: 41)
             .preferredColorScheme(.dark)
-//            .previewLayout(.fixed(width: 150, height: 46))
+            .previewLayout(.fixed(width: 300, height: 60))
     }
 }
 
