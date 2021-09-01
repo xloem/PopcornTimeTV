@@ -18,10 +18,12 @@ struct PlayerControlsView: View {
             #if os(iOS)
             topView
                 .padding([.leading, .trailing], 20)
+                .padding(.top, 20)
             #endif
             Spacer()
             bottomView
                 .padding([.leading, .trailing], 20)
+                .padding(.bottom, 20)
         }
         .accentColor(.white)
     }
@@ -81,11 +83,6 @@ struct PlayerControlsView: View {
         .background(.regularMaterial)
         .cornerRadius(10)
         .buttonStyle(.plain)
-        #if os(macOS)
-        .padding(.bottom, 20)
-        #else
-        .padding(.bottom, 1)
-        #endif
     }
     
     @ViewBuilder
