@@ -14,22 +14,30 @@ struct SelectTorrentQualityButton<Label>: View where Label : View {
     var action: (Torrent) -> Void
     @ViewBuilder var label: () -> Label
     
+    struct AlertType: Identifiable {
+        enum Choice {
+            case noTorrentsFound, streamOnCellular
+        }
+
+        var id: Choice
+    }
+
+    
     @State var showChooseQualityActionSheet = false
-    @State var noTorrentsFoundAlert = false
-    @State var showStreamOnCellularAlert = false
+    @State var alert: AlertType?
     
     var body: some View {
         return Button(action: {
             #if os(iOS)
             if UIDevice.current.hasCellularCapabilites &&
                 Session.reachability.connection != .wifi && !Session.streamOnCellular {
-                self.showStreamOnCellularAlert = true
+                alert = .init(id: .streamOnCellular)
                 return
             }
             #endif
             
             if media.torrents.count == 0 {
-                self.noTorrentsFoundAlert = true
+                alert = .init(id: .noTorrentsFound)
             } else if let torrent = autoSelectTorrent {
                 action(torrent)
             } else {
@@ -39,18 +47,21 @@ struct SelectTorrentQualityButton<Label>: View where Label : View {
         .confirmationDialog("Choose Quality", isPresented: $showChooseQualityActionSheet, titleVisibility: .visible, actions: {
             chooseTorrentsButtons
         })
-        .alert(isPresented: $noTorrentsFoundAlert, content: {
-            Alert(title: Text("No torrents found".localized),
-                  message: Text("Torrents could not be found for the specified media.".localized),
-                  dismissButton: .cancel())
-        }).alert(isPresented: $showStreamOnCellularAlert, content: {
-            Alert(title: Text("Cellular Data is turned off for streaming".localized),
-                  message: nil,
-                  primaryButton: .default(Text("Turn On".localized)) {
-                    Session.streamOnCellular = true
-                  },
-                  secondaryButton: .cancel())
-        })
+        .alert(item: $alert) { alert in
+            switch alert.id {
+            case .noTorrentsFound:
+                return Alert(title: Text("No torrents found".localized),
+                      message: Text("Torrents could not be found for the specified media.".localized))
+            case .streamOnCellular:
+                return Alert(title: Text("Cellular Data is turned off for streaming".localized),
+                      message: nil,
+                      primaryButton: .default(Text("Turn On".localized)) {
+                        Session.streamOnCellular = true
+                      },
+                      secondaryButton: .cancel())
+            }
+            
+        }
     }
     
     var autoSelectTorrent: Torrent? {

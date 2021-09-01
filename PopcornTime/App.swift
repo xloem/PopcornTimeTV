@@ -54,7 +54,6 @@ struct PopcornTime: App {
         }
     }
     
-    #if os(tvOS)
     @ViewBuilder
     var mediaView: some View {
         switch media {
@@ -66,7 +65,6 @@ struct PopcornTime: App {
             EmptyView()
         }
     }
-    #endif
     
     func openUrl(url: URL) {
         if url.scheme == "PopcornTimeSwiftUI" {

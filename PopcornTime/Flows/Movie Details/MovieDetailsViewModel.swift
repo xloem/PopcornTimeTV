@@ -49,6 +49,7 @@ class MovieDetailsViewModel: ObservableObject {
             if var movie = movie {
                 movie.ratings = self.movie.ratings
                 self.movie = movie
+                self.downloadModel = DownloadButtonViewModel(media: movie)
             }
             
             self.isLoading = false

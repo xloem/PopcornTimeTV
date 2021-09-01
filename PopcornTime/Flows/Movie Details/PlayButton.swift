@@ -17,7 +17,7 @@ struct PlayButton: View {
     }
     let theme = Theme()
     
-    @StateObject var viewModel: PlayButtonModel
+    var viewModel: PlayButtonModel
     @State var showPlayer = false
     
     var body: some View {

@@ -108,14 +108,6 @@ struct DownloadButton: View {
                         ]
             )
         }
-//        .actionSheet(isPresented: $viewModel.showDownloadFailedAlert) {
-//            ActionSheet(title: Text( "Download Failed".localized),
-//                        message: Text(viewModel.downloadError?.localizedDescription ?? ""),
-//                        buttons: [
-//                            .default(Text("OK".localized))
-//                        ]
-//            )
-//        }
 #endif
         .alert(isPresented: $viewModel.showDownloadFailedAlert, content: {
             Alert(title: Text( "Download Failed".localized),
