@@ -22,10 +22,8 @@ class PlayerSubtitleModel {
     private (set) var mediaplayer: VLCMediaPlayer
     private (set) var downloadDirectory: URL
     private let NSNotFound: Int32 = -1
-    
-    var subtitleEncodingBinding: Binding<String> = .constant("")
-    var subtitleDelayBinding: Binding<Int> = .constant(0)
-    var subtitleBinding: Binding<Subtitle?> = .constant(nil)
+    let settings = SubtitleSettings.shared
+    var currentSubtitle: Subtitle?
     
     public let vlcSettingTextEncoding = "subsdec-encoding"
     
@@ -44,9 +42,9 @@ class PlayerSubtitleModel {
             }
         }
         
-        let settings = SubtitleSettings.shared
         if let preferredLanguage = settings.language {
             self.currentSubtitle = media.subtitles[preferredLanguage]?.first
+            configurePlayer(subtitle: self.currentSubtitle)
         }
         let vlcAppearance = mediaplayer as VLCFontAppearance
         vlcAppearance.setTextRendererFontSize?(NSNumber(value: settings.size.rawValue))
@@ -55,39 +53,43 @@ class PlayerSubtitleModel {
         vlcAppearance.setTextRendererFontForceBold?(NSNumber(booleanLiteral: settings.style == .bold || settings.style == .boldItalic))
         
         mediaplayer.media.addOptions([vlcSettingTextEncoding: settings.encoding])
-        
-        subtitleDelayBinding = Binding(get: {
-            mediaplayer.currentVideoSubTitleDelay
-        }, set: { newDelay in
-            mediaplayer.currentVideoSubTitleDelay = newDelay
-        })
-        
-        subtitleEncodingBinding = Binding(get: {
-            SubtitleSettings.shared.encoding
+    }
+    
+    func configurePlayer(subtitle: Subtitle?) {
+        if let subtitle = subtitle {
+            PopcornKit.downloadSubtitleFile(subtitle.link, downloadDirectory: downloadDirectory, completion: { (subtitlePath, error) in
+                guard let subtitlePath = subtitlePath else { return }
+                self.mediaplayer.addPlaybackSlave(subtitlePath, type: .subtitle, enforce: true)
+            })
+        } else {
+            mediaplayer.currentVideoSubTitleIndex = NSNotFound // Remove all subtitles
+        }
+    }
+    
+    lazy var subtitleEncodingBinding: Binding<String> =  {
+        Binding(get: { [unowned self] in
+            settings.encoding
         }, set: { [unowned self] encoding in
-            let subtitle = SubtitleSettings.shared
-            subtitle.encoding = encoding
-            subtitle.save()
+            settings.encoding = encoding
+            settings.save()
             mediaplayer.media.addOptions([vlcSettingTextEncoding: encoding])
         })
-        
-        subtitleBinding = Binding(get: { [unowned self] in
+    }()
+    
+    lazy var subtitleDelayBinding: Binding<Int> = {
+        Binding(get: { [unowned self] in
+            mediaplayer.currentVideoSubTitleDelay
+        }, set: { [unowned self] newDelay in
+            mediaplayer.currentVideoSubTitleDelay = newDelay
+        })
+    }()
+    
+    lazy var subtitleBinding: Binding<Subtitle?> = {
+        Binding(get: { [unowned self] in
             currentSubtitle
         }, set: { [unowned self] subtitle in
             currentSubtitle = subtitle
+            configurePlayer(subtitle: subtitle)
         })
-    }
-    
-    var currentSubtitle: Subtitle? {
-        didSet {
-            if let subtitle = currentSubtitle {
-                PopcornKit.downloadSubtitleFile(subtitle.link, downloadDirectory: downloadDirectory, completion: { (subtitlePath, error) in
-                    guard let subtitlePath = subtitlePath else { return }
-                    self.mediaplayer.addPlaybackSlave(subtitlePath, type: .subtitle, enforce: true)
-                })
-            } else {
-                mediaplayer.currentVideoSubTitleIndex = NSNotFound // Remove all subtitles
-            }
-        }
-    }
+    }()
 }
