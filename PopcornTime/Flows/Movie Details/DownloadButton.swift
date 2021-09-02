@@ -61,22 +61,15 @@ struct DownloadButton: View {
             }
         })
         .frame(width: theme.buttonWidth, height: theme.buttonHeight)
-#if os(tvOS) || os(iOS)
-        .actionSheet(isPresented: $viewModel.showDownloadedActionSheet) {
-            ActionSheet(title: Text(""),
-                        message: nil,
-                        buttons: [
-                            .default(Text("Play".localized)) {
-                                showPlayer = true
-                            },
-                            .destructive(Text("Delete Download".localized)) {
-                                viewModel.deleteDownload()
-                            },
-                            .cancel()
-                        ]
-            )
-        }
-#endif
+        .confirmationDialog("", isPresented: $viewModel.showDownloadedActionSheet, actions: {
+            Button { showPlayer = true } label: { Text("Play".localized) }
+            Button(role: .destructive) {
+                viewModel.deleteDownload()
+            } label: {
+                Text("Delete Download".localized)
+            }
+            Button(role: .cancel, action: {}, label: { Text("Cancel") })
+        })
         .fullScreenContent(isPresented: $showPlayer, title: viewModel.media.title) {
             TorrentPlayerView(torrent: viewModel.torrent ?? Torrent(), media: viewModel.media)
         }
@@ -96,19 +89,17 @@ struct DownloadButton: View {
             }
         })
         .frame(width: theme.buttonWidth, height: theme.buttonHeight)
-#if os(tvOS) || os(iOS)
-        .actionSheet(isPresented: $viewModel.showStopDownloadAlert) {
-            ActionSheet(title: Text( "Stop Download".localized),
-                        message: Text("Are you sure you want to stop the download?".localized),
-                        buttons: [
-                            .cancel(),
-                            .destructive(Text("Stop".localized)) {
-                              self.viewModel.stopDownload()
-                            }
-                        ]
-            )
-        }
-#endif
+        .confirmationDialog(
+            Text("Are you sure you want to stop the download?".localized),
+            isPresented: $viewModel.showStopDownloadAlert,
+            titleVisibility: .visible,
+            actions: {
+                     Button(role: .cancel, action: {}, label: { Text("Cancel") })
+                     Button(role: .destructive, action: {
+                         self.viewModel.stopDownload()
+                     }, label: { Text("Stop".localized) })
+        })
+
         .alert(isPresented: $viewModel.showDownloadFailedAlert, content: {
             Alert(title: Text( "Download Failed".localized),
                   message: Text(viewModel.downloadError?.localizedDescription ?? ""),
