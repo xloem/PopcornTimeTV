@@ -32,32 +32,20 @@ enum EqualizerProfiles: UInt32, CaseIterable, Identifiable {
 struct AudioView: View {
     @Binding var currentDelay: Int
     @Binding var currentSound: EqualizerProfiles
-    #if os(tvOS)
-    @State var manager = AVSpeakerManager()
-    #endif
     @State var triggerRefresh = false
-//    @State var routesDidChange = NotificationCenter.default.publisher(for: .AVSpeakerManagerPickableRoutesDidChange).sink { _ in
-//        self.triggerRefresh = true
-//    }
     
     let delays = (-60..<60)
     let sounds = EqualizerProfiles.allCases
     
     var body: some View {
-        HStack (alignment:.top, spacing: 50) {
+        HStack (spacing: 50) {
             Spacer()
             delaySection
-                .frame(width: 390)
+                .frame(maxWidth: 300)
                 #if os(tvOS)
                 .focusSection()
                 #endif
             soundSection
-                .frame(width: 400)
-                #if os(tvOS)
-                .focusSection()
-                #endif
-            speakerSection
-                .frame(width: 500)
                 #if os(tvOS)
                 .focusSection()
                 #endif
@@ -106,24 +94,6 @@ struct AudioView: View {
                         self.triggerRefresh.toggle()
                     }
                 }
-            }
-            Spacer()
-        }
-    }
-    
-    var speakerSection: some View {
-        VStack(alignment: .leading, spacing: 10) {
-            sectionHeader(text: "Speakers")
-            VStack(alignment: .leading, spacing: 15) {
-                #if os(tvOS)
-                ForEach(0..<manager.speakerRoutes.count, id: \.self) { item in
-                    button(text: manager.speakerRoutes[item].name, isSelected: manager.speakerRoutes[item].isSelected, onFocus: {}) {
-                        let route = manager.speakerRoutes[item]
-                        manager.select(route: route)
-                        triggerRefresh.toggle()
-                    }
-                }
-                #endif
             }
             Spacer()
         }

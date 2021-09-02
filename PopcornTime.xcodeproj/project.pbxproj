@@ -158,8 +158,6 @@
 		2391BE7F26847B9800576CAD /* SelectTorrentQualityButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2391BE7E26847B9800576CAD /* SelectTorrentQualityButton.swift */; };
 		2391BE81268496E300576CAD /* Media + Download.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2391BE80268496E300576CAD /* Media + Download.swift */; };
 		23989FA726865A3500FEDA41 /* PlayerOptionsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23989FA626865A3500FEDA41 /* PlayerOptionsView.swift */; };
-		23989FA92687572B00FEDA41 /* AVSpeakerManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4DF3942E1E96B5B600DFCEC6 /* AVSpeakerManager.swift */; };
-		23989FAA2687574F00FEDA41 /* AVAudioRoute.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4DF394311E96BA3300DFCEC6 /* AVAudioRoute.swift */; };
 		23989FAC2687706C00FEDA41 /* IfModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23989FAB2687706C00FEDA41 /* IfModifier.swift */; };
 		23989FAD2687B83C00FEDA41 /* NSNotificationName+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4DE6FDEE1F04256B00A7F274 /* NSNotificationName+Extension.swift */; };
 		23A10F3D26C699CD0062D9CE /* DownloadsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23313B1B267E3AAB00774A85 /* DownloadsView.swift */; };
@@ -246,9 +244,7 @@
 		23A2BDC726BEDBE5004B864E /* Locale+Langs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D0183A81DC3ACB400AB75B3 /* Locale+Langs.swift */; };
 		23A2BDC826BEDBE7004B864E /* FileManager+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4DBE60891E5E49B200C2549B /* FileManager+Extension.swift */; };
 		23A2BDC926BEDBEA004B864E /* UIColor+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4DCCBA5A1DC50D780046C755 /* UIColor+Extension.swift */; };
-		23A2BDCA26BEDBEF004B864E /* AVSpeakerManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4DF3942E1E96B5B600DFCEC6 /* AVSpeakerManager.swift */; };
 		23A2BDCB26BEDBF5004B864E /* SubtitleSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D990E271DC4F00F005CDE34 /* SubtitleSettings.swift */; };
-		23A2BDCC26BEDBF7004B864E /* AVAudioRoute.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4DF394311E96BA3300DFCEC6 /* AVAudioRoute.swift */; };
 		23A2BDCE26BEDC09004B864E /* Reachability in Frameworks */ = {isa = PBXBuildFile; productRef = 23A2BDCD26BEDC09004B864E /* Reachability */; };
 		23A2BDCF26BEDC3E004B864E /* Show+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D0F9E441E705BD100860852 /* Show+Extension.swift */; };
 		23A2BDD026BEDC3E004B864E /* Subtitle + Identifiable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2343A7602688718300B824E7 /* Subtitle + Identifiable.swift */; };
@@ -483,8 +479,6 @@
 		4DDBD9081E0EDA2E00CEA1B1 /* Array+Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Array+Extension.swift"; sourceTree = "<group>"; };
 		4DE6FDEE1F04256B00A7F274 /* NSNotificationName+Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "NSNotificationName+Extension.swift"; sourceTree = "<group>"; };
 		4DF3942C1E96B10500DFCEC6 /* AVKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVKit.framework; path = System/Library/Frameworks/AVKit.framework; sourceTree = SDKROOT; };
-		4DF3942E1E96B5B600DFCEC6 /* AVSpeakerManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AVSpeakerManager.swift; sourceTree = "<group>"; };
-		4DF394311E96BA3300DFCEC6 /* AVAudioRoute.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AVAudioRoute.swift; sourceTree = "<group>"; };
 		60B34B536975850179B89908 /* Pods_PopcornTimeiOS.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_PopcornTimeiOS.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		68224FE12A62B483A8A03AEE /* Pods-PopcornTime (macOS).release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PopcornTime (macOS).release.xcconfig"; path = "Target Support Files/Pods-PopcornTime (macOS)/Pods-PopcornTime (macOS).release.xcconfig"; sourceTree = "<group>"; };
 		8CD649BD2F68EDBE31FA2A0C /* Pods_PopcornTime__tvOS_.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_PopcornTime__tvOS_.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -851,8 +845,6 @@
 			children = (
 				4D990E321DC4F028005CDE34 /* Images.xcassets */,
 				4D990E271DC4F00F005CDE34 /* SubtitleSettings.swift */,
-				4DF3942E1E96B5B600DFCEC6 /* AVSpeakerManager.swift */,
-				4DF394311E96BA3300DFCEC6 /* AVAudioRoute.swift */,
 			);
 			path = Resources;
 			sourceTree = "<group>";
@@ -1246,7 +1238,6 @@
 				23313B14267E3A4500774A85 /* ShowsView.swift in Sources */,
 				23313B24267E3B4A00774A85 /* MovieDetailsView.swift in Sources */,
 				2388FD622691EC0D00B51201 /* ShowDetailsView.swift in Sources */,
-				23989FAA2687574F00FEDA41 /* AVAudioRoute.swift in Sources */,
 				23446AD3268071070049CC72 /* VLCMediaPlayer+VLCFontAppearance.swift in Sources */,
 				23313B2E267E3BD500774A85 /* InfoView.swift in Sources */,
 				23446ADB2680E7BB0049CC72 /* ProgressBar.swift in Sources */,
@@ -1315,7 +1306,6 @@
 				23A2BD8526BE9A2E004B864E /* MediaRatingsLoader.swift in Sources */,
 				23446ADF2680E8600049CC72 /* ProgressBarView.swift in Sources */,
 				23C96EE22685B40E0056455E /* DownloadProgressView.swift in Sources */,
-				23989FA92687572B00FEDA41 /* AVSpeakerManager.swift in Sources */,
 				237F28652692F6B900FE036C /* SeasonPickerViewModel.swift in Sources */,
 				238F78CF26BADCFF00C4A4E9 /* YoutubeApi.swift in Sources */,
 				23BEFC9826D7952E008EDC44 /* PlayerAudioModel.swift in Sources */,
@@ -1341,12 +1331,10 @@
 				23A2BDD226BEDC3E004B864E /* MPMediaType.swift in Sources */,
 				23A2BD8226BC5AD2004B864E /* OperatingSystem.swift in Sources */,
 				236A11C126C6792900AFF1FD /* SubtitlesView.swift in Sources */,
-				23A2BDCA26BEDBEF004B864E /* AVSpeakerManager.swift in Sources */,
 				23A2BDD626BEDC50004B864E /* CodableCaching.swift in Sources */,
 				236A11B426C6772E00AFF1FD /* PreloadTorrentViewModel.swift in Sources */,
 				23B24D7F26CA963E00B8CD84 /* FullScreenContent.swift in Sources */,
 				23A2BD8D26BED9FA004B864E /* ShowsView.swift in Sources */,
-				23A2BDCC26BEDBF7004B864E /* AVAudioRoute.swift in Sources */,
 				23A2BDC226BEDBC2004B864E /* RotateAnimation.swift in Sources */,
 				23A2BDD426BEDC3E004B864E /* Media + Download.swift in Sources */,
 				23A2BDA826BEDA19004B864E /* DownloadDetailsView.swift in Sources */,
