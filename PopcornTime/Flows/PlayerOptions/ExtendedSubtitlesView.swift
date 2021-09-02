@@ -48,25 +48,23 @@ struct ExtendedSubtitlesView: View {
         }
         .font(.system(size: 38, weight: .regular))
         .foregroundColor(.init(white: 1, opacity: 0.5))
-        #if os(iOS) || os(tvOS)
-        .actionSheet(isPresented: $showLanguageAlert, content: {
-            ActionSheet(title: Text("Select Language".localized),
-                        message: nil,
-                        buttons: languageButtons + [.cancel()])
+        .confirmationDialog(Text("Select Language".localized), isPresented: $showLanguageAlert, titleVisibility: .visible, actions: {
+            languageButtons
+            Button("Cancel", role: .cancel, action: {})
         })
-        #endif
         .padding()
     }
     
-    #if os(iOS) || os(tvOS)
-    var languageButtons: [ActionSheet.Button] {
-        Array(subtitles.keys).sorted().map({ language in
-            ActionSheet.Button.default(Text(language)) {
+    @ViewBuilder
+    var languageButtons: some View {
+        let items = Array(subtitles.keys).sorted()
+        ForEach(items, id: \.self) { language in
+            Button {
                 self.currentSubtitle = self.subtitles[language]?.first
-            }
-        })
+            } label: { Text(language) }
+
+        }
     }
-    #endif
     
     var subtitlesSection: some View {
         VStack(alignment: .leading, spacing: 10) {
@@ -127,6 +125,7 @@ struct ExtendedSubtitlesView: View {
     func generateSubtitles() -> [Subtitle] {
         var subtitles = [currentSubtitle ?? subtitles[enLocale.localizedCapitalized]?.first ?? subtitles[subtitles.keys.first!]!.first!,
                          Subtitle(name: "", language: "Select Other".localized, link: "", ISO639: "", rating: 0.0)]//insert predetermined subtitle or english or first available whichever exists
+        
         for unknownSubtitle in SubtitleSettings.shared.subtitlesSelectedForVideo {
             if let subtitle = unknownSubtitle as? Subtitle {
                 if !subtitles.contains(subtitle){
