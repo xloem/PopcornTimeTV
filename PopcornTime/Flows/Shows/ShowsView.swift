@@ -39,7 +39,9 @@ struct ShowsView: View {
                     if (!viewModel.shows.isEmpty) {
                         loadingView
                     }
-                }.padding(.all, 0)
+                }
+                .padding(.all, 0)
+                
                 if viewModel.isLoading && viewModel.shows.isEmpty {
                     ProgressView()
                 }
@@ -55,6 +57,11 @@ struct ShowsView: View {
                 .padding(.leading, -50)
             #endif
         }
+        #if os(tvOS) || os(iOS)
+        .onReceive(NotificationCenter.default.publisher(for: UIApplication.willEnterForegroundNotification)) { _ in
+            viewModel.appDidBecomeActive()
+        }
+        #endif
     }
     
     @ViewBuilder

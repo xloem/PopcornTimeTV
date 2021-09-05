@@ -41,7 +41,9 @@ struct MoviesView: View {
                     if (!viewModel.movies.isEmpty) {
                         loadingView
                     }
-                }.padding(.all, 0)
+                }
+                .padding(.all, 0)
+                
                 if viewModel.isLoading && viewModel.movies.isEmpty {
                     ProgressView()
                 }
@@ -57,6 +59,11 @@ struct MoviesView: View {
                 .padding(.leading, -50)
             #endif
         }
+        #if os(tvOS) || os(iOS)
+        .onReceive(NotificationCenter.default.publisher(for: UIApplication.willEnterForegroundNotification)) { _ in
+            viewModel.appDidBecomeActive()
+        }
+        #endif
     }
     
     @ViewBuilder

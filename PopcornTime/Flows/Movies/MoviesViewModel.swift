@@ -21,6 +21,7 @@ class MoviesViewModel: ObservableObject, MovieRatingsLoader {
     }
     @Published var error: Error? = nil
     @Published var movies: [Movie] = []
+    var lastReloadDate: Date?
     
     func reload() {
         movies = []
@@ -45,9 +46,20 @@ class MoviesViewModel: ObservableObject, MovieRatingsLoader {
                 return
             }
             
+            if page == 1 {
+                lastReloadDate = Date()
+            }
+            
             self.movies = (self.movies + movies).uniqued
             self.hasNextPage = !self.movies.isEmpty
             self.page += 1
+        }
+    }
+    
+    func appDidBecomeActive() {
+        let _4Hours = 4 * 60 * 60.0
+        if _4Hours < abs(lastReloadDate?.timeIntervalSinceNow ?? 0)  {
+            self.reload()
         }
     }
 }

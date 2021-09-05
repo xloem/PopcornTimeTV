@@ -21,6 +21,7 @@ class ShowsViewModel: ObservableObject {
     }
     @Published var error: Error? = nil
     @Published var shows: [Show] = []
+    var lastReloadDate: Date?
     
     func reload() {
         shows = []
@@ -47,6 +48,13 @@ class ShowsViewModel: ObservableObject {
             self.shows = (self.shows + shows).uniqued
             self.hasNextPage = !self.shows.isEmpty
             self.page += 1
+        }
+    }
+    
+    func appDidBecomeActive() {
+        let _4Hours = 4 * 60 * 60.0
+        if _4Hours < abs(lastReloadDate?.timeIntervalSinceNow ?? 0)  {
+            self.reload()
         }
     }
 }
