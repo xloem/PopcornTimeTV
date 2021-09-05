@@ -10,6 +10,12 @@ import SwiftUI
 import PopcornKit
 
 struct SearchView: View {
+    struct Theme {
+        let itemWidth: CGFloat = value(tvOS: 240, macOS: 160)
+        let personWidth: CGFloat  = value(tvOS: 220, macOS: 150)
+    }
+    let theme = Theme()
+    
     @StateObject var viewModel = SearchViewModel()
     
     var body: some View {
@@ -72,11 +78,14 @@ struct SearchView: View {
                             destination: MovieDetailsView(viewModel: MovieDetailsViewModel(movie: movie)),
                             label: {
                                 MovieView(movie: movie)
-                                    .frame(width:250, height: 460)
+                                    .frame(width:theme.itemWidth)
                             })
                             .buttonStyle(PlainNavigationLinkButtonStyle())
                     }
                 }
+                #if os(iOS)
+                    .padding(.leading, 50)
+                #endif
             }
             #if os(tvOS)
             .focusSection()
@@ -96,11 +105,14 @@ struct SearchView: View {
                             destination: ShowDetailsView(viewModel: ShowDetailsViewModel(show: show)),
                             label: {
                                 ShowView(show: show)
-                                    .frame(width:250, height: 460)
+                                    .frame(width:theme.itemWidth)
                             })
                             .buttonStyle(PlainNavigationLinkButtonStyle())
                     }
                 }
+                #if os(iOS)
+                    .padding(.leading, 50)
+                #endif
             }
             #if os(tvOS)
             .focusSection()
@@ -121,13 +133,17 @@ struct SearchView: View {
                         NavigationLink(
                             destination: PersonDetailsView(viewModel: PersonDetailsViewModel(person: persons[index])),
                             label: {
-                                PersonView(person: persons[index])
-                                    .frame(width: 220)
+                                PersonView(person: persons[index], radius: theme.personWidth)
                             })
                             .buttonStyle(PlainNavigationLinkButtonStyle())
                     }
                 }
-                .frame(height: 321)
+                #if os(iOS)
+                    .padding(.leading, 50)
+                #endif
+                #if os(tvOS)
+                    .frame(height: 321)
+                #endif
                 Spacer()
             }
             #if os(tvOS)
