@@ -26,7 +26,7 @@ struct TabBarView: View {
                     Image("Watchlist On").renderingMode(.template)
                     Text("Watchlist")
                 }
-            #if os(tvOS)
+            #if os(iOS) || os(tvOS)
             SearchView()
                 .tabItem {
                     Image(systemName: "magnifyingglass")

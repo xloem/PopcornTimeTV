@@ -45,6 +45,10 @@ struct DownloadsView: View {
         .onAppear {
             viewModel.reload()
         }
+        #if os(iOS)
+        .navigationBarHidden(true)
+        .navigationBarTitleDisplayMode(.inline)
+        #endif
     }
     
     @ViewBuilder

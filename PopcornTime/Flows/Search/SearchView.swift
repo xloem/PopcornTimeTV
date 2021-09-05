@@ -14,11 +14,7 @@ struct SearchView: View {
     
     var body: some View {
         VStack {
-            Picker(selection: $viewModel.selection, label: Text("")) {
-                 Text("Movies".localized).tag(SearchViewModel.SearchType.movies)
-                 Text("Shows".localized).tag(SearchViewModel.SearchType.shows)
-                 Text("People".localized).tag(SearchViewModel.SearchType.people)
-            }
+            searchView
             errorView
             if viewModel.isLoading {
                 ProgressView()
@@ -26,17 +22,42 @@ struct SearchView: View {
             switch viewModel.selection {
             case .movies:
                 moviesSection
-                    .focusSection()
             case .shows:
                 showsSection
-                    .focusSection()
             case .people:
                 peopleSection
-                    .focusSection()
             }
             Spacer()
         }
         .searchable(text: $viewModel.search)
+        #if os(iOS)
+        .navigationBarHidden(true)
+        .navigationBarTitleDisplayMode(.inline)
+        #endif
+    }
+    
+    @ViewBuilder
+    var searchView: some View {
+        #if os(iOS)
+        VStack {
+            SearchBarView(text: $viewModel.search)
+            pickerView
+            .pickerStyle(.segmented)
+        }
+        .padding([.top, .leading, .trailing])
+        .padding(.horizontal, 40)
+        #elseif os(tvOS)
+        pickerView
+        #endif
+    }
+    
+    @ViewBuilder
+    var pickerView: some View {
+        Picker("", selection: $viewModel.selection) {
+             Text("Movies".localized).tag(SearchViewModel.SearchType.movies)
+             Text("Shows".localized).tag(SearchViewModel.SearchType.shows)
+             Text("People".localized).tag(SearchViewModel.SearchType.people)
+        }
     }
     
     @ViewBuilder
@@ -57,6 +78,9 @@ struct SearchView: View {
                     }
                 }
             }
+            #if os(tvOS)
+            .focusSection()
+            #endif
         }
     }
     
@@ -78,6 +102,9 @@ struct SearchView: View {
                     }
                 }
             }
+            #if os(tvOS)
+            .focusSection()
+            #endif
         }
     }
     
@@ -103,6 +130,9 @@ struct SearchView: View {
                 .frame(height: 321)
                 Spacer()
             }
+            #if os(tvOS)
+            .focusSection()
+            #endif
         }
     }
     

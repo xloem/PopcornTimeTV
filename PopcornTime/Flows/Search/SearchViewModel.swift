@@ -28,8 +28,14 @@ class SearchViewModel: ObservableObject {
     init() {
         self.onTextChange = Publishers.CombineLatest($search, $selection)
             .removeDuplicates { prev, curent in
-                prev == curent
-            }.debounce(for: 0.5, scheduler: RunLoop.main)
+                let isSame = prev == curent
+                if !isSame {
+                    self.isLoading = true
+                    self.error = nil
+                }
+                return isSame
+            }
+            .debounce(for: 0.5, scheduler: RunLoop.main)
             .sink(receiveValue: { [weak self] value in
                 self?.filterSearchText(value.0)
         })
@@ -48,6 +54,7 @@ class SearchViewModel: ObservableObject {
         persons = []
         movies = []
         shows = []
+        error = nil
         
         switch selection {
         case .movies:

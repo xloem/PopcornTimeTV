@@ -18,7 +18,6 @@ import VLCKit
 
 struct PlayerOptionsView: View {
     var media: Media?
-    var mediaplayer: VLCMediaPlayer?
     let height: CGFloat = 440
     @State var selectedTab = Selection.info
     @Binding var audioDelay: Int

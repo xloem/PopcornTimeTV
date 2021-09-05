@@ -62,6 +62,10 @@ struct ShowsView: View {
             viewModel.appDidBecomeActive()
         }
         #endif
+        #if os(iOS)
+        .navigationBarHidden(true)
+        .navigationBarTitleDisplayMode(.inline)
+        #endif
     }
     
     @ViewBuilder

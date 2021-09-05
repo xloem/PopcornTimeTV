@@ -74,7 +74,10 @@ struct SettingsView: View {
             .listStyle(GroupedListStyle())
             .padding(.trailing, theme.iconLeading)
         }
-//        .navigationBarHidden(true)
+        #if os(iOS)
+        .navigationBarHidden(true)
+        .navigationBarTitleDisplayMode(.inline)
+        #endif
     }
     
     @ViewBuilder

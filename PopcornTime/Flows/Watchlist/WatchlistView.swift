@@ -36,7 +36,10 @@ struct WatchlistView: View {
                 viewModel.load()
             }
         }
-//        .navigationBarHidden(true)
+        #if os(iOS)
+        .navigationBarHidden(true)
+        .navigationBarTitleDisplayMode(.inline)
+        #endif
     }
     
     @ViewBuilder
