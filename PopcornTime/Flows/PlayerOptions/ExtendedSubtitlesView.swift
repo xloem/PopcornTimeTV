@@ -13,65 +13,36 @@ struct ExtendedSubtitlesView: View {
     @Binding var currentSubtitle: Subtitle?
     @State var triggerRefresh = false
     @State var showLanguageAlert = false
-    
     var subtitles = Dictionary<String, [Subtitle]>()
     
-    var body: some View {
-        VStack (alignment:.leading, spacing: 10) {
-            Spacer()
-            languageSection
-            subtitlesSection
-            Spacer()
-        }
-        .frame(width: 1140)
-        .frame(maxHeight: 860)
-    }
-    
+    @Binding var isPresented: Bool
     let enLocale = Locale.current.localizedString(forLanguageCode: "en")!
     var displaySubtitles: [Subtitle]  {
         return subtitles[currentSubtitle?.language ?? enLocale] ?? []
     }
     
-    var languageSection: some View {
-        HStack(alignment: .top, spacing: 10) {
-            Text("Language".localized)
+    var body: some View {
+        HStack (alignment:.top, spacing: 25) {
             Spacer()
-            Button(action: {
-                self.showLanguageAlert = true
-            }, label: {
-                HStack(spacing: 5) {
-                    Text(currentSubtitle?.language ?? "None".localized)
-                    Image(systemName: "greaterthan")
-                }
-            })
-            .buttonStyle(PlainButtonStyle(onFocus: {}))
+            subtitlesSection
+            languageSection
+            Spacer()
         }
-        .font(.system(size: 38, weight: .regular))
-        .foregroundColor(.init(white: 1, opacity: 0.5))
-        .confirmationDialog(Text("Select Language".localized), isPresented: $showLanguageAlert, titleVisibility: .visible, actions: {
-            languageButtons
-            Button("Cancel", role: .cancel, action: {})
-        })
-        .padding()
-    }
-    
-    @ViewBuilder
-    var languageButtons: some View {
-        let items = Array(subtitles.keys).sorted()
-        ForEach(items, id: \.self) { language in
-            Button {
-                self.currentSubtitle = self.subtitles[language]?.first
-            } label: { Text(language) }
-
-        }
+        .frame(maxHeight: 860)
     }
     
     var subtitlesSection: some View {
         VStack(alignment: .leading, spacing: 10) {
             HStack {
-                sectionHeader(text: "Available Subtitles")
+                Button {
+                    self.isPresented = false
+                } label: {
+                    sectionHeader(text: "❮ Available Subtitles")
+                }
+                .buttonStyle(PlainButtonStyle(onFocus: {}))
                 Spacer()
             }
+            
             ScrollViewReader { scroll in
                 ScrollView {
                     VStack(alignment: .leading, spacing: 15) {
@@ -89,12 +60,49 @@ struct ExtendedSubtitlesView: View {
                 })
             }
         }
+        #if os(tvOS)
+        .focusSection()
+        #endif
+    }
+    
+    var languageSection: some View {
+        VStack(alignment:.leading, spacing: 0) {
+            sectionHeader(text: "Language".uppercased())
+                .foregroundColor(.init(white: 1, opacity: 0.5))
+            
+            Button(action: {
+                self.showLanguageAlert = true
+            }, label: {
+                Text(currentSubtitle?.language ?? "None".localized) + Text(" ❯")
+                    .font(.system(size: 32, weight: .regular))
+            })
+                .buttonStyle(PlainButtonStyle(onFocus: {}))
+                .padding(.leading)
+            Spacer()
+        }
+        .confirmationDialog(Text("Select Language".localized), isPresented: $showLanguageAlert, titleVisibility: .visible, actions: {
+            languageButtons
+            Button("Cancel", role: .cancel, action: {})
+        })
+        #if os(tvOS)
+        .focusSection()
+        #endif
+    }
+    
+    @ViewBuilder
+    var languageButtons: some View {
+        let items = Array(subtitles.keys).sorted()
+        ForEach(items, id: \.self) { language in
+            Button {
+                self.currentSubtitle = self.subtitles[language]?.first
+            } label: { Text(language) }
+
+        }
     }
     
     func sectionHeader(text: String) -> some View {
         Text(text.localized)
             .font(.system(size: 38, weight: .regular))
-            .foregroundColor(.init(white: 1, opacity: 0.5))
             .padding()
     }
     
@@ -108,33 +116,14 @@ struct ExtendedSubtitlesView: View {
                 } else {
                     Text("").frame(width: 32)
                 }
-//                VStack(alignment: .leading) {
                     Text(subtitle.name)
                         .font(.system(size: 32, weight: .regular))
                     Spacer()
-//                    Text(subtitle.language)
-//                        .font(.system(size: 32, weight: .regular))
-//                }
                 
             }
             .padding([.leading, .trailing], 50) // allow space for scale animation
         })
         .buttonStyle(PlainButtonStyle(onFocus: {}))
-    }
-    
-    func generateSubtitles() -> [Subtitle] {
-        var subtitles = [currentSubtitle ?? subtitles[enLocale.localizedCapitalized]?.first ?? subtitles[subtitles.keys.first!]!.first!,
-                         Subtitle(name: "", language: "Select Other".localized, link: "", ISO639: "", rating: 0.0)]//insert predetermined subtitle or english or first available whichever exists
-        
-        for unknownSubtitle in SubtitleSettings.shared.subtitlesSelectedForVideo {
-            if let subtitle = unknownSubtitle as? Subtitle {
-                if !subtitles.contains(subtitle){
-                    subtitles.insert(subtitle, at: 0)
-                }
-            }
-        }
-        
-        return subtitles
     }
 }
 
@@ -144,7 +133,8 @@ struct ExtendedSubtitlesView_Previews: PreviewProvider {
         Group {
             ExtendedSubtitlesView(
                 currentSubtitle: .constant(subtitle),
-                subtitles: [Locale.current.localizedString(forLanguageCode: "en")! : [subtitle]]
+                subtitles: [Locale.current.localizedString(forLanguageCode: "en")! : [subtitle]],
+                isPresented: .constant(true)
             )
         }.previewLayout(.sizeThatFits)
     }

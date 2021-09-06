@@ -59,6 +59,9 @@
 		23313B53267E4A6600774A85 /* libc++.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 4D9CED361DD278BD005ABC0A /* libc++.tbd */; };
 		23313B54267E4A7100774A85 /* libiconv.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 4D9CED381DD278F1005ABC0A /* libiconv.tbd */; };
 		23313B55267E4EF900774A85 /* Array+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4DDBD9081E0EDA2E00CEA1B1 /* Array+Extension.swift */; };
+		233B5F6A26E65CF000552FA3 /* SubtitlesViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 233B5F6926E65CF000552FA3 /* SubtitlesViewModel.swift */; };
+		233B5F6B26E65CF000552FA3 /* SubtitlesViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 233B5F6926E65CF000552FA3 /* SubtitlesViewModel.swift */; };
+		233B5F6C26E65CF000552FA3 /* SubtitlesViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 233B5F6926E65CF000552FA3 /* SubtitlesViewModel.swift */; };
 		234180A126C29F7D00C32083 /* WatchlistView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23313B15267E3A7100774A85 /* WatchlistView.swift */; };
 		234180A226C29F8600C32083 /* WatchlistViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 237F286B269359C600FE036C /* WatchlistViewModel.swift */; };
 		234180A426C2D38500C32083 /* PlayButtonModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 234180A326C2D38500C32083 /* PlayButtonModel.swift */; };
@@ -396,6 +399,7 @@
 		23313B46267E3DF600774A85 /* CodableCaching.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CodableCaching.swift; sourceTree = "<group>"; };
 		23313B4A267E409700774A85 /* Result.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Result.swift; sourceTree = "<group>"; };
 		23313B4C267E48C300774A85 /* MoviesViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoviesViewModel.swift; sourceTree = "<group>"; };
+		233B5F6926E65CF000552FA3 /* SubtitlesViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubtitlesViewModel.swift; sourceTree = "<group>"; };
 		234180A326C2D38500C32083 /* PlayButtonModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayButtonModel.swift; sourceTree = "<group>"; };
 		2343A75E268861C800B824E7 /* ExtendedSubtitlesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExtendedSubtitlesView.swift; sourceTree = "<group>"; };
 		2343A7602688718300B824E7 /* Subtitle + Identifiable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Subtitle + Identifiable.swift"; sourceTree = "<group>"; };
@@ -775,6 +779,7 @@
 				23989FA626865A3500FEDA41 /* PlayerOptionsView.swift */,
 				23313B2D267E3BD500774A85 /* InfoView.swift */,
 				23313B2F267E3BE200774A85 /* SubtitlesView.swift */,
+				233B5F6926E65CF000552FA3 /* SubtitlesViewModel.swift */,
 				2343A75E268861C800B824E7 /* ExtendedSubtitlesView.swift */,
 				23313B31267E3BF700774A85 /* AudioView.swift */,
 			);
@@ -1267,6 +1272,7 @@
 				237F28672692F91000FE036C /* SeasonView.swift in Sources */,
 				23446AD0268054EF0049CC72 /* PlayerViewModel.swift in Sources */,
 				23313B32267E3BF700774A85 /* AudioView.swift in Sources */,
+				233B5F6A26E65CF000552FA3 /* SubtitlesViewModel.swift in Sources */,
 				237F286C269359C600FE036C /* WatchlistViewModel.swift in Sources */,
 				2343A76B2688AF1100B824E7 /* ShowView.swift in Sources */,
 				23313B3F267E3D7600774A85 /* Session.swift in Sources */,
@@ -1325,6 +1331,7 @@
 			files = (
 				23A2BDA526BEDA11004B864E /* PersonDetailsViewModel.swift in Sources */,
 				236A11B926C6783800AFF1FD /* NowPlayingController.swift in Sources */,
+				233B5F6B26E65CF000552FA3 /* SubtitlesViewModel.swift in Sources */,
 				23A2BDC026BEDBC2004B864E /* ProgressBar.swift in Sources */,
 				23A2BD9826BEDA07004B864E /* TorrentPlayerView.swift in Sources */,
 				23A2BDC726BEDBE5004B864E /* Locale+Langs.swift in Sources */,
@@ -1457,6 +1464,7 @@
 				23A2BD7B26BC5930004B864E /* SeasonPickerViewModel.swift in Sources */,
 				237ECA1C26B8482700EE8B46 /* MoviesView.swift in Sources */,
 				237ECA1B26B8481800EE8B46 /* TabBarView.swift in Sources */,
+				233B5F6C26E65CF000552FA3 /* SubtitlesViewModel.swift in Sources */,
 				23A10F3F26C699D20062D9CE /* DownloadDetailsView.swift in Sources */,
 				23A2BD8626BE9A2E004B864E /* MediaRatingsLoader.swift in Sources */,
 				23BEFC9E26D79862008EDC44 /* PlayerSubtitleModel.swift in Sources */,

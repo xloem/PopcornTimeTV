@@ -13,47 +13,44 @@ struct SubtitlesView: View {
     @Binding var currentDelay: Int
     @Binding var currentEncoding: String
     @Binding var currentSubtitle: Subtitle?
-    @State var triggerRefresh = false
+    @StateObject var viewModel: SubtitlesViewModel
     @State var showExtendedSubtitles = false
-    
-    let delays = (-60..<60)
-    var subtitles = Dictionary<String, [Subtitle]>()
-    let encodings = SubtitleSettings.encodings
-    var encodingsKeys: [String] = Array(SubtitleSettings.encodings.keys.sorted())
-    
-    @State var subtitlesInView: [Subtitle] = []
-    let enLocale = Locale.current.localizedString(forLanguageCode: "en")!
-    let selectOther = "Select Other".localized
+    @State var triggerRefresh = false
     
     var body: some View {
         HStack (alignment:.top, spacing: 0) {
-            Spacer()
-            languageSection
-                .frame(width: 390)
-                #if os(tvOS)
-                .focusSection()
-                #endif
-            delaySection
-                #if os(tvOS)
-                .focusSection()
-                #endif
-            encodingSection
-                #if os(tvOS)
-                .focusSection()
-                #endif
-            Spacer()
+            if !showExtendedSubtitles {
+                Spacer()
+                languageSection
+                    .frame(width: 390)
+                delaySection
+                encodingSection
+                Spacer()
+            } else {
+                let binding: Binding<Subtitle?> = Binding.init(get: {
+                    currentSubtitle
+                }, set: { item in
+                    currentSubtitle = item
+                    viewModel.didSelectSubtitle(item)
+                    triggerRefresh.toggle()
+                })
+                
+                ExtendedSubtitlesView(currentSubtitle: binding,
+                                      subtitles: viewModel.subtitles,
+                                      isPresented: $showExtendedSubtitles)
+                    .padding(.horizontal, 10)
+            }
         }
         #if os(tvOS)
         .focusSection()
         #endif
-        .frame(maxHeight: 300)
     }
     
     var languageSection: some View {
         Group {
             VStack(alignment: .leading, spacing: 10) {
                 sectionHeader(text: "Language")
-                if subtitles.isEmpty {
+                if viewModel.subtitles.isEmpty {
                     Text("No subtitles available.".localized)
                         .foregroundColor(.init(white: 1, opacity: 0.5))
                         .font(.system(size: 35, weight: .medium))
@@ -62,55 +59,49 @@ struct SubtitlesView: View {
                     ScrollViewReader { scroll in
                         ScrollView {
                             LazyVStack(alignment: .leading, spacing: 15) {
-                                ForEach(subtitlesInView) { subtitle in
+                                ForEach(viewModel.subtitlesInView) { subtitle in
                                     button(text: subtitle.language, isSelected: subtitle.language == currentSubtitle?.language, onFocus: {
                                         scroll.scrollTo(subtitle.language, anchor: .center)
                                     }) {
-                                        if subtitle.language == selectOther {
+                                        if subtitle.language == viewModel.selectOther {
                                             self.showExtendedSubtitles = true
                                         } else {
-                                            self.currentSubtitle = self.currentSubtitle == subtitle ? nil : subtitle
-                                            self.triggerRefresh.toggle()
+                                            currentSubtitle = currentSubtitle == subtitle ? nil : subtitle
+                                            triggerRefresh.toggle()
                                         }
                                     }
-//                                    .prefersDefaultFocus(subtitle.language == currentSubtitle?.language, in: namespace)
                                     .id(subtitle.language)
                                 }
                             }
                         }
                         .onAppear(perform: {
-                            self.subtitlesInView = self.generateSubtitles()
+                            viewModel.subtitlesInView = viewModel.generateSubtitles(currentSubtitle: currentSubtitle)
                             scroll.scrollTo(currentSubtitle?.language, anchor: .center)
                         })
                     }
                 }
-                
-                NavigationLink(
-                    destination: ExtendedSubtitlesView(currentSubtitle:
-                                                        .init(get: { currentSubtitle }, set: didSelectSubtitle(_:)),
-                                                       subtitles: subtitles),
-                    isActive: $showExtendedSubtitles,
-                    label: { EmptyView() })
-                    .hidden()
-//                    .buttonStyle(PlainNavigationLinkButtonStyle())
             }
         }
+        #if os(tvOS)
+        .focusSection()
+        #endif
     }
     
+    @ViewBuilder
     var delaySection: some View {
         VStack(alignment: .leading, spacing: 10) {
             sectionHeader(text: "Delay")
             ScrollViewReader { scroll in
                 ScrollView {
                     LazyVStack(alignment: .leading, spacing: 15) {
-                        ForEach(delays) { delay in
-                            button(text: delayText(delay: delay), isSelected: delay == currentDelay, onFocus: {
+                        ForEach(viewModel.delays) { delay in
+                            button(text: viewModel.delayText(delay: delay), isSelected: delay == currentDelay, onFocus: {
                                 withAnimation {
                                     scroll.scrollTo(delay, anchor: .center)
                                 }
                             }) {
-                                self.currentDelay = delay
-                                self.triggerRefresh.toggle()
+                                currentDelay = delay
+                                triggerRefresh.toggle()
                             }
                             .id(delay)
 //                            .prefersDefaultFocus(delay == currentDelay, in: delayNamespace)
@@ -122,25 +113,31 @@ struct SubtitlesView: View {
                 })
             }
         }
+        #if os(tvOS)
+        .focusSection()
+        #endif
 //        .focusScope(delayNamespace)
     }
     
+    @ViewBuilder
     var encodingSection: some View {
         VStack(alignment: .leading, spacing: 10) {
             sectionHeader(text: "Encoding")
             ScrollViewReader { scroll in
                 ScrollView {
                     LazyVStack(alignment: .leading, spacing: 15) {
-                        ForEach(encodingsKeys, id: \.self) { key in
-                            button(text: key, isSelected: currentEncoding == encodings[key], onFocus: {
+                        ForEach(viewModel.encodingsKeys, id: \.self) { key in
+                            let item = viewModel.encodings[key]
+                            
+                            button(text: key, isSelected: currentEncoding == item, onFocus: {
                                 withAnimation {
-                                    scroll.scrollTo(encodings[key], anchor: .center)
+                                    scroll.scrollTo(item, anchor: .center)
                                 }
                             }) {
-                                self.currentEncoding = encodings[key]!
-                                self.triggerRefresh.toggle()
+                                currentEncoding = item!
+                                triggerRefresh.toggle()
                             }
-                            .id(encodings[key])
+                            .id(item)
 //                            .prefersDefaultFocus(encodings[key] == currentEncoding, in: encodingNamespace)
                         }
                     }
@@ -149,6 +146,9 @@ struct SubtitlesView: View {
                     scroll.scrollTo(currentEncoding, anchor: .center)
                 })
             }
+            #if os(tvOS)
+            .focusSection()
+            #endif
             
 //            ScrollViewReader { scroll in
 //                List {
@@ -167,10 +167,6 @@ struct SubtitlesView: View {
 //            }
         }
 //        .focusScope(encodingNamespace)
-    }
-    
-    func delayText(delay: Int) -> String {
-        return (delay > 0 ? "+" : "") + NumberFormatter.localizedString(from: NSNumber(value: delay), number: .decimal)
     }
     
     func sectionHeader(text: String) -> some View {
@@ -197,73 +193,36 @@ struct SubtitlesView: View {
         .padding([.leading, .trailing], 50)
         .buttonStyle(PlainButtonStyle(onFocus: onFocus))
     }
-    
-    func generateSubtitles() -> [Subtitle] {
-        var subtitles = [currentSubtitle ?? subtitles[enLocale.localizedCapitalized]?.first ?? subtitles[subtitles.keys.first!]!.first!,
-                         Subtitle(name: "", language: selectOther, link: "", ISO639: "", rating: 0.0)]//insert predetermined subtitle or english or first available whichever exists
-        for unknownSubtitle in SubtitleSettings.shared.subtitlesSelectedForVideo {
-            if let subtitle = unknownSubtitle as? Subtitle {
-                if !subtitles.contains(subtitle){
-                    subtitles.insert(subtitle, at: 0)
-                }
-            }
-        }
-        
-        return subtitles
-    }
-    
-    func didSelectSubtitle(_ subtitle: Subtitle?) {
-        self.currentSubtitle = subtitle
-        self.triggerRefresh.toggle()
-        
-        guard let subtitle = subtitle else {
-            return
-        }
-
-        for i in 0..<SubtitleSettings.shared.subtitlesSelectedForVideo.count {
-            if let savedSubtitle = SubtitleSettings.shared.subtitlesSelectedForVideo[i] as? Subtitle{
-                if savedSubtitle.language == subtitle.language{// do we have a sub with the same language in permanent storage
-                    SubtitleSettings.shared.subtitlesSelectedForVideo.replaceSubrange(i...i, with: [subtitle as Any])//replace the one we have with the latest one
-                    let index = subtitlesInView.firstIndex(of: savedSubtitle)!
-                    subtitlesInView[index] = subtitle
-                    return
-                }
-            }
-        }
-        
-        if !subtitlesInView.contains(subtitle){// does the subtitlesinview already have our sub if no enter
-            for savedSubtitle in subtitlesInView{
-                if subtitle.language == savedSubtitle.language{// do we have a sub with the same language
-                    let index = subtitlesInView.firstIndex(of: savedSubtitle)!
-                    subtitlesInView[index] = subtitle//switch out the one with the same language with our latest one
-                    SubtitleSettings.shared.subtitlesSelectedForVideo.append(subtitle as Any)//add it to our permanent list
-                    break
-                }
-                if savedSubtitle == subtitlesInView.last{//if we do not have a sub with the same language
-                    subtitlesInView.insert(subtitle, at: 0) //add the latest selected
-                    SubtitleSettings.shared.subtitlesSelectedForVideo.append(subtitle as Any)
-                }
-            }
-        }else{// we have the sub in the subtitlesinview but not in permanent storage
-            SubtitleSettings.shared.subtitlesSelectedForVideo.append(subtitle as Any)
-        }
-    }
 }
 
 struct SubtitlesView_Previews: PreviewProvider {
     static var previews: some View {
         let subtitle = Subtitle(name: "Test", language: "English", link: "", ISO639: "", rating: 0)
+        let encoding = SubtitleSettings.encodings.values.first!
+        let enKey: String = Locale.current.localizedString(forLanguageCode: "en") ?? ""
+        let subtitles: Dictionary<String, [Subtitle]> = [enKey : [subtitle]]
+
         Group {
             SubtitlesView(currentDelay: .constant(0),
-                          currentEncoding: .constant(SubtitleSettings.encodings.values.first!),
-                          currentSubtitle: .constant(nil)
+                          currentEncoding: .constant(encoding),
+                          currentSubtitle: .constant(nil),
+                          viewModel:SubtitlesViewModel()
             )
             
             SubtitlesView(currentDelay: .constant(0),
-                          currentEncoding: .constant(SubtitleSettings.encodings.values.first!),
+                          currentEncoding: .constant(encoding),
                           currentSubtitle: .constant(subtitle),
-                          subtitles: [Locale.current.localizedString(forLanguageCode: "en")! : [subtitle]]
+                        viewModel: SubtitlesViewModel(subtitles: subtitles)
             )
-        }.previewLayout(.sizeThatFits)
+            
+            SubtitlesView(currentDelay: .constant(0),
+                          currentEncoding: .constant(encoding),
+                          currentSubtitle: .constant(subtitle),
+                          viewModel:SubtitlesViewModel(subtitles: subtitles),
+                showExtendedSubtitles: true
+            )
+        }
+        .frame(maxHeight: 300)
+        .previewLayout(.sizeThatFits)
     }
 }

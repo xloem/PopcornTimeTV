@@ -37,7 +37,11 @@ struct PlayerOptionsView: View {
                     Text("Info".localized)
                 }
                 .tag(Selection.info)
-            SubtitlesView(currentDelay: $subtitleDelay, currentEncoding: $subtitleEncoding, currentSubtitle: $subtitle, subtitles: media?.subtitles ?? [:])
+            SubtitlesView(currentDelay: $subtitleDelay,
+                          currentEncoding: $subtitleEncoding,
+                          currentSubtitle: $subtitle,
+                          viewModel: SubtitlesViewModel(subtitles: media?.subtitles ?? [:])
+                )
                 .tabItem {
                     Text("Subtitles".localized)
                 }
