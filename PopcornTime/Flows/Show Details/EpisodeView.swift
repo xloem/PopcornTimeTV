@@ -54,5 +54,9 @@ struct EpisodeView_Previews: PreviewProvider {
     static var previews: some View {
         let episode = Episode(JSON: showEpisodesJSON[0])!
         EpisodeView(episode: episode)
+            .environmentObject(ShowDetailsViewModel(show: episode.show!))
+            .preferredColorScheme(.dark)
+            .previewLayout(.sizeThatFits)
+            .background(.blue)
     }
 }

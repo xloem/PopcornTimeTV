@@ -15,9 +15,10 @@ struct EpisodesView: View {
         let episodeWidth: CGFloat = value(tvOS: 310, macOS: 217)
         let episodeHeight: CGFloat = value(tvOS: 215, macOS: 150)
         let episodeSpacing: CGFloat = value(tvOS: 40, macOS: 20)
-        let currentEpisode: (padding: CGFloat, height: CGFloat) =
-                        (padding: value(tvOS: 250, macOS: 100),
-                         height: value(tvOS: 350, macOS: 250))
+        let currentEpisode: (padding: CGFloat, height: CGFloat)
+            = (padding: value(tvOS: 250, macOS: 80),
+               height: value(tvOS: 350, macOS: 250))
+        let leading: CGFloat = value(tvOS: 90, macOS: 50)
     }
     let theme = Theme()
     
@@ -47,7 +48,7 @@ struct EpisodesView: View {
                     }
                 }
                 .padding([.top, .bottom], 20) // allow zooming to be visible
-                .padding([.leading, .trailing], 90)
+                .padding([.leading, .trailing], theme.leading)
             }
             currentEpisodeView
             #if os(tvOS)
@@ -108,7 +109,7 @@ struct EpisodesView: View {
         Text("\(seasonString) (\(numberOfEpisodes.lowercased()))")
             .font(.callout)
             .foregroundColor(.init(white: 1.0, opacity: 0.667)) // light text color
-            .padding(.leading, 90)
+            .padding(.leading, theme.leading)
             .padding(.top, 14)
     }
     
@@ -128,6 +129,9 @@ struct EpisodesView: View {
                 VStack(alignment: .leading) {
                     Text("\(episode.episode). " + episode.title)
                         .font(.headline)
+                        #if !os(tvOS)
+                            .padding(.horizontal, 30)
+                        #endif
                     HStack {
                         Text(episode.summary)
                             .multilineTextAlignment(.leading)
@@ -136,6 +140,8 @@ struct EpisodesView: View {
 //                            .frame(minWidth: 600, maxWidth: 800)
                         #if os(tvOS)
                             .frame(width: 800)
+                        #else
+                            .padding(.horizontal, 30)
                         #endif
                         DownloadButton(viewModel: downloadModel)
                             .buttonStyle(TVButtonStyle(onFocus: onFocus))
@@ -158,6 +164,21 @@ struct EpisodesView: View {
 struct EpisodesView_Previews: PreviewProvider {
     static var previews: some View {
         let show = Show.dummy()
-        EpisodesView(show: show, episodes: show.episodes, currentSeason: 0, currentEpisode: show.episodes.first)
+        let episode = show.episodes.first!
+        let downloadModel = DownloadButtonViewModel(media: show)
+        let showDetails = ShowDetailsViewModel(show: show)
+        
+        Group {
+            EpisodesView(show: show, episodes: show.episodes, currentSeason: 0, currentEpisode: episode, downloadModel: downloadModel)
+                .environmentObject(showDetails)
+//                .frame(maxHeight: 500)
+            
+            EpisodesView(show: show, episodes: show.episodes, currentSeason: 0, currentEpisode: episode)
+                .environmentObject(showDetails)
+//                .frame(maxHeight: 300)
+        }
+            .preferredColorScheme(.dark)
+//            .previewLayout(.sizeThatFits)
+            .background(.gray)
     }
 }

@@ -23,7 +23,10 @@ struct ShowDetailsView: View {
                cellWidth: value(tvOS: 220, macOS: 150),
                cellHeight: value(tvOS: 460, macOS: 180),
                spacing: value(tvOS: 90, macOS: 30))
+        let watchedSectionLeading: CGFloat = value(tvOS: 90, macOS: 50)
         let backgroundOpacity = value(tvOS: 0.3, macOS: 0.5)
+        let seasonFontSize: CGFloat = value(tvOS: 43, macOS: 21)
+        let titleFont: Font = Font.system(size: value(tvOS: 76, macOS: 50), weight: .medium)
     }
     let theme = Theme()
     
@@ -50,7 +53,7 @@ struct ShowDetailsView: View {
                     HStack {
                         VStack() {
                             Text(show.title)
-                                .font(.title)
+                                .font(theme.titleFont)
                                 .padding(.bottom, 50)
                                 .padding(.top, 200)
                             VStack(alignment: .leading, spacing: 50) {
@@ -113,10 +116,6 @@ struct ShowDetailsView: View {
                         
                         if show.related.count > 0 {
                             alsoWatchedSection(scroll: scroll)
-                                .background(
-                                    Color.init(white: 0, opacity: 0.3)
-                                        .padding([.top, .bottom], -10)
-                                )
                                 #if os(tvOS)
                                 .focusSection()
                                 #endif
@@ -180,16 +179,14 @@ struct ShowDetailsView: View {
         let year = show.year
         
         let items = [Text([genre, year].compactMap({$0}).joined(separator: "\t"))]
-            + (["HD", "CC"]).map {
-                Text(Image($0).renderingMode(.template))
-            }
+            + (["HD", "CC"]).map { Text(Image($0).renderingMode(.template)) }
         
         let watchOn: String = .localizedStringWithFormat("Watch %@ on %@".localized, show.title, show.network ?? "TV")
         let runtime = "Run Time".localized + " \(show.runtime ?? 0) min"
         
         return VStack(alignment: .leading) {
             Text(title)
-                .font(.system(size: 43, weight: .medium))
+                .font(.system(size: theme.seasonFontSize, weight: .medium))
             HStack(alignment: .center, spacing: 25) {
                 ForEach(0..<items.count) { item in
                     items[item]
@@ -204,7 +201,7 @@ struct ShowDetailsView: View {
             }
                 .foregroundColor(Color.init(white: 1, opacity: 0.67))
         }
-        .font(.system(size: 31, weight: .medium))
+        .font(.callout)
     }
     
     var seasonsButton: some View {
@@ -250,7 +247,7 @@ struct ShowDetailsView: View {
             Text("Viewers Also Watched".localized)
                 .font(.callout)
                 .foregroundColor(.init(white: 1.0, opacity: 0.667)) // light text color
-                .padding(.leading, theme.watchedSection.spacing)
+                .padding(.leading, theme.watchedSectionLeading)
                 .padding(.top, 14)
             ScrollView(.horizontal, showsIndicators: false) {
                 LazyHStack(alignment: .center, spacing: theme.watchedSection.spacing) {
@@ -260,7 +257,7 @@ struct ShowDetailsView: View {
                             destination: ShowDetailsView(viewModel: ShowDetailsViewModel(show: show)),
                             label: {
                                 ShowView(show: show)
-                                    .frame(width: theme.watchedSection.cellWidth, height: theme.watchedSection.cellHeight)
+                                    .frame(width: theme.watchedSection.cellWidth)
                             })
                             .buttonStyle(PlainNavigationLinkButtonStyle(onFocus: {
 //                                withAnimation {
@@ -269,15 +266,21 @@ struct ShowDetailsView: View {
                             }))
                     }
                 }
+                #if os(tvOS)
                 .padding([.top, .bottom], 30) // on focus zoom will not be clipped
-//                .background(Color.blue)
+                #endif
             }
-//            .background(Color.gray)
         }
-//        .background(Color.red)
         .frame(height: theme.watchedSection.height)
         .padding(0)
         .id(section3)
+        .background(
+            Color(white: 0, opacity: 0.3)
+                .padding([.bottom], -10)
+            #if os(tvOS)
+                .padding([.top], -30)
+            #endif
+        )
     }
 }
 
