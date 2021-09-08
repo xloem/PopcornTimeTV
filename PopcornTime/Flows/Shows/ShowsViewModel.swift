@@ -70,7 +70,7 @@ extension Show {
         var show = Show.init(JSON: showDetailsJSON)!
         show.actors = .init(JSONArray: showActorsJSON)
         show.crew = .init(JSONArray: showCrewJSON)
-        show.related = .init(JSONArray: showRelatedJSON)
+        show.related = dummiesFromJSON()
         show.episodes = .init(JSONArray: showEpisodesJSON)
         return show
     }

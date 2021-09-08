@@ -24,10 +24,12 @@ struct MovieDetailsView: View {
         let starSize: CGSize = value(tvOS: CGSize(width: 220, height: 40), macOS: CGSize(width: 110, height: 20))
         let starOffset: CGFloat = value(tvOS: -8, macOS: -4)
         let ratingHeight: CGFloat = value(tvOS: 32, macOS: 24)
-        let watchedSection: (height: CGFloat, cellWidth: CGFloat, spacing: CGFloat) = (height: value(tvOS: 450, macOS: 240),
-                                                                                        cellWidth: value(tvOS: 220, macOS: 150),
-                                                                                        spacing: value(tvOS: 90, macOS: 30))
+        let watchedSection: (height: CGFloat, cellWidth: CGFloat, spacing: CGFloat)
+            = (height: value(tvOS: 450, macOS: 240),
+               cellWidth: value(tvOS: 220, macOS: 150),
+               spacing: value(tvOS: 90, macOS: 40))
         let backgroundOpacity = value(tvOS: 0.3, macOS: 0.5)
+        let titleFont: Font = Font.system(size: value(tvOS: 76, macOS: 50), weight: .medium)
     }
     let theme = Theme()
     
@@ -51,7 +53,7 @@ struct MovieDetailsView: View {
                     ScrollView {
                         VStack {
                             Text(movie.title)
-                                .font(.title)
+                                .font(theme.titleFont)
                                 .padding(.bottom, 50)
                                 .padding(.top, 200)
                             HStack(alignment: .top, spacing: 40) {
@@ -74,13 +76,6 @@ struct MovieDetailsView: View {
                         VStack {
                             if movie.related.count > 0 {
                                 alsoWatchedSection
-                                    .background(
-                                        Color.init(white: 0, opacity: 0.3)
-                                            .padding([.bottom], -10)
-                                        #if os(tvOS)
-                                            .padding([.top], -30)
-                                        #endif
-                                    )
                                     #if os(tvOS)
                                     .focusSection()
                                     #endif
@@ -306,6 +301,13 @@ struct MovieDetailsView: View {
         }
         .frame(height: theme.watchedSection.height)
         .padding(0)
+        .background(
+            Color(white: 0, opacity: 0.3)
+                .padding([.bottom], -10)
+            #if os(tvOS)
+                .padding([.top], -30)
+            #endif
+        )
     }
     
     @ViewBuilder
