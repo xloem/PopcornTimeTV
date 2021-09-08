@@ -21,8 +21,6 @@ struct DownloadView: View {
     @StateObject var viewModel: DownloadViewModel
     @State var showDeleteAction = false
     @State var showActions = false
-    
-    @State var torrent: Torrent?
     @State var showPlayer = false
     
     var body: some View {

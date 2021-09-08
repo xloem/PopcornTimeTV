@@ -31,11 +31,23 @@ extension View {
 //        NavigationLinkWrapper(isActive: isPresented, content: self, destination: content)
         self.fullScreenCover(isPresented: isPresented, content: content)
         #elseif os(iOS)
-        self.fullScreenCover(isPresented: isPresented, content: {
-            content()
-        })
+        self.fullScreenCover(isPresented: isPresented, content: content)
         #elseif os(macOS)
         self.fullScreenModal(isPresented: isPresented, title: title, modalView: content)
+        #endif
+    }
+    
+    // use item: Binding<Item?> when content has some optional value stored in state
+    @ViewBuilder
+    func fullScreenContent<Item, Content>(item: Binding<Item?>, title: String, content: @escaping (Item) -> Content) -> some View where Item : Identifiable & Equatable, Content : View {
+        #if os(tvOS)
+        // using fullscreenCover -> doesn't trigger onAppear/onDisappear and is messing with background music that is stopped onDissapear
+//        NavigationLinkWrapper(isActive: isPresented, content: self, destination: content)
+        self.fullScreenCover(item: item, content: content)
+        #elseif os(iOS)
+        self.fullScreenCover(item: item, content: content)
+        #elseif os(macOS)
+        MacModalWindowWrapper(item: item, title: title, content: self, modalView: content)
         #endif
     }
 }

@@ -70,3 +70,20 @@ class MacModalWindowModel: NSObject, ObservableObject, NSWindowDelegate {
         isPresented.wrappedValue = false
     }
 }
+
+
+struct MacModalWindowWrapper<Item, Content, Modal>: View where Item : Identifiable & Equatable, Content: View, Modal : View {
+    @Binding var item: Item?
+    @State var isPresented = false
+    var title: String
+    var content: Content
+    var modalView: (Item) -> Modal
+    
+    var body: some View {
+        content
+            .onChange(of: item) { newValue in
+                self.isPresented = (newValue != nil)
+            }
+            .fullScreenModal(isPresented: $isPresented, title: title, modalView: { modalView(item!) })
+    }
+}

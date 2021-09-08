@@ -11,19 +11,19 @@ import PopcornKit
 import Combine
 
 struct PlayButton: View {
-    struct Theme {
-        let buttonWidth: CGFloat = value(tvOS: 142, macOS: 100)
-        let buttonHeight: CGFloat = value(tvOS: 115, macOS: 81)
-    }
     let theme = Theme()
     
-    var viewModel: PlayButtonModel
-    @State var showPlayer = false
+    @State var media: Media
+    @State var showTorrent: PlayTorrent?
+    
+    struct PlayTorrent: Identifiable, Equatable {
+        var id: String  { torrent.id }
+        var torrent: Torrent
+    }
     
     var body: some View {
-        SelectTorrentQualityButton(media: viewModel.media, action: { torrent in
-            self.viewModel.torrent = torrent
-            self.showPlayer = true
+        SelectTorrentQualityButton(media: media, action: { torrent in
+            self.showTorrent = PlayTorrent(torrent: torrent)
         }, label: {
             VStack {
                 VisualEffectBlur() {
@@ -33,22 +33,22 @@ struct PlayButton: View {
             }
         })
         .frame(width: theme.buttonWidth, height: theme.buttonHeight)
-        .fullScreenContent(isPresented: $showPlayer, title: viewModel.media.title) {
-            torrentView()
+        .fullScreenContent(item: $showTorrent, title: media.title) { item in
+            TorrentPlayerView(torrent: item.torrent, media: media)
         }
     }
-    
-    @ViewBuilder
-    func torrentView() -> some View {
-        if let torrent = viewModel.torrent {
-            TorrentPlayerView(torrent: torrent, media: viewModel.media)
-        }
+}
+
+extension PlayButton {
+    struct Theme {
+        let buttonWidth: CGFloat = value(tvOS: 142, macOS: 100)
+        let buttonHeight: CGFloat = value(tvOS: 115, macOS: 81)
     }
 }
 
 struct PlayButton_Previews: PreviewProvider {
     static var previews: some View {
-        PlayButton(viewModel: PlayButtonModel(media: Movie.dummy()))
+        PlayButton(media: Movie.dummy())
             .buttonStyle(TVButtonStyle())
             .padding(40)
             .previewLayout(.fixed(width: 300, height: 300))
