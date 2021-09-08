@@ -35,7 +35,7 @@ class SearchViewModel: ObservableObject {
                 }
                 return isSame
             }
-            .debounce(for: 0.5, scheduler: RunLoop.main)
+            .debounce(for: 1.5, scheduler: RunLoop.main)
             .sink(receiveValue: { [weak self] value in
                 self?.filterSearchText(value.0)
         })
