@@ -9,32 +9,11 @@
 import SwiftUI
 import PopcornKit
 import Kingfisher
-#if canImport(UIKit)
-import UIKit
-#endif
 
 struct MovieDetailsView: View {
-    struct Theme {
-        let buttonWidth: CGFloat = value(tvOS: 142, macOS: 100)
-        let buttonHeight: CGFloat = value(tvOS: 115, macOS: 81)
-        let leftSectionTitle: CGFloat = value(tvOS: 24, macOS: 16)
-        let leftSectionTitleContent: CGFloat = value(tvOS: 31, macOS: 18)
-        let leftSectionWidth: CGFloat = value(tvOS: 340, macOS: 200)
-        let leftSectionLeading: CGFloat = value(tvOS: 100, macOS: 30)
-        let starSize: CGSize = value(tvOS: CGSize(width: 220, height: 40), macOS: CGSize(width: 110, height: 20))
-        let starOffset: CGFloat = value(tvOS: -8, macOS: -4)
-        let ratingHeight: CGFloat = value(tvOS: 32, macOS: 24)
-        let watchedSection: (height: CGFloat, cellWidth: CGFloat, spacing: CGFloat)
-            = (height: value(tvOS: 450, macOS: 240),
-               cellWidth: value(tvOS: 220, macOS: 150),
-               spacing: value(tvOS: 90, macOS: 40))
-        let backgroundOpacity = value(tvOS: 0.3, macOS: 0.5)
-        let titleFont: Font = Font.system(size: value(tvOS: 76, macOS: 50), weight: .medium)
-    }
     let theme = Theme()
     
     @StateObject var viewModel: MovieDetailsViewModel
-    @State var showPlayer: Bool = false
     @State var error: Error?
     
     @Environment(\.colorScheme) var colorScheme
@@ -68,6 +47,11 @@ struct MovieDetailsView: View {
                             #endif
                         }
                         .padding(.leading, theme.leftSectionLeading)
+                        #if os(tvOS)
+                        .frame(idealHeight: 960)
+                        #else
+                        .frame(idealHeight: 710)
+                        #endif
                         .id(section1)
                         #if os(tvOS)
                         .focusSection()
@@ -200,7 +184,7 @@ struct MovieDetailsView: View {
         let year = movie.year
         
         let items = [Text([runtime, year].compactMap({$0}).joined(separator: "\t"))]
-            + ([movie.certification, "HD", "CC"]).map {
+        + ([movie.certification, "HD", "CC"]).filter{ !$0.isEmpty }.map {
                 Text(Image($0).renderingMode(.template))
             }
         return HStack(alignment: /*@START_MENU_TOKEN@*/.center/*@END_MENU_TOKEN@*/, spacing: 25) {
@@ -351,7 +335,27 @@ struct MovieDetailsView: View {
     }
 }
 
-struct DetailView_Previews: PreviewProvider {
+extension MovieDetailsView {
+    struct Theme {
+        let buttonWidth: CGFloat = value(tvOS: 142, macOS: 100)
+        let buttonHeight: CGFloat = value(tvOS: 115, macOS: 81)
+        let leftSectionTitle: CGFloat = value(tvOS: 24, macOS: 16)
+        let leftSectionTitleContent: CGFloat = value(tvOS: 31, macOS: 18)
+        let leftSectionWidth: CGFloat = value(tvOS: 340, macOS: 200)
+        let leftSectionLeading: CGFloat = value(tvOS: 100, macOS: 30)
+        let starSize: CGSize = value(tvOS: CGSize(width: 220, height: 40), macOS: CGSize(width: 110, height: 20))
+        let starOffset: CGFloat = value(tvOS: -8, macOS: -4)
+        let ratingHeight: CGFloat = value(tvOS: 32, macOS: 24)
+        let watchedSection: (height: CGFloat, cellWidth: CGFloat, spacing: CGFloat)
+            = (height: value(tvOS: 450, macOS: 240),
+               cellWidth: value(tvOS: 220, macOS: 150),
+               spacing: value(tvOS: 90, macOS: 40))
+        let backgroundOpacity = value(tvOS: 0.3, macOS: 0.5)
+        let titleFont: Font = Font.system(size: value(tvOS: 76, macOS: 50), weight: .medium)
+    }
+}
+
+struct MovieDetailsView_Previews: PreviewProvider {
     static var previews: some View {
         Group {
             MovieDetailsView(viewModel: viewModel())
@@ -366,6 +370,7 @@ struct DetailView_Previews: PreviewProvider {
                 .previewDisplayName("Loading")
         }
         .preferredColorScheme(.dark)
+//        .previewInterfaceOrientation(.landscapeLeft)
     }
     
     static func viewModel() -> MovieDetailsViewModel {

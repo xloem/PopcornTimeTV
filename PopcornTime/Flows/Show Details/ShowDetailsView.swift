@@ -51,34 +51,14 @@ struct ShowDetailsView: View {
                                     Spacer()
                                         .layoutPriority(-1)
                                 }
-                                HStack(spacing: 24) {
-                                    if viewModel.didLoad {
-                                        if let episode = viewModel.nextEpisodeToWatch() {
-                                            PlayButton(media: episode)
-                                        }
-                                        if viewModel.show.seasonNumbers.count > 1 {
-                                            seasonsButton
-                                        }
-                                        watchlistButton
-                                    }
-                                    if viewModel.isLoading {
-                                        ProgressView()
-                                            .padding(.leading, 50)
-                                            .padding(.bottom, 40)
-                                    }
-                                }
-                                .buttonStyle(TVButtonStyle(onFocus: {
-                                    withAnimation {
-                                        scroll.scrollTo(section1, anchor: .top)
-                                    }
-                                }))
-                                .padding(.bottom, 20)
+                                actionButtons(scroll: scroll)
+                                    .padding(.bottom, 20)
                             }
                         }
                         .id(section1)
                         #if os(tvOS)
                         .frame(idealHeight: 1010)
-                        .padding(.leading, 100)
+                        .padding([.leading, .trailing], 100)
                         #else
                         .frame(idealHeight: 780)
                         .padding([.leading, .trailing], 50)
@@ -157,7 +137,8 @@ struct ShowDetailsView: View {
 
     var infoText: some View {
         let localizedSeason = NumberFormatter.localizedString(from: NSNumber(value: viewModel.currentSeason), number: .none)
-        let title = "Season".localized + " \(localizedSeason)"
+        let season = viewModel.currentSeason > -1 ? " \(localizedSeason)" : ""
+        let title = "Season".localized + season
         
         let genre = show.genres.first?.localizedCapitalized.localized
         let year = show.year
@@ -186,6 +167,30 @@ struct ShowDetailsView: View {
                 .foregroundColor(Color.init(white: 1, opacity: 0.67))
         }
         .font(.callout)
+    }
+    
+    func actionButtons(scroll: ScrollViewProxy?) -> some View {
+        HStack(spacing: 24) {
+            if viewModel.didLoad {
+                if let episode = viewModel.nextEpisodeToWatch() {
+                    PlayButton(media: episode)
+                }
+                if viewModel.show.seasonNumbers.count > 1 {
+                    seasonsButton
+                }
+                watchlistButton
+            }
+            if viewModel.isLoading {
+                ProgressView()
+                    .padding(.leading, 50)
+                    .padding(.bottom, 40)
+            }
+        }
+        .buttonStyle(TVButtonStyle(onFocus: {
+            withAnimation {
+                scroll?.scrollTo(section1, anchor: .top)
+            }
+        }))
     }
     
     var seasonsButton: some View {
