@@ -164,7 +164,9 @@ struct PlayerControlsView: View {
         Button {
             viewModel.rewind()
         } label: {
-            Image("Rewind")
+            Image("SkipBack30") //"Rewind"
+                .resizable()
+                .frame(width: 25, height: 25)
         }
         .onLongPressGesture(perform: {}, onPressingChanged: { started in
             viewModel.rewindHeld(started)
@@ -178,7 +180,10 @@ struct PlayerControlsView: View {
         Button {
             viewModel.fastForward()
         } label: {
-            Image("Fast Forward")
+//            Image("Fast Forward")
+            Image("SkipForward30")
+                .resizable()
+                .frame(width: 25, height: 25)
         }
         .disabled(viewModel.isLoading || viewModel.progress.progress == 1.0)
         .onLongPressGesture(perform: {}, onPressingChanged: { started in
