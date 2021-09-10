@@ -11,23 +11,6 @@ import PopcornKit
 import Kingfisher
 
 struct ShowDetailsView: View {
-    struct Theme {
-        let buttonWidth: CGFloat = value(tvOS: 142, macOS: 100)
-        let buttonHeight: CGFloat = value(tvOS: 115, macOS: 81)
-        
-        let starSize: CGSize = value(tvOS: CGSize(width: 220, height: 40), macOS: CGSize(width: 110, height: 20))
-        let starOffset: CGFloat = value(tvOS: -8, macOS: -4)
-        let ratingHeight: CGFloat = value(tvOS: 32, macOS: 24)
-        let watchedSection: (height: CGFloat, cellWidth: CGFloat, cellHeight: CGFloat, spacing: CGFloat)
-            = (height: value(tvOS: 475, macOS: 240),
-               cellWidth: value(tvOS: 220, macOS: 150),
-               cellHeight: value(tvOS: 460, macOS: 180),
-               spacing: value(tvOS: 90, macOS: 30))
-        let watchedSectionLeading: CGFloat = value(tvOS: 90, macOS: 50)
-        let backgroundOpacity = value(tvOS: 0.3, macOS: 0.5)
-        let seasonFontSize: CGFloat = value(tvOS: 43, macOS: 21)
-        let titleFont: Font = Font.system(size: value(tvOS: 76, macOS: 50), weight: .medium)
-    }
     let theme = Theme()
     
     @StateObject var viewModel: ShowDetailsViewModel
@@ -51,18 +34,23 @@ struct ShowDetailsView: View {
             ScrollViewReader { scroll in
                 ScrollView {
                     HStack {
-                        VStack() {
+                        VStack(alignment: .leading) {
                             Text(show.title)
                                 .font(theme.titleFont)
                                 .padding(.bottom, 50)
                                 .padding(.top, 200)
+                                .multilineTextAlignment(.center)
+                                .frame(maxWidth: .infinity)
+                            
                             VStack(alignment: .leading, spacing: 50) {
                                 infoText
-                                Text(show.summary)
-                                    .lineLimit(5)
-                                #if os(tvOS)
-                                    .frame(width: 1200, height: 200)
-                                #endif
+                                VStack(spacing: 0) {
+                                    Text(show.summary)
+    //                                    .lineLimit(5)
+                                        .multilineTextAlignment(.leading)
+                                    Spacer()
+                                        .layoutPriority(-1)
+                                }
                                 HStack(spacing: 24) {
                                     if viewModel.didLoad {
                                         if let episode = viewModel.nextEpisodeToWatch() {
@@ -84,21 +72,17 @@ struct ShowDetailsView: View {
                                         scroll.scrollTo(section1, anchor: .top)
                                     }
                                 }))
-                                #if os(tvOS)
-                                .padding(.top, 50)
-                                .padding(.bottom, 100)
-                                #else
                                 .padding(.bottom, 20)
-                                #endif
                             }
                         }
                         .id(section1)
                         #if os(tvOS)
+                        .frame(idealHeight: 1010)
                         .padding(.leading, 100)
                         #else
+                        .frame(idealHeight: 780)
                         .padding([.leading, .trailing], 50)
                         #endif
-                        Spacer()
                     }
                     #if os(tvOS)
                     .focusSection()
@@ -284,19 +268,44 @@ struct ShowDetailsView: View {
     }
 }
 
+extension ShowDetailsView {
+    struct Theme {
+        let buttonWidth: CGFloat = value(tvOS: 142, macOS: 100)
+        let buttonHeight: CGFloat = value(tvOS: 115, macOS: 81)
+        
+        let starSize: CGSize = value(tvOS: CGSize(width: 220, height: 40), macOS: CGSize(width: 110, height: 20))
+        let starOffset: CGFloat = value(tvOS: -8, macOS: -4)
+        let ratingHeight: CGFloat = value(tvOS: 32, macOS: 24)
+        let watchedSection: (height: CGFloat, cellWidth: CGFloat, cellHeight: CGFloat, spacing: CGFloat)
+            = (height: value(tvOS: 475, macOS: 240),
+               cellWidth: value(tvOS: 220, macOS: 150),
+               cellHeight: value(tvOS: 460, macOS: 180),
+               spacing: value(tvOS: 90, macOS: 30))
+        let watchedSectionLeading: CGFloat = value(tvOS: 90, macOS: 50)
+        let backgroundOpacity = value(tvOS: 0.3, macOS: 0.5)
+        let seasonFontSize: CGFloat = value(tvOS: 43, macOS: 21)
+        let titleFont: Font = Font.system(size: value(tvOS: 76, macOS: 50), weight: .medium)
+    }
+}
+
 struct ShowDetailsView_Previews: PreviewProvider {
     static var previews: some View {
         let show = Show.dummy()
         let model = ShowDetailsViewModel(show: show)
         model.currentSeason = show.latestUnwatchedEpisode()?.season ?? show.seasonNumbers.first ?? -1
         model.didLoad = true
+        
+        return Group {
+            ShowDetailsView(viewModel: model)
             
-        return ShowDetailsView(viewModel: model)
+            ShowDetailsView(viewModel: model)
             #if os(tvOS)
             .previewLayout(.fixed(width: 2000, height: 2400))
             #else
             .previewLayout(.fixed(width: 1024, height: 1800))
             #endif
-            .preferredColorScheme(.dark)
+        }
+        .preferredColorScheme(.dark)
+        .previewInterfaceOrientation(.landscapeLeft)
     }
 }
