@@ -26,6 +26,9 @@ struct ShowsView: View {
         ZStack(alignment: .leading) {
             errorView
             ScrollView {
+                #if os(iOS)
+                filtersView
+                #endif
                 LazyVGrid(columns: columns, spacing: ShowsView.theme.columnSpacing) {
                     ForEach(viewModel.shows, id: \.self) { show in
                         NavigationLink(
@@ -90,6 +93,27 @@ struct ShowsView: View {
             }
         }
     }
+    
+    @ViewBuilder
+    var filtersView: some View {
+        HStack(spacing: 0) {
+            Picker("Shows", selection: $viewModel.currentFilter) {
+                ForEach(MovieManager.Filters.allCases, id: \.self) { item in
+                    Text(item.string).tag(item)
+                }
+            
+            }
+            Text("Shows - Genre")
+                .padding(.horizontal, 5)
+            Picker("Genre", selection: $viewModel.currentGenre) {
+                ForEach(MovieManager.Genres.allCases, id: \.self) { item in
+                    Text(item.string).tag(item)
+                }
+            }
+        }
+        .foregroundColor(.init(white: 1, opacity: 0.667))
+        .font(.callout)
+    }
 }
 
 struct ShowsView_Previews: PreviewProvider {
@@ -98,6 +122,7 @@ struct ShowsView_Previews: PreviewProvider {
         model.shows = Show.dummiesFromJSON()
         return ShowsView(viewModel: model)
             .preferredColorScheme(.dark)
+            .accentColor(.white)
 //            .previewInterfaceOrientation(.landscapeLeft)
     }
 }

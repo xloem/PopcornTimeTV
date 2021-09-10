@@ -31,9 +31,13 @@ struct EpisodesView: View {
         }
     }
     @State var downloadModel: DownloadButtonViewModel?
+    @State var showTorrent: PlayTorrent?
     
-    @State var torrent: Torrent?
-    @State var showPlayer = false
+    struct PlayTorrent: Identifiable, Equatable {
+        var id: String  { torrent.id }
+        var torrent: Torrent
+        var episode: Episode
+    }
     
     var onFocus: () -> Void = {}
     
@@ -55,20 +59,13 @@ struct EpisodesView: View {
                 .focusSection()
             #endif
         }
-        .fullScreenContent(isPresented: $showPlayer, title: show.title, content: {
-            torrentView()
+        .fullScreenContent(item: $showTorrent, title: show.title, content: { item in
+            TorrentPlayerView(torrent: item.torrent, media: item.episode)
         })
         .onChange(of: episodes) { newValue in
             if currentEpisode == nil {
                 currentEpisode = newValue.first
             }
-        }
-    }
-    
-    @ViewBuilder
-    func torrentView() -> some View {
-        if let torrent = torrent, let episode = currentEpisode {
-            TorrentPlayerView(torrent: torrent, media: episode)
         }
     }
     
@@ -85,9 +82,8 @@ struct EpisodesView: View {
     @ViewBuilder
     func episodeView(episode: Episode) -> some View {
         SelectTorrentQualityButton(media: episode, action: { torrent in
-            self.torrent = torrent
             self.currentEpisode = episode
-            showPlayer = true
+            showTorrent = PlayTorrent(torrent: torrent, episode: episode)
         }, label: {
             EpisodeView(episode: episode)
         })

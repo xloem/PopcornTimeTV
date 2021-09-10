@@ -180,7 +180,7 @@ struct MovieDetailsView: View {
     func actionButtons(scroll: ScrollViewProxy?) -> some View {
         HStack(spacing: 24) {
             TrailerButton(viewModel: viewModel.trailerModel)
-            PlayButton(viewModel: PlayButtonModel(media: movie))
+            PlayButton(media: movie)
             watchlistButton
             watchedButton
             DownloadButton(viewModel: viewModel.downloadModel)

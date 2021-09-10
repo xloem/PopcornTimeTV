@@ -66,7 +66,7 @@ struct ShowDetailsView: View {
                                 HStack(spacing: 24) {
                                     if viewModel.didLoad {
                                         if let episode = viewModel.nextEpisodeToWatch() {
-                                            PlayButton(viewModel: PlayButtonModel(media: episode))
+                                            PlayButton(media: episode)
                                         }
                                         if viewModel.show.seasonNumbers.count > 1 {
                                             seasonsButton
