@@ -20,20 +20,31 @@ struct TermsOfServiceView: View {
                     .font(.callout)
             }
             .padding()
+            
             HStack(spacing: 50) {
-                Button(action: {
-                    exit(0)
-                }, label: {
-                    Text("Leave")
-                })
-                Button(action: {
-                    Session.tosAccepted = true
-                    tosAccepted = true
-                }, label: {
-                    Text("Accept")
-                })
+                leaveButton
+                acceptButton
             }
         }
+    }
+    
+    @ViewBuilder
+    var leaveButton: some View {
+        Button(action: {
+            exit(0)
+        }, label: {
+            Text("Leave")
+        })
+    }
+    
+    @ViewBuilder
+    var acceptButton: some View {
+        Button(action: {
+            Session.tosAccepted = true
+            tosAccepted = true
+        }, label: {
+            Text("Accept")
+        })
     }
     
     

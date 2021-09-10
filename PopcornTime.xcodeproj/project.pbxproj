@@ -300,6 +300,7 @@
 		23D2B3A026959C910077BBED /* StarRatingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23D2B39F26959C910077BBED /* StarRatingView.swift */; };
 		23D4606926C7C1DD00D56978 /* MacModalWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23D4606826C7C1DC00D56978 /* MacModalWindow.swift */; };
 		23DBB51D26ADBF1400AAF824 /* DownloadViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23DBB51C26ADBF1400AAF824 /* DownloadViewModel.swift */; };
+		23E2A6C926EB8C3300F24931 /* TopShelfLinkOpener.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23E2A6C826EB8C3300F24931 /* TopShelfLinkOpener.swift */; };
 		23E4976726947E1300175DEE /* TVServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 002682111CD0B76200F51D31 /* TVServices.framework */; };
 		23E4976A26947E1300175DEE /* ContentProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23E4976926947E1300175DEE /* ContentProvider.swift */; };
 		23E6239F26975A0C007B11EF /* FileManager+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4DBE60891E5E49B200C2549B /* FileManager+Extension.swift */; };
@@ -459,6 +460,7 @@
 		23D2B39F26959C910077BBED /* StarRatingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StarRatingView.swift; sourceTree = "<group>"; };
 		23D4606826C7C1DC00D56978 /* MacModalWindow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MacModalWindow.swift; sourceTree = "<group>"; };
 		23DBB51C26ADBF1400AAF824 /* DownloadViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DownloadViewModel.swift; sourceTree = "<group>"; };
+		23E2A6C826EB8C3300F24931 /* TopShelfLinkOpener.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TopShelfLinkOpener.swift; sourceTree = "<group>"; };
 		23E4976626947E1300175DEE /* TopShelf.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = TopShelf.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		23E4976926947E1300175DEE /* ContentProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentProvider.swift; sourceTree = "<group>"; };
 		23E4976B26947E1300175DEE /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -600,6 +602,7 @@
 				23313B3B267E3CA800774A85 /* TermsOfServiceView.swift */,
 				23313B0F267E39B400774A85 /* TabBarView.swift */,
 				23313B19267E3A9200774A85 /* LeftSidePanelView.swift */,
+				23E2A6C826EB8C3300F24931 /* TopShelfLinkOpener.swift */,
 				23025D94267E71C400229559 /* Movies */,
 				2343A7672688AEEC00B824E7 /* Shows */,
 				237F286D26935E2300FE036C /* Watchlist */,
@@ -1274,6 +1277,7 @@
 				23313B32267E3BF700774A85 /* AudioView.swift in Sources */,
 				233B5F6A26E65CF000552FA3 /* SubtitlesViewModel.swift in Sources */,
 				237F286C269359C600FE036C /* WatchlistViewModel.swift in Sources */,
+				23E2A6C926EB8C3300F24931 /* TopShelfLinkOpener.swift in Sources */,
 				2343A76B2688AF1100B824E7 /* ShowView.swift in Sources */,
 				23313B3F267E3D7600774A85 /* Session.swift in Sources */,
 				23446ABE267F1ED10049CC72 /* TVButtonStyle.swift in Sources */,
