@@ -19,6 +19,7 @@ class DownloadViewModel: NSObject, ObservableObject {
     var downloadManager = PTTorrentDownloadManager.shared()
     var media: Media
     var torrent = Torrent() // No torrent metadata necessary, media
+    let downloadDeleted = NSNotification.Name("DownloadDeleted")
     
     init(download: PTTorrentDownload) {
         self.download = download
@@ -38,6 +39,7 @@ class DownloadViewModel: NSObject, ObservableObject {
             downloadManager.pause(download)
         } else {
             downloadManager.delete(download)
+            NotificationCenter.default.post(name: downloadDeleted, object: self)
         }
     }
     

@@ -35,6 +35,8 @@ struct MovieDetailsView: View {
                                 .font(theme.titleFont)
                                 .padding(.bottom, 50)
                                 .padding(.top, 200)
+                                .padding(.leading, -theme.leftSectionLeading)
+                                
                             HStack(alignment: .top, spacing: 40) {
                                 leftSection
                                 rightSection(scroll: scroll)
@@ -43,15 +45,12 @@ struct MovieDetailsView: View {
                             .padding(.leading, 10)
                             #if os(iOS)
                             actionButtons(scroll: nil)
-                            .padding(.top, 10)
+                                .padding(.top, 10)
                             #endif
                         }
                         .padding(.leading, theme.leftSectionLeading)
-                        #if os(tvOS)
-                        .frame(idealHeight: 960)
-                        #else
-                        .frame(idealHeight: 710)
-                        #endif
+                        .frame(idealHeight: theme.section1Height)
+                        
                         .id(section1)
                         #if os(tvOS)
                         .focusSection()
@@ -121,13 +120,14 @@ struct MovieDetailsView: View {
                 sectionText(title: "Genre".localized.localizedUppercase, description: [genre])
             }
             
-            if let directors: [String] = movie.crew.filter({$0.roleType == .director}).compactMap{String($0.name)},
-               directors.count > 0,
+            let directors = movie.crew.filter({$0.roleType == .director}).prefix(5).compactMap{String($0.name)}
+            if directors.count > 0,
                let isSingular = directors.count == 1 {
                 sectionText(title: (isSingular ? "Director".localized.localizedUppercase : "Directors".localized.localizedUppercase), description: directors)
             }
             
-            let actors = movie.actors.prefix(5).compactMap{ String($0.name) }
+            let showActorsCount = max(6 - directors.count, 1)
+            let actors = movie.actors.prefix(showActorsCount).compactMap{ String($0.name) }
             if !actors.isEmpty {
                 sectionText(title: "Starring".localized.localizedUppercase, description: actors)
             }
@@ -144,16 +144,16 @@ struct MovieDetailsView: View {
         VStack(alignment: .leading, spacing: 50) {
             infoText
             ratings()
-            Text(movie.summary)
+            Color.clear
+                .overlay(alignment: .topLeading) {
+                    VStack(alignment: .leading, spacing: 20) {
+                        Text(movie.summary)
+                        awards()
+                    }
+                }
             #if os(tvOS)
                 .frame(width: 920)
-                .lineLimit(6)
             #endif
-            awards()
-            if viewModel.movie.ratings?.awards == nil {
-                Spacer()
-                    .frame(height: 40)
-            }
             #if os(tvOS) || os(macOS)
             actionButtons(scroll: scroll)
             #endif
@@ -352,6 +352,7 @@ extension MovieDetailsView {
                spacing: value(tvOS: 90, macOS: 40))
         let backgroundOpacity = value(tvOS: 0.3, macOS: 0.5)
         let titleFont: Font = Font.system(size: value(tvOS: 76, macOS: 50), weight: .medium)
+        let section1Height: CGFloat = value(tvOS: 960, macOS: 710)
     }
 }
 

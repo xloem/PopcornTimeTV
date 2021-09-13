@@ -204,7 +204,7 @@ struct PlayerControlsView: View {
     @ViewBuilder
     var subtitlesButton: some View {
         Button {
-            
+            viewModel.showInfo = true
         } label: {
             Image("Subtitles")
         }

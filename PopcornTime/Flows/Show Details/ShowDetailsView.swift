@@ -35,22 +35,24 @@ struct ShowDetailsView: View {
                 ScrollView {
                     HStack {
                         VStack(alignment: .leading) {
-                            Text(show.title)
-                                .font(theme.titleFont)
-                                .padding(.bottom, 50)
-                                .padding(.top, 200)
-                                .multilineTextAlignment(.center)
-                                .frame(maxWidth: .infinity)
+                            HStack {
+                                Text(show.title)
+                                    .font(theme.titleFont)
+                                    .padding(.bottom, 50)
+                                    .padding(.top, 200)
+                                    .multilineTextAlignment(.center)
+                                Spacer()
+                            }
                             
                             VStack(alignment: .leading, spacing: 50) {
+                                
                                 infoText
-                                VStack(spacing: 0) {
-                                    Text(show.summary)
-    //                                    .lineLimit(5)
-                                        .multilineTextAlignment(.leading)
-                                    Spacer()
-                                        .layoutPriority(-1)
-                                }
+                                Color.clear
+                                    .overlay(alignment: .topLeading, content: {
+                                        Text(show.summary)
+                                            .multilineTextAlignment(.leading)
+                                    })
+                                    .frame(maxWidth: theme.summaryMaxWidth)
                                 actionButtons(scroll: scroll)
                                     .padding(.bottom, 20)
                             }
@@ -290,6 +292,7 @@ extension ShowDetailsView {
         let backgroundOpacity = value(tvOS: 0.3, macOS: 0.5)
         let seasonFontSize: CGFloat = value(tvOS: 43, macOS: 21)
         let titleFont: Font = Font.system(size: value(tvOS: 76, macOS: 50), weight: .medium)
+        let summaryMaxWidth: CGFloat = value(tvOS: 1200, macOS: 800)
     }
 }
 
@@ -302,6 +305,7 @@ struct ShowDetailsView_Previews: PreviewProvider {
         
         return Group {
             ShowDetailsView(viewModel: model)
+//                .previewInterfaceOrientation(.portrait)
             
             ShowDetailsView(viewModel: model)
             #if os(tvOS)

@@ -10,10 +10,6 @@ import SwiftUI
 import PopcornKit
 
 struct WatchlistView: View {
-    struct Theme {
-        let itemWidth: CGFloat = value(tvOS: 240, macOS: 160)
-        let itemSpacing: CGFloat = value(tvOS: 40, macOS: 20)
-    }
     let theme = Theme()
     
     @StateObject var viewModel = WatchlistViewModel()
@@ -29,7 +25,7 @@ struct WatchlistView: View {
                     showSection
                 }
             }
-            .padding(.leading, 90)
+            .padding(.leading, theme.leading)
             .padding(.horizontal)
             .ignoresSafeArea(edges: [.leading, .trailing])
             .onAppear {
@@ -109,17 +105,28 @@ struct WatchlistView: View {
     }
 }
 
+extension WatchlistView {
+    struct Theme {
+        let itemWidth: CGFloat = value(tvOS: 240, macOS: 160)
+        let itemSpacing: CGFloat = value(tvOS: 40, macOS: 20)
+        let leading: CGFloat = value(tvOS: 90, macOS: 50)
+    }
+}
+
 struct WatchlistView_Previews: PreviewProvider {
     static var previews: some View {
-        // empty list
-        WatchlistView(viewModel: WatchlistViewModel())
-        
-        let moviesModel = WatchlistViewModel()
-        WatchlistView(viewModel: moviesModel)
-            .onAppear {
-                DispatchQueue.main.async {
-                    moviesModel.movies = Movie.dummiesFromJSON()
+        Group {
+            // empty list
+            WatchlistView(viewModel: WatchlistViewModel())
+            
+            let moviesModel = WatchlistViewModel()
+            WatchlistView(viewModel: moviesModel)
+                .onAppear {
+                    DispatchQueue.main.async {
+                        moviesModel.movies = Movie.dummiesFromJSON()
+                    }
                 }
-            }
+        }
+        .preferredColorScheme(.dark)
     }
 }

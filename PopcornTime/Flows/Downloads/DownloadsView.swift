@@ -11,15 +11,11 @@ import PopcornKit
 import PopcornTorrent
 
 struct DownloadsView: View {
-    struct Theme {
-        let itemWidth: CGFloat = value(tvOS: 240, macOS: 200)
-        let itemHeight: CGFloat = value(tvOS: 420, macOS: 350)
-        let downloadingSize: CGSize = value(tvOS: CGSize(width: 500, height: 400) , macOS: CGSize(width: 300, height: 200))
-        let itemSpacing: CGFloat = value(tvOS: 40, macOS: 30)
-    }
     let theme = Theme()
     
     @StateObject var viewModel = DownloadsViewModel()
+    let downloadDeleted =  NotificationCenter.default
+        .publisher(for: NSNotification.Name("DownloadDeleted"))
     
     var body: some View {
         ZStack {
@@ -38,11 +34,15 @@ struct DownloadsView: View {
                             showSection
                         }
                     }
+                    .padding(.leading)
                 }
                 
             }
         }
         .onAppear {
+            viewModel.reload()
+        }
+        .onReceive(downloadDeleted) { _ in
             viewModel.reload()
         }
         #if os(iOS)
@@ -125,11 +125,23 @@ struct DownloadsView: View {
     }
 }
 
+extension DownloadsView {
+    struct Theme {
+        let itemWidth: CGFloat = value(tvOS: 240, macOS: 200)
+        let itemHeight: CGFloat = value(tvOS: 420, macOS: 350)
+        let downloadingSize: CGSize = value(tvOS: CGSize(width: 500, height: 400) , macOS: CGSize(width: 300, height: 200))
+        let itemSpacing: CGFloat = value(tvOS: 40, macOS: 30)
+    }
+}
+
 struct DownloadsView_Previews: PreviewProvider {
     static var previews: some View {
-        activeDownloadsView
-        completedDownloadsView
-        DownloadsView()
+        Group {
+            activeDownloadsView
+            completedDownloadsView
+            DownloadsView()
+        }
+        .preferredColorScheme(.dark)
     }
     
     static var activeDownloadsView: some View {
