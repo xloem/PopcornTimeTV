@@ -41,11 +41,14 @@ struct PlayerControlsView: View {
             
             Spacer()
             #if os(iOS)
-            VolumeButtonSlider()
+            VolumeButtonSlider(onVolumeChange: {
+                viewModel.resetIdleTimer()
+            })
                 .frame(width: 200)
                 .padding([.leading, .trailing], 10)
                 .background(.regularMaterial)
                 .cornerRadius(10)
+                
             #endif
         }
         .frame(height: 46)

@@ -11,49 +11,57 @@ import MediaPlayer
 import UIKit
 
 struct VolumeButtonSlider: View {
-    @State var previousValue: Float = -1
     @State var volume: Float = 0
-    
+    @State var mute = false
+    var onVolumeChange: () -> Void = {}
+
     var body: some View {
-        HStack {
-            VolumeSlider(volume: $volume)
+        HStack(spacing: 0) {
+            VolumeSlider(volume: $volume, mute: $mute)
                 .padding(.top, 14)
                 .padding(.trailing, 10)
-            
+
             Button {
-                let value = volume
-                volume = previousValue != 0 ? 0 : previousValue
-                previousValue = value
+                mute.toggle()
             } label: {
                 Color.clear
                     .overlay {
                         Image(volume > 0 ? "Volume Maximum" : "Volume Minimum")
                             .padding(.leading, maskValue)
-                            .mask(Rectangle().padding(.trailing, maskValue))
+                            .mask(Rectangle()
+                                    .padding(.trailing, maskValue))
                     }
                 .clipped()
             }
             .frame(width: 41)
         }
+        .onChange(of: volume) { newValue in
+            onVolumeChange()
+        }
     }
-    
+
     var maskValue: CGFloat {
         switch volume {
         case 0:
             return 0
         case 0..<0.4:
-            return 11
+            return 12
         case 0.4..<0.7:
-            return 6
+            return 6.5
         default:
             return 0
         }
     }
 }
 
+
 struct VolumeSlider: UIViewRepresentable {
-    @State var volumeObservation: NSKeyValueObservation?
     @Binding var volume: Float
+    @Binding var mute: Bool
+    @State private var volumeObservation: NSKeyValueObservation?
+    @State private var slider: UISlider?
+    
+    private static var previousValue: Float = -1
     
     
     func makeUIView(context: Context) -> MPVolumeView {
@@ -61,21 +69,47 @@ struct VolumeSlider: UIViewRepresentable {
         volumeView.showsRouteButton = false
         if let slider = volumeView.subviews.compactMap({$0 as? UISlider}).first {
             context.coordinator.addObservers(slider: slider)
+            DispatchQueue.main.async {
+                mute = slider.value == 0
+                volume = slider.value
+                self.slider = slider
+            }
         }
         return volumeView
     }
     
-    func updateUIView(_ view: MPVolumeView, context: Context) {}
+    func updateUIView(_ view: MPVolumeView, context: Context) {
+        guard let slider = slider else {
+            return
+        }
+
+        if mute && slider.value > 0 {
+            VolumeSlider.previousValue = slider.value
+            slider.value = 0
+            DispatchQueue.main.async {
+                volume = 0
+            }
+        } else if !mute && slider.value == 0 {
+            let value = VolumeSlider.previousValue != -1 ? VolumeSlider.previousValue : 0.3
+            slider.value = value
+            DispatchQueue.main.async {
+                volume = value
+            }
+            VolumeSlider.previousValue = -1
+        }
+    }
     
     func makeCoordinator() -> VolumeSliderCoordinator {
-        return VolumeSliderCoordinator(binding: $volume)
+        return VolumeSliderCoordinator(volume: $volume, mute: $mute)
     }
     
     class VolumeSliderCoordinator {
-        var binding: Binding<Float>
+        var volume: Binding<Float>
+        var mute: Binding<Bool>
         
-        init(binding: Binding<Float>) {
-            self.binding = binding
+        init(volume: Binding<Float>, mute: Binding<Bool>) {
+            self.volume = volume
+            self.mute = mute
         }
         
         func addObservers(slider: UISlider) {
@@ -83,7 +117,8 @@ struct VolumeSlider: UIViewRepresentable {
         }
         
         @objc func volumeChanged(slider: UISlider) {
-            binding.wrappedValue = slider.value
+            volume.wrappedValue = slider.value
+            mute.wrappedValue = slider.value == 0
         }
     }
 }
