@@ -29,7 +29,7 @@ struct PlayButton: View {
                 VisualEffectBlur() {
                     Image("Play")
                 }
-                Text("Play".localized)
+                Text("Play")
             }
         })
         .frame(width: theme.buttonWidth, height: theme.buttonHeight)

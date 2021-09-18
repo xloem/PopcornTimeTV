@@ -22,7 +22,7 @@ struct ActorsCrewView: View {
     
     var body: some View {
         return VStack(alignment: .leading) {
-            Text("Cast & Crew".localized)
+            Text("Cast & Crew")
                 .font(.callout)
                 .foregroundColor(.init(white: 1.0, opacity: 0.667)) // light text color
                 .padding(.leading, theme.leading)

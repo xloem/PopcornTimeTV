@@ -52,7 +52,7 @@ struct InfoView: View {
             .padding(0)
             .padding([.leading, .trailing], theme.leading)
         } else {
-            Text("No info available.".localized)
+            Text("No info available.")
                 .font(.system(size: theme.noContentFontSize, weight: .medium))
                 .foregroundColor(.init(white: 1.0, opacity: 0.5))
         }

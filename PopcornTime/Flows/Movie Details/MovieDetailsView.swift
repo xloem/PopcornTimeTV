@@ -222,7 +222,7 @@ struct MovieDetailsView: View {
                 VisualEffectBlur() {
                     Image("Seasons")
                 }.cornerRadius(6)
-                Text("Series".localized)
+                Text("Series")
             }
         })
         .frame(width: theme.buttonWidth, height: theme.buttonHeight)
@@ -237,7 +237,7 @@ struct MovieDetailsView: View {
                 VisualEffectBlur() {
                     movie.isAddedToWatchlist ? Image("Remove") : Image("Add")
                 }
-                Text("Watchlist".localized)
+                Text("Watchlist")
             }
         })
         .frame(width: theme.buttonWidth, height: theme.buttonHeight)
@@ -252,7 +252,7 @@ struct MovieDetailsView: View {
                 VisualEffectBlur() {
                     movie.isWatched ? Image("Watched On") : Image("Watched Off")
                 }
-                Text("Watched".localized)
+                Text("Watched")
             }
         })
         .frame(width: theme.buttonWidth, height: theme.buttonHeight)
@@ -260,7 +260,7 @@ struct MovieDetailsView: View {
     
     var alsoWatchedSection: some View {
         VStack (alignment: .leading) {
-            Text("Viewers Also Watched".localized)
+            Text("Viewers Also Watched")
                 .font(.callout)
                 .foregroundColor(.init(white: 1.0, opacity: 0.667)) // light text color
                 .padding(.leading, theme.watchedSection.spacing)

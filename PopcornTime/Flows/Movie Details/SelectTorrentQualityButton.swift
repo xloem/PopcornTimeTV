@@ -50,12 +50,12 @@ struct SelectTorrentQualityButton<Label>: View where Label : View {
         .alert(item: $alert) { alert in
             switch alert.id {
             case .noTorrentsFound:
-                return Alert(title: Text("No torrents found".localized),
-                      message: Text("Torrents could not be found for the specified media.".localized))
+                return Alert(title: Text("No torrents found"),
+                      message: Text("Torrents could not be found for the specified media."))
             case .streamOnCellular:
-                return Alert(title: Text("Cellular Data is turned off for streaming".localized),
+                return Alert(title: Text("Cellular Data is turned off for streaming"),
                       message: nil,
-                      primaryButton: .default(Text("Turn On".localized)) {
+                      primaryButton: .default(Text("Turn On")) {
                         Session.streamOnCellular = true
                       },
                       secondaryButton: .cancel())

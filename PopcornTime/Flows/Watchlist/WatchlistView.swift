@@ -41,7 +41,7 @@ struct WatchlistView: View {
     @ViewBuilder
     var movieSection: some View {
         VStack(alignment: .leading) {
-            Text("Movies".localized)
+            Text("Movies")
                 .font(.callout)
                 .foregroundColor(.init(white: 1.0, opacity: 0.667)) // light text color
                 .padding(.top, 14)
@@ -66,7 +66,7 @@ struct WatchlistView: View {
     @ViewBuilder
     var showSection: some View {
         VStack(alignment: .leading) {
-            Text("Shows".localized)
+            Text("Shows")
                 .font(.callout)
                 .foregroundColor(.init(white: 1.0, opacity: 0.667)) // light text color
                 .padding(.top, 14)
@@ -92,10 +92,10 @@ struct WatchlistView: View {
     var emptyView: some View {
         if viewModel.shows.isEmpty && viewModel.movies.isEmpty {
             VStack {
-                Text("Watchlist Empty".localized)
+                Text("Watchlist Empty")
                     .font(.title2)
                     .padding()
-                Text("Try adding movies or shows to your watchlist.".localized)
+                Text("Try adding movies or shows to your watchlist.")
                     .font(.callout)
                     .foregroundColor(.init(white: 1.0, opacity: 0.667))
                     .frame(maxWidth: 400)

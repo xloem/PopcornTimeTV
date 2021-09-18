@@ -35,7 +35,7 @@ struct PlayerOptionsView: View {
         TabView(selection: $selectedTab) {
             InfoView(media: media)
                 .tabItem {
-                    Text("Info".localized)
+                    Text("Info")
                 }
                 .tag(Selection.info)
             SubtitlesView(currentDelay: $subtitleDelay,
@@ -44,14 +44,14 @@ struct PlayerOptionsView: View {
                           viewModel: SubtitlesViewModel(subtitles: media?.subtitles ?? [:])
                 )
                 .tabItem {
-                    Text("Subtitles".localized)
+                    Text("Subtitles")
                 }
                 .tag(Selection.subtitles)
             AudioView(
                 currentDelay: $audioDelay,
                 currentSound: $audioProfile)
                 .tabItem {
-                    Text("Audio".localized)
+                    Text("Audio")
                 }
                 .tag(Selection.audio)
         }

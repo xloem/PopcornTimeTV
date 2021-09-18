@@ -212,7 +212,7 @@ struct ShowDetailsView: View {
                     VisualEffectBlur() {
                         Image("Seasons")
                     }
-                    Text("Series".localized)
+                    Text("Series")
                 }
             })
             .frame(width: theme.buttonWidth, height: theme.buttonHeight)
@@ -227,7 +227,7 @@ struct ShowDetailsView: View {
                 VisualEffectBlur() {
                     show.isAddedToWatchlist ? Image("Remove") : Image("Add")
                 }
-                Text("Watchlist".localized)
+                Text("Watchlist")
             }
         })
         .frame(width: theme.buttonWidth, height: theme.buttonHeight)
@@ -235,7 +235,7 @@ struct ShowDetailsView: View {
     
     func alsoWatchedSection(scroll: ScrollViewProxy) -> some View {
         VStack (alignment: .leading) {
-            Text("Viewers Also Watched".localized)
+            Text("Viewers Also Watched")
                 .font(.callout)
                 .foregroundColor(.init(white: 1.0, opacity: 0.667)) // light text color
                 .padding(.leading, theme.watchedSectionLeading)

@@ -31,7 +31,7 @@ struct TrailerButton: View {
                 VisualEffectBlur() {
                     Image("Preview")
                 }
-                Text("Trailer".localized)
+                Text("Trailer")
             }
         })
         .frame(width: theme.buttonWidth, height: theme.buttonHeight)

@@ -60,9 +60,9 @@ struct SearchView: View {
     @ViewBuilder
     var pickerView: some View {
         Picker("", selection: $viewModel.selection) {
-             Text("Movies".localized).tag(SearchViewModel.SearchType.movies)
-             Text("Shows".localized).tag(SearchViewModel.SearchType.shows)
-             Text("People".localized).tag(SearchViewModel.SearchType.people)
+             Text("Movies").tag(SearchViewModel.SearchType.movies)
+             Text("Shows").tag(SearchViewModel.SearchType.shows)
+             Text("People").tag(SearchViewModel.SearchType.people)
         }
     }
     
@@ -173,7 +173,7 @@ struct SearchView: View {
             
             VStack {
                 Spacer()
-                Text("No results".localized)
+                Text("No results")
                     .font(.title2)
                     .padding()
                 Text(description)

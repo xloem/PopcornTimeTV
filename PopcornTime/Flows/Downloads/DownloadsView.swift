@@ -54,10 +54,10 @@ struct DownloadsView: View {
     @ViewBuilder
     var emptyView: some View {
         VStack {
-            Text("Downloads Empty".localized)
+            Text("Downloads Empty")
                 .font(.title2)
                 .padding()
-            Text("Movies and episodes you download will show up here.".localized)
+            Text("Movies and episodes you download will show up here.")
                 .font(.callout)
                 .foregroundColor(.init(white: 1.0, opacity: 0.667))
                 .frame(maxWidth: 400)
@@ -68,7 +68,7 @@ struct DownloadsView: View {
     @ViewBuilder
     var downloadingSection: some View {
         VStack(alignment: .leading) {
-            Text("Downloading".localized)
+            Text("Downloading")
                 .font(.callout)
                 .foregroundColor(.init(white: 1.0, opacity: 0.667)) // light text color
                 .padding(.top, 14)
@@ -88,7 +88,7 @@ struct DownloadsView: View {
     @ViewBuilder
     var movieSection: some View {
         VStack(alignment: .leading) {
-            Text("Movies".localized)
+            Text("Movies")
                 .font(.callout)
                 .foregroundColor(.init(white: 1.0, opacity: 0.667)) // light text color
                 .padding(.top, 14)
@@ -108,7 +108,7 @@ struct DownloadsView: View {
     @ViewBuilder
     var showSection: some View {
         VStack(alignment: .leading) {
-            Text("Episodes".localized)
+            Text("Episodes")
                 .font(.callout)
                 .foregroundColor(.init(white: 1.0, opacity: 0.667)) // light text color
                 .padding(.top, 14)

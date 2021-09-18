@@ -43,7 +43,7 @@ struct DownloadButton: View {
                 VisualEffectBlur() {
                     Image("Download Progress Start")
                 }
-                Text("Download".localized)
+                Text("Download")
             }
         })
         .frame(width: theme.buttonWidth, height: theme.buttonHeight)
@@ -57,16 +57,16 @@ struct DownloadButton: View {
                 VisualEffectBlur() {
                     Image("Download Progress Finished")
                 }
-                Text("Options".localized)
+                Text("Options")
             }
         })
         .frame(width: theme.buttonWidth, height: theme.buttonHeight)
         .confirmationDialog("", isPresented: $viewModel.showDownloadedActionSheet, actions: {
-            Button { showPlayer = true } label: { Text("Play".localized) }
+            Button { showPlayer = true } label: { Text("Play") }
             Button(role: .destructive) {
                 viewModel.deleteDownload()
             } label: {
-                Text("Delete Download".localized)
+                Text("Delete Download")
             }
             Button(role: .cancel, action: {}, label: { Text("Cancel") })
         })
@@ -85,25 +85,25 @@ struct DownloadButton: View {
                     DownloadProgressView(progress: viewModel.downloadProgress)
                         .padding(.all, 5)
                 }
-                Text("Downloading".localized)
+                Text("Downloading")
             }
         })
         .frame(width: theme.buttonWidth, height: theme.buttonHeight)
         .confirmationDialog(
-            Text("Are you sure you want to stop the download?".localized),
+            Text("Are you sure you want to stop the download?"),
             isPresented: $viewModel.showStopDownloadAlert,
             titleVisibility: .visible,
             actions: {
                      Button(role: .cancel, action: {}, label: { Text("Cancel") })
                      Button(role: .destructive, action: {
                          self.viewModel.stopDownload()
-                     }, label: { Text("Stop".localized) })
+                     }, label: { Text("Stop") })
         })
 
         .alert(isPresented: $viewModel.showDownloadFailedAlert, content: {
-            Alert(title: Text( "Download Failed".localized),
+            Alert(title: Text( "Download Failed"),
                   message: Text(viewModel.downloadError?.localizedDescription ?? ""),
-                  dismissButton: .cancel(Text("OK".localized)))
+                  dismissButton: .cancel(Text("OK")))
         })
     }
     
@@ -115,7 +115,7 @@ struct DownloadButton: View {
                 VisualEffectBlur() {
                     Image("Download Progress Pause")
                 }
-                Text("Paused".localized)
+                Text("Paused")
             }
         })
         .frame(width: theme.buttonWidth, height: theme.buttonHeight)
@@ -130,7 +130,7 @@ struct DownloadButton: View {
                     Image("Download Progress Indeterminate")
                         .modifier(RotateAnimation())
                 }
-                Text("Pending".localized)
+                Text("Pending")
             }
         })
         .frame(width: theme.buttonWidth, height: theme.buttonHeight)

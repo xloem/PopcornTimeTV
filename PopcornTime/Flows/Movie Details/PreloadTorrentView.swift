@@ -34,9 +34,9 @@ struct PreloadTorrentView: View {
                 viewModel.cancel()
             }
             .alert(isPresented: $viewModel.showError, content: {
-                Alert(title: Text("Error".localized),
+                Alert(title: Text("Error"),
                       message: Text(viewModel.error?.localizedDescription ?? ""),
-                      dismissButton: .cancel(Text("Cancel".localized), action: {
+                      dismissButton: .cancel(Text("Cancel"), action: {
                         presentationMode.wrappedValue.dismiss()
                       }))
             })
@@ -71,7 +71,7 @@ struct PreloadTorrentView: View {
                 presentationMode.wrappedValue.dismiss()
             }
         } label: {
-            Text("CANCEL".localized)
+            Text("CANCEL")
                 .foregroundColor(.blue)
         }
 

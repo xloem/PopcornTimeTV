@@ -51,7 +51,7 @@ struct PersonDetailsView: View {
     @ViewBuilder
     var movieSection: some View {
         VStack(alignment: .leading) {
-            Text("Movies".localized)
+            Text("Movies")
                 .font(.callout)
                 .foregroundColor(.init(white: 1.0, opacity: 0.667)) // light text color
                 .padding(.top, 14)
@@ -76,7 +76,7 @@ struct PersonDetailsView: View {
     @ViewBuilder
     var showSection: some View {
         VStack(alignment: .leading) {
-            Text("Shows".localized)
+            Text("Shows")
                 .font(.callout)
                 .foregroundColor(.init(white: 1.0, opacity: 0.667)) // light text color
                 .padding(.top, 14)

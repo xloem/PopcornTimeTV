@@ -58,7 +58,7 @@ struct SubtitlesView: View {
             VStack(alignment: .leading, spacing: 10) {
                 sectionHeader(text: "Language")
                 if viewModel.subtitles.isEmpty {
-                    Text("No subtitles available.".localized)
+                    Text("No subtitles available.")
                         .foregroundColor(.init(white: 1, opacity: 0.5))
                         .font(.system(size: theme.noLanguageFontSize, weight: .medium))
                         .padding(.leading, 20)

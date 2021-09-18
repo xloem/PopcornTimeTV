@@ -95,7 +95,7 @@ struct PlayerControlsView: View {
                 HStack(spacing: 10) {
                     Spacer()
                     ProgressView()
-                    Text("Loading...".localized)
+                    Text("Loading...")
                     Spacer()
                 }
             } else {
