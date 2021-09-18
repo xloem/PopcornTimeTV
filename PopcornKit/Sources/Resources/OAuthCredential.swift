@@ -18,9 +18,6 @@ enum OAuthGrantType: String {
  */
 class OAuthCredential: NSObject, Codable {
     
-    /// Service name for storing the credential.
-    private static let service = "OAuthCredentialService"
-    
     override var description: String {
         return "<\(type(of: self)): \(String(format: "%p", unsafeBitCast(self, to: Int.self))); accessToken = '\(self.accessToken)'; tokenType = '\(self.tokenType)'; refreshToken = '\(self.refreshToken ?? "none")'; expiration = \(self.expiration ?? Date.distantFuture)>"
     }
@@ -207,77 +204,4 @@ class OAuthCredential: NSObject, Codable {
         self.refreshToken = refreshToken
         self.expiration = expiration
     }
-    
-    /**
-     Stores the specified OAuth credential for a given web service identifier in the Keychain.
-     with the default Keychain Accessibilty of kSecAttrAccessibleWhenUnlocked.
-     
-     - Parameter credential:            The OAuth credential to be stored.
-     - Parameter identifier:            The service identifier associated with the specified token.
-     - Parameter securityAccessibility: The Keychain security accessibility to store the credential with default Keychain Accessibilty of kSecAttrAccessibleWhenUnlocked.
-     
-     - Throws: Error if storing credential fails.
-     */
-    func store(
-        withIdentifier identifier: String,
-        accessibility: AnyObject = kSecAttrAccessibleWhenUnlocked
-        ) throws {
-        
-        if let data = try? JSONEncoder().encode(self) {
-            Session.oauthCredentials = data
-        }
-        
-//        return try Locksmith.updateData(data: ["credential": NSKeyedArchiver.archivedData(withRootObject: self)], forUserAccount: identifier, inService: OAuthCredential.service)
-    }
-    
-    /**
-     Retrieves the OAuth credential stored with the specified service identifier from the Keychain.
-     
-     - Parameter identifier: The service identifier associated with the specified credential.
-     
-     - Returns: The OAuthCredential if it existed, `nil` otherwise.
-     */
-    init?(identifier: String) {
-        
-        guard let data = Session.oauthCredentials,
-              let credential = try? JSONDecoder().decode(Self.self, from: data) else {
-             return nil
-        }
-//        guard let result = Locksmith.loadDataForUserAccount(userAccount: identifier, inService: OAuthCredential.service)?["credential"] as? Data, let credential = NSKeyedUnarchiver.unarchiveObject(with: result) as? OAuthCredential else { return nil }
-        
-        self.accessToken = credential.accessToken
-        self.expiration = credential.expiration
-        self.refreshToken = credential.refreshToken
-        self.tokenType = credential.tokenType
-        super.init()
-    }
-    
-    /**
-     Deletes the OAuth credential stored with the specified service identifier from the Keychain.
-     
-     - Parameter identifier: The service identifier associated with the specified credential.
-     
-      - Throws: Error if deleting the credential fails.
-     */
-    class func delete(withIdentifier identifier: String) throws {
-        Session.oauthCredentials = nil
-//        return try Locksmith.deleteDataForUserAccount(userAccount: identifier, inService: service)
-    }
-    
-    // MARK: - NSCoding
-    
-//    func encode(with aCoder: NSCoder) {
-//        aCoder.encode(accessToken, forKey: "accessToken")
-//        aCoder.encode(tokenType, forKey: "tokenType")
-//        aCoder.encode(refreshToken, forKey: "refreshToken")
-//        aCoder.encode(expiration, forKey: "expiration")
-//    }
-    
-//    required init(coder aDecoder: NSCoder) {
-//        accessToken = aDecoder.decodeObject(forKey: "accessToken") as! String
-//        tokenType = aDecoder.decodeObject(forKey: "tokenType") as! String
-//        refreshToken = aDecoder.decodeObject(forKey: "refreshToken") as? String
-//        expiration = aDecoder.decodeObject(forKey: "expiration") as? Date
-//        super.init()
-//    }
 }

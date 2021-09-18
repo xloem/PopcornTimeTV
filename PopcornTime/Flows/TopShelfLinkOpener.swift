@@ -11,8 +11,6 @@ import PopcornKit
 import ObjectMapper
 
 struct TopShelfLinkOpener: ViewModifier {
-    let scheme = "PopcornTimeSwiftUI" // should be the same in info.plist
-    
     @State var media: Media?
     @State var showOpenedMedia: Bool = false
     
@@ -44,9 +42,9 @@ struct TopShelfLinkOpener: ViewModifier {
     }
     
     func openUrl(url: URL) {
-        if url.scheme == scheme {
+        if url.scheme == AppScheme {
             guard
-                let actions = url.absoluteString.removingPercentEncoding?.components(separatedBy: "\(scheme):?action=").last?.components(separatedBy: "»"),
+                let actions = url.absoluteString.removingPercentEncoding?.components(separatedBy: "\(AppScheme):?action=").last?.components(separatedBy: "»"),
                 let type = actions.first, let json = actions.last
                 else {
                     return

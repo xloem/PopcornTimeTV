@@ -7,10 +7,14 @@
 //
 
 import SwiftUI
+import PopcornKit
 
 class SettingsViewModel: ObservableObject {
     @Published var clearCacheTitle: LocalizedStringKey = ""
     @Published var clearCacheMessage: LocalizedStringKey = ""
+    
+    @Published var isTraktSingedIn: Bool = TraktManager.shared.isSignedIn()
+    var traktAuthorizationUrl: URL = TraktManager.shared.authorizationUrl(appScheme: AppScheme)
     
     func clearCache() {
         do {
@@ -41,5 +45,24 @@ class SettingsViewModel: ObservableObject {
     var version: String {
         let bundle = Bundle.main
         return [bundle.object(forInfoDictionaryKey: "CFBundleShortVersionString"), bundle.object(forInfoDictionaryKey: "CFBundleVersion")].compactMap({$0 as? String}).joined(separator: ".")
+    }
+    
+    func validate(traktUrl: URL) {
+        TraktManager.shared.authenticate(traktUrl) { error in
+            let success = error == nil
+            if success {
+                self.traktDidLoggedIn()
+            }
+        }
+    }
+    
+    func traktLogout() {
+        TraktManager.shared.logout()
+        isTraktSingedIn = false
+    }
+    
+    func traktDidLoggedIn() {
+        isTraktSingedIn = true
+        TraktManager.shared.syncUserData()
     }
 }

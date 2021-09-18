@@ -24,8 +24,8 @@ enum Session {
     @UserDefault(key: "themeSongVolume", defaultValue: 0.75)
     static var themeSongVolume: Float
     
-    @UserDefault(key: "oauthCredentials", defaultValue: nil)
-    static var oauthCredentials: Data?
+    @UserDefault(key: "traktCredentials", defaultValue: nil)
+    static var traktCredentials: Data?
     
     @UserDefault(key: "skipReleaseVersion", defaultValue: nil)
     static var skipReleaseVersion: Data?

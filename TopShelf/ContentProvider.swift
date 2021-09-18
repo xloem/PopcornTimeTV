@@ -55,7 +55,7 @@ class ContentProvider: TVTopShelfContentProvider {
 
         // generate url
         var components = URLComponents()
-        components.scheme = "PopcornTimeSwiftUI"
+        components.scheme = AppScheme
         components.queryItems = [URLQueryItem(name: "action", value: toJSONString(media))]
         if let url = components.url {
             item.playAction = TVTopShelfAction(url: url)

@@ -7,6 +7,8 @@
 //
 
 import SwiftUI
+import PopcornKit
+
 
 @main
 struct PopcornTime: App {
@@ -34,6 +36,9 @@ struct PopcornTime: App {
             .accentColor(.white)
             .navigationViewStyle(StackNavigationViewStyle())
             #endif
+//            .onAppear {
+//                TraktManager.shared.syncUserData()
+//            }
         }
     }
 }

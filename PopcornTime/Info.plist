@@ -23,7 +23,7 @@
 			<string>$(PRODUCT_BUNDLE_IDENTIFIER)</string>
 			<key>CFBundleURLSchemes</key>
 			<array>
-				<string>PopcornTimeSwiftUI</string>
+				<string>PopcornTime</string>
 			</array>
 		</dict>
 	</array>

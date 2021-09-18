@@ -22,9 +22,6 @@ open class TraktManager: NetworkManager {
     /// OAuth state parameter added for extra security against cross site forgery.
     fileprivate var state: String!
     
-    /// The delegate for the Trakt Authentication process.
-    open weak var delegate: TraktManagerDelegate?
-    
     /**
      Scrobbles current video.
      
@@ -36,7 +33,7 @@ open class TraktManager: NetworkManager {
      - Parameter completion:    Optional completion handler only called if an error is thrown.
      */
     open func scrobble(_ id: String, progress: Float, type: Trakt.MediaType, status: Trakt.WatchedStatus, completion: ((NSError) -> Void)? = nil) {
-        guard var credential = OAuthCredential(identifier: "trakt") else { return }
+        guard var credential = traktCredentials() else { return }
         guard progress != 0 else { return removePlaybackProgress(id, type: type) }
         DispatchQueue.global(qos: .background).async {
             if credential.expired {
@@ -82,7 +79,7 @@ open class TraktManager: NetworkManager {
      - Parameter completion:    The completion handler for the request containing an array of media objects and an optional error.
      */
     open func getWatched<T: Media>(forMediaOfType type: T.Type, completion:@escaping ([T], NSError?) -> Void) {
-        guard var credential = OAuthCredential(identifier: "trakt") else { return }
+        guard var credential = traktCredentials() else { return }
         DispatchQueue.global(qos: .userInitiated).async {
             if credential.expired {
                 do {
@@ -125,7 +122,7 @@ open class TraktManager: NetworkManager {
      - Parameter completion: The completion handler for the request containing a dictionary of either imdbIds or tvdbIds depending on the type selected as keys and the users corrisponding watched progress as values and an optional error. Eg. ["tt1431045": 0.5] means you have watched half of Deadpool.
      */
     open func getPlaybackProgress<T: Media>(forMediaOfType type: T.Type, completion:@escaping ([T: Float], NSError?) -> Void) {
-        guard var credential = OAuthCredential(identifier: "trakt") else { return }
+        guard var credential = traktCredentials() else { return }
         DispatchQueue.global(qos: .userInitiated).async {
             if credential.expired {
                 do {
@@ -181,7 +178,7 @@ open class TraktManager: NetworkManager {
      - Parameter completion: An optional completion handler called only if an error is thrown.
      */
     open func removePlaybackProgress(_ id: String, type: Trakt.MediaType, completion: ((NSError) -> Void)? = nil) {
-        guard var credential = OAuthCredential(identifier: "trakt") else { return }
+        guard var credential = traktCredentials() else { return }
         DispatchQueue.global(qos: .background).async {
             if credential.expired {
                 do {
@@ -232,7 +229,7 @@ open class TraktManager: NetworkManager {
      - Parameter completion:    An optional completion handler called only if an error is thrown.
      */
     open func remove(_ id: String, fromWatchedlistOfType type: Trakt.MediaType, completion: ((NSError) -> Void)? = nil) {
-        guard var credential = OAuthCredential(identifier: "trakt") else { return }
+        guard var credential = traktCredentials() else { return }
         DispatchQueue.global(qos: .background).async {
             if credential.expired {
                 do {
@@ -264,7 +261,7 @@ open class TraktManager: NetworkManager {
      - Parameter completion: The completion handler for the request containing an optional error if the request fails.
      */
     open func add(_ id: String, toWatchedlistOfType type: Trakt.MediaType, completion: ((NSError) -> Void)? = nil) {
-        guard var credential = OAuthCredential(identifier: "trakt") else { return }
+        guard var credential = traktCredentials() else { return }
         DispatchQueue.global(qos: .background).async {
             if credential.expired {
                 do {
@@ -336,7 +333,7 @@ open class TraktManager: NetworkManager {
      - Parameter completion: The completion handler for the request containing an array of media that the user has added to their watchlist and an optional error.
      */
     open func getWatchlist<T: Media>(forMediaOfType type: T.Type, completion:@escaping ([T], NSError?) -> Void) {
-        guard var credential = OAuthCredential(identifier: "trakt") else { return }
+        guard var credential = traktCredentials() else { return }
         DispatchQueue.global(qos: .background).async {
             if credential.expired {
                 do {
@@ -385,7 +382,7 @@ open class TraktManager: NetworkManager {
      - Parameter completion: The completion handler for the request containing an optional error if the request fails.
      */
     open func add(_ id: String, toWatchlistOfType type: Trakt.MediaType, completion: ((NSError) -> Void)? = nil) {
-        guard var credential = OAuthCredential(identifier: "trakt") else { return }
+        guard var credential = traktCredentials() else { return }
         DispatchQueue.global(qos: .background).async {
             if credential.expired {
                 do {
@@ -415,7 +412,7 @@ open class TraktManager: NetworkManager {
      - Parameter completion: The completion handler for the request containing an optional error if the request fails.
      */
     open func remove(_ id: String, fromWatchlistOfType type: Trakt.MediaType, completion: ((NSError) -> Void)? = nil) {
-        guard var credential = OAuthCredential(identifier: "trakt") else { return }
+        guard var credential = traktCredentials() else { return }
         DispatchQueue.global(qos: .background).async {
             if credential.expired {
                 do {
@@ -591,59 +588,29 @@ open class TraktManager: NetworkManager {
 /// When mapping to movies or shows from Trakt, the JSON is formatted differently to the Popcorn API. This struct is used to distinguish from which API the Media is being mapped from.
 struct TraktContext: MapContext {}
 
-
-// MARK: Trakt OAuth
-
-@objc public protocol TraktManagerDelegate: AnyObject {
-    /// Called when a user has successfully logged in.
-    @objc optional func authenticationDidSucceed()
-    
-    /**
-     Called if a user cancels the auth process or if the requests fail.
-     
-     - Parameter error: The underlying error.
-     */
-    @objc optional func authenticationDidFail(with error: NSError)
-}
-
 extension TraktManager {
     
-    #if os(iOS) || os(tvOS)
-    /**
-     First part of the Trakt authentication process.
-     
-     - Returns: A login view controller to be presented.
-     */
-    public func loginViewController() -> UIViewController {
-        #if os(iOS)
-            state = .random(of: 15)
-            
-            let vc = SFSafariViewController(url: URL(string: Trakt.base + Trakt.auth + "/authorize?client_id=" + Trakt.apiKey + "&redirect_uri=PopcornTime%3A%2F%2Ftrakt&response_type=code&state=\(state!)")!)
-            vc.modalPresentationStyle = .fullScreen
-            
-            return vc
-        #else
-            return TraktAuthenticationViewController(nibName: "TraktAuthenticationViewController", bundle: TraktAuthenticationViewController.bundle)
-        #endif
-    }
-    #endif
-    
-    /**
-     Logout of Trakt.
-     
-     - Returns: Boolean value indicating the sucess of the operation.
-     */
-    public func logout() throws {
-        return try OAuthCredential.delete(withIdentifier: "trakt")
+    public func logout() {
+        Session.traktCredentials = nil
     }
     
-    /**
-     Checks if user is authenticated with trakt.
-     
-     - Returns: Boolean value indicating the signed in status of the user.
-     */
     public func isSignedIn() -> Bool {
-        return OAuthCredential(identifier: "trakt") != nil
+        return Session.traktCredentials != nil
+    }
+    
+    private func traktCredentials() -> OAuthCredential? {
+        if let data = Session.traktCredentials,
+           let credentials = try? JSONDecoder().decode(OAuthCredential.self, from: data) {
+            return credentials
+        }
+        
+        return nil
+    }
+    
+    private func storeCredentials(_ credentials: OAuthCredential) {
+        if let data = try? JSONEncoder().encode(credentials) {
+            Session.traktCredentials = data
+        }
     }
     
     /**
@@ -651,43 +618,65 @@ extension TraktManager {
      
      - Parameter completion: The completion handler for the request containing the code for the user to enter to the validation url (`https://trakt.tv/activate/authorize`), the code for the device to get the access token, the expiery date of the displat code and the time interval that the program is to check whether the user has authenticated and an optional error if request fails.
      */
-    internal func generateCode(completion: @escaping (String?, String?, Date?, TimeInterval?, NSError?) -> Void) {
+    public func generateCode(completion: @escaping (String?, String?, Date?, TimeInterval?, NSError?) -> Void) {
         self.manager.request(Trakt.base + Trakt.auth + Trakt.device + Trakt.code, method: .post, parameters: ["client_id": Trakt.apiKey]).validate().responseJSON { (response) in
             guard let value = response.result.value as? [String: AnyObject], let displayCode = value["user_code"] as? String, let deviceCode = value["device_code"] as? String, let expire = value["expires_in"] as? Int, let interval = value["interval"]  as? Int else { completion(nil, nil, nil, nil, response.result.error as NSError?); return }
             completion(displayCode, deviceCode, Date().addingTimeInterval(Double(expire)), Double(interval), nil)
         }
     }
     
+    public func check(deviceCode: String, success: @escaping () -> Void) {
+        DispatchQueue.global(qos: .default).async {
+            do {
+                let credentials = try OAuthCredential(Trakt.base + Trakt.auth + Trakt.device + Trakt.token, parameters: ["code": deviceCode], clientID: Trakt.apiKey, clientSecret: Trakt.apiSecret, useBasicAuthentication: false)
+                self.storeCredentials(credentials)
+                
+                DispatchQueue.main.async {
+                    success()
+                }
+            } catch { }
+        }
+    }
+    
+    /// 1 step of the authentication process, open this url in browser
+    public func authorizationUrl(appScheme: String) -> URL {
+        state = .random(of: 15)
+        
+        return URL(string: Trakt.base + Trakt.auth + "/authorize?client_id=" + Trakt.apiKey + "&redirect_uri=\(appScheme)%3A%2F%2Ftrakt&response_type=code&state=\(state!)")!
+    }
+    
     /**
-     Second part of the authentication process. Calls delegate upon completion.
+     Second part of the authentication process
      
      - Parameter url: The redirect URI recieved from step 1.
      */
-    public func authenticate(_ url: URL) {
+    public func authenticate(_ url: URL, completion: @escaping (_ error: Error?)->Void) {
         defer { state = nil }
         
         guard let query = url.query?.queryString,
             let code = query["code"],
             query["state"] == state
             else {
-                delegate?.authenticationDidFail?(with: NSError(domain: "com.popcorntimetv.popcornkit.error", code: -1, userInfo: [NSLocalizedDescriptionKey: "An unknown error occured."]))
+                let error = NSError(domain: "com.popcorntimetv.popcornkit.error", code: -1, userInfo: [NSLocalizedDescriptionKey: "An unknown error occured."])
+                completion(error)
                 return
         }
         
         DispatchQueue.global(qos: .default).async {
             do {
-                try OAuthCredential(Trakt.base + Trakt.auth + Trakt.token,
+                let credentials = try OAuthCredential(Trakt.base + Trakt.auth + Trakt.token,
                                     code: code,
                                     redirectURI: "PopcornTime://trakt",
                                     clientID: Trakt.apiKey,
                                     clientSecret: Trakt.apiSecret,
-                                    useBasicAuthentication: false).store(withIdentifier: "trakt")
+                                    useBasicAuthentication: false)
+                self.storeCredentials(credentials)
                 DispatchQueue.main.sync {
-                    self.delegate?.authenticationDidSucceed?()
+                    completion(nil)
                 }
             } catch let error as NSError {
                 DispatchQueue.main.sync {
-                    self.delegate?.authenticationDidFail?(with: error)
+                    completion(error)
                 }
             }
         }

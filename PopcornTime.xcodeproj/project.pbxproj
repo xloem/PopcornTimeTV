@@ -158,6 +158,8 @@
 		23901BEC26F6171400A7C292 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 23901BEA26F6171400A7C292 /* Localizable.strings */; };
 		23901BED26F6171400A7C292 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 23901BEA26F6171400A7C292 /* Localizable.strings */; };
 		23901BEE26F6171400A7C292 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 23901BEA26F6171400A7C292 /* Localizable.strings */; };
+		23901BF726F6496B00A7C292 /* TraktView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23901BF626F6496B00A7C292 /* TraktView.swift */; };
+		23901BFB26F64B3D00A7C292 /* TraktViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23901BFA26F64B3D00A7C292 /* TraktViewModel.swift */; };
 		2391BE7B2684759000576CAD /* DownloadButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2391BE7A2684759000576CAD /* DownloadButton.swift */; };
 		2391BE7D268475A200576CAD /* DownloadButtonViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2391BE7C268475A200576CAD /* DownloadButtonViewModel.swift */; };
 		2391BE7F26847B9800576CAD /* SelectTorrentQualityButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2391BE7E26847B9800576CAD /* SelectTorrentQualityButton.swift */; };
@@ -299,6 +301,10 @@
 		23D2B3A026959C910077BBED /* StarRatingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23D2B39F26959C910077BBED /* StarRatingView.swift */; };
 		23D4606926C7C1DD00D56978 /* MacModalWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23D4606826C7C1DC00D56978 /* MacModalWindow.swift */; };
 		23DBB51D26ADBF1400AAF824 /* DownloadViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23DBB51C26ADBF1400AAF824 /* DownloadViewModel.swift */; };
+		23DC476226F66C43006E18D4 /* AppScheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23DC476126F66C43006E18D4 /* AppScheme.swift */; };
+		23DC476326F66C43006E18D4 /* AppScheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23DC476126F66C43006E18D4 /* AppScheme.swift */; };
+		23DC476426F66C43006E18D4 /* AppScheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23DC476126F66C43006E18D4 /* AppScheme.swift */; };
+		23DC476526F66C43006E18D4 /* AppScheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23DC476126F66C43006E18D4 /* AppScheme.swift */; };
 		23E2A6C926EB8C3300F24931 /* TopShelfLinkOpener.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23E2A6C826EB8C3300F24931 /* TopShelfLinkOpener.swift */; };
 		23E4976726947E1300175DEE /* TVServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 002682111CD0B76200F51D31 /* TVServices.framework */; };
 		23E4976A26947E1300175DEE /* ContentProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23E4976926947E1300175DEE /* ContentProvider.swift */; };
@@ -446,6 +452,8 @@
 		23901BF326F6172F00A7C292 /* it */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = it; path = Localization/it.lproj/Localizable.strings; sourceTree = "<group>"; };
 		23901BF426F6173200A7C292 /* pt-BR */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "pt-BR"; path = "Localization/pt-BR.lproj/Localizable.strings"; sourceTree = "<group>"; };
 		23901BF526F6173400A7C292 /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = Localization/es.lproj/Localizable.strings; sourceTree = "<group>"; };
+		23901BF626F6496B00A7C292 /* TraktView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TraktView.swift; sourceTree = "<group>"; };
+		23901BFA26F64B3D00A7C292 /* TraktViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TraktViewModel.swift; sourceTree = "<group>"; };
 		2391BE7A2684759000576CAD /* DownloadButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DownloadButton.swift; sourceTree = "<group>"; };
 		2391BE7C268475A200576CAD /* DownloadButtonViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DownloadButtonViewModel.swift; sourceTree = "<group>"; };
 		2391BE7E26847B9800576CAD /* SelectTorrentQualityButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectTorrentQualityButton.swift; sourceTree = "<group>"; };
@@ -466,6 +474,7 @@
 		23D2B39F26959C910077BBED /* StarRatingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StarRatingView.swift; sourceTree = "<group>"; };
 		23D4606826C7C1DC00D56978 /* MacModalWindow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MacModalWindow.swift; sourceTree = "<group>"; };
 		23DBB51C26ADBF1400AAF824 /* DownloadViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DownloadViewModel.swift; sourceTree = "<group>"; };
+		23DC476126F66C43006E18D4 /* AppScheme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppScheme.swift; sourceTree = "<group>"; };
 		23E2A6C826EB8C3300F24931 /* TopShelfLinkOpener.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TopShelfLinkOpener.swift; sourceTree = "<group>"; };
 		23E4976626947E1300175DEE /* TopShelf.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = TopShelf.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		23E4976926947E1300175DEE /* ContentProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentProvider.swift; sourceTree = "<group>"; };
@@ -572,6 +581,8 @@
 			children = (
 				23313B1D267E3AB800774A85 /* SettingsView.swift */,
 				2304530A26B541900050BCB8 /* SettingsViewModel.swift */,
+				23901BF626F6496B00A7C292 /* TraktView.swift */,
+				23901BFA26F64B3D00A7C292 /* TraktViewModel.swift */,
 			);
 			path = Settings;
 			sourceTree = "<group>";
@@ -797,6 +808,7 @@
 			isa = PBXGroup;
 			children = (
 				23E4976926947E1300175DEE /* ContentProvider.swift */,
+				23DC476126F66C43006E18D4 /* AppScheme.swift */,
 				23E4976B26947E1300175DEE /* Info.plist */,
 			);
 			path = TopShelf;
@@ -1257,6 +1269,7 @@
 				23446AD3268071070049CC72 /* VLCMediaPlayer+VLCFontAppearance.swift in Sources */,
 				23313B2E267E3BD500774A85 /* InfoView.swift in Sources */,
 				23446ADB2680E7BB0049CC72 /* ProgressBar.swift in Sources */,
+				23DC476226F66C43006E18D4 /* AppScheme.swift in Sources */,
 				23446ACE26804F9F0049CC72 /* PlayButton.swift in Sources */,
 				234180A426C2D38500C32083 /* PlayButtonModel.swift in Sources */,
 				23313B41267E3DC100774A85 /* UserDefault.swift in Sources */,
@@ -1270,6 +1283,7 @@
 				2391BE7D268475A200576CAD /* DownloadButtonViewModel.swift in Sources */,
 				23313B38267E3C2700774A85 /* PreloadTorrentView.swift in Sources */,
 				2304530B26B541900050BCB8 /* SettingsViewModel.swift in Sources */,
+				23901BFB26F64B3D00A7C292 /* TraktViewModel.swift in Sources */,
 				2391BE7B2684759000576CAD /* DownloadButton.swift in Sources */,
 				23313B48267E3DF600774A85 /* JSONDecoder+KeyPath.swift in Sources */,
 				2343A75F268861C800B824E7 /* ExtendedSubtitlesView.swift in Sources */,
@@ -1315,6 +1329,7 @@
 				23793D9D26AD950D0094FFA0 /* DownloadView.swift in Sources */,
 				23446AD5268072130049CC72 /* UIColor+Extension.swift in Sources */,
 				2388FD5D2691C4E000B51201 /* PersonDetailsView.swift in Sources */,
+				23901BF726F6496B00A7C292 /* TraktView.swift in Sources */,
 				23313B36267E3C1400774A85 /* PlayerView.swift in Sources */,
 				23446ADA2680C1110049CC72 /* NowPlayingController.swift in Sources */,
 				23BEFC9C26D79862008EDC44 /* PlayerSubtitleModel.swift in Sources */,
@@ -1373,6 +1388,7 @@
 				23A2BDDA26BEDC50004B864E /* JSONCache.swift in Sources */,
 				23A2BD9726BEDA07004B864E /* MovieDetailsView.swift in Sources */,
 				23A2BDAA26BEDA19004B864E /* DownloadsView.swift in Sources */,
+				23DC476426F66C43006E18D4 /* AppScheme.swift in Sources */,
 				236A11C226C67FB100AFF1FD /* ExtendedSubtitlesView.swift in Sources */,
 				23A2BDC326BEDBC2004B864E /* BufferingBar.swift in Sources */,
 				23A2BDBB26BEDBB2004B864E /* PlainNavigationLinkButton.swift in Sources */,
@@ -1487,6 +1503,7 @@
 				237ECA1526B847C100EE8B46 /* App.swift in Sources */,
 				237ECA3D26B84A3600EE8B46 /* JSONCache.swift in Sources */,
 				23B24D7526CA775800B8CD84 /* UIColor+Extension.swift in Sources */,
+				23DC476526F66C43006E18D4 /* AppScheme.swift in Sources */,
 				23461D9026DD3025007C6520 /* AirplayView.swift in Sources */,
 				23BEFC9A26D7952E008EDC44 /* PlayerAudioModel.swift in Sources */,
 				23A10F4126C699D80062D9CE /* DownloadViewModel.swift in Sources */,
@@ -1532,6 +1549,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				23DC476326F66C43006E18D4 /* AppScheme.swift in Sources */,
 				23E4976A26947E1300175DEE /* ContentProvider.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

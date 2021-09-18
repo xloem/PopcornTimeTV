@@ -26,6 +26,8 @@ struct SettingsView: View {
     @State var showSubtitleEncondingAlert = false
     
     @State var showTraktAlert = false
+    @State var showTraktView = false
+    @Environment(\.openURL) var openURL
     
     @State var showClearCacheAlert = false
     
@@ -52,11 +54,11 @@ struct SettingsView: View {
                     subtitleEncondingButton
                 }
                 
-//                Section(header: sectionHeader("Services")) {
-//                    trackButton
-//                }
+                Section(header: sectionHeader("Services")) {
+                    trackButton
+                }
                 
-                Section(header: Text("Info".localized.uppercased())) {
+                Section(header: sectionHeader("Info")) {
                     clearCacheButton
 //                    button(text: "Check for Updates", value: lastUpdate) {
 //
@@ -334,19 +336,33 @@ struct SettingsView: View {
 
     @ViewBuilder
     var trackButton: some View {
-        let tracktValue = TraktManager.shared.isSignedIn() ? "Sign Out".localized : "Sign In".localized
+        let tracktValue = viewModel.isTraktSingedIn ? "Sign Out".localized : "Sign In".localized
         button(text: "Trakt", value: tracktValue) {
-            if TraktManager.shared.isSignedIn() {
+            if viewModel.isTraktSingedIn {
                 showTraktAlert = true
             } else  {
-//                TraktManager.shared.delegate = self
-//                let vc = TraktManager.shared.loginViewController()
-//                present(vc, animated: true)
+                #if os(tvOS)
+                showTraktView = true
+                #else
+                openURL(viewModel.traktAuthorizationUrl)
+                #endif
             }
         }
         .actionSheet(isPresented: $showTraktAlert) {
             traktAlert
         }
+        #if os(tvOS)
+        .fullScreenContent(isPresented: $showTraktView, title: "Trakt") {
+            TraktView(viewModel: TraktViewModel(onSuccess: {
+                self.viewModel.traktDidLoggedIn()
+                self.showTraktView = false
+            }))
+        }
+        #else
+        .onOpenURL { url in
+            viewModel.validate(traktUrl: url)
+        }
+        #endif
     }
 
     var traktAlert: ActionSheet {
@@ -354,9 +370,7 @@ struct SettingsView: View {
                     message: Text("Are you sure you want to Sign Out?"),
                     buttons:[
                         .default(Text("Sign Out"), action: {
-                            do {
-                                try TraktManager.shared.logout()
-                            } catch { }
+                            viewModel.traktLogout()
                         }),
                         .cancel(),
                     ]
