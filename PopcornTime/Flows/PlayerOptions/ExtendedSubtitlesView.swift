@@ -10,6 +10,7 @@ import SwiftUI
 import PopcornKit
 
 struct ExtendedSubtitlesView: View {
+    let theme = Theme()
     @Binding var currentSubtitle: Subtitle?
     @State var triggerRefresh = false
     @State var showLanguageAlert = false
@@ -28,7 +29,7 @@ struct ExtendedSubtitlesView: View {
             languageSection
             Spacer()
         }
-        .frame(maxHeight: 860)
+        .frame(maxHeight: theme.maxHeight)
     }
     
     var subtitlesSection: some View {
@@ -74,7 +75,7 @@ struct ExtendedSubtitlesView: View {
                 self.showLanguageAlert = true
             }, label: {
                 Text(currentSubtitle?.language ?? "None".localized) + Text(" ❯")
-                    .font(.system(size: 32, weight: .regular))
+                    .font(.system(size: theme.contentFontSize, weight: .regular))
             })
                 .buttonStyle(PlainButtonStyle(onFocus: {}))
                 .padding(.leading)
@@ -96,13 +97,12 @@ struct ExtendedSubtitlesView: View {
             Button {
                 self.currentSubtitle = self.subtitles[language]?.first
             } label: { Text(language) }
-
         }
     }
     
     func sectionHeader(text: String) -> some View {
         Text(text.localized)
-            .font(.system(size: 38, weight: .regular))
+            .font(.system(size: theme.sectionFontSize, weight: .regular))
             .padding()
     }
     
@@ -114,11 +114,11 @@ struct ExtendedSubtitlesView: View {
                 if (isSelected) {
                     Image(systemName: "checkmark")
                 } else {
-                    Text("").frame(width: 32)
+                    Text("").frame(width: theme.contentFontSize)
                 }
-                    Text(subtitle.name)
-                        .font(.system(size: 32, weight: .regular))
-                    Spacer()
+                Text(subtitle.name)
+                    .font(.system(size: theme.contentFontSize, weight: .regular))
+                Spacer()
                 
             }
             .padding([.leading, .trailing], 50) // allow space for scale animation
@@ -126,6 +126,15 @@ struct ExtendedSubtitlesView: View {
         .buttonStyle(PlainButtonStyle(onFocus: {}))
     }
 }
+
+extension ExtendedSubtitlesView {
+    struct Theme {
+        let sectionFontSize: CGFloat = value(tvOS: 38, macOS: 25)
+        let contentFontSize: CGFloat = value(tvOS: 32, macOS: 20)
+        let maxHeight: CGFloat = value(tvOS: 860, macOS: 400)
+    }
+}
+
 
 struct ExtendedSubtitlesView_Previews: PreviewProvider {
     static var previews: some View {
@@ -136,6 +145,8 @@ struct ExtendedSubtitlesView_Previews: PreviewProvider {
                 subtitles: [Locale.current.localizedString(forLanguageCode: "en")! : [subtitle]],
                 isPresented: .constant(true)
             )
-        }.previewLayout(.sizeThatFits)
+        }
+        .previewLayout(.sizeThatFits)
+        .preferredColorScheme(.dark)
     }
 }

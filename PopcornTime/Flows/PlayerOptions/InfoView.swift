@@ -11,6 +11,7 @@ import PopcornKit
 import Kingfisher
 
 struct InfoView: View {
+    let theme = Theme()
     let media: Media?
     
     var body: some View {
@@ -27,23 +28,21 @@ struct InfoView: View {
                     .cornerRadius(10)
                     .shadow(radius: 5)
                     .padding(.bottom, 5)
-                    .padding(.trailing, 40)
-                    .frame(maxWidth: 400)
+                    .padding(.trailing, theme.leading * 0.5)
+                    .frame(maxWidth: theme.imageMaxWidth)
                 VStack(alignment: .leading, spacing: 0) {
                     Text(media.title)
                         .lineLimit(1)
-                        .font(.system(size: 32, weight: .medium))
+                        .font(.system(size: theme.sectionFontSize, weight: .medium))
                         .foregroundColor(.init(white: 1.0, opacity: 0.5))
-                        .frame(height: 39)
                         .padding(.bottom, 10)
                     infoText
                         .lineLimit(1)
-                        .font(.system(size: 32, weight: .medium))
+                        .font(.system(size: theme.sectionFontSize, weight: .medium))
                         .foregroundColor(.init(white: 1.0, opacity: 0.5))
-                        .frame(height: 39)
                         .padding(.bottom, 4)
                     Text(media.summary)
-                        .font(.system(size: 30, weight: .medium))
+                        .font(.system(size: theme.contentFontSize, weight: .medium))
                         .foregroundColor(.init(white: 1.0, opacity: 0.5))
                         .frame(maxHeight: 140)
                         .padding(.bottom, 4)
@@ -51,10 +50,10 @@ struct InfoView: View {
                 }
             }
             .padding(0)
-            .padding([.leading, .trailing], 80)
+            .padding([.leading, .trailing], theme.leading)
         } else {
             Text("No info available.".localized)
-                .font(.system(size: 35, weight: .medium))
+                .font(.system(size: theme.noContentFontSize, weight: .medium))
                 .foregroundColor(.init(white: 1.0, opacity: 0.5))
         }
     }
@@ -87,11 +86,23 @@ struct InfoView: View {
     }
 }
 
+extension InfoView {
+    struct Theme {
+        let sectionFontSize: CGFloat = value(tvOS: 32, macOS: 20)
+        let contentFontSize: CGFloat = value(tvOS: 30, macOS: 18)
+        let noContentFontSize: CGFloat = value(tvOS: 35, macOS: 23)
+        let leading: CGFloat = value(tvOS: 80, macOS: 40)
+        let imageMaxWidth: CGFloat = value(tvOS: 400, macOS: 200)
+    }
+}
+
 struct InfoView_Previews: PreviewProvider {
     static var previews: some View {
         Group {
             InfoView(media: Movie.dummy())
             InfoView(media: nil)
-        }.previewLayout(.sizeThatFits)
+        }
+        .previewLayout(.sizeThatFits)
+        .preferredColorScheme(.dark)
     }
 }

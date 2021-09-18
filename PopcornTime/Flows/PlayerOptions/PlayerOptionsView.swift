@@ -17,8 +17,8 @@ import VLCKit
 #endif
 
 struct PlayerOptionsView: View {
+    let theme = Theme()
     var media: Media?
-    let height: CGFloat = 440
     @State var selectedTab = Selection.info
     @Binding var audioDelay: Int
     @Binding var audioProfile: EqualizerProfiles
@@ -30,6 +30,7 @@ struct PlayerOptionsView: View {
         case info = 0, subtitles, audio
     }
     
+    #if os(tvOS)
     var body: some View {
         TabView(selection: $selectedTab) {
             InfoView(media: media)
@@ -55,11 +56,48 @@ struct PlayerOptionsView: View {
                 .tag(Selection.audio)
         }
         .ignoresSafeArea(.all)
-        .frame(maxHeight: height)
+        .frame(maxHeight: theme.maxHeight)
         .padding([.bottom], 30)
         .background(VisualEffectBlur().cornerRadius(60).padding(.top, 100))
         .padding([.leading, .trailing], 120)
         .padding([.top], 30)
+    }
+    
+    #else
+    var body: some View {
+        VStack {
+            Picker("", selection: $selectedTab) {
+                Text("Info").tag(Selection.info)
+                Text("Subtitles").tag(Selection.subtitles)
+                Text("Audio").tag(Selection.audio)
+            }
+            .pickerStyle(SegmentedPickerStyle())
+            .padding(.bottom, 10)
+
+            switch(selectedTab) {
+            case .info:
+                InfoView(media: media)
+            case .subtitles:
+                SubtitlesView(currentDelay: $subtitleDelay,
+                              currentEncoding: $subtitleEncoding,
+                              currentSubtitle: $subtitle,
+                              viewModel: SubtitlesViewModel(subtitles: media?.subtitles ?? [:]))
+            case .audio:
+                AudioView(currentDelay: $audioDelay, currentSound: $audioProfile)
+            }
+        }
+        .frame(maxHeight: theme.maxHeight)
+        .padding(.bottom, 20)
+        .background(VisualEffectBlur().cornerRadius(10))
+        .padding(.horizontal, 50)
+        .padding(.top, 40)
+    }
+    #endif
+}
+
+extension PlayerOptionsView {
+    struct Theme {
+        let maxHeight: CGFloat = value(tvOS: 440, macOS: 280)
     }
 }
 
@@ -75,8 +113,6 @@ struct PlayerOptionsView_Previews: PreviewProvider {
                                   subtitle: .constant(nil))
                 Spacer()
             }
-            .background(Color.gray)
-            .ignoresSafeArea()
             
             VStack {
                 PlayerOptionsView(media: Movie.dummy(),
@@ -88,8 +124,6 @@ struct PlayerOptionsView_Previews: PreviewProvider {
                                   subtitle: .constant(nil))
                 Spacer()
             }
-            .background(Color.gray)
-            .ignoresSafeArea()
             
             VStack {
                 PlayerOptionsView(media: Movie.dummy(),
@@ -101,8 +135,8 @@ struct PlayerOptionsView_Previews: PreviewProvider {
                                   subtitle: .constant(nil))
                 Spacer()
             }
-            .background(Color.gray)
-            .ignoresSafeArea()
         }
+        .background(Color.gray)
+        .ignoresSafeArea()
     }
 }

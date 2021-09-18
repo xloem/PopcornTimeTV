@@ -96,7 +96,11 @@ struct PlayerView: View {
             #else
                 .onTapGesture {
                     withAnimation {
-                        viewModel.toggleControlsVisible()
+                        if viewModel.showInfo == true {
+                            viewModel.showInfo = false
+                        } else {
+                            viewModel.toggleControlsVisible()
+                        }
                     }
                 }
             #endif

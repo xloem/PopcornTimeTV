@@ -30,6 +30,7 @@ enum EqualizerProfiles: UInt32, CaseIterable, Identifiable {
 }
 
 struct AudioView: View {
+    let theme = Theme()
     @Binding var currentDelay: Int
     @Binding var currentSound: EqualizerProfiles
     @State var triggerRefresh = false
@@ -105,7 +106,7 @@ struct AudioView: View {
     
     func sectionHeader(text: String) -> some View {
         Text(text.localized.uppercased())
-            .font(.system(size: 32, weight: .bold))
+            .font(.system(size: theme.sectionFontSize, weight: .bold))
             .foregroundColor(.init(white: 1, opacity: 0.5))
             .padding(.leading, 50)
     }
@@ -118,21 +119,30 @@ struct AudioView: View {
                 if (isSelected) {
                     Image(systemName: "checkmark")
                 } else {
-                    Text("").frame(width: 32)
+                    Text("").frame(width: theme.contentFontSize)
                 }
                 Text(text)
-                    .font(.system(size: 31, weight: .medium))
+                    .font(.system(size: theme.contentFontSize, weight: .medium))
             }
         }).buttonStyle(PlainButtonStyle(onFocus: onFocus))
     }
 }
 
+extension AudioView {
+    struct Theme {
+        let sectionFontSize: CGFloat = value(tvOS: 32, macOS: 20)
+        let contentFontSize: CGFloat = value(tvOS: 31, macOS: 19)
+        let languageSectionWidth: CGFloat = value(tvOS: 390, macOS: 250)
+    }
+}
 
 struct AudioView_Previews: PreviewProvider {
     static var previews: some View {
         Group {
             AudioView(currentDelay: .constant(0),
                       currentSound: .constant(.fullDynamicRange))
-        }.previewLayout(.sizeThatFits)
+        }
+        .previewLayout(.sizeThatFits)
+        .preferredColorScheme(.dark)
     }
 }

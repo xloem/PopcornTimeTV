@@ -207,11 +207,17 @@ struct PlayerControlsView: View {
     @ViewBuilder
     var subtitlesButton: some View {
         Button {
-            viewModel.showInfo = true
+            withAnimation {
+                viewModel.showInfo = true
+                viewModel.showControls = false
+            }
         } label: {
             Image("Subtitles")
+                .renderingMode(.template)
+                .foregroundColor(.gray)
+                .padding(.top, 2)
+                .padding(.leading, -3)
         }
-        .tint(.gray)
         .frame(width: 32)
     }
 }

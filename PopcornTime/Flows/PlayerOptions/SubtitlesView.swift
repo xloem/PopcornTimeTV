@@ -10,6 +10,7 @@ import SwiftUI
 import PopcornKit
 
 struct SubtitlesView: View {
+    let theme = Theme()
     @Binding var currentDelay: Int
     @Binding var currentEncoding: String
     @Binding var currentSubtitle: Subtitle?
@@ -22,20 +23,16 @@ struct SubtitlesView: View {
             if !showExtendedSubtitles {
                 Spacer()
                 languageSection
-                    .frame(width: 390)
+                    .frame(width: theme.languageSectionWidth)
                 delaySection
+                #if os(iOS)
+                    .frame(width: 150)
+                #endif
                 encodingSection
+                
                 Spacer()
             } else {
-                let binding: Binding<Subtitle?> = Binding.init(get: {
-                    currentSubtitle
-                }, set: { item in
-                    currentSubtitle = item
-                    viewModel.didSelectSubtitle(item)
-                    triggerRefresh.toggle()
-                })
-                
-                ExtendedSubtitlesView(currentSubtitle: binding,
+                ExtendedSubtitlesView(currentSubtitle: subtitleBinding,
                                       subtitles: viewModel.subtitles,
                                       isPresented: $showExtendedSubtitles)
                     .padding(.horizontal, 10)
@@ -46,6 +43,16 @@ struct SubtitlesView: View {
         #endif
     }
     
+    var subtitleBinding: Binding<Subtitle?> {
+        return Binding.init(get: {
+            currentSubtitle
+        }, set: { item in
+            currentSubtitle = item
+            viewModel.didSelectSubtitle(item)
+            triggerRefresh.toggle()
+        })
+    }
+    
     var languageSection: some View {
         Group {
             VStack(alignment: .leading, spacing: 10) {
@@ -53,7 +60,7 @@ struct SubtitlesView: View {
                 if viewModel.subtitles.isEmpty {
                     Text("No subtitles available.".localized)
                         .foregroundColor(.init(white: 1, opacity: 0.5))
-                        .font(.system(size: 35, weight: .medium))
+                        .font(.system(size: theme.noLanguageFontSize, weight: .medium))
                         .padding(.leading, 20)
                 } else {
                     ScrollViewReader { scroll in
@@ -104,7 +111,6 @@ struct SubtitlesView: View {
                                 triggerRefresh.toggle()
                             }
                             .id(delay)
-//                            .prefersDefaultFocus(delay == currentDelay, in: delayNamespace)
                         }
                     }
                 }
@@ -116,7 +122,6 @@ struct SubtitlesView: View {
         #if os(tvOS)
         .focusSection()
         #endif
-//        .focusScope(delayNamespace)
     }
     
     @ViewBuilder
@@ -138,7 +143,6 @@ struct SubtitlesView: View {
                                 triggerRefresh.toggle()
                             }
                             .id(item)
-//                            .prefersDefaultFocus(encodings[key] == currentEncoding, in: encodingNamespace)
                         }
                     }
                 }
@@ -149,31 +153,14 @@ struct SubtitlesView: View {
             #if os(tvOS)
             .focusSection()
             #endif
-            
-//            ScrollViewReader { scroll in
-//                List {
-//                    ForEach(encodingsKeys, id: \.self) { key in
-//                        button(text: key, isSelected: currentEncoding == encodings[key]) {
-//                            self.currentEncoding = encodings[key]!
-//                            self.triggerRefresh.toggle()
-//                        }
-//                        .id(encodings[key])
-//                    }
-//                }
-//                .environment(\.defaultMinListRowHeight, 0)
-//                .onAppear(perform: {
-//                    scroll.scrollTo(currentEncoding, anchor: .center)
-//                })
-//            }
         }
-//        .focusScope(encodingNamespace)
     }
     
     func sectionHeader(text: String) -> some View {
         Text(text.localized.uppercased())
-            .font(.system(size: 32, weight: .bold))
+            .font(.system(size: theme.sectionFontSize, weight: .bold))
             .foregroundColor(.init(white: 1, opacity: 0.5))
-            .padding(.leading, 100)
+            .padding(.leading, theme.sectionLeading)
     }
     
     func button(text: String, isSelected: Bool, onFocus: @escaping () -> Void, action: @escaping () -> Void) -> some View {
@@ -184,14 +171,25 @@ struct SubtitlesView: View {
                 if (isSelected) {
                     Image(systemName: "checkmark")
                 } else {
-                    Text("").frame(width: 32)
+                    Text("").frame(width: theme.contentFontSize)
                 }
                 Text(text)
-                    .font(.system(size: 31, weight: .medium))
+                    .font(.system(size: theme.contentFontSize, weight: .medium))
             }
         })
-        .padding([.leading, .trailing], 50)
-        .buttonStyle(PlainButtonStyle(onFocus: onFocus))
+            .padding([.leading, .trailing], theme.sectionLeading * 0.5)
+            .buttonStyle(PlainButtonStyle(onFocus: onFocus))
+    }
+}
+
+
+extension SubtitlesView {
+    struct Theme {
+        let sectionLeading: CGFloat = value(tvOS: 100, macOS: 50)
+        let sectionFontSize: CGFloat = value(tvOS: 32, macOS: 20)
+        let contentFontSize: CGFloat = value(tvOS: 31, macOS: 19)
+        let noLanguageFontSize: CGFloat = value(tvOS: 35, macOS: 23)
+        let languageSectionWidth: CGFloat = value(tvOS: 390, macOS: 250)
     }
 }
 
@@ -224,5 +222,6 @@ struct SubtitlesView_Previews: PreviewProvider {
         }
         .frame(maxHeight: 300)
         .previewLayout(.sizeThatFits)
+        .preferredColorScheme(.dark)
     }
 }
