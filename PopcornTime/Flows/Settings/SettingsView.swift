@@ -10,11 +10,6 @@ import SwiftUI
 import PopcornKit
 
 struct SettingsView: View {
-    struct Theme {
-        let fontSize: CGFloat = value(tvOS: 38, macOS: 20)
-        let hStackSpacing: CGFloat = value(tvOS: 300, macOS: 50)
-        let iconLeading: CGFloat = value(tvOS: 100, macOS: 50)
-    }
     let theme = Theme()
     
     let subtitleSettings = SubtitleSettings.shared
@@ -135,8 +130,8 @@ struct SettingsView: View {
             }
         })
         
-        return ActionSheet(title: Text("Auto Select Quality".localized),
-                    message: Text("Choose a default quality. If said quality is available, it will be automatically selected.".localized),
+        return ActionSheet(title: Text("Auto Select Quality"),
+                    message: Text("Choose a default quality. If said quality is available, it will be automatically selected."),
                     buttons:[
                         .cancel(),
                     ] + actions
@@ -163,8 +158,8 @@ struct SettingsView: View {
             }
         })
         
-        return ActionSheet(title: Text("Auto Select Quality".localized),
-                    message: Text("Choose a default quality. If said quality is available, it will be automatically selected.".localized),
+        return ActionSheet(title: Text("Auto Select Quality"),
+                    message: Text("Choose a default quality. If said quality is available, it will be automatically selected."),
                     buttons:[
                         .cancel(),
                     ] + actions
@@ -190,8 +185,8 @@ struct SettingsView: View {
             }
         })
         
-        return ActionSheet(title: Text("Subtitle Font Size".localized),
-                    message: Text("Choose a font size for the player subtitles.".localized),
+        return ActionSheet(title: Text("Subtitle Font Size"),
+                    message: Text("Choose a font size for the player subtitles."),
                     buttons:[
                         .cancel(),
                     ] + actions
@@ -218,8 +213,8 @@ struct SettingsView: View {
             }
         })
         
-        return ActionSheet(title: Text("Subtitle Color".localized),
-                    message: Text("Choose text color for the player subtitles.".localized),
+        return ActionSheet(title: Text("Subtitle Color"),
+                    message: Text("Choose text color for the player subtitles."),
                     buttons:[
                         .cancel(),
                     ] + actions
@@ -250,8 +245,8 @@ struct SettingsView: View {
             }
         })
         
-        return ActionSheet(title: Text("Subtitle Font".localized),
-                    message: Text("Choose a default font for the player subtitles.".localized),
+        return ActionSheet(title: Text("Subtitle Font"),
+                    message: Text("Choose a default font for the player subtitles."),
                     buttons:[
                         .cancel(),
                     ] + actions
@@ -277,8 +272,8 @@ struct SettingsView: View {
             }
         })
         
-        return ActionSheet(title: Text("Subtitle Font Style".localized),
-                    message: Text("Choose a default font style for the player subtitles.".localized),
+        return ActionSheet(title: Text("Subtitle Font Style"),
+                    message: Text("Choose a default font style for the player subtitles."),
                     buttons:[
                         .cancel(),
                     ] + actions
@@ -306,8 +301,8 @@ struct SettingsView: View {
             }
         })
         
-        return ActionSheet(title: Text("Subtitle Encoding".localized),
-                    message: Text("Choose encoding for the player subtitles.".localized),
+        return ActionSheet(title: Text("Subtitle Encoding"),
+                    message: Text("Choose encoding for the player subtitles."),
                     buttons:[
                         .cancel(),
                     ] + actions
@@ -329,7 +324,7 @@ struct SettingsView: View {
         return ActionSheet(title: Text(viewModel.clearCacheTitle),
                            message: Text(viewModel.clearCacheMessage),
                     buttons:[
-                        .default(Text("Ok".localized), action: {
+                        .default(Text("Ok"), action: {
                         }),
                     ]
         )
@@ -355,10 +350,10 @@ struct SettingsView: View {
     }
 
     var traktAlert: ActionSheet {
-        return ActionSheet(title: Text("Sign Out".localized),
-                    message: Text("Are you sure you want to Sign Out?".localized),
+        return ActionSheet(title: Text("Sign Out"),
+                    message: Text("Are you sure you want to Sign Out?"),
                     buttons:[
-                        .default(Text("Sign Out".localized), action: {
+                        .default(Text("Sign Out"), action: {
                             do {
                                 try TraktManager.shared.logout()
                             } catch { }
@@ -369,12 +364,12 @@ struct SettingsView: View {
     }
     
     
-    func button(text: String, value: String, action: @escaping () -> Void) -> some View {
+    func button(text: LocalizedStringKey, value: String, action: @escaping () -> Void) -> some View {
         Button(action: {
             action()
         }, label: {
             HStack {
-                Text(text.localized)
+                Text(text)
                 Spacer()
                 Text(value)
                     .multilineTextAlignment(.trailing)
@@ -385,6 +380,14 @@ struct SettingsView: View {
     
     func sectionHeader(_ text: String) -> some View {
         return Text(text.localized.uppercased())
+    }
+}
+
+extension SettingsView {
+    struct Theme {
+        let fontSize: CGFloat = value(tvOS: 38, macOS: 20)
+        let hStackSpacing: CGFloat = value(tvOS: 300, macOS: 50)
+        let iconLeading: CGFloat = value(tvOS: 100, macOS: 50)
     }
 }
 

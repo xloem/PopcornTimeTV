@@ -9,8 +9,8 @@
 import SwiftUI
 
 class SettingsViewModel: ObservableObject {
-    @Published var clearCacheTitle = ""
-    @Published var clearCacheMessage = ""
+    @Published var clearCacheTitle: LocalizedStringKey = ""
+    @Published var clearCacheMessage: LocalizedStringKey = ""
     
     func clearCache() {
         do {
@@ -18,15 +18,15 @@ class SettingsViewModel: ObservableObject {
             for path in try FileManager.default.contentsOfDirectory(atPath: NSTemporaryDirectory()) {
                 try FileManager.default.removeItem(atPath: NSTemporaryDirectory() + "/\(path)")
             }
-            clearCacheTitle = "Success".localized
+            clearCacheTitle = "Success"
             if size == 0 {
-                clearCacheMessage = "Cache was already empty, no disk space was reclaimed.".localized
+                clearCacheMessage = "Cache was already empty, no disk space was reclaimed."
             } else {
-                clearCacheMessage = "Cleaned".localized + " \(ByteCountFormatter.string(fromByteCount: size, countStyle: .file))."
+                clearCacheMessage = "Cleaned \(ByteCountFormatter.string(fromByteCount: size, countStyle: .file))."
             }
         } catch {
-            clearCacheTitle = "Failed".localized
-            clearCacheMessage = "Error cleaning cache.".localized
+            clearCacheTitle = "Failed"
+            clearCacheMessage = "Error cleaning cache."
         }
     }
     

@@ -48,7 +48,7 @@ struct TermsOfServiceView: View {
     }
     
     
-    let longText = """
+    let longText: LocalizedStringKey = """
         Your Acceptance
 
         By using the ‘Popcorn Time’ app you signify your agreement to (1) these terms and conditions (the 'Terms of Service').
