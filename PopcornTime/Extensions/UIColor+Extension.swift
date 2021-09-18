@@ -25,12 +25,12 @@ extension UIColor {
         return NSString(format: "#%02lX%02lX%02lX", lroundf(Float(r) * 255), lroundf(Float(g) * 255), lroundf(Float(b) * 255)) as String
     }
     
-    func hexInt() -> UInt32 {
+    func hexInt() -> UInt64 {
         let hex = hexString()
-        var rgb: UInt32 = 0
+        var rgb: UInt64 = 0
         let s = Scanner(string: hex)
-        s.scanLocation = 1
-        s.scanHexInt32(&rgb)
+        s.charactersToBeSkipped = CharacterSet(charactersIn: "#")
+        s.scanHexInt64(&rgb)
         return rgb
     }
     

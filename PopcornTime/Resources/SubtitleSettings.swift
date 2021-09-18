@@ -90,7 +90,10 @@ class SubtitleSettings: NSObject, NSCoding {
     static let shared = SubtitleSettings()
     
     override init() {
-        guard let codedData = Session.subtitleSettings, let settings = NSKeyedUnarchiver.unarchiveObject(with: codedData) as? SubtitleSettings else { return }
+        guard let codedData = Session.subtitleSettings,
+              let settings = try? NSKeyedUnarchiver.unarchiveTopLevelObjectWithData(codedData) as? SubtitleSettings else {
+                  return
+              }
         self.size = settings.size
         self.color = settings.color
         self.encoding = settings.encoding
@@ -101,7 +104,7 @@ class SubtitleSettings: NSObject, NSCoding {
     
     func save() {
         subtitlesSelectedForVideo.removeAll()
-        Session.subtitleSettings = NSKeyedArchiver.archivedData(withRootObject: self)
+        Session.subtitleSettings = try? NSKeyedArchiver.archivedData(withRootObject: self, requiringSecureCoding: false)
         UserDefaults.standard.synchronize()
     }
     

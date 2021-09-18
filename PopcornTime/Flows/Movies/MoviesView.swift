@@ -86,7 +86,7 @@ struct MoviesView: View {
     
     @ViewBuilder
     var errorView: some View {
-        if let error = viewModel.error {
+        if let error = viewModel.error, viewModel.movies.isEmpty {
             HStack() {
                 Spacer()
                 ErrorView(error: error)

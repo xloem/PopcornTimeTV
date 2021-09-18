@@ -158,8 +158,8 @@ struct SettingsView: View {
             }
         })
         
-        return ActionSheet(title: Text("Auto Select Quality"),
-                    message: Text("Choose a default quality. If said quality is available, it will be automatically selected."),
+        return ActionSheet(title: Text("Subtitle Language"),
+                    message: Text("Choose a default language for the player subtitles."),
                     buttons:[
                         .cancel(),
                     ] + actions
