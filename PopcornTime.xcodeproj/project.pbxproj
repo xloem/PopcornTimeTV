@@ -308,6 +308,11 @@
 		23E2A6C926EB8C3300F24931 /* TopShelfLinkOpener.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23E2A6C826EB8C3300F24931 /* TopShelfLinkOpener.swift */; };
 		23E4976726947E1300175DEE /* TVServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 002682111CD0B76200F51D31 /* TVServices.framework */; };
 		23E4976A26947E1300175DEE /* ContentProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23E4976926947E1300175DEE /* ContentProvider.swift */; };
+		23E4E18526F7425300CFC3F8 /* MagnetTorrentLinkOpener.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23E4E18426F7425300CFC3F8 /* MagnetTorrentLinkOpener.swift */; };
+		23E4E18626F7425300CFC3F8 /* MagnetTorrentLinkOpener.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23E4E18426F7425300CFC3F8 /* MagnetTorrentLinkOpener.swift */; };
+		23E4E18826F7498000CFC3F8 /* ColorPallete.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23E4E18726F7498000CFC3F8 /* ColorPallete.swift */; };
+		23E4E18926F7498000CFC3F8 /* ColorPallete.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23E4E18726F7498000CFC3F8 /* ColorPallete.swift */; };
+		23E4E18A26F7498000CFC3F8 /* ColorPallete.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23E4E18726F7498000CFC3F8 /* ColorPallete.swift */; };
 		23E6239F26975A0C007B11EF /* FileManager+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4DBE60891E5E49B200C2549B /* FileManager+Extension.swift */; };
 		23E623A026975AB6007B11EF /* Locale+Langs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D0183A81DC3ACB400AB75B3 /* Locale+Langs.swift */; };
 		23E8172D26950B56003258CC /* PopcornKit in Frameworks */ = {isa = PBXBuildFile; productRef = 23E8172C26950B56003258CC /* PopcornKit */; };
@@ -479,6 +484,8 @@
 		23E4976626947E1300175DEE /* TopShelf.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = TopShelf.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		23E4976926947E1300175DEE /* ContentProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentProvider.swift; sourceTree = "<group>"; };
 		23E4976B26947E1300175DEE /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		23E4E18426F7425300CFC3F8 /* MagnetTorrentLinkOpener.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MagnetTorrentLinkOpener.swift; sourceTree = "<group>"; };
+		23E4E18726F7498000CFC3F8 /* ColorPallete.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorPallete.swift; sourceTree = "<group>"; };
 		23E8172B26950B34003258CC /* PopcornKit */ = {isa = PBXFileReference; lastKnownFileType = folder; path = PopcornKit; sourceTree = "<group>"; };
 		23F0856D269787B300B341D0 /* DownloadsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DownloadsViewModel.swift; sourceTree = "<group>"; };
 		23F125D526E4D21B008097C5 /* SearchBarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchBarView.swift; sourceTree = "<group>"; };
@@ -619,6 +626,7 @@
 				23313B0F267E39B400774A85 /* TabBarView.swift */,
 				23313B19267E3A9200774A85 /* LeftSidePanelView.swift */,
 				23E2A6C826EB8C3300F24931 /* TopShelfLinkOpener.swift */,
+				23E4E18426F7425300CFC3F8 /* MagnetTorrentLinkOpener.swift */,
 				23025D94267E71C400229559 /* Movies */,
 				2343A7672688AEEC00B824E7 /* Shows */,
 				237F286D26935E2300FE036C /* Watchlist */,
@@ -641,6 +649,7 @@
 			isa = PBXGroup;
 			children = (
 				23313B3E267E3D7600774A85 /* Session.swift */,
+				23E4E18726F7498000CFC3F8 /* ColorPallete.swift */,
 				23446AD126806FD20049CC72 /* Media + Subtitles.swift */,
 				2391BE80268496E300576CAD /* Media + Download.swift */,
 				2343A7602688718300B824E7 /* Subtitle + Identifiable.swift */,
@@ -1284,6 +1293,7 @@
 				23313B38267E3C2700774A85 /* PreloadTorrentView.swift in Sources */,
 				2304530B26B541900050BCB8 /* SettingsViewModel.swift in Sources */,
 				23901BFB26F64B3D00A7C292 /* TraktViewModel.swift in Sources */,
+				23E4E18826F7498000CFC3F8 /* ColorPallete.swift in Sources */,
 				2391BE7B2684759000576CAD /* DownloadButton.swift in Sources */,
 				23313B48267E3DF600774A85 /* JSONDecoder+KeyPath.swift in Sources */,
 				2343A75F268861C800B824E7 /* ExtendedSubtitlesView.swift in Sources */,
@@ -1371,6 +1381,7 @@
 				23A2BDD426BEDC3E004B864E /* Media + Download.swift in Sources */,
 				23A2BDA826BEDA19004B864E /* DownloadDetailsView.swift in Sources */,
 				236A11BF26C6790000AFF1FD /* PlayerOptionsView.swift in Sources */,
+				23E4E18926F7498000CFC3F8 /* ColorPallete.swift in Sources */,
 				23A2BDA326BEDA0C004B864E /* EpisodeView.swift in Sources */,
 				23F125D126E3EC3E008097C5 /* SearchViewModel.swift in Sources */,
 				23A2BDDB26BEDC50004B864E /* UserDefault.swift in Sources */,
@@ -1427,6 +1438,7 @@
 				234180A526C2D38500C32083 /* PlayButtonModel.swift in Sources */,
 				23A2BD8C26BED9F6004B864E /* MoviesView.swift in Sources */,
 				23A2BD9626BEDA07004B864E /* SelectTorrentQualityButton.swift in Sources */,
+				23E4E18526F7425300CFC3F8 /* MagnetTorrentLinkOpener.swift in Sources */,
 				23A2BDCB26BEDBF5004B864E /* SubtitleSettings.swift in Sources */,
 				236A11C026C6791800AFF1FD /* InfoView.swift in Sources */,
 				236A11BE26C678F600AFF1FD /* AudioView.swift in Sources */,
@@ -1457,6 +1469,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				23E4E18A26F7498000CFC3F8 /* ColorPallete.swift in Sources */,
 				23B24D8026CA963E00B8CD84 /* FullScreenContent.swift in Sources */,
 				23B24D7C26CA7BAE00B8CD84 /* PlayerControlsView.swift in Sources */,
 				23B24D7926CA78B000B8CD84 /* SubtitlesView.swift in Sources */,
@@ -1501,6 +1514,7 @@
 				237ECA1D26B8482700EE8B46 /* MovieView.swift in Sources */,
 				23A10F4326C69AFC0062D9CE /* DownloadProgressView.swift in Sources */,
 				237ECA1526B847C100EE8B46 /* App.swift in Sources */,
+				23E4E18626F7425300CFC3F8 /* MagnetTorrentLinkOpener.swift in Sources */,
 				237ECA3D26B84A3600EE8B46 /* JSONCache.swift in Sources */,
 				23B24D7526CA775800B8CD84 /* UIColor+Extension.swift in Sources */,
 				23DC476526F66C43006E18D4 /* AppScheme.swift in Sources */,

@@ -48,10 +48,12 @@ class SettingsViewModel: ObservableObject {
     }
     
     func validate(traktUrl: URL) {
-        TraktManager.shared.authenticate(traktUrl) { error in
-            let success = error == nil
-            if success {
-                self.traktDidLoggedIn()
+        if traktUrl.scheme == AppScheme {
+            TraktManager.shared.authenticate(traktUrl) { error in
+                let success = error == nil
+                if success {
+                    self.traktDidLoggedIn()
+                }
             }
         }
     }

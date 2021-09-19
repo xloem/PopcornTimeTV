@@ -23,6 +23,9 @@ struct PopcornTime: App {
                     TabBarView()
                     #if os(macOS)
                         .padding(.top, 15)
+                        .modifier(MagnetTorrentLinkOpener())
+                    #elseif os(iOS)
+                        .modifier(MagnetTorrentLinkOpener())
                     #elseif os(tvOS)
                         .modifier(TopShelfLinkOpener())
                     #endif
