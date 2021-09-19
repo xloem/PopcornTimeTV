@@ -11,15 +11,6 @@ import PopcornKit
 import Combine
 
 struct EpisodesView: View {
-    struct Theme {
-        let episodeWidth: CGFloat = value(tvOS: 310, macOS: 217)
-        let episodeHeight: CGFloat = value(tvOS: 215, macOS: 150)
-        let episodeSpacing: CGFloat = value(tvOS: 40, macOS: 20)
-        let currentEpisode: (padding: CGFloat, height: CGFloat)
-            = (padding: value(tvOS: 250, macOS: 80),
-               height: value(tvOS: 350, macOS: 250))
-        let leading: CGFloat = value(tvOS: 90, macOS: 50)
-    }
     let theme = Theme()
     
     var show: Show
@@ -91,7 +82,9 @@ struct EpisodesView: View {
         .buttonStyle(TVButtonStyle(onFocus: {
             currentEpisode = episode
             onFocus()
-        }))
+        }, onPressed: {
+            currentEpisode = episode
+        }, isSelected: episode.id == currentEpisode?.id))
     }
     
     @ViewBuilder
@@ -154,6 +147,18 @@ struct EpisodesView: View {
 //            #endif
 //            .background(Color.gray)
         }
+    }
+}
+
+extension EpisodesView {
+    struct Theme {
+        let episodeWidth: CGFloat = value(tvOS: 310, macOS: 217)
+        let episodeHeight: CGFloat = value(tvOS: 215, macOS: 150)
+        let episodeSpacing: CGFloat = value(tvOS: 40, macOS: 20)
+        let currentEpisode: (padding: CGFloat, height: CGFloat)
+            = (padding: value(tvOS: 250, macOS: 80),
+               height: value(tvOS: 350, macOS: 250))
+        let leading: CGFloat = value(tvOS: 90, macOS: 50)
     }
 }
 
