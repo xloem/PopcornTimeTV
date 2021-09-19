@@ -113,7 +113,7 @@ struct MoviesView: View {
                 }
             }
         }
-        .foregroundColor(.init(white: 1, opacity: 0.667))
+        .foregroundColor(.appSecondary)
         .font(.callout)
     }
 }

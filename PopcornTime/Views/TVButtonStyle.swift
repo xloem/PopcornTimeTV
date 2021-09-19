@@ -39,7 +39,7 @@ struct TVButton: View {
             .focusable(true)
         #endif
             .font(.system(size: theme.fontSize, weight: .medium))
-            .foregroundColor((focused || configuration.isPressed || isSelected) ? .white : Color(white: 1, opacity: 0.6))
+            .foregroundColor((focused || configuration.isPressed || isSelected) ? .primary : .appSecondary)
             .animation(.easeOut, value: focused)
             .onChange(of: focused) { newValue in
                 if newValue {

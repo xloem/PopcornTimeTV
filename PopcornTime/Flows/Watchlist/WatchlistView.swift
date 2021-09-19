@@ -40,7 +40,7 @@ struct WatchlistView: View {
         VStack(alignment: .leading) {
             Text("Movies")
                 .font(.callout)
-                .foregroundColor(.init(white: 1.0, opacity: 0.667)) // light text color
+                .foregroundColor(.appSecondary)
                 .padding(.top, 14)
             ScrollView(.horizontal) {
                 HStack(spacing: theme.itemSpacing) {
@@ -66,7 +66,7 @@ struct WatchlistView: View {
         VStack(alignment: .leading) {
             Text("Shows")
                 .font(.callout)
-                .foregroundColor(.init(white: 1.0, opacity: 0.667)) // light text color
+                .foregroundColor(.appSecondary)
                 .padding(.top, 14)
             ScrollView(.horizontal) {
                 HStack(spacing: theme.itemSpacing) {
@@ -96,7 +96,7 @@ struct WatchlistView: View {
                     .padding()
                 Text("Try adding movies or shows to your watchlist.")
                     .font(.callout)
-                    .foregroundColor(.init(white: 1.0, opacity: 0.667))
+                    .foregroundColor(.appSecondary)
                     .frame(maxWidth: 400)
                     .multilineTextAlignment(.center)
             }

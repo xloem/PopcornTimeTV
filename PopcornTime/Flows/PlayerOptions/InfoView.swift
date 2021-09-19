@@ -34,16 +34,16 @@ struct InfoView: View {
                     Text(media.title)
                         .lineLimit(1)
                         .font(.system(size: theme.sectionFontSize, weight: .medium))
-                        .foregroundColor(.init(white: 1.0, opacity: 0.5))
+                        .foregroundColor(.appGray)
                         .padding(.bottom, 10)
                     infoText
                         .lineLimit(1)
                         .font(.system(size: theme.sectionFontSize, weight: .medium))
-                        .foregroundColor(.init(white: 1.0, opacity: 0.5))
+                        .foregroundColor(.appGray)
                         .padding(.bottom, 4)
                     Text(media.summary)
                         .font(.system(size: theme.contentFontSize, weight: .medium))
-                        .foregroundColor(.init(white: 1.0, opacity: 0.5))
+                        .foregroundColor(.appGray)
                         .frame(maxHeight: 140)
                         .padding(.bottom, 4)
 //                    Spacer()
@@ -54,7 +54,7 @@ struct InfoView: View {
         } else {
             Text("No info available.")
                 .font(.system(size: theme.noContentFontSize, weight: .medium))
-                .foregroundColor(.init(white: 1.0, opacity: 0.5))
+                .foregroundColor(.appGray)
         }
     }
     

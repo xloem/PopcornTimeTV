@@ -53,7 +53,7 @@ struct PersonDetailsView: View {
         VStack(alignment: .leading) {
             Text("Movies")
                 .font(.callout)
-                .foregroundColor(.init(white: 1.0, opacity: 0.667)) // light text color
+                .foregroundColor(.appSecondary)
                 .padding(.top, 14)
             ScrollView(.horizontal) {
                 HStack(spacing: 40) {
@@ -78,7 +78,7 @@ struct PersonDetailsView: View {
         VStack(alignment: .leading) {
             Text("Shows")
                 .font(.callout)
-                .foregroundColor(.init(white: 1.0, opacity: 0.667)) // light text color
+                .foregroundColor(.appSecondary)
                 .padding(.top, 14)
             ScrollView(.horizontal) {
                 HStack(spacing: 40) {
@@ -110,5 +110,6 @@ struct PersonDetailView_Previews: PreviewProvider {
         return VStack {
             PersonDetailsView(viewModel: viewModel)
         }
+        .preferredColorScheme(.dark)
     }
 }

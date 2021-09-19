@@ -83,3 +83,14 @@ extension UIColor {
     
     @nonobjc static let dark = UIColor(red: 28.0/255.0, green: 28.0/255.0, blue: 28.0/255.0, alpha: 1.0)
 }
+
+
+import SwiftUI
+
+extension Color {
+    static let appPrimary: Color = Color("AppPrimary")
+    static let appSecondary: Color = Color("AppSecondary")
+    static let appGray: Color = Color("AppGray")
+    static let appLightGray: Color = Color("AppLightGray")
+    static let AppTertiary: Color = Color("AppTertiary")
+}

@@ -107,7 +107,7 @@ struct AudioView: View {
     func sectionHeader(text: String) -> some View {
         Text(text.localized.uppercased())
             .font(.system(size: theme.sectionFontSize, weight: .bold))
-            .foregroundColor(.init(white: 1, opacity: 0.5))
+            .foregroundColor(.appGray)
             .padding(.leading, 50)
     }
     

@@ -97,7 +97,7 @@ struct EpisodesView: View {
         
         Text("\(seasonString) (\(numberOfEpisodes.lowercased()))")
             .font(.callout)
-            .foregroundColor(.init(white: 1.0, opacity: 0.667)) // light text color
+            .foregroundColor(.appSecondary)
             .padding(.leading, theme.leading)
             .padding(.top, 14)
     }

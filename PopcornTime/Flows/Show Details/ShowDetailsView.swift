@@ -16,10 +16,6 @@ struct ShowDetailsView: View {
     @StateObject var viewModel: ShowDetailsViewModel
     @State var showSeasonPicker: Bool = false
     
-    @Environment(\.colorScheme) var colorScheme
-    var isDark: Bool {
-        return colorScheme == .dark
-    }
     var show: Show {
         return viewModel.show
     }
@@ -166,7 +162,7 @@ struct ShowDetailsView: View {
                 Text(watchOn)
 //                Text(runtime)
             }
-                .foregroundColor(Color.init(white: 1, opacity: 0.67))
+            .foregroundColor(.appSecondary)
         }
         .font(.callout)
     }
@@ -237,7 +233,7 @@ struct ShowDetailsView: View {
         VStack (alignment: .leading) {
             Text("Viewers Also Watched")
                 .font(.callout)
-                .foregroundColor(.init(white: 1.0, opacity: 0.667)) // light text color
+                .foregroundColor(.appSecondary)
                 .padding(.leading, theme.watchedSectionLeading)
                 .padding(.top, 14)
             ScrollView(.horizontal, showsIndicators: false) {

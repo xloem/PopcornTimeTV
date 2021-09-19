@@ -21,7 +21,7 @@ struct PlainNavigationLinkButton: View {
     var body: some View {
         configuration.label
             .scaleEffect(focused || configuration.isPressed ? theme.scaleEffect : 1)
-            .foregroundColor(.init(white: 1, opacity: focused || configuration.isPressed ? 1 : 0.667))
+            .foregroundColor((focused || configuration.isPressed) ? Color.primary : Color.appSecondary)
             .animation(.easeOut, value: focused)
             .onChange(of: focused) { newValue in
                 if newValue {
@@ -51,7 +51,7 @@ struct PlainButton: View {
     var body: some View {
         configuration.label
             .scaleEffect(focused || configuration.isPressed ? theme.scaleEffect : 1)
-            .foregroundColor(.init(white: 1, opacity: focused || configuration.isPressed ? 1 : 0.5))
+            .foregroundColor((focused || configuration.isPressed) ? .primary : .appGray)
             .animation(.easeOut, value: focused)
             .onChange(of: focused) { newValue in
                 if newValue {

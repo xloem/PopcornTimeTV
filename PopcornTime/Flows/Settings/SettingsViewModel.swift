@@ -48,7 +48,7 @@ class SettingsViewModel: ObservableObject {
     }
     
     func validate(traktUrl: URL) {
-        if traktUrl.scheme == AppScheme {
+        if traktUrl.scheme?.lowercased() == AppScheme.lowercased() {
             TraktManager.shared.authenticate(traktUrl) { error in
                 let success = error == nil
                 if success {

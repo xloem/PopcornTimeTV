@@ -19,7 +19,7 @@ struct ErrorView: View {
                 .padding()
             Text(info.description)
                 .font(.callout)
-                .foregroundColor(.init(white: 1.0, opacity: 0.667))
+                .foregroundColor(.appSecondary)
                 .frame(maxWidth: 400)
                 .multilineTextAlignment(.center)
         }

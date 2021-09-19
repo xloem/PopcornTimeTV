@@ -37,7 +37,7 @@ struct TraktView: View {
                 Spacer()
             }
         }
-        .foregroundColor(.init(white: 1, opacity: 0.667))
+        .foregroundColor(.appSecondary)
         .onAppear(perform: {
             viewModel.getNewCode()
         })

@@ -16,10 +16,6 @@ struct MovieDetailsView: View {
     @StateObject var viewModel: MovieDetailsViewModel
     @State var error: Error?
     
-    @Environment(\.colorScheme) var colorScheme
-    var isDark: Bool {
-        return colorScheme == .dark
-    }
     var movie: Movie {
         return viewModel.movie
     }
@@ -203,12 +199,12 @@ struct MovieDetailsView: View {
         VStack(alignment: .trailing) {
             Text(title)
                 .font(.system(size: theme.leftSectionTitle, weight: .bold))
-                .foregroundColor(isDark ? Color(white: 1, opacity: 0.8) : Color(white: 0, opacity: 0.8))
+                .foregroundColor(.appLightGray)
             ForEach(description, id: \.self) { item in
                 Text(item)
             }
             .font(.system(size: theme.leftSectionTitleContent, weight: .medium))
-            .foregroundColor(isDark ? Color(white: 1, opacity: 0.5) : Color(white: 0, opacity: 0.5))
+            .foregroundColor(.appGray)
         }
     }
     
@@ -262,7 +258,7 @@ struct MovieDetailsView: View {
         VStack (alignment: .leading) {
             Text("Viewers Also Watched")
                 .font(.callout)
-                .foregroundColor(.init(white: 1.0, opacity: 0.667)) // light text color
+                .foregroundColor(.appSecondary)
                 .padding(.leading, theme.watchedSection.spacing)
                 .padding(.top, 14)
             ScrollView(.horizontal, showsIndicators: false) {

@@ -59,7 +59,7 @@ struct SubtitlesView: View {
                 sectionHeader(text: "Language")
                 if viewModel.subtitles.isEmpty {
                     Text("No subtitles available.")
-                        .foregroundColor(.init(white: 1, opacity: 0.5))
+                        .foregroundColor(.appGray)
                         .font(.system(size: theme.noLanguageFontSize, weight: .medium))
                         .padding(.leading, 20)
                 } else {
@@ -159,7 +159,7 @@ struct SubtitlesView: View {
     func sectionHeader(text: String) -> some View {
         Text(text.localized.uppercased())
             .font(.system(size: theme.sectionFontSize, weight: .bold))
-            .foregroundColor(.init(white: 1, opacity: 0.5))
+            .foregroundColor(.appGray)
             .padding(.leading, theme.sectionLeading)
     }
     

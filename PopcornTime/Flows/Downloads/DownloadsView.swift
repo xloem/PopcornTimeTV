@@ -58,7 +58,7 @@ struct DownloadsView: View {
                 .padding()
             Text("Movies and episodes you download will show up here.")
                 .font(.callout)
-                .foregroundColor(.init(white: 1.0, opacity: 0.667))
+                .foregroundColor(.appSecondary)
                 .frame(maxWidth: 400)
                 .multilineTextAlignment(.center)
         }
@@ -69,7 +69,7 @@ struct DownloadsView: View {
         VStack(alignment: .leading) {
             Text("Downloading")
                 .font(.callout)
-                .foregroundColor(.init(white: 1.0, opacity: 0.667)) // light text color
+                .foregroundColor(.appSecondary)
                 .padding(.top, 14)
             ScrollView(.horizontal) {
                 HStack(spacing: theme.itemSpacing) {
@@ -89,7 +89,7 @@ struct DownloadsView: View {
         VStack(alignment: .leading) {
             Text("Movies")
                 .font(.callout)
-                .foregroundColor(.init(white: 1.0, opacity: 0.667)) // light text color
+                .foregroundColor(.appSecondary)
                 .padding(.top, 14)
             ScrollView(.horizontal) {
                 HStack(spacing: theme.itemSpacing) {
@@ -109,7 +109,7 @@ struct DownloadsView: View {
         VStack(alignment: .leading) {
             Text("Episodes")
                 .font(.callout)
-                .foregroundColor(.init(white: 1.0, opacity: 0.667)) // light text color
+                .foregroundColor(.appSecondary)
                 .padding(.top, 14)
             ScrollView(.horizontal) {
                 HStack(spacing: theme.itemSpacing) {

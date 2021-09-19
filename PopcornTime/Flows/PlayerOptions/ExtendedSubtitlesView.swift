@@ -69,7 +69,7 @@ struct ExtendedSubtitlesView: View {
     var languageSection: some View {
         VStack(alignment:.leading, spacing: 0) {
             sectionHeader(text: "Language".uppercased())
-                .foregroundColor(.init(white: 1, opacity: 0.5))
+                .foregroundColor(.appGray)
             
             Button(action: {
                 self.showLanguageAlert = true
