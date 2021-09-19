@@ -21,10 +21,12 @@ struct LeftSidePanelView: View {
     enum Selection: Hashable {
         case sort
         case genre
+        case externalTorrent
     }
     @State var selection: Selection?
     @FocusState private var focusedFilter: String?
     @FocusState private var focusedType: Selection?
+    @State var showExternalTorrent = false
     
     var body: some View {
         HStack(spacing: 0) {
@@ -32,6 +34,7 @@ struct LeftSidePanelView: View {
                 Spacer()
                 sortButton
                 genreButton
+                externalTorrentButton
                 Spacer()
             }
             .focusSection()
@@ -57,6 +60,9 @@ struct LeftSidePanelView: View {
             selection = nil
         }
         .background(backgroundView)
+        .fullScreenContent(isPresented: $showExternalTorrent, title: "") {
+            LoadExternalTorrentView()
+        }
         .ignoresSafeArea()
     }
     
@@ -87,6 +93,20 @@ struct LeftSidePanelView: View {
         }))
         .frame(height: 70)
         .focused($focusedType, equals: .genre)
+    }
+    
+    @ViewBuilder
+    var externalTorrentButton: some View {
+        Button(action: {
+            selection = nil
+        }, label: {
+            Image(systemName: "plus.rectangle.fill")
+        })
+        .buttonStyle(PlainButtonStyle(onFocus: {
+            selection = .externalTorrent
+        }))
+        .frame(height: 70)
+        .focused($focusedType, equals: .externalTorrent)
     }
     
     @ViewBuilder
@@ -122,6 +142,15 @@ struct LeftSidePanelView: View {
                     })
                 }
 //            .frame(maxWidth: 350, maxHeight: .infinity)
+        case (.externalTorrent, .some(_)):
+            VStack(alignment: .leading, spacing: 15) {
+                Spacer()
+                button(text: "Open External Torrent".localized, isSelected: false) {
+                    showExternalTorrent = true
+                    selection = nil
+                }
+                Spacer()
+            }
         default:
             EmptyView()
         }
