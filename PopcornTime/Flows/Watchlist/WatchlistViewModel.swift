@@ -18,8 +18,8 @@ class WatchlistViewModel: ObservableObject {
     }
     
     func load() {
-        self.movies = WatchlistManager<Movie>.movie.getWatchlist()//.sorted(by: {$0.title < $1.title})
-        self.shows = WatchlistManager<Show>.show.getWatchlist()//.sorted(by: {$0.title < $1.title})
+        self.movies = WatchlistManager<Movie>.movie.getWatchlist().reversed() // newest first
+        self.shows = WatchlistManager<Show>.show.getWatchlist().reversed() //.sorted(by: {$0.title < $1.title})
     }
     
 }

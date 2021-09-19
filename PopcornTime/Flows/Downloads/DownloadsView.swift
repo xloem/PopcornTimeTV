@@ -34,9 +34,8 @@ struct DownloadsView: View {
                             showSection
                         }
                     }
-                    .padding(.leading)
+                    .padding(.leading, theme.leading)
                 }
-                
             }
         }
         .onAppear {
@@ -131,6 +130,7 @@ extension DownloadsView {
         let itemHeight: CGFloat = value(tvOS: 420, macOS: 350)
         let downloadingSize: CGSize = value(tvOS: CGSize(width: 500, height: 400) , macOS: CGSize(width: 300, height: 200))
         let itemSpacing: CGFloat = value(tvOS: 40, macOS: 30)
+        let leading: CGFloat = value(tvOS: 50, macOS: 50)
     }
 }
 

@@ -25,9 +25,6 @@ struct WatchlistView: View {
                     showSection
                 }
             }
-            .padding(.leading, theme.leading)
-            .padding(.horizontal)
-            .ignoresSafeArea(edges: [.leading, .trailing])
             .onAppear {
                 viewModel.load()
             }
@@ -61,6 +58,7 @@ struct WatchlistView: View {
                 }.padding(.all, 0)
             }
         }
+        .padding(.leading, theme.leading)
     }
     
     @ViewBuilder
@@ -86,6 +84,7 @@ struct WatchlistView: View {
                 }.padding(.all, 0)
             }
         }
+        .padding(.leading, theme.leading)
     }
     
     @ViewBuilder
@@ -109,7 +108,7 @@ extension WatchlistView {
     struct Theme {
         let itemWidth: CGFloat = value(tvOS: 240, macOS: 160)
         let itemSpacing: CGFloat = value(tvOS: 40, macOS: 20)
-        let leading: CGFloat = value(tvOS: 90, macOS: 50)
+        let leading: CGFloat = value(tvOS: 50, macOS: 50)
     }
 }
 
