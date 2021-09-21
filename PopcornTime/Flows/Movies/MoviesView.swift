@@ -10,19 +10,14 @@ import SwiftUI
 import PopcornKit
 
 struct MoviesView: View {
-    struct Theme {
-        let itemWidth: CGFloat = value(tvOS: 240, macOS: 160)
-        let itemSpacing: CGFloat = value(tvOS: 30, macOS: 20)
-        let columnSpacing: CGFloat = value(tvOS: 60, macOS: 30)
-    }
     static let theme = Theme()
     
     @StateObject var viewModel = MoviesViewModel()
-
     let columns = [
         GridItem(.adaptive(minimum: theme.itemWidth), spacing: theme.itemSpacing)
 //        GridItem(.flexible(), spacing: 80)
     ]
+    let willEnterForegroundNotification = NotificationCenter.default.publisher(for: UIApplication.willEnterForegroundNotification)
     
     var body: some View {
         ZStack(alignment: .leading) {
@@ -33,13 +28,7 @@ struct MoviesView: View {
                 #endif
                 LazyVGrid(columns: columns, spacing: MoviesView.theme.columnSpacing) {
                     ForEach(viewModel.movies, id: \.self) { movie in
-                        NavigationLink(
-                            destination: { MovieDetailsView(viewModel: MovieDetailsViewModel(movie: movie)) },
-                            label: {
-                                MovieView(movie: movie, ratingsLoader: viewModel)
-                            })
-                            .buttonStyle(PlainNavigationLinkButtonStyle())
-                            .padding([.leading, .trailing], 10)
+                        navigationLink(movie: movie)
                     }
                     if (!viewModel.movies.isEmpty) {
                         loadingView
@@ -63,7 +52,7 @@ struct MoviesView: View {
             #endif
         }
         #if os(tvOS) || os(iOS)
-        .onReceive(NotificationCenter.default.publisher(for: UIApplication.willEnterForegroundNotification)) { _ in
+        .onReceive(willEnterForegroundNotification) { _ in
             viewModel.appDidBecomeActive()
         }
         #endif
@@ -71,6 +60,17 @@ struct MoviesView: View {
         .navigationBarHidden(true)
         .navigationBarTitleDisplayMode(.inline)
         #endif
+    }
+    
+    @ViewBuilder
+    func navigationLink(movie: Movie) -> some View {
+        NavigationLink(
+            destination: { MovieDetailsView(viewModel: MovieDetailsViewModel(movie: movie)) },
+            label: {
+                MovieView(movie: movie, ratingsLoader: viewModel)
+            })
+            .buttonStyle(PlainNavigationLinkButtonStyle())
+            .padding([.leading, .trailing], 10)
     }
     
     @ViewBuilder
@@ -115,6 +115,14 @@ struct MoviesView: View {
         }
         .foregroundColor(.appSecondary)
         .font(.callout)
+    }
+}
+
+extension MoviesView {
+    struct Theme {
+        let itemWidth: CGFloat = value(tvOS: 240, macOS: 160)
+        let itemSpacing: CGFloat = value(tvOS: 30, macOS: 20)
+        let columnSpacing: CGFloat = value(tvOS: 60, macOS: 30)
     }
 }
 

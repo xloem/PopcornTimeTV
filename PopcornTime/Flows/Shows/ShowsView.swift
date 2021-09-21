@@ -10,17 +10,13 @@ import SwiftUI
 import PopcornKit
 
 struct ShowsView: View {
-    struct Theme {
-        let itemWidth: CGFloat = value(tvOS: 240, macOS: 160)
-        let itemSpacing: CGFloat = value(tvOS: 30, macOS: 20)
-        let columnSpacing: CGFloat = value(tvOS: 60, macOS: 30)
-    }
     static let theme = Theme()
     
     @StateObject var viewModel = ShowsViewModel()
     let columns = [
         GridItem(.adaptive(minimum: theme.itemWidth), spacing: theme.itemSpacing)
     ]
+    let willEnterForegroundNotification = NotificationCenter.default.publisher(for: UIApplication.willEnterForegroundNotification)
     
     var body: some View {
         ZStack(alignment: .leading) {
@@ -31,13 +27,7 @@ struct ShowsView: View {
                 #endif
                 LazyVGrid(columns: columns, spacing: ShowsView.theme.columnSpacing) {
                     ForEach(viewModel.shows, id: \.self) { show in
-                        NavigationLink(
-                            destination: ShowDetailsView(viewModel: ShowDetailsViewModel(show: show)),
-                            label: {
-                                ShowView(show: show)
-                            })
-                            .buttonStyle(PlainNavigationLinkButtonStyle())
-                            .padding([.leading, .trailing], 10)
+                        navigationLink(show: show)
                     }
                     if (!viewModel.shows.isEmpty) {
                         loadingView
@@ -61,7 +51,7 @@ struct ShowsView: View {
             #endif
         }
         #if os(tvOS) || os(iOS)
-        .onReceive(NotificationCenter.default.publisher(for: UIApplication.willEnterForegroundNotification)) { _ in
+        .onReceive(willEnterForegroundNotification) { _ in
             viewModel.appDidBecomeActive()
         }
         #endif
@@ -69,6 +59,17 @@ struct ShowsView: View {
         .navigationBarHidden(true)
         .navigationBarTitleDisplayMode(.inline)
         #endif
+    }
+    
+    @ViewBuilder
+    func navigationLink(show: Show) -> some View {
+        NavigationLink(
+            destination: ShowDetailsView(viewModel: ShowDetailsViewModel(show: show)),
+            label: {
+                ShowView(show: show)
+            })
+            .buttonStyle(PlainNavigationLinkButtonStyle())
+            .padding([.leading, .trailing], 10)
     }
     
     @ViewBuilder
@@ -113,6 +114,14 @@ struct ShowsView: View {
         }
         .foregroundColor(.appSecondary)
         .font(.callout)
+    }
+}
+
+extension ShowsView {
+    struct Theme {
+        let itemWidth: CGFloat = value(tvOS: 240, macOS: 160)
+        let itemSpacing: CGFloat = value(tvOS: 30, macOS: 20)
+        let columnSpacing: CGFloat = value(tvOS: 60, macOS: 30)
     }
 }
 
