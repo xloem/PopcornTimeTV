@@ -20,14 +20,28 @@ struct PlainNavigationLinkButton: View {
 
     var body: some View {
         configuration.label
-            .scaleEffect(focused || configuration.isPressed ? theme.scaleEffect : 1)
+            .scaleEffect(focused ? theme.scaleEffect : 1)
             .foregroundColor((focused || configuration.isPressed) ? Color.primary : Color.appSecondary)
             .animation(.easeOut, value: focused)
+            #if os(iOS)
+            .compositingGroup()
+            .overlay(overlayColor)
+            #endif
             .onChange(of: focused) { newValue in
                 if newValue {
                     onFocus()
                 }
             }
+    }
+    
+    /// highlight effect
+    @ViewBuilder
+    var overlayColor: some View {
+        if configuration.isPressed {
+            Color(white: 0, opacity: 0.3).mask(configuration.label)
+        } else {
+            EmptyView()
+        }
     }
 }
 

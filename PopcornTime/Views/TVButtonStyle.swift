@@ -70,6 +70,6 @@ struct TVButton: View {
 extension TVButton {
     struct Theme {
         let fontSize: CGFloat = value(tvOS: 23, macOS: 16)
-        let scaleEffect: CGFloat = value(tvOS: 1.1, macOS: 0.95)
+        let scaleEffect: CGFloat = value(tvOS: 1.1, macOS: 0.96)
     }
 }

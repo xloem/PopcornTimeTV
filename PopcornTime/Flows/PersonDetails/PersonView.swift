@@ -28,6 +28,7 @@ struct PersonView: View {
                     Circle()
                         .foregroundColor(Color(white: 0.8, opacity: 0.667))
                         .frame(width: radius, height: radius)
+                        .shadow(color: Color(white: 0, opacity: 0.8), radius: 5)
                     Text(person.initials)
                         .foregroundColor(Color.black)
                         .font(.system(size: theme.initalsTitleSize, weight: .regular))
@@ -37,24 +38,25 @@ struct PersonView: View {
                             .aspectRatio(contentMode: .fill)
                             .frame(width: radius, height: radius)
                             .clipShape(Circle())
-                            .shadow(radius: 5)
                     }
                 }
             }
-            Text(person.name)
-                .font(.system(size: theme.nameSize, weight: .medium))
-                .padding(.top, 10)
-            if let actor = person as? Actor {
-                Text(actor.characterName.uppercased())
-                    .font(.system(size: theme.characterNameSize, weight: .bold))
-            } else if let crew = person as? Crew {
-                Text(crew.job.uppercased())
-                    .font(.system(size: theme.characterNameSize, weight: .bold))
+            Group {
+                Text(person.name)
+                    .font(.system(size: theme.nameSize, weight: .medium))
+                    .padding(.top, 10)
+                if let actor = person as? Actor {
+                    Text(actor.characterName.uppercased())
+                        .font(.system(size: theme.characterNameSize, weight: .bold))
+                } else if let crew = person as? Crew {
+                    Text(crew.job.uppercased())
+                        .font(.system(size: theme.characterNameSize, weight: .bold))
+                }
             }
+            .multilineTextAlignment(.center)
+            .lineLimit(1)
+            .shadow(color: .init(white: 0, opacity: 0.6), radius: 2, x: 0, y: 1)
         }
-        .multilineTextAlignment(.center)
-        .lineLimit(1)
-        .shadow(color: .init(white: 0, opacity: 0.6), radius: 2, x: 0, y: 1)
     }
 }
 
