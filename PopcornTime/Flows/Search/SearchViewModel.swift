@@ -29,7 +29,7 @@ class SearchViewModel: ObservableObject {
         self.onTextChange = Publishers.CombineLatest($search, $selection)
             .removeDuplicates { prev, curent in
                 let isSame = prev == curent
-                if !isSame && curent.count > 2 {
+                if !isSame && curent.0.count > 2 {
                     self.isLoading = true
                     self.error = nil
                 }
