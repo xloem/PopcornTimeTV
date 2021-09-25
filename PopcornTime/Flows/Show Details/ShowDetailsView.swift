@@ -23,6 +23,7 @@ struct ShowDetailsView: View {
     @Namespace var section1
     @Namespace var section2
     @Namespace var section3
+    @Environment(\.openURL) var openURL
     
     var body: some View {
         ZStack {
@@ -161,6 +162,9 @@ struct ShowDetailsView: View {
             Group {
                 Text(watchOn)
 //                Text(runtime)
+                #if os(iOS) || os(macOS)
+                ratings()
+                #endif
             }
             .foregroundColor(.appSecondary)
         }
@@ -268,6 +272,28 @@ struct ShowDetailsView: View {
                 .padding([.top], -30)
             #endif
         )
+    }
+    
+    @ViewBuilder
+    func ratings() -> some View {
+        ratingItem(image: "imdb", value: "")
+            .onTapGesture {
+                openURL(show.imdbUrl)
+            }
+    
+    }
+    
+    func ratingItem(image: String, value: String) -> some View {
+        HStack(spacing: 4) {
+            Image(image)
+                .resizable()
+                .aspectRatio(contentMode: .fit)
+                .frame(height: theme.ratingHeight)
+            Text(value)
+            #if os(macOS)
+                .font(.title2)
+            #endif
+        }
     }
 }
 

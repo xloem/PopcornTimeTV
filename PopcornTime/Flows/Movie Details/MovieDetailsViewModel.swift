@@ -85,4 +85,20 @@ class MovieDetailsViewModel: ObservableObject {
     func stopTheme() {
         ThemeSongManager.shared.stopTheme()
     }
+    
+    var ratings: Ratings? {
+        #if os(tvOS)
+        return movie.ratings
+        #else
+        if var ratings = movie.ratings, ratings.hasValue {
+            if ratings.imdbRating == nil {
+                ratings.imdbRating = "" // for opening website
+            }
+            return ratings
+        } else {
+            // show empty imdb when no ratings, for opening website
+            return Ratings(awards: nil, imdbRating: "", metascore: nil, rottenTomatoes: nil)
+        }
+        #endif
+    }
 }

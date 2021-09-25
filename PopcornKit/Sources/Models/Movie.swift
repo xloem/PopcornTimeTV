@@ -260,3 +260,22 @@ public struct Ratings: Equatable {
         return imdbRating != nil || metascore != nil || rottenTomatoes != nil
     }
 }
+
+extension Media {
+    public var imdbUrl: URL {
+        return URL(string:"https://www.imdb.com/title/\(id)") ?? URL(string: "")!
+    }
+}
+
+extension Movie {
+    
+    public var metacriticFindUrl: URL {
+        return URL(string:"https://www.metacritic.com/search/movie/\(slug)/results") ?? URL(string: "")!
+    }
+    public var metacriticUrl: URL {
+        return URL(string:"https://www.metacritic.com/movie/\(slug)") ?? URL(string: "")!
+    }
+    public var rottentomatoesUrl: URL {
+        return URL(string:"https://www.rottentomatoes.com/search?search=\(slug)") ?? URL(string: "")!
+    }
+}

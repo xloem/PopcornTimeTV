@@ -20,6 +20,7 @@ struct MovieDetailsView: View {
         return viewModel.movie
     }
     @Namespace var section1
+    @Environment(\.openURL) var openURL
     
     var body: some View {
             ZStack {
@@ -137,7 +138,7 @@ struct MovieDetailsView: View {
     
     @ViewBuilder
     func rightSection(scroll: ScrollViewProxy) -> some View {
-        VStack(alignment: .leading, spacing: 50) {
+        VStack(alignment: .leading, spacing: theme.rightSectionSpacing) {
             infoText
             ratings()
             Color.clear
@@ -300,16 +301,33 @@ struct MovieDetailsView: View {
     
     @ViewBuilder
     func ratings() -> some View {
-        if let ratings = movie.ratings {
+        if let ratings = viewModel.ratings {
             HStack(spacing: 25) {
-                if let metascore = ratings.metascore {
-                    ratingItem(image: "metacritic", value: metascore)
-                }
                 if let imdb = ratings.imdbRating {
                     ratingItem(image: "imdb", value: imdb)
+                    #if os(iOS) || os(macOS)
+                        .onTapGesture {
+                            openURL(movie.imdbUrl)
+                        }
+                    #endif
+                } else {
+                    
+                }
+                if let metascore = ratings.metascore {
+                    ratingItem(image: "metacritic", value: metascore)
+                    #if os(iOS) || os(macOS)
+                        .onTapGesture {
+                            openURL(movie.metacriticFindUrl)
+                        }
+                    #endif
                 }
                 if let rotten = ratings.rottenTomatoes {
                     ratingItem(image: "rotten-tomatoes", value: rotten)
+                    #if os(iOS) || os(macOS)
+                        .onTapGesture {
+                            openURL(movie.rottentomatoesUrl)
+                        }
+                    #endif
                 }
             }
             .font(.caption)
@@ -349,6 +367,7 @@ extension MovieDetailsView {
         let backgroundOpacity = value(tvOS: 0.3, macOS: 0.5)
         let titleFont: Font = Font.system(size: value(tvOS: 76, macOS: 50), weight: .medium)
         let section1Height: CGFloat = value(tvOS: 960, macOS: 710)
+        let rightSectionSpacing: CGFloat = value(tvOS: 50, macOS: 30)
     }
 }
 

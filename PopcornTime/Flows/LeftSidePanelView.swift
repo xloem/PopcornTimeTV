@@ -145,7 +145,7 @@ struct LeftSidePanelView: View {
         case (.externalTorrent, .some(_)):
             VStack(alignment: .leading, spacing: 15) {
                 Spacer()
-                button(text: "Open External Torrent".localized, isSelected: false) {
+                button(text: "Open External".localized, isSelected: false) {
                     showExternalTorrent = true
                     selection = nil
                 }

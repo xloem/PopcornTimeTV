@@ -6,10 +6,12 @@
       "scale" : "1x"
     },
     {
+      "filename" : "Rotten_Tomatoes-64px.png",
       "idiom" : "universal",
       "scale" : "2x"
     },
     {
+      "filename" : "Rotten_Tomatoes-96px.png",
       "idiom" : "universal",
       "scale" : "3x"
     }

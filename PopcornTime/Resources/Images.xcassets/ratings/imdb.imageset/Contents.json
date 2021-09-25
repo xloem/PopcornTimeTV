@@ -6,10 +6,12 @@
       "scale" : "1x"
     },
     {
+      "filename" : "IMDB-64px.png",
       "idiom" : "universal",
       "scale" : "2x"
     },
     {
+      "filename" : "IMDB-96px.png",
       "idiom" : "universal",
       "scale" : "3x"
     }
