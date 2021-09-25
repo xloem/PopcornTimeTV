@@ -113,6 +113,9 @@ public struct Show: Media, Equatable {
     /// The genres associated with the show. Empty by default. Must be filled by calling `getInfo:imdbId:completion` on `ShowManager`.
     public var genres = [String]()
     
+    /// populated later from other sources
+    public var ratings: Ratings?
+    
     public init?(map: Map) {
         do { self = try Show(map) }
         catch { return nil }
@@ -236,7 +239,7 @@ extension Show: Hashable {
 }
 
 // MARK: Equatable
-
-public func ==(lhs: Show, rhs: Show) -> Bool {
-    return lhs.id == rhs.id
-}
+//
+//public func ==(lhs: Show, rhs: Show) -> Bool {
+//    return lhs.id == rhs.id
+//}

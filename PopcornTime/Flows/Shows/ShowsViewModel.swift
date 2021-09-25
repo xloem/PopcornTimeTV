@@ -9,7 +9,7 @@
 import SwiftUI
 import PopcornKit
 
-class ShowsViewModel: ObservableObject {
+class ShowsViewModel: ObservableObject, ShowRatingsLoader {
     @Published var isLoading = false
     var page = 1
     @Published var hasNextPage = false

@@ -17,17 +17,26 @@ struct ShowView: View {
     static let theme = Theme()
     
     var show: Show
+    var ratingsLoader: ShowRatingsLoader?
+    @Environment(\.isFocused) var focused: Bool
     
     var body: some View {
         VStack {
             KFImage(URL(string: show.smallCoverImage ?? ""))
                 .resizable()
+                .loadImmediately()
                 .placeholder {
                     Image("Episode Placeholder")
                         .resizable()
                         .aspectRatio(contentMode: .fit)
                 }
                 .aspectRatio(contentMode: .fit)
+                .overlay(alignment: .bottom) {
+                    if focused {
+                        RatingsOverlayView(ratings: show.ratings)
+                            .transition(.move(edge: .bottom))
+                    }
+                }
                 .cornerRadius(10)
                 .shadow(radius: 5)
 //                .padding(.bottom, 5)
@@ -39,6 +48,9 @@ struct ShowView: View {
                 .padding(0)
                 .zIndex(10)
 //                .frame(height: 80)
+        }
+        .onAppear {
+            ratingsLoader?.loadRatingIfMissing(show: show)
         }
     }
 }

@@ -35,6 +35,14 @@ class ShowDetailsViewModel: ObservableObject {
             return
         }
         
+        if show.ratings == nil {
+            OMDbManager.shared.loadCachedInfo(imdbId: show.id) { info, error in
+                if let info = info {
+                    self.show.ratings = info.transform()
+                }
+            }
+        }
+        
         isLoading = true
         PopcornKit.getShowInfo(show.id) { (show, error) in
             if let error = error {
@@ -42,11 +50,12 @@ class ShowDetailsViewModel: ObservableObject {
                 self.isLoading = false
                 return
             }
-            guard let show = show else {
+            guard var show = show else {
                 self.isLoading = false
                 return
             }
             
+            show.ratings = self.show.ratings
             self.show = show
             
             guard let season = show.latestUnwatchedEpisode()?.season ?? show.seasonNumbers.first else {

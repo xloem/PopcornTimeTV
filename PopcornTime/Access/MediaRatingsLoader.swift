@@ -30,25 +30,22 @@ extension MovieRatingsLoader {
     }
 }
 
-//protocol ShowRatingsLoader: AnyObject {
-//    var shows: [Show] {get set}
-//
-//    func loadRatingIfMissing(show: Show)
-//}
-//
-//extension ShowRatingsLoader {
-//    func loadRatingIfMissing(show: Show) {
-//        guard show.ratings == nil else {
-//            return
-//        }
-//
-//        OMDbManager.shared.loadCachedInfo(imdbId: show.id) { media, error in
-//            if let media = media, let index = self.shows.firstIndex(where: {$0.id == show.id}) {
-//                let ratings = Ratings(awards: media.awards, imdbRating: media.imdbRating, metascore: media.metascore)
-//                var show = self.shows[index]
-//                show.ratings = ratings
-//                self.shows[index] = show
-//            }
-//        }
-//    }
-//}
+protocol ShowRatingsLoader: AnyObject {
+    var shows: [Show] {get set}
+
+    func loadRatingIfMissing(show: Show)
+}
+
+extension ShowRatingsLoader {
+    func loadRatingIfMissing(show: Show) {
+        guard show.ratings == nil else {
+            return
+        }
+
+        OMDbManager.shared.loadCachedInfo(imdbId: show.id) { media, error in
+            if let media = media, let index = self.shows.firstIndex(where: {$0.id == show.id}) {
+                self.shows[index].ratings = media.transform()
+            }
+        }
+    }
+}

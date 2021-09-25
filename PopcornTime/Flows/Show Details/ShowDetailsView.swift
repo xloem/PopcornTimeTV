@@ -46,8 +46,11 @@ struct ShowDetailsView: View {
                                 infoText
                                 Color.clear
                                     .overlay(alignment: .topLeading, content: {
-                                        Text(show.summary)
-                                            .multilineTextAlignment(.leading)
+                                        VStack(alignment: .leading, spacing: 20) {
+                                            Text(show.summary)
+                                                .multilineTextAlignment(.leading)
+                                            awards()
+                                        }
                                     })
                                     .frame(maxWidth: theme.summaryMaxWidth)
                                 actionButtons(scroll: scroll)
@@ -162,9 +165,7 @@ struct ShowDetailsView: View {
             Group {
                 Text(watchOn)
 //                Text(runtime)
-                #if os(iOS) || os(macOS)
-                ratings()
-                #endif
+                RatingsView(viewModel: RatingsViewModel(media: show, ratings: show.ratings))
             }
             .foregroundColor(.appSecondary)
         }
@@ -275,24 +276,10 @@ struct ShowDetailsView: View {
     }
     
     @ViewBuilder
-    func ratings() -> some View {
-        ratingItem(image: "imdb", value: "")
-            .onTapGesture {
-                openURL(show.imdbUrl)
-            }
-    
-    }
-    
-    func ratingItem(image: String, value: String) -> some View {
-        HStack(spacing: 4) {
-            Image(image)
-                .resizable()
-                .aspectRatio(contentMode: .fit)
-                .frame(height: theme.ratingHeight)
-            Text(value)
-            #if os(macOS)
-                .font(.title2)
-            #endif
+    func awards() -> some View {
+        if let awards = show.ratings?.awards {
+            Text("Awards: " + awards)
+                .font(.caption)
         }
     }
 }
@@ -304,7 +291,6 @@ extension ShowDetailsView {
         
         let starSize: CGSize = value(tvOS: CGSize(width: 220, height: 40), macOS: CGSize(width: 110, height: 20))
         let starOffset: CGFloat = value(tvOS: -8, macOS: -4)
-        let ratingHeight: CGFloat = value(tvOS: 32, macOS: 24)
         let watchedSection: (height: CGFloat, cellWidth: CGFloat, cellHeight: CGFloat, spacing: CGFloat)
             = (height: value(tvOS: 475, macOS: 240),
                cellWidth: value(tvOS: 220, macOS: 150),

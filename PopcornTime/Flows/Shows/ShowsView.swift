@@ -66,7 +66,7 @@ struct ShowsView: View {
         NavigationLink(
             destination: ShowDetailsView(viewModel: ShowDetailsViewModel(show: show)),
             label: {
-                ShowView(show: show)
+                ShowView(show: show, ratingsLoader: viewModel)
             })
             .buttonStyle(PlainNavigationLinkButtonStyle())
             .padding([.leading, .trailing], 10)

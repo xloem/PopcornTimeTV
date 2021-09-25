@@ -20,7 +20,6 @@ struct MovieDetailsView: View {
         return viewModel.movie
     }
     @Namespace var section1
-    @Environment(\.openURL) var openURL
     
     var body: some View {
             ZStack {
@@ -140,7 +139,7 @@ struct MovieDetailsView: View {
     func rightSection(scroll: ScrollViewProxy) -> some View {
         VStack(alignment: .leading, spacing: theme.rightSectionSpacing) {
             infoText
-            ratings()
+            RatingsView(viewModel: RatingsViewModel(media: movie, ratings: movie.ratings))
             Color.clear
                 .overlay(alignment: .topLeading) {
                     VStack(alignment: .leading, spacing: 20) {
@@ -209,22 +208,6 @@ struct MovieDetailsView: View {
         }
     }
     
-
-    
-    var seasonsButton: some View {
-        return Button(action: {
-            
-        }, label: {
-            VStack {
-                VisualEffectBlur() {
-                    Image("Seasons")
-                }.cornerRadius(6)
-                Text("Series")
-            }
-        })
-        .frame(width: theme.buttonWidth, height: theme.buttonHeight)
-    }
-    
     var watchlistButton: some View {
         return Button(action: {
             viewModel.movie.isAddedToWatchlist.toggle()
@@ -243,7 +226,6 @@ struct MovieDetailsView: View {
     var watchedButton: some View {
         return Button(action: {
             viewModel.movie.isWatched.toggle()
-            print(#function, viewModel.movie.isWatched)
         }, label: {
             VStack {
                 VisualEffectBlur() {
@@ -298,55 +280,6 @@ struct MovieDetailsView: View {
                 .font(.caption)
         }
     }
-    
-    @ViewBuilder
-    func ratings() -> some View {
-        if let ratings = viewModel.ratings {
-            HStack(spacing: 25) {
-                if let imdb = ratings.imdbRating {
-                    ratingItem(image: "imdb", value: imdb)
-                    #if os(iOS) || os(macOS)
-                        .onTapGesture {
-                            openURL(movie.imdbUrl)
-                        }
-                    #endif
-                } else {
-                    
-                }
-                if let metascore = ratings.metascore {
-                    ratingItem(image: "metacritic", value: metascore)
-                    #if os(iOS) || os(macOS)
-                        .onTapGesture {
-                            openURL(movie.metacriticFindUrl)
-                        }
-                    #endif
-                }
-                if let rotten = ratings.rottenTomatoes {
-                    ratingItem(image: "rotten-tomatoes", value: rotten)
-                    #if os(iOS) || os(macOS)
-                        .onTapGesture {
-                            openURL(movie.rottentomatoesUrl)
-                        }
-                    #endif
-                }
-            }
-            .font(.caption)
-            .lineLimit(1)
-        }
-    }
-    
-    func ratingItem(image: String, value: String) -> some View {
-        HStack(spacing: 4) {
-            Image(image)
-                .resizable()
-                .aspectRatio(contentMode: .fit)
-                .frame(height: theme.ratingHeight)
-            Text(value)
-            #if os(macOS)
-                .font(.title2)
-            #endif
-        }
-    }
 }
 
 extension MovieDetailsView {
@@ -359,7 +292,6 @@ extension MovieDetailsView {
         let leftSectionLeading: CGFloat = value(tvOS: 100, macOS: 30)
         let starSize: CGSize = value(tvOS: CGSize(width: 220, height: 40), macOS: CGSize(width: 110, height: 20))
         let starOffset: CGFloat = value(tvOS: -8, macOS: -4)
-        let ratingHeight: CGFloat = value(tvOS: 32, macOS: 24)
         let watchedSection: (height: CGFloat, cellWidth: CGFloat, spacing: CGFloat)
             = (height: value(tvOS: 450, macOS: 240),
                cellWidth: value(tvOS: 220, macOS: 150),

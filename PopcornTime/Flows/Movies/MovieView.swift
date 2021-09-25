@@ -39,7 +39,7 @@ struct MovieView: View {
                 }
                 .overlay(alignment: .bottom) {
                     if focused {
-                        ratings()
+                        RatingsOverlayView(ratings: movie.ratings)
                             .transition(.move(edge: .bottom))
                     }
                 }
@@ -57,46 +57,6 @@ struct MovieView: View {
         }
         .onAppear {
             ratingsLoader?.loadRatingIfMissing(movie: movie)
-        }
-    }
-    
-    @ViewBuilder
-    func ratings() -> some View {
-        if let ratings = movie.ratings, ratings.hasValue {
-            HStack(spacing: 15) {
-                if let metascore = ratings.metascore {
-                    HStack(spacing: 4) {
-                        Image("metacritic")
-                            .resizable()
-                            .aspectRatio(contentMode: .fit)
-                            .frame(height: 26)
-                        Text(metascore)
-                    }
-                }
-                if let imdb = ratings.imdbRating {
-                    HStack(spacing: 4) {
-                        Image("imdb")
-                            .resizable()
-                            .aspectRatio(contentMode: .fit)
-                            .frame(height: 26)
-                        Text(imdb)
-                    }
-                }
-                if let rotten = ratings.rottenTomatoes, (ratings.imdbRating == nil || ratings.metascore == nil) {
-                    HStack(spacing: 4) {
-                        Image("rotten-tomatoes")
-                            .resizable()
-                            .aspectRatio(contentMode: .fit)
-                            .frame(height: 26)
-                        Text(rotten)
-                    }
-                }
-            }
-            .font(.caption)
-            .lineLimit(1)
-            .frame(maxWidth: .infinity)
-            .padding([.top, .bottom])
-            .background(.regularMaterial)
         }
     }
 }
