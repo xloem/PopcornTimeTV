@@ -16,8 +16,9 @@ struct ShowsView: View {
     let columns = [
         GridItem(.adaptive(minimum: theme.itemWidth), spacing: theme.itemSpacing)
     ]
+    #if os(tvOS) || os(iOS)
     let willEnterForegroundNotification = NotificationCenter.default.publisher(for: UIApplication.willEnterForegroundNotification)
-    
+    #endif
     var body: some View {
         ZStack(alignment: .leading) {
             errorView

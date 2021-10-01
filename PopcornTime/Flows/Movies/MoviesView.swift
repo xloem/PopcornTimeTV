@@ -17,8 +17,9 @@ struct MoviesView: View {
         GridItem(.adaptive(minimum: theme.itemWidth), spacing: theme.itemSpacing)
 //        GridItem(.flexible(), spacing: 80)
     ]
+#if os(tvOS) || os(iOS)
     let willEnterForegroundNotification = NotificationCenter.default.publisher(for: UIApplication.willEnterForegroundNotification)
-    
+#endif
     var body: some View {
         ZStack(alignment: .leading) {
             errorView
