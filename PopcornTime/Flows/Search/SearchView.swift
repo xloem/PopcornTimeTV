@@ -35,7 +35,9 @@ struct SearchView: View {
             }
             Spacer()
         }
+        #if os(iOS) || os(tvOS)
         .searchable(text: $viewModel.search)
+        #endif
         #if os(iOS)
         .navigationBarHidden(true)
         .navigationBarTitleDisplayMode(.inline)
@@ -54,6 +56,11 @@ struct SearchView: View {
         .padding(.horizontal, 40)
         #elseif os(tvOS)
         pickerView
+        #elseif os(macOS)
+        pickerView
+            .pickerStyle(.segmented)
+            .frame(maxWidth: 200)
+            .padding()
         #endif
     }
     

@@ -16,9 +16,7 @@ struct ShowsView: View {
     let columns = [
         GridItem(.adaptive(minimum: theme.itemWidth), spacing: theme.itemSpacing)
     ]
-    #if os(tvOS) || os(iOS)
-    let willEnterForegroundNotification = NotificationCenter.default.publisher(for: UIApplication.willEnterForegroundNotification)
-    #endif
+    
     var body: some View {
         ZStack(alignment: .leading) {
             errorView
@@ -51,8 +49,17 @@ struct ShowsView: View {
                 .padding(.leading, -50)
             #endif
         }
+        #if os(macOS)
+        .modifier(VisibleToolbarView(toolbarContent: { isVisible in
+            ToolbarItemGroup {
+                if isVisible {
+                    filtersView
+                }
+            }
+        }))
+        #endif
         #if os(tvOS) || os(iOS)
-        .onReceive(willEnterForegroundNotification) { _ in
+        .onReceive(NotificationCenter.default.publisher(for: UIApplication.willEnterForegroundNotification)) { _ in
             viewModel.appDidBecomeActive()
         }
         #endif
@@ -105,8 +112,10 @@ struct ShowsView: View {
                 }
             
             }
+            #if os(iOS)
             Text("Shows - Genre")
                 .padding(.horizontal, 5)
+            #endif
             Picker("Genre", selection: $viewModel.currentGenre) {
                 ForEach(MovieManager.Genres.allCases, id: \.self) { item in
                     Text(item.string).tag(item)

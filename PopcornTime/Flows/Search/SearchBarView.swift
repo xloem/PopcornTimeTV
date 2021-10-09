@@ -21,7 +21,9 @@ struct SearchBarView: View {
             TextField("Search ...", text: $text)
                 .padding(7)
                 .padding(.horizontal, 25)
+            #if os(iOS)
                 .background(Color(.systemGray6))
+            #endif
                 .cornerRadius(8)
                 .focused($focused, equals: .search)
                 .overlay(

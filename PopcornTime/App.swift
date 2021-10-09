@@ -21,18 +21,12 @@ struct PopcornTime: App {
                     TermsOfServiceView(tosAccepted: $tosAccepted)
                 } else {
                     TabBarView()
-                    #if os(macOS)
-                        .padding(.top, 15)
-                        .modifier(MagnetTorrentLinkOpener())
-                    #elseif os(iOS)
+                    #if os(iOS) || os(macOS)
                         .modifier(MagnetTorrentLinkOpener())
                     #elseif os(tvOS)
                         .modifier(TopShelfLinkOpener())
                     #endif
                 }
-                #if os(macOS)
-                    Spacer()
-                #endif
             }
             .preferredColorScheme(.dark)
             #if os(iOS)
@@ -43,5 +37,7 @@ struct PopcornTime: App {
 //                TraktManager.shared.syncUserData()
 //            }
         }
+//        .windowStyle(.hiddenTitleBar)
+//        .windowToolbarStyle(.unified(showsTitle: false))
     }
 }

@@ -15,11 +15,8 @@ struct MoviesView: View {
     @StateObject var viewModel = MoviesViewModel()
     let columns = [
         GridItem(.adaptive(minimum: theme.itemWidth), spacing: theme.itemSpacing)
-//        GridItem(.flexible(), spacing: 80)
     ]
-#if os(tvOS) || os(iOS)
-    let willEnterForegroundNotification = NotificationCenter.default.publisher(for: UIApplication.willEnterForegroundNotification)
-#endif
+    
     var body: some View {
         ZStack(alignment: .leading) {
             errorView
@@ -52,8 +49,18 @@ struct MoviesView: View {
                 .padding(.leading, -50)
             #endif
         }
+        #if os(macOS)
+        .modifier(VisibleToolbarView(toolbarContent: { isVisible in
+            ToolbarItemGroup {
+                if isVisible {
+                    filtersView
+                }
+            }
+        }))
+        #endif
+                                
         #if os(tvOS) || os(iOS)
-        .onReceive(willEnterForegroundNotification) { _ in
+        .onReceive(NotificationCenter.default.publisher(for: UIApplication.willEnterForegroundNotification)) { _ in
             viewModel.appDidBecomeActive()
         }
         #endif
@@ -106,8 +113,10 @@ struct MoviesView: View {
                 }
             
             }
+            #if os(iOS)
             Text("Movies - Genre")
                 .padding(.horizontal, 5)
+            #endif
             Picker("Genre", selection: $viewModel.currentGenre) {
                 ForEach(MovieManager.Genres.allCases, id: \.self) { item in
                     Text(item.string).tag(item)
