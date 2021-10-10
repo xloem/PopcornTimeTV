@@ -12,7 +12,11 @@ import PopcornKit
 struct SeasonPickerView: View {
     @StateObject var viewModel: SeasonPickerViewModel
     @Binding var selectedSeasonNumber: Int
-    @Environment(\.presentationMode) var presentationMode
+    #if os(macOS)
+    @Environment(\.macDismiss) var dismiss
+    #else
+    @Environment(\.dismiss) var dismiss
+    #endif
     #if os(tvOS)
     @FocusState var focusedField: Int?
     #endif
@@ -31,7 +35,7 @@ struct SeasonPickerView: View {
                             ForEach(viewModel.seasons, id: \.self) { season in
                                 Button(action: {
                                     selectedSeasonNumber = season.number
-                                    presentationMode.wrappedValue.dismiss()
+                                    dismiss()
                                 }, label: {
                                     SeasonView(season: season)
                                 })

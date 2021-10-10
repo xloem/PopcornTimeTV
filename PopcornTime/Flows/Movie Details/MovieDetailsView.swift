@@ -149,6 +149,8 @@ struct MovieDetailsView: View {
                 }
             #if os(tvOS)
                 .frame(width: 920)
+            #else
+                .frame(maxWidth: 900)
             #endif
             #if os(tvOS) || os(macOS)
             actionButtons(scroll: scroll)

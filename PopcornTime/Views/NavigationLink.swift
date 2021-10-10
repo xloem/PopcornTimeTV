@@ -15,13 +15,14 @@ public struct StackNavigationLink<Label: View, Destination: View>: View {
     private var label: Label
     private var destination: Destination
     private var wrapInButton = false
+    @Binding var isActive: Bool
     
     @Environment(\.push) private var push
     
     public var body: some View {
         let action = {
             withAnimation {
-                self.push(AnyView(destination))
+                self.push(AnyView(destination), nil)
             }
         }
         
@@ -30,6 +31,11 @@ public struct StackNavigationLink<Label: View, Destination: View>: View {
         }
         else {
             label.onTapGesture(perform: action)
+                .onChange(of: isActive) { newValue in
+                    if newValue {
+                        self.push(AnyView(destination), _isActive)
+                    }
+                }
         }
     }
 
@@ -37,11 +43,13 @@ public struct StackNavigationLink<Label: View, Destination: View>: View {
     public init(destination: Destination, @ViewBuilder label: () -> Label) {
         self.label = label()
         self.destination = destination
+        _isActive = .constant(false)
     }
 //
     public init(destination: Destination, isActive: Binding<Bool>, @ViewBuilder label: @escaping () -> Label) {
         self.label = label()
         self.destination = destination
+        _isActive = isActive
     }
 //
 //    /// Creates an instance that presents `destination` when `selection` is set
@@ -54,11 +62,13 @@ public struct StackNavigationLink<Label: View, Destination: View>: View {
     public init(isActive: Binding<Bool>, @ViewBuilder destination: () -> Destination, @ViewBuilder label: () -> Label) {
         self.destination = destination()
         self.label = label()
+        _isActive = isActive
     }
     
     public init(@ViewBuilder destination: () -> Destination, @ViewBuilder label: () -> Label) {
         self.destination = destination()
         self.label = label()
+        _isActive = .constant(false)
     }
 }
 
@@ -89,6 +99,7 @@ extension StackNavigationLink where Label == Text {
         self.label = Text(title)
         self.destination = destination
         self.wrapInButton = true
+        _isActive = .constant(false)
     }
     
 }

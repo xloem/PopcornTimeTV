@@ -71,16 +71,18 @@ struct SelectTorrentQualityButton<Label>: View where Label : View {
             return torrent
         }
         
+        #if os(tvOS)
         if media.torrents.count == 1 {
             return media.torrents[0]
         }
+        #endif
         
         return nil
     }
 
     @ViewBuilder
     var chooseTorrentsButtons: some View {
-        ForEach(media.torrents) { torrent in
+        ForEach(media.torrents.sorted(by: >)) { torrent in
             Button {
                 action(torrent)
             } label: {
@@ -89,6 +91,11 @@ struct SelectTorrentQualityButton<Label>: View where Label : View {
                 + Text(" (seeds: \(torrent.seeds) - peers: \(torrent.peers))")
             }
         }
+//        #if os(macOS)
+//        Button("Cancel", role: .cancel) {
+//            showChooseQualityActionSheet = false
+//        }
+//        #endif
     }
 }
 

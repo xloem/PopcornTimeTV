@@ -12,9 +12,9 @@ import SwiftUI
 typealias NavigationView = StackNavigationView
 #endif
 
-typealias PushAction = (AnyView) -> ()
+typealias PushAction = (_ view: AnyView, _ binding: Binding<Bool>?) -> ()
 struct PushKey: EnvironmentKey {
-    static let defaultValue: PushAction = { _ in }
+    static let defaultValue: PushAction = { _, _ in }
 }
 
 typealias PopToRootAction = () -> ()
@@ -34,13 +34,32 @@ extension EnvironmentValues {
     }
 }
 
+struct MacDismissAction {
+    var action: () -> Void
+    
+    public func callAsFunction() {
+        action()
+    }
+}
+
+struct MacDismissActionKey: EnvironmentKey {
+    static let defaultValue: MacDismissAction = .init(action: { })
+}
+
+extension EnvironmentValues {
+    var macDismiss: MacDismissAction {
+        get { self[MacDismissActionKey.self] }
+        set { self[MacDismissActionKey.self] = newValue }
+    }
+}
+
 public struct StackNavigationView<Content: View>: View {
     public typealias V = Bool
     
     private var content: Content
     
-    @State private var pushed: [AnyView]
-    @State private var popped = [AnyView]()
+    @State private var pushed: [(view: AnyView, binding: Binding<Bool>?)]
+    @State private var popped: [(view: AnyView, binding: Binding<Bool>?)] = []
     
     private var canGoBack: Bool { pushed.count > 0 }
     private var canGoForward: Bool { popped.count > 0 }
@@ -49,11 +68,13 @@ public struct StackNavigationView<Content: View>: View {
         ZStack(content: {
             content
                 .hide(!pushed.isEmpty)
+            
             ForEach(0..<pushed.count, id: \.self) { index in
-                pushed[index]
+                pushed[index].view
                     .hide(index != pushed.count - 1)
-//                    .opacity(index == pushed.count - 1 ? 1 : 0)
-//                    .transition(.move(edge: .trailing))
+                    .environment(\.macDismiss, MacDismissAction(action: {
+                        goBack(index: index)
+                    }))
             }
         })
             .environment(\.push, push)
@@ -81,9 +102,10 @@ public struct StackNavigationView<Content: View>: View {
         self._pushed = State(initialValue: [])
     }
     
-    private func push(_ content: AnyView) {
+    private func push(_ content: AnyView, _ binding: Binding<Bool>?) {
         let view = AnyView(content.id(UUID()))
-        pushed.append(view)
+        pushed.append((view, binding))
+        binding?.wrappedValue = true
         popped.removeAll()
     }
     
@@ -91,20 +113,29 @@ public struct StackNavigationView<Content: View>: View {
         guard let content = pushed.popLast() else { preconditionFailure() }
         
         withAnimation {
+            content.binding?.wrappedValue = false
             popped.append(content)
         }
-
+    }
+    private func goBack(index: Int) {
+        for _ in index..<pushed.count {
+            guard let content = pushed.popLast() else { preconditionFailure() }
+            content.binding?.wrappedValue = false
+            popped.append(content)
+        }
     }
     
     private func goForward() {
         guard let content = popped.popLast() else { preconditionFailure() }
         
         withAnimation {
+            content.binding?.wrappedValue = true
             pushed.append(content)
         }
     }
     
     private func popToRoot() {
+        pushed.reversed().forEach({ $0.binding?.wrappedValue = false })
         pushed.removeAll()
         popped.removeAll()
     }

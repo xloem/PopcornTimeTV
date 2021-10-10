@@ -13,7 +13,7 @@ import Combine
 struct PlayButton: View {
     let theme = Theme()
     
-    @State var media: Media
+    var media: Media
     @State var showTorrent: PlayTorrent?
     
     struct PlayTorrent: Identifiable, Equatable {

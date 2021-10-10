@@ -25,9 +25,7 @@ struct TabBarView: View {
     @State var selectedTab = Selection.movies
     #if os(macOS)
     @Environment(\.popToRoot) var popToRoot
-    @State var canSearch = false
-    @Environment(\.isSearching) var isSearching
-    @Environment(\.dismissSearch) var dismissSearch
+    @State var isVisible = false
     #endif
     
     @StateObject var searchModel = SearchViewModel()
@@ -88,7 +86,7 @@ struct TabBarView: View {
                 .hide(selectedTab != .search)
             DownloadsView()
                 .hide(selectedTab != .downloads)
-            if canSearch {
+            if isVisible {
                 EmptyView()
                     .searchable(text: $searchModel.search)
             }
@@ -97,10 +95,10 @@ struct TabBarView: View {
             selectedTab = .search
         })
         .onAppear(perform: {
-            canSearch = true
+            isVisible = true
         })
         .onDisappear(perform: {
-            canSearch = false
+            isVisible = false
         })
         .environment(\.currentTab, selectedTab)
         .toolbar(content: {
@@ -109,7 +107,6 @@ struct TabBarView: View {
                     selectedTab
                 }, set: { newValue in
                     selectedTab = newValue
-                    dismissSearch()
                     popToRoot()
                 })) {
                     Text("Movies").tag(Selection.movies)
@@ -119,6 +116,7 @@ struct TabBarView: View {
 //                     Image(systemName: "magnifyingglass").tag(Selection.search)
                 }
                 .pickerStyle(SegmentedPickerStyle())
+
             }
             
             ToolbarItem(placement: .principal) {
