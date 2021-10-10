@@ -19,6 +19,8 @@ struct MagnetTorrentLinkOpener: ViewModifier {
     }
     @State var playTorrent: PlayTorrent?
     
+    let anyUrlMatch = Set(arrayLiteral: "*")
+    
     func body(content: Content) -> some View {
         content
             .onOpenURL { url in
@@ -27,6 +29,7 @@ struct MagnetTorrentLinkOpener: ViewModifier {
             .fullScreenContent(item: $playTorrent, title: "", content: { item in
                 TorrentPlayerView(torrent: item.torrent, media: item.movie)
             })
+            .handlesExternalEvents(preferring: anyUrlMatch, allowing: anyUrlMatch)
     }
     
     func openUrl(url: URL) {
@@ -52,7 +55,7 @@ struct MagnetTorrentLinkOpener: ViewModifier {
             }
             
             let torrent = Torrent(url: torrentUrl)
-            let movie = Movie(id: id, torrents: [torrent])
+            let movie = Movie(title: url.lastPathComponent, id: id, torrents: [torrent])
             self.playTorrent = PlayTorrent(torrent: torrent, movie: movie)
         }
     }
