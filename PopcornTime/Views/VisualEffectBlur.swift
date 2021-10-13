@@ -64,30 +64,18 @@ extension VisualEffectBlur {
     }
     #elseif os(macOS)
     struct Representable<Content: View>: NSViewRepresentable {
-        let material: NSVisualEffectView.Material = .contentBackground
-        let blendingMode: NSVisualEffectView.BlendingMode = .withinWindow
-        let hostingController: NSHostingController<Content>
-        let visualEffectView: NSVisualEffectView
-        
-        init(content: Content) {
-            hostingController = NSHostingController(rootView: content)
-            hostingController.view.autoresizingMask = [.width, .height]
-            
-            visualEffectView = NSVisualEffectView()
-            visualEffectView.material = material
-            visualEffectView.blendingMode = blendingMode
-            visualEffectView.state = .active
-            visualEffectView.addSubview(hostingController.view)
-            visualEffectView.autoresizingMask = [.width, .height]
-        }
+        var content: Content
         
         func makeNSView(context: Context) -> NSVisualEffectView {
-            return visualEffectView
+            return context.coordinator.visualEffectView
         }
 
         func updateNSView(_ visualEffectView: NSVisualEffectView, context: Context) {
-            visualEffectView.material = material
-            visualEffectView.blendingMode = blendingMode
+            context.coordinator.update(content: content)
+        }
+        
+        func makeCoordinator() -> Coordinator {
+            Coordinator(content: content)
         }
     }
     #endif
@@ -129,6 +117,32 @@ public extension VisualEffectBlur where Content == EmptyView {
     }
 }
 #elseif os(macOS)
+// MARK: - Coordinator
+extension VisualEffectBlur.Representable {
+    class Coordinator {
+        let material: NSVisualEffectView.Material = .contentBackground
+        let blendingMode: NSVisualEffectView.BlendingMode = .withinWindow
+        let hostingController: NSHostingController<Content>
+        let visualEffectView: NSVisualEffectView
+
+        init(content: Content) {
+            hostingController = NSHostingController(rootView: content)
+            hostingController.view.autoresizingMask = [.width, .height]
+            
+            visualEffectView = NSVisualEffectView()
+            visualEffectView.material = material
+            visualEffectView.blendingMode = blendingMode
+            visualEffectView.state = .active
+            visualEffectView.addSubview(hostingController.view)
+            visualEffectView.autoresizingMask = [.width, .height]
+        }
+
+        func update(content: Content) {
+            hostingController.rootView = content
+        }
+    }
+}
+
 // MARK: - Content-less Initializer
 public extension VisualEffectBlur where Content == EmptyView {
     init() {
