@@ -23,15 +23,37 @@ typealias VLCPlayerView = VLCPlayerView_MAC
 struct VLCPlayerView_MAC: NSViewRepresentable {
     var mediaplayer = VLCMediaPlayer()
     
+    ///https://code.videolan.org/videolan/vlc/-/issues/25264
+    @State var fixedFirstTimeInvalidSize = false
+    
     func makeNSView(context: Context) -> NSView {
         let view = NSView()
-        view.autoresizingMask = [.width, .height]
-        mediaplayer.drawable = view
+        fixFirstTimeInvalidSize(view: view)
         return view
     }
     
-    func updateNSView(_ uiView: NSView, context: Context) {
-        mediaplayer.drawable = uiView
+    func updateNSView(_ view: NSView, context: Context) {
+        mediaplayer.drawable = view
+    }
+    
+    func fixFirstTimeInvalidSize(view: NSView) {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.005) {
+            if !fixedFirstTimeInvalidSize && !mediaplayer.hasVideoOut {
+                fixFirstTimeInvalidSize(view: view) // delay
+                return
+            }
+            
+            if !fixedFirstTimeInvalidSize, var frame = view.window?.frame {
+                frame.size.height += 1
+                view.window?.setFrame(frame, display: true)
+                fixedFirstTimeInvalidSize = true
+                // revert back
+                DispatchQueue.main.async {
+                    frame.size.height -= 1
+                    view.window?.setFrame(frame, display: true)
+                }
+            }
+        }
     }
 }
 #endif
