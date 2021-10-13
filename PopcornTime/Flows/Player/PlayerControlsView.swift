@@ -111,7 +111,7 @@ struct PlayerControlsView: View {
                     viewModel.progress.scrubbingProgress = value
                     viewModel.positionSliderDidDrag()
                 })) { started in
-                        viewModel.clickGesture()
+                    viewModel.clickGesture()
                 }
             }
         }

@@ -1,12 +1,10 @@
+import Foundation
+import CoreGraphics
 
-
-import UIKit
-
-
-extension UIScreen {
+extension CGSize {
     
-    var aspectRatio: String {
-        let numbers = [bounds.width, bounds.height]
+    var vlcAspectRatio: String {
+        let numbers = [self.width, self.height]
         
         // Normalize the input vector to that the maximum is 1.0,
         // and compute rational approximations of all components:

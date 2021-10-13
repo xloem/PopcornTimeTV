@@ -37,7 +37,18 @@ struct PopcornTime: App {
 //                TraktManager.shared.syncUserData()
 //            }
         }
+//        #if os(iOS) || os(macOS)
+//        .commands(content: {
+//            OpenCommand()
+//        })
+//        #endif
 //        .windowStyle(.hiddenTitleBar)
 //        .windowToolbarStyle(.unified(showsTitle: false))
+        
+        #if os(macOS)
+//        Settings {
+//            SettingsView()
+//        }
+        #endif
     }
 }

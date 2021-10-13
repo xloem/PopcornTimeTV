@@ -293,6 +293,12 @@
 		23B24D8026CA963E00B8CD84 /* FullScreenContent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23B24D7D26CA963E00B8CD84 /* FullScreenContent.swift */; };
 		23B4F07727118CD2002C5662 /* VisibleToolbarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23B4F07627118CD2002C5662 /* VisibleToolbarView.swift */; };
 		23B4F0782711CB28002C5662 /* SearchBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23F125D526E4D21B008097C5 /* SearchBarView.swift */; };
+		23B4F07927134BB2002C5662 /* TraktViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23901BFA26F64B3D00A7C292 /* TraktViewModel.swift */; };
+		23B4F07A27134BB2002C5662 /* TraktView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23901BF626F6496B00A7C292 /* TraktView.swift */; };
+		23B4F07C27134BB2002C5662 /* SettingsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2304530A26B541900050BCB8 /* SettingsViewModel.swift */; };
+		23B4F07E27135A4C002C5662 /* TorrentFileOpener.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23B4F07D27135A4C002C5662 /* TorrentFileOpener.swift */; };
+		23B4F080271361C3002C5662 /* TorrentFileOpener.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23B4F07D27135A4C002C5662 /* TorrentFileOpener.swift */; };
+		23B4F08127136F83002C5662 /* UIScreen+AspectRatio.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23BE4BF926C8598C0081D2AA /* UIScreen+AspectRatio.swift */; };
 		23BE4BF426C7F57C0081D2AA /* PlayerControlsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23BE4BF326C7F57C0081D2AA /* PlayerControlsView.swift */; };
 		23BE4BF626C814650081D2AA /* VolumeSlider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23BE4BF526C814650081D2AA /* VolumeSlider.swift */; };
 		23BE4BF826C815790081D2AA /* AirplayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23BE4BF726C815790081D2AA /* AirplayView.swift */; };
@@ -487,6 +493,7 @@
 		23B0A01526B9818100844309 /* TorrentPlayerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TorrentPlayerView.swift; sourceTree = "<group>"; };
 		23B24D7D26CA963E00B8CD84 /* FullScreenContent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FullScreenContent.swift; sourceTree = "<group>"; };
 		23B4F07627118CD2002C5662 /* VisibleToolbarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VisibleToolbarView.swift; sourceTree = "<group>"; };
+		23B4F07D27135A4C002C5662 /* TorrentFileOpener.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TorrentFileOpener.swift; sourceTree = "<group>"; };
 		23BE4BF326C7F57C0081D2AA /* PlayerControlsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerControlsView.swift; sourceTree = "<group>"; };
 		23BE4BF526C814650081D2AA /* VolumeSlider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VolumeSlider.swift; sourceTree = "<group>"; };
 		23BE4BF726C815790081D2AA /* AirplayView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AirplayView.swift; sourceTree = "<group>"; };
@@ -653,6 +660,7 @@
 				23313B19267E3A9200774A85 /* LeftSidePanelView.swift */,
 				23E2A6C826EB8C3300F24931 /* TopShelfLinkOpener.swift */,
 				23E4E18426F7425300CFC3F8 /* MagnetTorrentLinkOpener.swift */,
+				23B4F07D27135A4C002C5662 /* TorrentFileOpener.swift */,
 				23025D94267E71C400229559 /* Movies */,
 				2343A7672688AEEC00B824E7 /* Shows */,
 				237F286D26935E2300FE036C /* Watchlist */,
@@ -1467,6 +1475,7 @@
 				23A2BDC626BEDBE2004B864E /* Array+Extension.swift in Sources */,
 				23A2BD8B26BED9F6004B864E /* MovieView.swift in Sources */,
 				23A2BD9F26BEDA0C004B864E /* ShowDetailsViewModel.swift in Sources */,
+				23B4F080271361C3002C5662 /* TorrentFileOpener.swift in Sources */,
 				23A2BD9B26BEDA07004B864E /* ActorsCrewView.swift in Sources */,
 				236A11BB26C6786200AFF1FD /* VLCPlayerView.swift in Sources */,
 				23A2BD8726BED9E8004B864E /* App.swift in Sources */,
@@ -1541,6 +1550,7 @@
 				23B24D7126CA761300B8CD84 /* AudioView.swift in Sources */,
 				237ECA4326B84A4200EE8B46 /* Locale+Langs.swift in Sources */,
 				23B24D7326CA76CB00B8CD84 /* UIFont+Style.swift in Sources */,
+				23B4F07E27135A4C002C5662 /* TorrentFileOpener.swift in Sources */,
 				23DB7E9C2709F3CD0084397F /* NavigationLink.swift in Sources */,
 				237ECA1926B8481800EE8B46 /* TermsOfServiceView.swift in Sources */,
 				23A2BD7826BC5923004B864E /* ShowView.swift in Sources */,
@@ -1552,6 +1562,7 @@
 				237ECA1B26B8481800EE8B46 /* TabBarView.swift in Sources */,
 				233B5F6C26E65CF000552FA3 /* SubtitlesViewModel.swift in Sources */,
 				23A10F3F26C699D20062D9CE /* DownloadDetailsView.swift in Sources */,
+				23B4F07C27134BB2002C5662 /* SettingsViewModel.swift in Sources */,
 				23A2BD8626BE9A2E004B864E /* MediaRatingsLoader.swift in Sources */,
 				23BEFC9E26D79862008EDC44 /* PlayerSubtitleModel.swift in Sources */,
 				2383A13726BC3D2200A0346C /* ActorsCrewView.swift in Sources */,
@@ -1565,12 +1576,14 @@
 				23A10F4326C69AFC0062D9CE /* DownloadProgressView.swift in Sources */,
 				237ECA1526B847C100EE8B46 /* App.swift in Sources */,
 				23E4E18626F7425300CFC3F8 /* MagnetTorrentLinkOpener.swift in Sources */,
+				23B4F07A27134BB2002C5662 /* TraktView.swift in Sources */,
 				23CD7957270DF81A00AE001C /* SearchView.swift in Sources */,
 				237ECA3D26B84A3600EE8B46 /* JSONCache.swift in Sources */,
 				23B24D7526CA775800B8CD84 /* UIColor+Extension.swift in Sources */,
 				23DC476526F66C43006E18D4 /* AppScheme.swift in Sources */,
 				23461D9026DD3025007C6520 /* AirplayView.swift in Sources */,
 				23B4F0782711CB28002C5662 /* SearchBarView.swift in Sources */,
+				23B4F07927134BB2002C5662 /* TraktViewModel.swift in Sources */,
 				23BEFC9A26D7952E008EDC44 /* PlayerAudioModel.swift in Sources */,
 				23A10F4126C699D80062D9CE /* DownloadViewModel.swift in Sources */,
 				2383A13926BC3D4600A0346C /* PersonDetailsView.swift in Sources */,
@@ -1588,6 +1601,7 @@
 				23B24D7626CA784400B8CD84 /* PlayerView.swift in Sources */,
 				23A10F4426C69B090062D9CE /* RotateAnimation.swift in Sources */,
 				237ECA3E26B84A3600EE8B46 /* CodableCaching.swift in Sources */,
+				23B4F08127136F83002C5662 /* UIScreen+AspectRatio.swift in Sources */,
 				23A10F3E26C699D00062D9CE /* DownloadsViewModel.swift in Sources */,
 				23C4AD2E26FF4EEE007B8E09 /* RatingsOverlayView.swift in Sources */,
 				23B24D7A26CA78B600B8CD84 /* ExtendedSubtitlesView.swift in Sources */,
@@ -2161,7 +2175,7 @@
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/alextud/PopcornTorrent";
 			requirement = {
-				branch = spm_ios15;
+				branch = master;
 				kind = branch;
 			};
 		};

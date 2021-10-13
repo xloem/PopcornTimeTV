@@ -262,7 +262,7 @@ class PlayerViewModel: NSObject, ObservableObject {
         resetIdleTimer()
         progress.isScrubbing = false
         progress.hint = .none
-        showControls = false
+//        showControls = false
     }
     
     func startScrubbing() {
@@ -326,7 +326,8 @@ class PlayerViewModel: NSObject, ObservableObject {
         if mediaplayer.videoCropGeometry == nil // Change to aspect to scale to fill
         {
             let screen =  UIScreen.screens.count > 1 ? UIScreen.screens[1] : UIScreen.main
-            mediaplayer.videoCropGeometry = UnsafeMutablePointer<Int8>(mutating: (screen.aspectRatio as NSString).utf8String)
+            let size = screen.bounds.size
+            mediaplayer.videoCropGeometry = UnsafeMutablePointer<Int8>(mutating: (size.vlcAspectRatio as NSString).utf8String)
 //            screenshotImageView!.contentMode = .scaleAspectFill
         } else // Change aspect ratio to scale to fit
         {
