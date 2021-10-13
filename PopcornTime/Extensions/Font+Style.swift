@@ -3,7 +3,7 @@
 import Foundation
 
 
-enum FontStyle: String {
+enum FontStyle: String, Codable {
     case bold = "Bold"
     case italic = "Italic"
     case boldItalic = "Bold-Italic"

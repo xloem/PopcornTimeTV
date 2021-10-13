@@ -48,8 +48,8 @@ class PlayerSubtitleModel {
         }
         let vlcAppearance = mediaplayer as VLCFontAppearance
         vlcAppearance.setTextRendererFontSize?(NSNumber(value: settings.size.rawValue))
-        vlcAppearance.setTextRendererFontColor?(NSNumber(value: settings.color.hexInt()))
-        vlcAppearance.setTextRendererFont?(settings.font.fontName as NSString)
+        vlcAppearance.setTextRendererFontColor?(NSNumber(value: settings.color.rawValue))
+        vlcAppearance.setTextRendererFont?(settings.fontName as NSString)
         vlcAppearance.setTextRendererFontForceBold?(NSNumber(booleanLiteral: settings.style == .bold || settings.style == .boldItalic))
         
         mediaplayer.media.addOptions([vlcSettingTextEncoding: settings.encoding])

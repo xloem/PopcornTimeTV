@@ -197,7 +197,7 @@ struct SettingsView: View {
     
     @ViewBuilder
     var subtitleFontColorButton: some View {
-        let colorValue = UIColor.systemColors.first(where: {$0 == subtitleSettings.color})?.localizedString ?? ""
+        let colorValue = SubtitleColor.allCases.first(where: {$0 == subtitleSettings.color})?.localizedString ?? ""
         button(text: "Color", value: colorValue) {
             showSubtitleFontColorAlert = true
         }
@@ -207,9 +207,9 @@ struct SettingsView: View {
     }
     
     var subtitleFontColorAlert: ActionSheet {
-        let values = UIColor.systemColors
+        let values = SubtitleColor.allCases
         let actions = values.map ({ color -> Alert.Button in
-            return Alert.Button.default(Text(color.localizedString!)) {
+            return Alert.Button.default(Text(color.localizedString)) {
                 subtitleSettings.color = color
                 subtitleSettings.save()
             }
@@ -226,7 +226,7 @@ struct SettingsView: View {
     
     @ViewBuilder
     var subtitleFontButton: some View {
-        button(text: "Font", value: subtitleSettings.font.familyName) {
+        button(text: "Font", value: subtitleSettings.fontFamilyName) {
             showSubtitleFontAlert = true
         }
         .actionSheet(isPresented: $showSubtitleFontAlert) {
@@ -235,14 +235,14 @@ struct SettingsView: View {
     }
     
     var subtitleFontAlert: ActionSheet {
-        let values = UIFont.familyNames
+        let values = Font.familyNames
         let actions = values.map ({ fontFamily -> Alert.Button in
             return Alert.Button.default(Text(fontFamily)) {
-                guard let fontName = UIFont.fontNames(forFamilyName: fontFamily).first,
-                let font = UIFont(name: fontName, size: 16) else {
+                guard let fontName = Font.fontName(familyName: fontFamily) else {
                     return
                 }
-                subtitleSettings.font = font
+                subtitleSettings.fontName = fontName
+                subtitleSettings.fontFamilyName = fontFamily
                 subtitleSettings.save()
             }
         })

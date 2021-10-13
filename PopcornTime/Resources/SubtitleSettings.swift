@@ -1,18 +1,11 @@
 
 
 import Foundation
-#if canImport(UIKit)
-import UIKit
-#else
-import AppKit
-typealias UIColor = NSColor
-typealias UIFont = NSFont
-typealias UIFontDescriptor = NSFontDescriptor
-#endif
+import SwiftUI
 
-class SubtitleSettings: NSObject, NSCoding {
+class SubtitleSettings: Codable {
     
-    enum Size: Float, CaseIterable {
+    enum Size: Float, CaseIterable, Codable {
         case small = 20.0
         case medium = 16.0
         case mediumLarge = 12.0
@@ -80,61 +73,52 @@ class SubtitleSettings: NSObject, NSCoding {
     }
     
     var size: Size = .medium
-    var color: UIColor = .white
+    var color: SubtitleColor = .white
     var encoding: String = "UTF-8"
     var language: String? = nil
-    var font: UIFont = UIFont.systemFont(ofSize: CGFloat(Size.medium.rawValue))
+    var fontName: String = defaultFont.name
+    var fontFamilyName: String = defaultFont.familyName
     var style: FontStyle = .normal
+    
+    enum CodingKeys: String, CodingKey {
+        case size, color, encoding, language, fontName, fontFamilyName, style
+    }
+    
+    // not saved
     var subtitlesSelectedForVideo: [Any] = Array()
     
-    static let shared = SubtitleSettings()
-    
-    override init() {
-        guard let codedData = Session.subtitleSettings,
-              let settings = try? NSKeyedUnarchiver.unarchiveTopLevelObjectWithData(codedData) as? SubtitleSettings else {
-                  return
-              }
-        self.size = settings.size
-        self.color = settings.color
-        self.encoding = settings.encoding
-        self.language = settings.language
-        self.font = settings.font
-        self.style = settings.style
-    }
+    static let shared = Session.subtitleSettings.flatMap({ try? JSONDecoder().decode(SubtitleSettings.self, from: $0) }) ?? SubtitleSettings()
     
     func save() {
-        subtitlesSelectedForVideo.removeAll()
-        Session.subtitleSettings = try? NSKeyedArchiver.archivedData(withRootObject: self, requiringSecureCoding: false)
-        UserDefaults.standard.synchronize()
+        Session.subtitleSettings = try? JSONEncoder().encode(self)
     }
     
-    required init?(coder aDecoder: NSCoder) {
-        guard let color = aDecoder.decodeObject(of: UIColor.self, forKey: "color"),
-            let rawSize = aDecoder.decodeObject(forKey: "size") as? CGFloat,
-            let size = Size(rawValue: Float(rawSize)),
-            let encoding = aDecoder.decodeObject(of: NSString.self, forKey: "encoding") as String?,
-            let descriptor = aDecoder.decodeObject(of: UIFontDescriptor.self, forKey: "font"),
-            let rawValue = aDecoder.decodeObject(of: NSString.self, forKey: "style") as String?,
-            let style = FontStyle(rawValue: rawValue) else { return nil }
-        self.size = size
-        self.color = color
-        self.encoding = encoding
-        self.language = aDecoder.decodeObject(of: NSString.self, forKey: "language") as String?
-        let font = UIFont(descriptor: descriptor, size: CGFloat(size.rawValue))
-        #if canImport(UIKit)
-        self.font = font
-        #else
-        self.font = font!
+    static var defaultFont: (name: String, familyName: String) {
+        #if os(iOS) || os(tvOS)
+        let font = UIFont.systemFont(ofSize: 20)
+        return (font.fontName, font.familyName)
+        #elseif os(macOS)
+        let font = NSFont.systemFont(ofSize: 20)
+        return (font.fontName, font.familyName ?? "N/A")
         #endif
-        self.style = style
+    }
+}
+
+
+extension Font {
+    static var familyNames: [String] {
+        #if os(iOS) || os(tvOS)
+        return UIFont.familyNames
+        #elseif os(macOS)
+        return NSFontManager.shared.availableFontFamilies
+        #endif
     }
     
-    func encode(with aCoder: NSCoder) {
-        aCoder.encode(CGFloat(size.rawValue), forKey: "size")
-        aCoder.encode(color, forKey: "color")
-        aCoder.encode(encoding, forKey: "encoding")
-        aCoder.encode(language, forKey: "language")
-        aCoder.encode(font.fontDescriptor, forKey: "font")
-        aCoder.encode(style.rawValue, forKey: "style")
+    static func fontName(familyName: String) -> String? {
+        #if os(iOS) || os(tvOS)
+        return UIFont.fontNames(forFamilyName: familyName).first
+        #elseif os(macOS)
+        return NSFontManager.shared.font(withFamily: familyName, traits: [], weight: 2, size: 20)?.fontName
+        #endif
     }
 }
