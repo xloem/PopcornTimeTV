@@ -10,6 +10,7 @@ import SwiftUI
 import PopcornKit
 
 struct RatingsOverlayView: View {
+    let theme = Theme()
     var ratings: Ratings?
     
     var body: some View {
@@ -20,7 +21,7 @@ struct RatingsOverlayView: View {
                         Image("metacritic")
                             .resizable()
                             .aspectRatio(contentMode: .fit)
-                            .frame(height: 26)
+                            .frame(height: theme.imageHeight)
                         Text(metascore)
                     }
                 }
@@ -29,7 +30,7 @@ struct RatingsOverlayView: View {
                         Image("imdb")
                             .resizable()
                             .aspectRatio(contentMode: .fit)
-                            .frame(height: 26)
+                            .frame(height: theme.imageHeight)
                         Text(imdb)
                     }
                 }
@@ -38,7 +39,7 @@ struct RatingsOverlayView: View {
                         Image("rotten-tomatoes")
                             .resizable()
                             .aspectRatio(contentMode: .fit)
-                            .frame(height: 26)
+                            .frame(height: theme.imageHeight)
                         Text(rotten)
                     }
                 }
@@ -46,9 +47,14 @@ struct RatingsOverlayView: View {
             .font(.caption)
             .lineLimit(1)
             .frame(maxWidth: .infinity)
-            .padding([.top, .bottom])
+            .padding(.vertical, theme.verticalPadding)
             .background(.regularMaterial)
         }
+    }
+    
+    struct Theme {
+        let imageHeight: CGFloat = value(tvOS: 26, macOS: 20)
+        let verticalPadding: CGFloat = value(tvOS: 10, macOS: 5)
     }
 }
 

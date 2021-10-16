@@ -11,15 +11,16 @@ import Kingfisher
 import PopcornKit
 
 struct MovieView: View {
-    struct Theme {
-        let fontSize: CGFloat = value(tvOS: 28, macOS: 16)
-    }
-    static let theme = Theme()
+    let theme = Theme()
     
     var movie: Movie
     var lineLimit = 1
     var ratingsLoader: MovieRatingsLoader?
     @Environment(\.isFocused) var focused: Bool
+    #if os(iOS)
+    @Environment(\.isButtonPress) var isButtonPress: Bool
+    #endif
+    @State var longPress: Bool = false
     
     var body: some View {
         VStack {
@@ -37,17 +38,17 @@ struct MovieView: View {
                         Image("Watched Indicator")
                     }
                 }
-                .overlay(alignment: .bottom) {
-                    if focused {
+                .overlay(alignment: theme.ratingAlignment) {
+                    if focused || longPress {
                         RatingsOverlayView(ratings: movie.ratings)
-                            .transition(.move(edge: .bottom))
+                            .transition(.move(edge: theme.ratingEdge))
                     }
                 }
                 .cornerRadius(10)
                 .shadow(radius: 5)
 //                .padding(.bottom, 5)
             Text(movie.title)
-                .font(.system(size: MovieView.theme.fontSize, weight: .medium))
+                .font(.system(size: theme.fontSize, weight: .medium))
 //                .font(.caption)
                 .multilineTextAlignment(.center)
                 .lineLimit(lineLimit)
@@ -55,9 +56,23 @@ struct MovieView: View {
                 .padding(0)
                 .zIndex(10)
         }
+        .drawingGroup() // increase scroll perfomance
+        #if os(iOS)
+        .onChange(of: isButtonPress, perform: { newValue in
+            withAnimation(Animation.easeOut.delay(newValue ? 0.5 : 0)) {
+                self.longPress = newValue
+            }
+        })
+        #endif
         .onAppear {
             ratingsLoader?.loadRatingIfMissing(movie: movie)
         }
+    }
+    
+    struct Theme {
+        let fontSize: CGFloat = value(tvOS: 28, macOS: 16)
+        let ratingEdge: Edge = value(tvOS: .bottom, macOS: .top)
+        let ratingAlignment: Alignment = value(tvOS: .bottom, macOS: .top)
     }
 }
 

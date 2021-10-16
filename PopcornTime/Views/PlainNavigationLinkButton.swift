@@ -26,6 +26,7 @@ struct PlainNavigationLinkButton: View {
             #if os(iOS)
             .compositingGroup()
             .overlay(overlayColor)
+            .environment(\.isButtonPress, configuration.isPressed)
             #endif
             .onChange(of: focused) { newValue in
                 if newValue {
@@ -74,3 +75,17 @@ struct PlainButton: View {
             }
     }
 }
+
+
+#if os(iOS)
+struct ButtonPressKey: EnvironmentKey {
+    static let defaultValue: Bool = false
+}
+
+extension EnvironmentValues {
+    var isButtonPress: Bool {
+        get { self[ButtonPressKey.self] }
+        set { self[ButtonPressKey.self] = newValue }
+    }
+}
+#endif

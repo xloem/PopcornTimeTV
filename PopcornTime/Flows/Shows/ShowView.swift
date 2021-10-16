@@ -11,14 +11,15 @@ import PopcornKit
 import Kingfisher
 
 struct ShowView: View {
-    struct Theme {
-        let fontSize: CGFloat = value(tvOS: 28, macOS: 18)
-    }
-    static let theme = Theme()
+    let theme = Theme()
     
     var show: Show
     var ratingsLoader: ShowRatingsLoader?
     @Environment(\.isFocused) var focused: Bool
+    #if os(iOS)
+    @Environment(\.isButtonPress) var isButtonPress: Bool
+    #endif
+    @State var longPress: Bool = false
     
     var body: some View {
         VStack {
@@ -31,17 +32,17 @@ struct ShowView: View {
                         .aspectRatio(contentMode: .fit)
                 }
                 .aspectRatio(contentMode: .fit)
-                .overlay(alignment: .bottom) {
-                    if focused {
+                .overlay(alignment: theme.ratingAlignment) {
+                    if focused || longPress {
                         RatingsOverlayView(ratings: show.ratings)
-                            .transition(.move(edge: .bottom))
+                            .transition(.move(edge: theme.ratingEdge))
                     }
                 }
                 .cornerRadius(10)
                 .shadow(radius: 5)
 //                .padding(.bottom, 5)
             Text(show.title)
-                .font(.system(size: ShowView.theme.fontSize, weight: .medium))
+                .font(.system(size: theme.fontSize, weight: .medium))
                 .multilineTextAlignment(.center)
                 .lineLimit(1)
                 .shadow(color: .init(white: 0, opacity: 0.6), radius: 2, x: 0, y: 1)
@@ -49,9 +50,23 @@ struct ShowView: View {
                 .zIndex(10)
 //                .frame(height: 80)
         }
+        .drawingGroup() // increase scroll perfomance
+        #if os(iOS)
+        .onChange(of: isButtonPress, perform: { newValue in
+            withAnimation(Animation.easeOut.delay(newValue ? 0.5 : 0)) {
+                self.longPress = newValue
+            }
+        })
+        #endif
         .onAppear {
             ratingsLoader?.loadRatingIfMissing(show: show)
         }
+    }
+    
+    struct Theme {
+        let fontSize: CGFloat = value(tvOS: 28, macOS: 16)
+        let ratingEdge: Edge = value(tvOS: .bottom, macOS: .top)
+        let ratingAlignment: Alignment = value(tvOS: .bottom, macOS: .top)
     }
 }
 
