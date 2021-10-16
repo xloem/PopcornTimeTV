@@ -244,11 +244,10 @@ struct MovieDetailsView: View {
             Text("Viewers Also Watched")
                 .font(.callout)
                 .foregroundColor(.appSecondary)
-                .padding(.leading, theme.watchedSection.spacing)
+                .padding(.leading, theme.watchedSection.leading)
                 .padding(.top, 14)
             ScrollView(.horizontal, showsIndicators: false) {
                 LazyHStack(alignment: .center, spacing: theme.watchedSection.spacing) {
-                    Spacer(minLength: theme.watchedSection.spacing)
                     ForEach(movie.related, id: \.self) { movie in
                         NavigationLink(
                             destination: MovieDetailsView(viewModel: MovieDetailsViewModel(movie: movie)),
@@ -259,8 +258,9 @@ struct MovieDetailsView: View {
                             .buttonStyle(PlainNavigationLinkButtonStyle())
                     }
                 }
+                .padding(.leading, theme.watchedSection.leading)
                 #if os(tvOS)
-                .padding([.top, .bottom], 30) // on focus zoom will not be clipped
+                .padding([.top, .bottom], 20) // on focus zoom will not be clipped
                 #endif
             }
         }
@@ -294,10 +294,11 @@ extension MovieDetailsView {
         let leftSectionLeading: CGFloat = value(tvOS: 100, macOS: 30)
         let starSize: CGSize = value(tvOS: CGSize(width: 220, height: 40), macOS: CGSize(width: 110, height: 20))
         let starOffset: CGFloat = value(tvOS: -8, macOS: -4)
-        let watchedSection: (height: CGFloat, cellWidth: CGFloat, spacing: CGFloat)
-            = (height: value(tvOS: 450, macOS: 240),
+        let watchedSection: (height: CGFloat, cellWidth: CGFloat, spacing: CGFloat, leading: CGFloat)
+            = (height: value(tvOS: 450, macOS: 280),
                cellWidth: value(tvOS: 220, macOS: 150),
-               spacing: value(tvOS: 90, macOS: 40))
+               spacing: value(tvOS: 90, macOS: 30),
+               leading: value(tvOS: 90, macOS: 50))
         let backgroundOpacity = value(tvOS: 0.3, macOS: 0.5)
         let titleFont: Font = Font.system(size: value(tvOS: 76, macOS: 50), weight: .medium)
         let section1Height: CGFloat = value(tvOS: 960, macOS: 710)
