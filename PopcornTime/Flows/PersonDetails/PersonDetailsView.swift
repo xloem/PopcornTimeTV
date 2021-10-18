@@ -11,6 +11,7 @@ import PopcornKit
 import Kingfisher
 
 struct PersonDetailsView: View {
+    let theme = Theme()
     @StateObject var viewModel: PersonDetailsViewModel
     
     var body: some View {
@@ -36,8 +37,7 @@ struct PersonDetailsView: View {
                     showSection
                 }
             }
-            .padding(.leading, 90)
-            .padding(.horizontal)
+//            .padding(.horizontal)
             .ignoresSafeArea(edges: [.leading, .trailing])
             .onAppear {
                 viewModel.load()
@@ -55,8 +55,9 @@ struct PersonDetailsView: View {
                 .font(.callout)
                 .foregroundColor(.appSecondary)
                 .padding(.top, 14)
+                .padding(.leading, theme.leading)
             ScrollView(.horizontal) {
-                HStack(spacing: 40) {
+                HStack(spacing: theme.spacing) {
                     ForEach(viewModel.movies, id: \.self) { movie in
                         NavigationLink(
                             destination: MovieDetailsView(viewModel: MovieDetailsViewModel(movie: movie)),
@@ -68,7 +69,9 @@ struct PersonDetailsView: View {
 //                            .padding([.leading, .trailing], 10)
                     }
                     .padding(20) // allow zoom
-                }.padding(.all, 0)
+                }
+                .padding(.all, 0)
+                .padding(.leading, theme.leading)
             }
         }
     }
@@ -80,10 +83,10 @@ struct PersonDetailsView: View {
                 .font(.callout)
                 .foregroundColor(.appSecondary)
                 .padding(.top, 14)
+                .padding(.leading, theme.leading)
             ScrollView(.horizontal) {
-                HStack(spacing: 40) {
+                HStack(spacing: theme.spacing) {
                     ForEach(viewModel.shows, id: \.self) { show in
-                        #if os(tvOS)
                         NavigationLink(
                             destination: ShowDetailsView(viewModel: ShowDetailsViewModel(show: show)),
                             label: {
@@ -92,12 +95,20 @@ struct PersonDetailsView: View {
                             })
                             .buttonStyle(PlainNavigationLinkButtonStyle())
 //                            .padding([.leading, .trailing], 10)
-                        #endif
                     }
                     .padding(20) // allow zoom
-                }.padding(.all, 0)
+                }
+                .padding(.all, 0)
+                .padding(.leading, theme.leading)
             }
         }
+    }
+}
+
+extension PersonDetailsView {
+    struct Theme {
+        let leading: CGFloat = value(tvOS: 90, macOS: 50)
+        let spacing: CGFloat = value(tvOS: 40, macOS: 20)
     }
 }
 
@@ -107,9 +118,11 @@ struct PersonDetailView_Previews: PreviewProvider {
         let viewModel = PersonDetailsViewModel(person: actor)
         viewModel.movies = Movie.dummiesFromJSON()
         viewModel.shows = Show.dummiesFromJSON()
+        viewModel.didLoad = true
+        
         return VStack {
             PersonDetailsView(viewModel: viewModel)
         }
-        .preferredColorScheme(.dark)
+//        .preferredColorScheme(.dark)
     }
 }

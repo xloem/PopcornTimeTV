@@ -77,5 +77,6 @@ struct PersonView_Previews: PreviewProvider {
             .frame(width: 220, height: 321, alignment: .leading)
         }
             .previewLayout(.sizeThatFits)
+            .preferredColorScheme(.dark)
     }
 }
