@@ -145,7 +145,7 @@ struct ShowDetailsView: View {
         let genre = show.genres.first?.localizedCapitalized.localized
         let year = show.year
         
-        let items = [Text([genre, year].compactMap({$0}).joined(separator: "\t"))]
+        let items = [genre, year].compactMap({$0}).map{Text($0)}
             + (["HD", "CC"]).map { Text(Image($0).renderingMode(.template)) }
         
         let watchOn: String = .localizedStringWithFormat("Watch %@ on %@".localized, show.title, show.network ?? "TV")

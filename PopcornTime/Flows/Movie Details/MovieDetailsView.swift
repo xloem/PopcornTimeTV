@@ -181,7 +181,7 @@ struct MovieDetailsView: View {
         let runtime = formatter.string(from: TimeInterval(movie.runtime) * 60)
         let year = movie.year
         
-        let items = [Text([runtime, year].compactMap({$0}).joined(separator: "\t"))]
+        let items = [runtime, year].compactMap({$0}).map{Text($0)}
         + ([movie.certification, "HD", "CC"]).filter{ !$0.isEmpty }.map {
                 Text(Image($0).renderingMode(.template))
             }
