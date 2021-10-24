@@ -35,19 +35,25 @@ struct TabBarView: View {
         TabView(selection: $selectedTab) {
             MoviesView()
                 .tabItem {
+                    #if os(iOS)
                     Image("Movies On").renderingMode(.template)
+                    #endif
                     Text("Movies")
                 }
                 .tag(Selection.movies)
             ShowsView()
                 .tabItem {
+                    #if os(iOS)
                     Image("Shows On").renderingMode(.template)
+                    #endif
                     Text("Shows")
                 }
                 .tag(Selection.shows)
             WatchlistView()
                 .tabItem {
+                    #if os(iOS)
                     Image("Watchlist On").renderingMode(.template)
+                    #endif
                     Text("Watchlist")
                 }
                 .tag(Selection.watchlist)
@@ -58,14 +64,18 @@ struct TabBarView: View {
                 .tag(Selection.search)
             DownloadsView()
                 .tabItem {
+                    #if os(iOS)
                     Image(systemName: "square.and.arrow.down")
+                    #endif
                     Text("Downloads")
                 }
                 .tag(Selection.downloads)
             #if os(tvOS) || os(iOS)
             SettingsView()
                 .tabItem {
+                    #if os(iOS)
                     Image("Settings On").renderingMode(.template)
+                    #endif
                     Text("Settings")
                 }
                 .tag(Selection.settings)

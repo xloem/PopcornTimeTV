@@ -46,17 +46,14 @@ struct MovieView: View {
                 }
                 .cornerRadius(10)
                 .shadow(radius: 5)
-//                .padding(.bottom, 5)
             Text(movie.title)
                 .font(.system(size: theme.fontSize, weight: .medium))
-//                .font(.caption)
                 .multilineTextAlignment(.center)
                 .lineLimit(lineLimit)
                 .shadow(color: .init(white: 0, opacity: 0.6), radius: 2, x: 0, y: 1)
                 .padding(0)
-                .zIndex(10)
+                .drawingGroup() // increase scroll perfomance
         }
-        .drawingGroup() // increase scroll perfomance
         #if os(iOS)
         .onChange(of: isButtonPress, perform: { newValue in
             withAnimation(Animation.easeOut.delay(newValue ? 0.5 : 0)) {
@@ -78,17 +75,15 @@ struct MovieView: View {
 
 struct MovieView_Previews: PreviewProvider {
     static var previews: some View {
-        MovieView(movie: Movie.dummy())
-            .background(Color.red)
-            .frame(width: 250, height: 460, alignment: .center)
-            .previewLayout(.sizeThatFits)
-            .preferredColorScheme(.dark)
-        
-//        MovieView(movie: Movie.dummy(ratings: .init(awards: nil, imdbRating: "24", metascore: "50", rottenTomatoes: "20")))
-//            .background(Color.red)
-//            .frame(width: 250, height: 460, alignment: .center)
-//            .previewLayout(.sizeThatFits)
-//            .preferredColorScheme(.dark)
-//            .previewDisplayName("Ratings")
+        Group {
+            MovieView(movie: Movie.dummy())
+            
+            MovieView(movie: Movie.dummy(ratings: .init(awards: nil, imdbRating: "24", metascore: "50", rottenTomatoes: "20")), longPress: true)
+                .previewDisplayName("Ratings")
+        }
+        .frame(width: 250, height: 460, alignment: .center)
+        .background(Color.red)
+        .previewLayout(.sizeThatFits)
+        .preferredColorScheme(.dark)
     }
 }

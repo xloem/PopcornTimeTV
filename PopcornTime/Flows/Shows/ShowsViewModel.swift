@@ -66,12 +66,13 @@ class ShowsViewModel: ObservableObject, ShowRatingsLoader {
 
 
 extension Show {
-    static func dummy() -> Self {
+    static func dummy(ratings: Ratings? = nil) -> Self {
         var show = Show.init(JSON: showDetailsJSON)!
         show.actors = .init(JSONArray: showActorsJSON)
         show.crew = .init(JSONArray: showCrewJSON)
         show.related = dummiesFromJSON()
         show.episodes = .init(JSONArray: showEpisodesJSON)
+        show.ratings = ratings
         return show
     }
     

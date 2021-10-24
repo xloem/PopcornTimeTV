@@ -40,17 +40,14 @@ struct ShowView: View {
                 }
                 .cornerRadius(10)
                 .shadow(radius: 5)
-//                .padding(.bottom, 5)
             Text(show.title)
                 .font(.system(size: theme.fontSize, weight: .medium))
                 .multilineTextAlignment(.center)
                 .lineLimit(1)
                 .shadow(color: .init(white: 0, opacity: 0.6), radius: 2, x: 0, y: 1)
                 .padding(0)
-                .zIndex(10)
-//                .frame(height: 80)
+                .drawingGroup() // increase scroll perfomance
         }
-        .drawingGroup() // increase scroll perfomance
         #if os(iOS)
         .onChange(of: isButtonPress, perform: { newValue in
             withAnimation(Animation.easeOut.delay(newValue ? 0.5 : 0)) {
@@ -72,10 +69,15 @@ struct ShowView: View {
 
 struct ShowView_Previews: PreviewProvider {
     static var previews: some View {
-        ShowView(show: Show.dummy())
-            .background(Color.red)
-            .frame(width: 250, height: 460, alignment: .center)
-            .previewLayout(.sizeThatFits)
-            .preferredColorScheme(.dark)
+        Group {
+            ShowView(show: Show.dummy())
+            
+            ShowView(show: Show.dummy(ratings: .init(awards: nil, imdbRating: "24", metascore: "50", rottenTomatoes: "20")), longPress: true)
+                .previewDisplayName("Ratings")
+        }
+        .frame(width: 250, height: 460, alignment: .center)
+        .background(Color.red)
+        .previewLayout(.sizeThatFits)
+        .preferredColorScheme(.dark)
     }
 }

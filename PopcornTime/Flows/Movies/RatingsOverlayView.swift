@@ -48,6 +48,7 @@ struct RatingsOverlayView: View {
             .lineLimit(1)
             .frame(maxWidth: .infinity)
             .padding(.vertical, theme.verticalPadding)
+            .drawingGroup()
             .background(.regularMaterial)
         }
     }
