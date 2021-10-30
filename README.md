@@ -5,13 +5,9 @@
 ## Popcorn Time for tvOS | iOS | macOS
 
 [![Platform](http://img.shields.io/badge/platform-iOS%20%7C%20tvOS-lightgrey.svg?style=flat)](https://github.com/PopcornTimeTV)
-[![Build Status](https://travis-ci.org/PopcornTimeTV/PopcornTimeTV.svg?branch=master)](https://travis-ci.org/PopcornTimeTV/PopcornTimeTV)
-[![Twitter](https://img.shields.io/badge/twitter-@Popcorn%20Time-3299EC.svg?style=flat)](https://twitter.com/popcorntimetv)
-[![Reddit](https://img.shields.io/badge/discussion-reddit-red.svg?style=flat)](https://reddit.com/r/popcorntime)
-[![Facebook](https://img.shields.io/badge/facebook-Popcorn%20Time-354F88.svg?style=flat)](https://www.facebook.com/PopcornTimedotsh)
 [![License](https://img.shields.io/badge/license-GPL_v3-373737.svg?style=flat)](https://github.com/PopcornTimeTV/PopcornTimeTV/blob/master/LICENSE.md)
 
-PopcornTimeTV was an Apple TV, iPhone and iPad application to torrent movies and tv shows for streaming.
+PopcornTimeTV is an Apple TV, iPhone and iPad application to torrent movies and tv shows for streaming.
 
 ## Compile yourself?
 
@@ -29,28 +25,6 @@ $ bundle exec pod repo update
 $ bundle exec pod install
 $ open PopcornTime.xcworkspace
 ```
-
-## Versioning
-
-For transparency and insight into our release cycle, and for striving to maintain backward compatibility, Popcorn Time will be maintained according to the [Semantic Versioning](http://semver.org/) guidelines as much as possible.
-
-### Beta versions
-
-Beta releases will be numbered with the following format:
-
-`0.<major>.<minor>-<patch>`
-
-### Stable versions
-
-Releases will be numbered with the following format:
-
-`<major>.<minor>.<patch>`
-
-
-Constructed with the following guidelines:
-* A new *major* release indicates a large change where backwards compatibility is broken.
-* A new *minor* release indicates a normal change that maintains backwards compatibility.
-* A new *patch* release indicates a bugfix or small change which does not affect compatibility.
 
 ## License
 
