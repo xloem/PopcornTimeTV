@@ -3,10 +3,6 @@
 import Foundation
 import ObjectMapper
 
-#if os(iOS) || os(tvOS)
-import UIKit
-#endif
-
 /**
  Health of a torrent.
  */
@@ -36,45 +32,6 @@ public enum Health {
             return "unknow"
         }
     }
-    
-    #if os(iOS) || os(tvOS)
-    /**
-     - Bad:         Red.
-     - Medium:      Orange.
-     - Good:        Yellow-green.
-     - Excellent:   Bright green.
-     - Unknown:     Grey.
-     */
-    public var color: UIColor {
-        switch self {
-        case .bad:
-            return UIColor(red: 212.0/255.0, green: 14.0/255.0, blue: 0.0, alpha: 1.0)
-        case .medium:
-            return UIColor(red: 212.0/255.0, green: 120.0/255.0, blue: 0.0, alpha: 1.0)
-        case .good:
-            return UIColor(red: 201.0/255.0, green: 212.0/255.0, blue: 0.0, alpha: 1.0)
-        case .excellent:
-            return UIColor(red: 90.0/255.0, green: 186.0/255.0, blue: 0.0, alpha: 1.0)
-        case .unknown:
-            return UIColor(red: 105.0/255.0, green: 105.0/255.0, blue: 105.0, alpha: 1.0)
-        }
-    }
-    
-    public var image: UIImage {
-        let rect = CGRect(x: 0.0, y: 0.0, width: 10.0, height: 10.0)
-        UIGraphicsBeginImageContext(rect.size)
-
-        UIBezierPath(roundedRect: rect, cornerRadius: 10.0).addClip()
-        let context = UIGraphicsGetCurrentContext()
-        
-        context?.setFillColor(color.cgColor)
-        context?.fill(rect)
-        
-        let image = UIGraphicsGetImageFromCurrentImageContext()
-        UIGraphicsEndImageContext()
-        return image!
-    }
-    #endif
 }
 
 public struct Torrent: Mappable, Equatable, Comparable {

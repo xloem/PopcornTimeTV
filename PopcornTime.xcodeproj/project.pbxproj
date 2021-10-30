@@ -101,6 +101,9 @@
 		2353D82926FF47A800C71C09 /* RatingsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2353D82826FF47A800C71C09 /* RatingsViewModel.swift */; };
 		2353D82A26FF47A800C71C09 /* RatingsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2353D82826FF47A800C71C09 /* RatingsViewModel.swift */; };
 		2353D82B26FF47A800C71C09 /* RatingsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2353D82826FF47A800C71C09 /* RatingsViewModel.swift */; };
+		2356F692272DC1E80039DB75 /* TorrentHealth.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2356F691272DC1E80039DB75 /* TorrentHealth.swift */; };
+		2356F693272DC1E80039DB75 /* TorrentHealth.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2356F691272DC1E80039DB75 /* TorrentHealth.swift */; };
+		2356F694272DC1E80039DB75 /* TorrentHealth.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2356F691272DC1E80039DB75 /* TorrentHealth.swift */; };
 		2364708B2694B76E008743CB /* ObjectMapper in Frameworks */ = {isa = PBXBuildFile; productRef = 2364708A2694B76E008743CB /* ObjectMapper */; };
 		236A11B426C6772E00AFF1FD /* PreloadTorrentViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23446AC5267FAD000049CC72 /* PreloadTorrentViewModel.swift */; };
 		236A11B526C6773200AFF1FD /* PreloadTorrentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23313B37267E3C2700774A85 /* PreloadTorrentView.swift */; };
@@ -455,6 +458,7 @@
 		23446ADE2680E8600049CC72 /* ProgressBarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgressBarView.swift; sourceTree = "<group>"; };
 		2353D82426FF46AE00C71C09 /* RatingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RatingsView.swift; sourceTree = "<group>"; };
 		2353D82826FF47A800C71C09 /* RatingsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RatingsViewModel.swift; sourceTree = "<group>"; };
+		2356F691272DC1E80039DB75 /* TorrentHealth.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TorrentHealth.swift; sourceTree = "<group>"; };
 		23793D9C26AD950D0094FFA0 /* DownloadView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DownloadView.swift; sourceTree = "<group>"; };
 		237EC9F426B842F300EE8B46 /* MPMediaType.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MPMediaType.swift; sourceTree = "<group>"; };
 		237EC9FE26B8478100EE8B46 /* PopcornTime.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PopcornTime.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -919,6 +923,7 @@
 				4DBE60891E5E49B200C2549B /* FileManager+Extension.swift */,
 				4DCCBA5A1DC50D780046C755 /* Color+Extension.swift */,
 				23BE4BF926C8598C0081D2AA /* UIScreen+AspectRatio.swift */,
+				2356F691272DC1E80039DB75 /* TorrentHealth.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -1088,7 +1093,7 @@
 			attributes = {
 				CLASSPREFIX = PCT;
 				LastSwiftUpdateCheck = 1250;
-				LastUpgradeCheck = 1020;
+				LastUpgradeCheck = 1310;
 				ORGANIZATIONNAME = PopcornTime;
 				TargetAttributes = {
 					23313AFC267E374F00774A85 = {
@@ -1130,8 +1135,6 @@
 				232BB52A26946B47005448AE /* XCRemoteSwiftPackageReference "ObjectMapper" */,
 				23166C052694F13800D87AD0 /* XCRemoteSwiftPackageReference "SwiftyJSON" */,
 				23D2B396269586810077BBED /* XCRemoteSwiftPackageReference "Reachability" */,
-				23D2B399269587BE0077BBED /* XCRemoteSwiftPackageReference "MarqueeLabel" */,
-				23D2B39C269588370077BBED /* XCRemoteSwiftPackageReference "TvOSMoreButton" */,
 			);
 			productRefGroup = 287B85351C9873A200EEF5C8 /* Products */;
 			projectDirPath = "";
@@ -1352,6 +1355,7 @@
 				23313B00267E374F00774A85 /* App.swift in Sources */,
 				23446AD82680BD7B0049CC72 /* Font+Style.swift in Sources */,
 				23313B4D267E48C300774A85 /* MoviesViewModel.swift in Sources */,
+				2356F692272DC1E80039DB75 /* TorrentHealth.swift in Sources */,
 				23313B10267E39B400774A85 /* TabBarView.swift in Sources */,
 				23313B30267E3BE200774A85 /* SubtitlesView.swift in Sources */,
 				237F28672692F91000FE036C /* SeasonView.swift in Sources */,
@@ -1461,6 +1465,7 @@
 				23A2BDBB26BEDBB2004B864E /* PlainNavigationLinkButton.swift in Sources */,
 				23BE4BFA26C8598C0081D2AA /* UIScreen+AspectRatio.swift in Sources */,
 				2353D82626FF46AE00C71C09 /* RatingsView.swift in Sources */,
+				2356F693272DC1E80039DB75 /* TorrentHealth.swift in Sources */,
 				23A2BDB026BEDA2A004B864E /* SettingsViewModel.swift in Sources */,
 				23A2BDAC26BEDA19004B864E /* DownloadViewModel.swift in Sources */,
 				23A2BDAD26BEDA23004B864E /* ErrorView.swift in Sources */,
@@ -1555,6 +1560,7 @@
 				237ECA1926B8481800EE8B46 /* TermsOfServiceView.swift in Sources */,
 				23A2BD7826BC5923004B864E /* ShowView.swift in Sources */,
 				237ECA2E26B848F000EE8B46 /* ErrorView.swift in Sources */,
+				2356F694272DC1E80039DB75 /* TorrentHealth.swift in Sources */,
 				237ECA2726B8485F00EE8B46 /* Subtitle + Identifiable.swift in Sources */,
 				23CD7958270DF81E00AE001C /* SearchViewModel.swift in Sources */,
 				23A2BD7B26BC5930004B864E /* SeasonPickerViewModel.swift in Sources */,
@@ -1686,10 +1692,10 @@
 				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
 				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
 				CODE_SIGN_IDENTITY = "Apple Development";
-				CODE_SIGN_STYLE = Automatic;
+				CODE_SIGN_STYLE = Manual;
 				COPY_PHASE_STRIP = NO;
 				DEVELOPMENT_ASSET_PATHS = "PopcornTime/Preview\\ Content/Preview\\ Assets.xcassets";
-				DEVELOPMENT_TEAM = G7T599BH7B;
+				DEVELOPMENT_TEAM = "";
 				ENABLE_PREVIEWS = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				GCC_DYNAMIC_NO_PIC = NO;
@@ -1706,7 +1712,7 @@
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
-				PRODUCT_BUNDLE_IDENTIFIER = "tapp.PopcornTime-tvOS";
+				PRODUCT_BUNDLE_IDENTIFIER = swiftui.PopcornTime;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
@@ -1735,10 +1741,10 @@
 				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
 				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
 				CODE_SIGN_IDENTITY = "Apple Development";
-				CODE_SIGN_STYLE = Automatic;
+				CODE_SIGN_STYLE = Manual;
 				COPY_PHASE_STRIP = NO;
 				DEVELOPMENT_ASSET_PATHS = "PopcornTime/Preview\\ Content/Preview\\ Assets.xcassets";
-				DEVELOPMENT_TEAM = G7T599BH7B;
+				DEVELOPMENT_TEAM = "";
 				ENABLE_PREVIEWS = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				INFOPLIST_FILE = PopcornTime/Info.plist;
@@ -1748,7 +1754,7 @@
 				);
 				MARKETING_VERSION = 4.0;
 				MTL_FAST_MATH = YES;
-				PRODUCT_BUNDLE_IDENTIFIER = "tapp.PopcornTime-tvOS";
+				PRODUCT_BUNDLE_IDENTIFIER = swiftui.PopcornTime;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_VERSION = 5.0;
@@ -1774,9 +1780,9 @@
 				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
 				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
 				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
-				CODE_SIGN_STYLE = Automatic;
+				CODE_SIGN_STYLE = Manual;
 				COPY_PHASE_STRIP = NO;
-				DEVELOPMENT_TEAM = G7T599BH7B;
+				DEVELOPMENT_TEAM = "";
 				ENABLE_BITCODE = NO;
 				ENABLE_PREVIEWS = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
@@ -1794,8 +1800,9 @@
 				MARKETING_VERSION = 4.0;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
-				PRODUCT_BUNDLE_IDENTIFIER = tapp.PopcornTime;
+				PRODUCT_BUNDLE_IDENTIFIER = swiftui.PopcornTime;
 				PRODUCT_NAME = PopcornTime;
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SDKROOT = iphoneos;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
@@ -1819,9 +1826,9 @@
 				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
 				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
 				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
-				CODE_SIGN_STYLE = Automatic;
+				CODE_SIGN_STYLE = Manual;
 				COPY_PHASE_STRIP = NO;
-				DEVELOPMENT_TEAM = G7T599BH7B;
+				DEVELOPMENT_TEAM = "";
 				ENABLE_BITCODE = NO;
 				ENABLE_PREVIEWS = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
@@ -1833,8 +1840,9 @@
 				);
 				MARKETING_VERSION = 4.0;
 				MTL_FAST_MATH = YES;
-				PRODUCT_BUNDLE_IDENTIFIER = tapp.PopcornTime;
+				PRODUCT_BUNDLE_IDENTIFIER = swiftui.PopcornTime;
 				PRODUCT_NAME = PopcornTime;
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SDKROOT = iphoneos;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 2;
@@ -1857,10 +1865,11 @@
 				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
 				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
 				CODE_SIGN_ENTITLEMENTS = macOS/macOS.entitlements;
-				CODE_SIGN_STYLE = Automatic;
+				CODE_SIGN_IDENTITY = "-";
+				CODE_SIGN_STYLE = Manual;
 				COMBINE_HIDPI_IMAGES = YES;
 				COPY_PHASE_STRIP = NO;
-				DEVELOPMENT_TEAM = G7T599BH7B;
+				DEVELOPMENT_TEAM = "";
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
@@ -1877,8 +1886,9 @@
 				MACOSX_DEPLOYMENT_TARGET = 12.0;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
-				PRODUCT_BUNDLE_IDENTIFIER = tapp.PopcornTime;
+				PRODUCT_BUNDLE_IDENTIFIER = swiftui.PopcornTime;
 				PRODUCT_NAME = PopcornTime;
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SDKROOT = macosx;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
 				SWIFT_VERSION = 5.0;
@@ -1900,10 +1910,11 @@
 				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
 				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
 				CODE_SIGN_ENTITLEMENTS = macOS/macOS.entitlements;
-				CODE_SIGN_STYLE = Automatic;
+				CODE_SIGN_IDENTITY = "-";
+				CODE_SIGN_STYLE = Manual;
 				COMBINE_HIDPI_IMAGES = YES;
 				COPY_PHASE_STRIP = NO;
-				DEVELOPMENT_TEAM = G7T599BH7B;
+				DEVELOPMENT_TEAM = "";
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
@@ -1914,8 +1925,9 @@
 				);
 				MACOSX_DEPLOYMENT_TARGET = 12.0;
 				MTL_FAST_MATH = YES;
-				PRODUCT_BUNDLE_IDENTIFIER = tapp.PopcornTime;
+				PRODUCT_BUNDLE_IDENTIFIER = swiftui.PopcornTime;
 				PRODUCT_NAME = PopcornTime;
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SDKROOT = macosx;
 				SWIFT_VERSION = 5.0;
 			};
@@ -1933,9 +1945,9 @@
 				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
 				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
 				CODE_SIGN_IDENTITY = "Apple Development";
-				CODE_SIGN_STYLE = Automatic;
+				CODE_SIGN_STYLE = Manual;
 				COPY_PHASE_STRIP = NO;
-				DEVELOPMENT_TEAM = G7T599BH7B;
+				DEVELOPMENT_TEAM = "";
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_PREPROCESSOR_DEFINITIONS = (
@@ -1951,8 +1963,9 @@
 				MARKETING_VERSION = 4.0;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
-				PRODUCT_BUNDLE_IDENTIFIER = "tapp.PopcornTime-tvOS.TopShelfSwiftUI";
+				PRODUCT_BUNDLE_IDENTIFIER = swiftui.PopcornTime.TopShelf;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SKIP_INSTALL = YES;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
 				SWIFT_VERSION = 5.0;
@@ -1973,9 +1986,9 @@
 				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
 				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
 				CODE_SIGN_IDENTITY = "Apple Development";
-				CODE_SIGN_STYLE = Automatic;
+				CODE_SIGN_STYLE = Manual;
 				COPY_PHASE_STRIP = NO;
-				DEVELOPMENT_TEAM = G7T599BH7B;
+				DEVELOPMENT_TEAM = "";
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				INFOPLIST_FILE = TopShelf/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -1985,8 +1998,9 @@
 				);
 				MARKETING_VERSION = 4.0;
 				MTL_FAST_MATH = YES;
-				PRODUCT_BUNDLE_IDENTIFIER = "tapp.PopcornTime-tvOS.TopShelfSwiftUI";
+				PRODUCT_BUNDLE_IDENTIFIER = swiftui.PopcornTime.TopShelf;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SKIP_INSTALL = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 3;
@@ -2017,6 +2031,7 @@
 				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
 				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
 				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
 				CLANG_WARN_STRICT_PROTOTYPES = YES;
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
@@ -2068,6 +2083,7 @@
 				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
 				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
 				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
 				CLANG_WARN_STRICT_PROTOTYPES = YES;
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
@@ -2201,22 +2217,6 @@
 			requirement = {
 				kind = upToNextMajorVersion;
 				minimumVersion = 5.1.0;
-			};
-		};
-		23D2B399269587BE0077BBED /* XCRemoteSwiftPackageReference "MarqueeLabel" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/cbpowell/MarqueeLabel";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 4.1.0;
-			};
-		};
-		23D2B39C269588370077BBED /* XCRemoteSwiftPackageReference "TvOSMoreButton" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/cgoldsby/TvOSMoreButton";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 1.4.0;
 			};
 		};
 /* End XCRemoteSwiftPackageReference section */

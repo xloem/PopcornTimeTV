@@ -44,9 +44,21 @@ struct SelectTorrentQualityButton<Label>: View where Label : View {
                 showChooseQualityActionSheet = true
             }
         }, label: label)
+        #if os(iOS) || os(tvOS)
         .confirmationDialog("Choose Quality", isPresented: $showChooseQualityActionSheet, titleVisibility: .visible, actions: {
             chooseTorrentsButtons
         })
+        #elseif os(macOS)
+        .popover(isPresented: $showChooseQualityActionSheet, content: {
+            VStack {
+                Text("Choose Quality")
+                chooseTorrentsButtons
+                    .controlSize(.large)
+            }
+            .font(.system(size: 16))
+            .padding(20)
+        })
+        #endif
         .alert(item: $alert) { alert in
             switch alert.id {
             case .noTorrentsFound:
@@ -86,16 +98,20 @@ struct SelectTorrentQualityButton<Label>: View where Label : View {
             Button {
                 action(torrent)
             } label: {
-//                Text(Image(uiImage: torrent.health.image.withRenderingMode(.alwaysOriginal)))
+                #if os(iOS) || os(tvOS)
+                Text(torrent.quality) +
+                Text(" (seeds: \(torrent.seeds) - peers: \(torrent.peers))")
+                #elseif os(macOS)
+                torrent.health.image
                 Text(torrent.quality)
-                + Text(" (seeds: \(torrent.seeds) - peers: \(torrent.peers))")
+                    .fontWeight(.bold)
+                Text(" (seeds: \(torrent.seeds) - peers: \(torrent.peers))")
+                    .foregroundColor(.appLightGray)
+                    .font(.system(size: 12, weight: .light))
+                Spacer()
+                #endif
             }
         }
-//        #if os(macOS)
-//        Button("Cancel", role: .cancel) {
-//            showChooseQualityActionSheet = false
-//        }
-//        #endif
     }
 }
 

@@ -37,6 +37,7 @@ struct MacModalWindow<Content: View, Modal: View>: View {
 
         window.delegate = viewModel
         
+        window.titlebarAppearsTransparent = true
         window.isReleasedWhenClosed = false
         window.center()
         window.setFrameAutosaveName("VideoPlayer")
