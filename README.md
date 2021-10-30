@@ -2,7 +2,7 @@
   <img src="http://i.imgur.com/76RElTT.png" alt="Popcorn Time" title="Popcorn Time">
 </p>
 
-## Popcorn Time for tvOS and iOS _WE ARE BACK_
+## Popcorn Time for tvOS | iOS | macOS
 
 [![Platform](http://img.shields.io/badge/platform-iOS%20%7C%20tvOS-lightgrey.svg?style=flat)](https://github.com/PopcornTimeTV)
 [![Build Status](https://travis-ci.org/PopcornTimeTV/PopcornTimeTV.svg?branch=master)](https://travis-ci.org/PopcornTimeTV/PopcornTimeTV)
@@ -13,25 +13,7 @@
 
 PopcornTimeTV was an Apple TV, iPhone and iPad application to torrent movies and tv shows for streaming.
 
-Since 2016, this project has grown exponentially - both in its user base and in its functionality. However, the team size has gone the other way. We went from having 13+ developers on the team to 1 developer and 1 designer, both of whom have lives and projects outside of Popcorn Time. We have decided that we have given our all to this project and it's time for us to move on to pursue greater things. There is no doubt that this comes with a heavy heart as we have learned so much from this project and watched it grow from this simple torrenting app that could only play 720p video, to what it is today.
-
-All that being said, we do not want this project to just die after we leave. The size of the project might be a bit daunting to an unseasoned developer but the app is extremely stable and packed with almost every feature you could need, so unless you're planning on doing a rewrite, it should be OK.
-
-ipas are available for download and will remain working as per. Thanks for all your support and understanding.
-
-## Want to contribute?
-
-We need your help to localise Popcorn Time. Visit our [Translating Guide](https://github.com/PopcornTimeTV/PopcornTimeTV/wiki/Translating-Popcorn-Time) to get started.
-
-## Download
-
-Download the [latest .ipas](https://github.com/PopcornTimeTV/PopcornTimeTV/releases/latest).
-
-Alternatively you can [compile one yourself](https://github.com/PopcornTimeTV/PopcornTimeTV/wiki/Archiving-Popcorn-Time).
-
-Once downloaded, follow our [Installing Guide](https://github.com/PopcornTimeTV/PopcornTimeTV/wiki/Installing-Popcorn-Time).
-
-## Know what you're doing?
+## Compile yourself?
 
 First, you need to install [bundler](https://bundler.io) to your computer with the `gem install bundler` command.
 
