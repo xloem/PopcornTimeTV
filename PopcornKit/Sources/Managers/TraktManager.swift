@@ -442,7 +442,11 @@ open class TraktManager: NetworkManager {
      */
     open func getRelated<T: Media>(_ media: T, completion: @escaping ([T], NSError?) -> Void) {
         self.manager.request(Trakt.base + (media is Movie ? Trakt.movies : Trakt.shows) + "/\(media.id)" + Trakt.related, parameters: Trakt.extended, headers: Trakt.Headers.Default).validate().responseJSON { response in
-            guard let value = response.result.value else { completion([T](), response.result.error as NSError?); return }
+            guard let value = response.result.value else {
+                completion([T](), response.result.error as NSError?)
+                return
+            }
+            
             let responseObject = JSON(value)
             let group = DispatchGroup()
             var array = [T]()
@@ -476,32 +480,36 @@ open class TraktManager: NetworkManager {
     open func getMediaCredits<T: Media>(forPersonWithId id: String, mediaType type: T.Type, completion: @escaping ([T], NSError?) -> Void) {
         var typeString = (type is Movie.Type ? Trakt.movies : Trakt.shows)
         self.manager.request(Trakt.base + Trakt.people + "/\(id)" + typeString, parameters: Trakt.extended, headers: Trakt.Headers.Default).validate().responseJSON { response in
-            guard let value = response.result.value else { completion([T](), response.result.error as NSError?); return }
+            guard let value = response.result.value else {
+                completion([T](), response.result.error as NSError?)
+                return
+            }
+            
             let responseObject = JSON(value)
             typeString.removeLast() // Removes 's' from the type string
             typeString.removeFirst() // Removes '/' from the type string
             var medias = [T]()
             let group = DispatchGroup()
-            for (_, item) in responseObject["crew"] {
-                for (_, item) in item {
-                    guard let id = item[typeString]["ids"]["imdb"].string else { continue }
-                    group.enter()
-                    let completion: (Media?, NSError?) -> Void = { (media, _) in
-                        if let media = media { medias.append(media as! T) }
-                        group.leave()
+            
+            for item in [responseObject["crew"], responseObject["cast"]].compactMap({ $0.array }) {
+                for json in item {
+                    if let payload = json[typeString].dictionaryObject,
+                       var mediaItem = Mapper<T>(context: TraktContext()).map(JSONObject: payload),
+                       let tmdbId = mediaItem.tmdbId {
+                        group.enter()
+                        let type: TMDB.MediaType = type is Movie.Type ? .movies : .shows
+                        TMDBManager.shared.getPoster(forMediaOfType: type, TMDBId: tmdbId) { backdrop, poster, error in
+                            if let poster = poster, let backdrop = backdrop {
+                                mediaItem.largeCoverImage = poster
+                                mediaItem.largeBackgroundImage = backdrop
+                                medias.append(mediaItem)
+                            }
+                            group.leave()
+                        }
                     }
-                    type is Movie.Type ?  MovieManager.shared.getInfo(id, completion: completion) : ShowManager.shared.getInfo(id, completion: completion)
                 }
             }
-            for (_, item) in responseObject["cast"] {
-                guard let id = item[typeString]["ids"]["imdb"].string else { continue }
-                group.enter()
-                let completion: (Media?, NSError?) -> Void = { (media, _) in
-                    if let media = media { medias.append(media as! T) }
-                    group.leave()
-                }
-                type is Movie.Type ?  MovieManager.shared.getInfo(id, completion: completion) : ShowManager.shared.getInfo(id, completion: completion)
-            }
+            
             group.notify(queue: .main, execute: { completion(medias, nil) })
         }
     }
