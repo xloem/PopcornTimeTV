@@ -48,6 +48,7 @@ class MovieDetailsViewModel: ObservableObject {
             }
             if var movie = movie {
                 movie.ratings = self.movie.ratings
+                movie.largeBackgroundImage = self.movie.largeBackgroundImage ?? movie.largeBackgroundImage //keep last background
                 self.movie = movie
                 self.downloadModel = DownloadButtonViewModel(media: movie)
             }

@@ -42,6 +42,36 @@ open class TMDBManager: NetworkManager {
         }
     }
     
+    
+    /**
+     Load movie posters from TMDB.
+     
+     - Parameter forMediaOfType:    The type of the media, either movie or show.
+     - Parameter TMDBId:        The tmdb id of the media.
+     
+     - Parameter completion:        The completion handler for the request containing a poster, backdrop url and an optional error.
+     */
+    open func getPoster(forMediaOfType type: TMDB.MediaType, TMDBId tmdb: Int, completion: @escaping (_ backdrop: String?, _ poster: String?, NSError?) -> Void) {
+        
+        self.manager.request(TMDB.base + "/" + type.rawValue + "/\(tmdb)" + TMDB.images, parameters: TMDB.defaultHeaders).validate().responseJSON { (response) in
+            guard let value = response.result.value else {
+                completion(nil, nil, response.result.error as NSError?);
+                return
+            }
+            let responseDict = JSON(value)
+            
+            var image: String?
+            var backdrop: String?
+            if let poster = responseDict["posters"].first?.1["file_path"].string {
+                image = "https://image.tmdb.org/t/p/w780" + poster
+            }
+            if let backdrops = responseDict["backdrops"].first?.1["file_path"].string {
+                backdrop = "https://image.tmdb.org/t/p/w780" + backdrops
+            }
+            completion(backdrop, image, nil)
+        }
+    }
+    
     /**
      Load season posters from TMDB. Either a tmdb id or an imdb id must be passed in.
      

@@ -55,6 +55,7 @@ class ShowDetailsViewModel: ObservableObject {
                 return
             }
             
+            show.largeBackgroundImage = self.show.largeBackgroundImage ?? show.largeBackgroundImage //keep last background
             show.ratings = self.show.ratings
             self.show = show
             

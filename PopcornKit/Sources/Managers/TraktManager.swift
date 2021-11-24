@@ -447,13 +447,19 @@ open class TraktManager: NetworkManager {
             let group = DispatchGroup()
             var array = [T]()
             for (_, item) in responseObject {
-                guard let id = item["ids"]["imdb"].string else { continue }
-                group.enter()
-                let completion: (Media?, NSError?) -> Void = { (media, _) in
-                    if let media = media { array.append(media as! T) }
-                    group.leave()
+                if var mediaItem = Mapper<T>(context: TraktContext()).map(JSONObject: item.dictionaryObject),
+                   let tmdbId = mediaItem.tmdbId {
+                    group.enter()
+                    let type: TMDB.MediaType = media is Movie ? .movies : .shows
+                    TMDBManager.shared.getPoster(forMediaOfType: type, TMDBId: tmdbId) { backdrop, poster, error in
+                        if let poster = poster, let backdrop = backdrop {
+                            mediaItem.largeCoverImage = poster
+                            mediaItem.largeBackgroundImage = backdrop
+                            array.append(mediaItem)
+                        }
+                        group.leave()
+                    }
                 }
-                media is Movie ?  MovieManager.shared.getInfo(id, completion: completion) : ShowManager.shared.getInfo(id, completion: completion)
             }
             group.notify(queue: .main, execute: { completion(array, nil) })
         }
