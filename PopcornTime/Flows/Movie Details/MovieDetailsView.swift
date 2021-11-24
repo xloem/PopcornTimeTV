@@ -186,7 +186,7 @@ struct MovieDetailsView: View {
                 Text(Image($0).renderingMode(.template))
             }
         return HStack(alignment: /*@START_MENU_TOKEN@*/.center/*@END_MENU_TOKEN@*/, spacing: 25) {
-            ForEach(0..<items.count) { item in
+            ForEach(0..<items.count, id: \.self) { item in
                 items[item]
             }
             
