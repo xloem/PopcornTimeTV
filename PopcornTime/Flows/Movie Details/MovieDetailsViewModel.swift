@@ -75,8 +75,8 @@ class MovieDetailsViewModel: ObservableObject {
         }
     }
     
-    var backgroundUrl: URL {
-        return URL(string: movie.largeBackgroundImage ?? "")!
+    var backgroundUrl: URL? {
+        return URL(string: movie.largeBackgroundImage ?? "")
     }
     
     func playSongTheme() {

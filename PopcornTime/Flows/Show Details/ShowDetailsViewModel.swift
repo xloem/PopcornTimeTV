@@ -26,8 +26,8 @@ class ShowDetailsViewModel: ObservableObject {
         self.show = show
     }
     
-    var backgroundUrl: URL {
-        return URL(string: show.largeBackgroundImage ?? "")!
+    var backgroundUrl: URL? {
+        return URL(string: show.largeBackgroundImage ?? "")
     }
     
     func load() {
