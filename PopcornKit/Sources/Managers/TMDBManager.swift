@@ -66,7 +66,7 @@ open class TMDBManager: NetworkManager {
                 image = "https://image.tmdb.org/t/p/w780" + poster
             }
             if let backdrops = responseDict["backdrops"].first?.1["file_path"].string {
-                backdrop = "https://image.tmdb.org/t/p/w780" + backdrops
+                backdrop = "https://image.tmdb.org/t/p/w1280" + backdrops
             }
             completion(backdrop, image, nil)
         }

@@ -258,7 +258,7 @@ struct MovieDetailsView: View {
                             .buttonStyle(PlainNavigationLinkButtonStyle())
                     }
                 }
-                .padding(.leading, theme.watchedSection.leading)
+                .padding(.horizontal, theme.watchedSection.leading)
                 #if os(tvOS)
                 .padding([.top, .bottom], 20) // on focus zoom will not be clipped
                 #endif

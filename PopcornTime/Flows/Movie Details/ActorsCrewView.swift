@@ -35,7 +35,7 @@ struct ActorsCrewView: View {
                         personView(person: persons[index])
                     }
                 }
-                .padding(.leading, theme.leading)
+                .padding(.horizontal, theme.leading)
                 Spacer()
             }
             .frame(height: theme.height)

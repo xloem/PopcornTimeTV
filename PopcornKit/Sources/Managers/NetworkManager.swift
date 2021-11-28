@@ -89,7 +89,7 @@ public struct TMDB {
         case shows = "tv"
     }
     
-    static let defaultHeaders = ["api_key": TMDB.apiKey]
+    static let defaultHeaders = ["api_key": TMDB.apiKey, "language": "en"]
 }
 
 public struct Fanart {
