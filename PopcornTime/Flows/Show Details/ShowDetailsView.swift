@@ -155,7 +155,7 @@ struct ShowDetailsView: View {
             Text(title)
                 .font(.system(size: theme.seasonFontSize, weight: .medium))
             HStack(alignment: .center, spacing: 25) {
-                ForEach(0..<items.count) { item in
+                ForEach(0..<items.count, id: \.self) { item in
                     items[item]
                 }
                 StarRatingView(rating: show.rating / 20)
