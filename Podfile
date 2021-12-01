@@ -10,7 +10,7 @@ end
 
 target 'PopcornTime (macOS)' do
     platform :macos, '12'
-    pod 'VLCKit', '~> 3.3.17'
+    pod 'VLCKit', '~> 3.3.18b6'
 end
 
 target 'PopcornTime (tvOS)' do

@@ -314,22 +314,15 @@ struct SettingsView: View {
     @ViewBuilder
     var clearCacheButton: some View {
         button(text: "Clear All Cache", value: "") {
-            viewModel.clearCache()
+            viewModel.clearCache.emptyCache()
             showClearCacheAlert = true
         }
-        .actionSheet(isPresented: $showClearCacheAlert) {
-            clearCacheAlert
-        }
-    }
-    
-    var clearCacheAlert: ActionSheet {
-        return ActionSheet(title: Text(viewModel.clearCacheTitle),
-                           message: Text(viewModel.clearCacheMessage),
-                    buttons:[
-                        .default(Text("Ok"), action: {
-                        }),
-                    ]
-        )
+        .alert(viewModel.clearCache.message, isPresented: $showClearCacheAlert, actions: {
+            Button("OK") {}
+        })
+//        .confirmationDialog(viewModel.clearCache.message, isPresented: $showClearCacheAlert, titleVisibility: .visible, actions: {
+//            Button("OK") {}
+//        })
     }
     
 

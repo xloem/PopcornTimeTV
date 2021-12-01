@@ -29,6 +29,7 @@ class PreloadTorrentViewModel: ObservableObject {
     @Published var showError = false
     @Published var showFileToPlay = false
     @Published var playerModel: PlayerViewModel?
+    @Published var clearCache = ClearCache()
     
     var onReadyToPlay: (PlayerViewModel) -> Void
     
@@ -129,7 +130,9 @@ class PreloadTorrentViewModel: ObservableObject {
             }, readyToPlay: { (videoFileURL, videoFilePath) in
                 playBlock(videoFileURL, videoFilePath, self.media, nextEpisode)
             }, failure: { error in
-                errorBlock(error)
+                DispatchQueue.main.async {
+                    errorBlock(error)
+                }
             })
         } else {
             PopcornKit.downloadTorrentFile(url, completion: { (url, error) in
@@ -160,5 +163,12 @@ class PreloadTorrentViewModel: ObservableObject {
     var hasDownloaded: Bool {
         let id = self.media.id
         return PTTorrentDownloadManager.shared().completedDownloads.first(where: {($0.mediaMetadata[MPMediaItemPropertyPersistentID] as? String) == id}) != nil
+    }
+    
+    var isNotEnoughSpaceError: Bool {
+        if let error = error as NSError?, error.code == -4 && error.domain == "com.popcorntimetv.popcorntorrent.error" {
+            return true
+        }
+        return false
     }
 }

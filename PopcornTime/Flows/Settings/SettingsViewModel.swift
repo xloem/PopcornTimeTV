@@ -10,29 +10,10 @@ import SwiftUI
 import PopcornKit
 
 class SettingsViewModel: ObservableObject {
-    @Published var clearCacheTitle: LocalizedStringKey = ""
-    @Published var clearCacheMessage: LocalizedStringKey = ""
+    @Published var clearCache = ClearCache()
     
     @Published var isTraktSingedIn: Bool = TraktManager.shared.isSignedIn()
     var traktAuthorizationUrl: URL = TraktManager.shared.authorizationUrl(appScheme: AppScheme)
-    
-    func clearCache() {
-        do {
-            let size = FileManager.default.folderSize(atPath: NSTemporaryDirectory())
-            for path in try FileManager.default.contentsOfDirectory(atPath: NSTemporaryDirectory()) {
-                try FileManager.default.removeItem(atPath: NSTemporaryDirectory() + "/\(path)")
-            }
-            clearCacheTitle = "Success"
-            if size == 0 {
-                clearCacheMessage = "Cache was already empty, no disk space was reclaimed."
-            } else {
-                clearCacheMessage = "Cleaned \(ByteCountFormatter.string(fromByteCount: size, countStyle: .file))."
-            }
-        } catch {
-            clearCacheTitle = "Failed"
-            clearCacheMessage = "Error cleaning cache."
-        }
-    }
     
     var lastUpdate: String {
         var date = "Never".localized

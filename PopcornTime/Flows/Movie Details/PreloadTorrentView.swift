@@ -12,7 +12,7 @@ import Kingfisher
 
 struct PreloadTorrentView: View {
     @StateObject var viewModel: PreloadTorrentViewModel
-    @Environment(\.presentationMode) var presentationMode
+    @Environment(\.dismiss) var dismiss
     
     var body: some View {
         ZStack {
@@ -34,11 +34,7 @@ struct PreloadTorrentView: View {
                 viewModel.cancel()
             }
             .alert(isPresented: $viewModel.showError, content: {
-                Alert(title: Text("Error"),
-                      message: Text(viewModel.error?.localizedDescription ?? ""),
-                      dismissButton: .cancel(Text("Cancel"), action: {
-                        presentationMode.wrappedValue.dismiss()
-                      }))
+                errorAlert
             })
         }
         .accentColor(.white)
@@ -68,13 +64,35 @@ struct PreloadTorrentView: View {
     var cancelButton: some View {
         Button {
             withAnimation {
-                presentationMode.wrappedValue.dismiss()
+                dismiss()
             }
         } label: {
             Text("CANCEL")
                 .foregroundColor(.blue)
         }
 
+    }
+    
+    var errorAlert: Alert {
+        if viewModel.isNotEnoughSpaceError {
+            return Alert(title: Text("Error"),
+                         message: Text(viewModel.error?.localizedDescription ?? ""),
+                         primaryButton: .default(Text("Clear All Cache"), action: {
+                            viewModel.clearCache.emptyCache()
+                            viewModel.error = nil
+                            viewModel.playTorrent()
+                        }),
+                         secondaryButton: .cancel(Text("Cancel"), action: {
+                            dismiss()
+                        })
+            )
+        } else {
+            return Alert(title: Text("Error"),
+                  message: Text(viewModel.error?.localizedDescription ?? ""),
+                  dismissButton: .cancel(Text("Cancel"), action: {
+                    dismiss()
+                  }))
+        }
     }
 }
 
