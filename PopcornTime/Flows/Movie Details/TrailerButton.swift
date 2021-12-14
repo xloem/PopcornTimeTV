@@ -21,11 +21,9 @@ struct TrailerButton: View {
     @State var playerObservation: Any?
     @State var showPlayer = false
     
-    var body: some View {    
+    var body: some View {
         Button(action: {
-            viewModel.loadTrailerUrl { url in
-                self.showPlayer = true
-            }
+            showTrailer()
         }, label: {
             VStack {
                 VisualEffectBlur() {
@@ -61,6 +59,18 @@ struct TrailerButton: View {
         viewModel.trailerVidePlayer?.pause()
         viewModel.trailerVidePlayer?.seek(to: .zero)
         self.playerObservation = nil
+    }
+    
+    func showTrailer() {
+        Task {
+            viewModel.error.wrappedValue = nil
+            do {
+                try await viewModel.loadTrailerUrl()
+                self.showPlayer = true
+            } catch {
+                viewModel.error.wrappedValue = error
+            }
+        }
     }
 }
 

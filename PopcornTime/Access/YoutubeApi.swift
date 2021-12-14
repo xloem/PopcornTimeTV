@@ -23,7 +23,7 @@ class YoutubeApi {
         var streamingData: Streaming
     }
     
-    static func getVideo(id: String, completion: @escaping (_ video: Video?, _ error: Error?) -> Void) {
+    class func getVideo(id: String) async throws -> Video {
         let body = """
             {
              "context": {
@@ -41,29 +41,17 @@ class YoutubeApi {
             """.replacingOccurrences(of: "{VIDEO_ID}", with: id)
         let url = "https://youtubei.googleapis.com/youtubei/v1/player?key=AIzaSyAO_FJ2SlqU8Q4STEHLGCilw_Y9_11qcW8"
         
-        let unknowError = NSError(domain: "popcorn", code: 2, userInfo: [NSLocalizedDescriptionKey: "Trailer not found!".localized])
-        
-        if var request = try? URLRequest(url: url, method: .post) {
-            request.httpBody = body.data(using: .utf8)
-            request.addValue("application/json", forHTTPHeaderField: "Content-Type")
-            
-            URLSession.shared.dataTask(with: request) { data, response, error in
-                DispatchQueue.main.async {
-                    do {
-                        if let data = data {
-                            let video = try JSONDecoder().decode(Video.self, from: data)
-                            completion(video, nil)
-                        } else {
-                            completion(nil, unknowError)
-                        }
-                    } catch let error {
-                        completion(nil, error)
-                    }
-                }
-            }.resume()
-        } else {
-            completion(nil, unknowError)
+        guard var request = try? URLRequest(url: url, method: .post) else {
+            throw NSError(domain: "popcorn", code: 3, userInfo: [NSLocalizedDescriptionKey: "Invalid trailer URL!".localized])
         }
+        
+        request.httpBody = body.data(using: .utf8)
+        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+        
+        let (data, _) = try await URLSession.shared.data(for: request)
+        let video = try JSONDecoder().decode(Video.self, from: data)
+    
+        return video
         
     }
 }

@@ -54,35 +54,32 @@ class TrailerButtonViewModel: ObservableObject {
         return player
     }
     
-    func loadTrailerUrl(_ completion: @escaping (URL) -> Void) {
-        self.error.wrappedValue = nil
-        guard let id = movie.trailerCode else {
-            self.error.wrappedValue = NSError(domain: "popcorn", code: 2, userInfo: [NSLocalizedDescriptionKey: "Trailer not found!".localized])
-            return
-        }
-        
+    @discardableResult
+    func loadTrailerUrl() async throws -> URL {
         if let url = trailerUrl {
-            completion(url)
-            return
+            return url
         }
         
-        YoutubeApi.getVideo(id: id) { video, error in
-            if let error = error {
-                self.error.wrappedValue = error
-            } else if let video = video {
-                let preferredVideoQualities = ["1080p", "720p", "360p"]
-                let formats = video.streamingData.formats
-                for quality in preferredVideoQualities {
-                    if let index = formats.firstIndex(where: {$0.qualityLabel == quality}){
-                        self.trailerUrl = formats[index].url
-                        completion(self.trailerUrl!)
-                        return
-                    }
-                }
-            } else {
-                self.error.wrappedValue = NSError(domain: "popcorn", code: 2, userInfo: [NSLocalizedDescriptionKey: "Trailer not found!".localized])
+        let notFoundError = NSError(domain: "popcorn", code: 2, userInfo: [NSLocalizedDescriptionKey: "Trailer not found!".localized])
+        guard let id = movie.trailerCode else {
+            throw notFoundError
+        }
+        
+        let video = try await YoutubeApi.getVideo(id: id)
+        let preferredVideoQualities = ["1080p", "720p", "360p"]
+        let formats = video.streamingData.formats
+        for quality in preferredVideoQualities {
+            if let index = formats.firstIndex(where: {$0.qualityLabel == quality}) {
+                self.trailerUrl = formats[index].url
+                break
             }
         }
+        
+        guard let url = trailerUrl else {
+            throw notFoundError
+        }
+        
+        return url
         
 //        XCDYouTubeClient.default().getVideoWithIdentifier(id) { (video, error) in
 //            guard let streamUrls = video?.streamURLs, let qualities = Array(streamUrls.keys) as? [UInt] else {
