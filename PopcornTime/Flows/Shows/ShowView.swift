@@ -55,8 +55,8 @@ struct ShowView: View {
             }
         })
         #endif
-        .onAppear {
-            ratingsLoader?.loadRatingIfMissing(show: show)
+        .task {
+            await ratingsLoader?.loadRatingIfMissing(show: show)
         }
     }
     

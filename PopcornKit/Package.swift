@@ -1,10 +1,10 @@
-// swift-tools-version:5.4.0
+// swift-tools-version:5.5.0
 import PackageDescription
 
 let package = Package(
     name: "PopcornKit",
     platforms: [
-        .iOS(.v12), .tvOS(.v12), .macOS(.v11)
+        .iOS(.v15), .tvOS(.v15), .macOS(.v12)
     ],
     products: [
         .library(name: "PopcornKit", targets: ["PopcornKit"]),

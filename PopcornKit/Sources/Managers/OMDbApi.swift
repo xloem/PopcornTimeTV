@@ -7,41 +7,28 @@
 
 import Foundation
 
-open class OMDbManager: NetworkManager {
+open class OMDbApi {
+    let client = HttpClient(config: HttpApiConfig(serverURL: OMDb.base))
     
-    /// Creates new instance of OMDbManager class
-    public static let shared = OMDbManager()
+    public static let shared = OMDbApi()
     
     
-    func loadInfo(imdbId: String, completion: @escaping (OMDbMedia?, Error?) -> Void) {
+    func loadInfo(imdbId: String) async throws -> OMDbMedia {
         var params = OMDb.defaultParameters
         params[OMDb.info] = imdbId
         
-        self.manager.request(OMDb.base, method: .get, parameters: params).validate().responseData { response in
-            guard let value = response.result.value else {
-                completion(nil, response.result.error)
-                return
-            }
-            
-            let media = try? JSONDecoder().decode(OMDbMedia.self, from: value)
-            completion(media, nil)
-        }
+        return try await client.request(.get, path: "", parameters: params).responseDecode()
     }
     
-    open func loadCachedInfo(imdbId: String, completion: @escaping (OMDbMedia?, Error?) -> Void) {
+    open func loadCachedInfo(imdbId: String) async throws -> OMDbMedia {
         let key = "ombd/\(imdbId)"
-        if let data = UserDefaults.standard.data(forKey: key),
-           let media = try? JSONDecoder().decode(OMDbMedia.self, from: data) {
-            completion(media, nil)
+        if let data = UserDefaults.standard.data(forKey: key) {
+           return try JSONDecoder().decode(OMDbMedia.self, from: data)
         } else {
-            loadInfo(imdbId: imdbId) { media, error in
-                if let media = media {
-                    let data = try? JSONEncoder().encode(media)
-                    UserDefaults.standard.setValue(data, forKey: key)
-                }
-                
-                completion(media, error)
-            }
+            let media = try await loadInfo(imdbId: imdbId)
+            let data = try? JSONEncoder().encode(media)
+            UserDefaults.standard.setValue(data, forKey: key)
+            return media
         }
     }
 }

@@ -32,7 +32,8 @@ class MovieDetailsViewModel: ObservableObject {
         }
         
         if movie.ratings == nil {
-            OMDbManager.shared.loadCachedInfo(imdbId: movie.id) { info, error in
+            Task { @MainActor in
+                let info = try? await OMDbApi.shared.loadCachedInfo(imdbId: movie.id)
                 if let info = info {
                     self.movie.ratings = info.transform()
                 }

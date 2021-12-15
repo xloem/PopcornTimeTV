@@ -61,8 +61,8 @@ struct MovieView: View {
             }
         })
         #endif
-        .onAppear {
-            ratingsLoader?.loadRatingIfMissing(movie: movie)
+        .task {
+            await ratingsLoader?.loadRatingIfMissing(movie: movie)
         }
     }
     

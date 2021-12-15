@@ -13,19 +13,21 @@ import PopcornKit
 protocol MovieRatingsLoader: AnyObject {
     var movies: [Movie] {get set}
     
-    func loadRatingIfMissing(movie: Movie)
+    func loadRatingIfMissing(movie: Movie) async
 }
 
+
 extension MovieRatingsLoader {
-    func loadRatingIfMissing(movie: Movie) {
+    
+    @MainActor
+    func loadRatingIfMissing(movie: Movie) async {
         guard movie.ratings == nil else {
             return
         }
         
-        OMDbManager.shared.loadCachedInfo(imdbId: movie.id) { media, error in
-            if let media = media, let index = self.movies.firstIndex(where: {$0.id == movie.id}) {
-                self.movies[index].ratings = media.transform()
-            }
+        let info = try? await OMDbApi.shared.loadCachedInfo(imdbId: movie.id)
+        if let info = info, let index = self.movies.firstIndex(where: {$0.id == movie.id}) {
+            self.movies[index].ratings = info.transform()
         }
     }
 }
@@ -33,19 +35,20 @@ extension MovieRatingsLoader {
 protocol ShowRatingsLoader: AnyObject {
     var shows: [Show] {get set}
 
-    func loadRatingIfMissing(show: Show)
+    func loadRatingIfMissing(show: Show) async
 }
 
 extension ShowRatingsLoader {
-    func loadRatingIfMissing(show: Show) {
+    
+    @MainActor
+    func loadRatingIfMissing(show: Show) async {
         guard show.ratings == nil else {
             return
         }
 
-        OMDbManager.shared.loadCachedInfo(imdbId: show.id) { media, error in
-            if let media = media, let index = self.shows.firstIndex(where: {$0.id == show.id}) {
-                self.shows[index].ratings = media.transform()
-            }
+        let info = try? await OMDbApi.shared.loadCachedInfo(imdbId: show.id)
+        if let info = info, let index = self.shows.firstIndex(where: {$0.id == show.id}) {
+            self.shows[index].ratings = info.transform()
         }
     }
 }
