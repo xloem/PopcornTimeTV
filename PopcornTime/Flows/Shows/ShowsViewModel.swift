@@ -10,7 +10,6 @@ import SwiftUI
 import PopcornKit
 
 class ShowsViewModel: ObservableObject, ShowRatingsLoader {
-    @Published var isLoading = false
     var page = 1
     @Published var hasNextPage = false
     @Published var currentFilter: ShowManager.Filters = .trending {
@@ -22,10 +21,24 @@ class ShowsViewModel: ObservableObject, ShowRatingsLoader {
     @Published var error: Error? = nil
     @Published var shows: [Show] = []
     var lastReloadDate: Date?
+    var task: Task<(), Never>?
+    var isLoading: Bool {
+        task != nil
+    }
     
     func reload() {
         shows = []
         page = 1
+        task?.cancel()
+        task = nil
+        loadShows()
+    }
+    
+    func loadMore() {
+        guard hasNextPage && !isLoading else {
+            return
+        }
+        
         loadShows()
     }
     
@@ -34,24 +47,24 @@ class ShowsViewModel: ObservableObject, ShowRatingsLoader {
             return
         }
         
-        isLoading = true
-        PopcornKit.loadShows(page, filterBy: currentFilter, genre: currentGenre) { [unowned self] (shows, error) in
-            isLoading = false
-//            print(shows, error)
-//            print(shows!.toJSON())
+        self.task = Task { @MainActor in
+            self.error = nil
             
-            guard let shows = shows else {
+            do {
+                let shows = try await PopcornKit.loadShows(page, filterBy: currentFilter, genre: currentGenre)
+                
+                if page == 1 {
+                    lastReloadDate = Date()
+                }
+                
+                self.shows = (self.shows + shows).uniqued
+                self.hasNextPage = !shows.isEmpty
+                self.page += 1
+            } catch {
                 self.error = error
-                return
             }
             
-            if page == 1 {
-                lastReloadDate = Date()
-            }
-            
-            self.shows = (self.shows + shows).uniqued
-            self.hasNextPage = !self.shows.isEmpty
-            self.page += 1
+            self.task = nil
         }
     }
     

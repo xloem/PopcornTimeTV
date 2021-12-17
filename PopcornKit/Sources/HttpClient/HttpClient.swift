@@ -9,9 +9,11 @@ import Foundation
 
 public class HttpClient {
     var config: HttpApiConfig
+    var session: URLSession
     
     init(config: HttpApiConfig) {
         self.config = config
+        self.session = URLSession(configuration: config.configuration)
     }
     
     func request(_ method: HTTPMethod, path: String, parameters: [String: Any]? = nil, headers: [String:String]? = nil) -> HttpSessionRequest {
@@ -23,12 +25,9 @@ public class HttpClient {
             urlComponents.queryItems = parameters.map {URLQueryItem(name: $0, value: $1 as? String)}
         }
         
-        var request = URLRequest(url: urlComponents.url!, cachePolicy: config.cachePolicy, timeoutInterval: config.defaultTimeout)
+        var request = URLRequest(url: urlComponents.url!)
         request.httpMethod = method.rawValue
         
-        config.httpHeaders.forEach { (key, value) in
-            request.setValue(value, forHTTPHeaderField: key)
-        }
         headers?.forEach {
             request.setValue($0.value, forHTTPHeaderField: $0.key)
         }
@@ -41,6 +40,6 @@ public class HttpClient {
             }
         }
         
-        return HttpSessionRequest(request: request)
+        return HttpSessionRequest(request: request, session: session)
     }
 }

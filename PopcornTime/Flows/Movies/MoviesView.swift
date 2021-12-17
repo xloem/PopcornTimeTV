@@ -25,7 +25,7 @@ struct MoviesView: View {
                 filtersView
                 #endif
                 LazyVGrid(columns: columns, spacing: MoviesView.theme.columnSpacing) {
-                    ForEach(viewModel.movies, id: \.self) { movie in
+                    ForEach(viewModel.movies, id: \.id) { movie in
                         navigationLink(movie: movie)
                     }
                     if (!viewModel.movies.isEmpty) {
@@ -85,7 +85,7 @@ struct MoviesView: View {
     var loadingView: some View {
         Text("")
             .onAppear {
-                viewModel.loadMovies()
+                viewModel.loadMore()
             }
         if viewModel.isLoading {
             ProgressView()

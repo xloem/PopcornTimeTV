@@ -20,6 +20,8 @@ struct APIError: Error {
         case missingSession = "MissingSession"
         case unkown
         case invalidHttpStatusCode
+        case missingContent
+        case couldNoteDecodeResponse
     }
     var message: String
     var type: Type_

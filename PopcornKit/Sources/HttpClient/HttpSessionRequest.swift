@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import ObjectMapper
 
 
 struct HttpSessionRequest {
@@ -39,6 +40,34 @@ struct HttpSessionRequest {
             print("unknown error", error.localizedDescription)
             throw error
         }
+    }
+    
+    func responseMapable<T: Mappable>(keyPath: String? = nil, decoder: JSONDecoder = .default) async throws -> [T] {
+        let (data, response): (Data, URLResponse) = try await session.data(for: request)
+        try validate(request: request, response: response, data: data)
+        
+        guard let jsonString = String(data: data, encoding: .utf8) else {
+            throw APIError.Type_.missingContent
+        }
+        guard let response = Mapper<T>().mapArray(JSONString: jsonString) else {
+            throw APIError.Type_.couldNoteDecodeResponse
+        }
+        
+        return response
+    }
+    
+    func responseMapable<T: Mappable>(keyPath: String? = nil, decoder: JSONDecoder = .default) async throws -> T {
+        let (data, response): (Data, URLResponse) = try await session.data(for: request)
+        try validate(request: request, response: response, data: data)
+        
+        guard let jsonString = String(data: data, encoding: .utf8) else {
+            throw APIError.Type_.missingContent
+        }
+        guard let response = Mapper<T>().map(JSONString: jsonString) else {
+            throw APIError.Type_.couldNoteDecodeResponse
+        }
+        
+        return response
     }
     
     func validate(request: URLRequest, response: URLResponse, data: Data?) throws {

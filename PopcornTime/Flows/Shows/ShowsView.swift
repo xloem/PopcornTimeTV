@@ -25,7 +25,7 @@ struct ShowsView: View {
                 filtersView
                 #endif
                 LazyVGrid(columns: columns, spacing: ShowsView.theme.columnSpacing) {
-                    ForEach(viewModel.shows, id: \.self) { show in
+                    ForEach(viewModel.shows, id: \.id) { show in
                         navigationLink(show: show)
                     }
                     if (!viewModel.shows.isEmpty) {
@@ -84,7 +84,7 @@ struct ShowsView: View {
     var loadingView: some View {
         Text("")
             .onAppear {
-                viewModel.loadShows()
+                viewModel.loadMore()
             }
         if viewModel.isLoading {
             ProgressView()

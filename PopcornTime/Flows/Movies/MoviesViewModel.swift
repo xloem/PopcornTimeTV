@@ -10,7 +10,6 @@ import Foundation
 import PopcornKit
 
 class MoviesViewModel: ObservableObject, MovieRatingsLoader {
-    @Published var isLoading = false
     var page = 1
     @Published var hasNextPage = false
     @Published var currentFilter: MovieManager.Filters = .trending {
@@ -22,10 +21,24 @@ class MoviesViewModel: ObservableObject, MovieRatingsLoader {
     @Published var error: Error? = nil
     @Published var movies: [Movie] = []
     var lastReloadDate: Date?
+    var task: Task<(), Never>?
+    var isLoading: Bool {
+        task != nil
+    }
     
     func reload() {
         movies = []
         page = 1
+        task?.cancel()
+        task = nil
+        loadMovies()
+    }
+    
+    func loadMore() {
+        guard hasNextPage && !isLoading else {
+            return
+        }
+        
         loadMovies()
     }
     
@@ -34,25 +47,24 @@ class MoviesViewModel: ObservableObject, MovieRatingsLoader {
             return
         }
         
-        isLoading = true
-        self.error = nil
-        PopcornKit.loadMovies(page, filterBy: currentFilter, genre: currentGenre) { [unowned self] (movies, error) in
-            isLoading = false
-//            print(movies, error)
-//            print(movies!.toJSONString())
-            
-            guard let movies = movies else {
+        self.task = Task { @MainActor in
+            self.error = nil
+            do {
+                let movies = try await PopcornKit.loadMovies(page, filterBy: currentFilter, genre: currentGenre)
+    //            print(movies)
+    //            print(movies.toJSONString())
+                    
+                if page == 1 {
+                    lastReloadDate = Date()
+                }
+                
+                self.movies = (self.movies + movies).uniqued
+                self.hasNextPage = !movies.isEmpty
+                self.page += 1
+            } catch {
                 self.error = error
-                return
             }
-            
-            if page == 1 {
-                lastReloadDate = Date()
-            }
-            
-            self.movies = (self.movies + movies).uniqued
-            self.hasNextPage = !self.movies.isEmpty
-            self.page += 1
+            self.task = nil
         }
     }
     

@@ -12,37 +12,22 @@ import ObjectMapper
 
 class ContentProvider: TVTopShelfContentProvider {
 
-    override func loadTopShelfContent(completionHandler: @escaping (TVTopShelfContent?) -> Void) {
-        // Fetch content and call completionHandler
+    override open func loadTopShelfContent() async -> TVTopShelfContent? {
         
-        var sections: [TVTopShelfItemCollection<TVTopShelfSectionedItem>] = [
-            TVTopShelfItemCollection(items: []),
-            TVTopShelfItemCollection(items: [])
-        ]
-        let group = DispatchGroup()
+        let movies = try? await PopcornKit.loadMovies(filterBy: .trending)
+        let movieItems = movies?.prefix(10).map{ self.mapMedia($0) } ?? []
+        let movieSection = TVTopShelfItemCollection(items: movieItems)
+        movieSection.title = "Trending Movies"
         
-        group.enter()
-        PopcornKit.loadMovies(filterBy: .trending) { (movies, error) in
-            let items = movies?.prefix(10).map{ self.mapMedia($0) } ?? []
-            let section = TVTopShelfItemCollection(items: items)
-            section.title = "Trending Movies"
-            sections[0] = section
-            group.leave()
-        }
+        let shows = try? await PopcornKit.loadShows(filterBy: .trending)
+        let showItems = shows?.prefix(10).map{ self.mapMedia($0) } ?? []
+        let showSection = TVTopShelfItemCollection(items: showItems)
+        showSection.title = "Trending Shows"
         
-        group.enter()
-        PopcornKit.loadShows(filterBy: .trending) { (shows, error) in
-            let items = shows?.prefix(10).map{ self.mapMedia($0) } ?? []
-            let section = TVTopShelfItemCollection(items: items)
-            section.title = "Trending Shows"
-            sections[1] = section
-            group.leave()
-        }
-        
-        group.notify(queue: .main) {
-            let content = TVTopShelfSectionedContent(sections: sections)
-            completionHandler(content);
-        }
+        return TVTopShelfSectionedContent(sections: [
+            movieSection,
+            showSection
+        ])
     }
     
     func mapMedia(_ media: Media) -> TVTopShelfSectionedItem {

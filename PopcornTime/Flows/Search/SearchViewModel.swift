@@ -58,15 +58,25 @@ class SearchViewModel: ObservableObject {
         
         switch selection {
         case .movies:
-            PopcornKit.loadMovies(searchTerm: text) { movies, error in
-                self.movies = movies ?? []
-                self.error = error
+            Task { @MainActor in
+                do  {
+                    let movies = try await PopcornKit.loadMovies(searchTerm: text)
+                    self.movies = movies
+                } catch {
+                    self.error = error
+                    self.movies = []
+                }
                 self.isLoading = false
             }
         case .shows:
-            PopcornKit.loadShows(searchTerm: text) { shows, error in
-                self.shows = shows ?? []
-                self.error = error
+            Task { @MainActor in
+                do  {
+                    let shows = try await PopcornKit.loadShows(searchTerm: text)
+                    self.shows = shows
+                } catch  {
+                    self.error = error
+                    self.shows = []
+                }
                 self.isLoading = false
             }
         case .people:

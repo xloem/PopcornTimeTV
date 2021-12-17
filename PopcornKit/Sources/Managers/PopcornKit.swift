@@ -18,15 +18,13 @@ public func loadShows(
     filterBy filter: ShowManager.Filters = .popularity,
     genre: ShowManager.Genres = .all,
     searchTerm: String? = nil,
-    orderBy order: ShowManager.Orders = .descending,
-    completion: @escaping ([Show]?, NSError?) -> Void) {
-    ShowManager.shared.load(
+    orderBy order: ShowManager.Orders = .descending) async throws -> [Show] {
+    return try await ShowManager.shared.load(
         page,
         filterBy: filter,
         genre: genre,
         searchTerm: searchTerm,
-        orderBy: order,
-        completion: completion)
+        orderBy: order)
 }
 
 /**
@@ -64,23 +62,19 @@ public func getEpisodeInfo(_ tvdbId: Int, completion: @escaping (Episode?, NSErr
  - Parameter genre:      Only return movies that match the provided genre.
  - Parameter searchTerm: Only return movies that match the provided string.
  - Parameter orderBy:    Ascending or descending.
- 
- - Parameter completion: Completion handler for the request. Returns array of movies upon success, error upon failure.
  */
 public func loadMovies(
     _ page: Int = 1,
     filterBy filter: MovieManager.Filters = .popularity,
     genre: MovieManager.Genres = .all,
     searchTerm: String? = nil,
-    orderBy order: MovieManager.Orders = .descending,
-    completion: @escaping ([Movie]?, NSError?) -> Void) {
-    MovieManager.shared.load(
+    orderBy order: MovieManager.Orders = .descending) async throws -> [Movie] {
+    try await MovieManager.shared.load(
         page,
         filterBy: filter,
         genre: genre,
         searchTerm: searchTerm,
-        orderBy: order,
-        completion: completion)
+        orderBy: order)
 }
 
 /**

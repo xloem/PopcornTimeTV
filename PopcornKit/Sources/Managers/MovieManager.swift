@@ -7,6 +7,8 @@ open class MovieManager: NetworkManager {
     /// Creates new instance of MovieManager class
     public static let shared = MovieManager()
     
+    let client = HttpClient(config: .init(serverURL: PopcornMovies.base))
+    
     /**
      Load Movies from API.
      
@@ -15,28 +17,22 @@ open class MovieManager: NetworkManager {
      - Parameter genre:      Only return movies that match the provided genre.
      - Parameter searchTerm: Only return movies that match the provided string.
      - Parameter orderBy:    Ascending or descending.
-     
-     - Parameter completion: Completion handler for the request. Returns array of movies upon success, error upon failure.
      */
     open func load(
         _ page: Int,
         filterBy filter: Filters,
         genre: Genres,
         searchTerm: String?,
-        orderBy order: Orders,
-        completion: @escaping ([Movie]?, NSError?) -> Void) {
-        var params: [String: Any] = ["sort": filter.rawValue, "order": order.rawValue, "genre": genre.rawValue.replacingOccurrences(of: " ", with: "-").lowercased()]
-        if let searchTerm = searchTerm , !searchTerm.isEmpty {
-            params["keywords"] = searchTerm
-        }
-        self.manager.request(PopcornMovies.base + PopcornMovies.movies + "/\(page)", parameters: params).validate().responseJSON { response in
-            guard let value = response.result.value else {
-                completion(nil, response.result.error as NSError?)
-                return
+        orderBy order: Orders) async throws -> [Movie] {
+            var params: [String: Any] = ["sort": filter.rawValue,
+                                         "order": order.rawValue,
+                                         "genre": genre.rawValue.replacingOccurrences(of: " ", with: "-").lowercased()]
+            if let searchTerm = searchTerm , !searchTerm.isEmpty {
+                params["keywords"] = searchTerm
             }
-            completion(Mapper<Movie>().mapArray(JSONObject: value), nil)
+            
+            return try await client.request(.get, path: PopcornMovies.movies + "/\(page)", parameters: params).responseMapable()
         }
-    }
     
     /**
      Get more movie information.

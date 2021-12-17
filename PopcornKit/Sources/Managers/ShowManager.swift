@@ -7,6 +7,8 @@ open class ShowManager: NetworkManager {
     /// Creates new instance of ShowManager class
     public static let shared = ShowManager()
     
+    let client = HttpClient(config: .init(serverURL: PopcornShows.base))
+    
     /**
      Load TV Shows from API.
      
@@ -15,24 +17,20 @@ open class ShowManager: NetworkManager {
      - Parameter genre:      Only return shows that match the provided genre.
      - Parameter searchTerm: Only return shows that match the provided string.
      - Parameter orderBy:    Ascending or descending.
-     
-     - Parameter completion: Completion handler for the request. Returns array of shows upon success, error upon failure.
      */
     open func load(
         _ page: Int,
         filterBy filter: Filters,
         genre: Genres,
         searchTerm: String?,
-        orderBy order: Orders,
-        completion: @escaping ([Show]?, NSError?) -> Void) {
-        var params: [String: Any] = ["sort": filter.rawValue, "genre": genre.rawValue.replacingOccurrences(of: " ", with: "-").lowercased(), "order": order.rawValue]
+        orderBy order: Orders) async throws -> [Show] {
+        var params: [String: Any] = ["sort": filter.rawValue,
+                                     "genre": genre.rawValue.replacingOccurrences(of: " ", with: "-").lowercased(),
+                                     "order": order.rawValue]
         if let searchTerm = searchTerm , !searchTerm.isEmpty {
             params["keywords"] = searchTerm
         }
-        self.manager.request(PopcornShows.base + PopcornShows.shows + "/\(page)", method: .get, parameters: params).validate().responseJSON { response in
-            guard let value = response.result.value else {completion(nil, response.result.error as NSError?); return}
-            completion(Mapper<Show>().mapArray(JSONObject: value), nil)
-        }
+        return try await client.request(.get, path: PopcornShows.shows + "/\(page)", parameters: params).responseMapable()
     }
     
     /**
