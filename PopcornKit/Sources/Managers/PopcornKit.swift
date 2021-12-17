@@ -15,11 +15,11 @@ import Alamofire
  */
 public func loadShows(
     _ page: Int = 1,
-    filterBy filter: ShowManager.Filters = .popularity,
-    genre: ShowManager.Genres = .all,
+    filterBy filter: ShowsApi.Filters = .popularity,
+    genre: ShowsApi.Genres = .all,
     searchTerm: String? = nil,
-    orderBy order: ShowManager.Orders = .descending) async throws -> [Show] {
-    return try await ShowManager.shared.load(
+    orderBy order: ShowsApi.Orders = .descending) async throws -> [Show] {
+    return try await ShowsApi.shared.load(
         page,
         filterBy: filter,
         genre: genre,
@@ -31,13 +31,9 @@ public func loadShows(
  Get more show information.
  
  - Parameter imdbId:        The imdb identification code of the show.
- 
- - Parameter completion:    Completion handler for the request. Returns show upon success, error upon failure.
  */
-public func getShowInfo(_ imdbId: String, completion: @escaping (Show?, NSError?) -> Void) {
-    DispatchQueue.global(qos: .background).async {
-        ShowManager.shared.getInfo(imdbId, completion: completion)
-    }
+public func getShowInfo(_ imdbId: String) async throws -> Show {
+    return try await ShowsApi.shared.getInfo(imdbId)
 }
 
 /**
@@ -65,11 +61,11 @@ public func getEpisodeInfo(_ tvdbId: Int, completion: @escaping (Episode?, NSErr
  */
 public func loadMovies(
     _ page: Int = 1,
-    filterBy filter: MovieManager.Filters = .popularity,
-    genre: MovieManager.Genres = .all,
+    filterBy filter: MoviesApi.Filters = .popularity,
+    genre: MoviesApi.Genres = .all,
     searchTerm: String? = nil,
-    orderBy order: MovieManager.Orders = .descending) async throws -> [Movie] {
-    try await MovieManager.shared.load(
+    orderBy order: MoviesApi.Orders = .descending) async throws -> [Movie] {
+    try await MoviesApi.shared.load(
         page,
         filterBy: filter,
         genre: genre,
@@ -81,13 +77,9 @@ public func loadMovies(
  Get more movie information.
  
  - Parameter imdbId:        The imdb identification code of the movie.
- 
- - Parameter completion:    Completion handler for the request. Returns movie upon success, error upon failure.
  */
-public func getMovieInfo(_ imdbId: String, completion: @escaping (Movie?, NSError?) -> Void) {
-    DispatchQueue.global(qos: .background).async {
-        MovieManager.shared.getInfo(imdbId, completion: completion)
-    }
+public func getMovieInfo(_ imdbId: String) async throws -> Movie {
+    try await MoviesApi.shared.getInfo(imdbId)
 }
 
 /**

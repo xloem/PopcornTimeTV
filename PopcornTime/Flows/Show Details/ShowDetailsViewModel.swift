@@ -45,57 +45,51 @@ class ShowDetailsViewModel: ObservableObject {
         }
         
         isLoading = true
-        PopcornKit.getShowInfo(show.id) { (show, error) in
-            if let error = error {
-                self.error = error
-                self.isLoading = false
-                return
-            }
-            guard var show = show else {
-                self.isLoading = false
-                return
-            }
-            
-            show.largeBackgroundImage = self.show.largeBackgroundImage ?? show.largeBackgroundImage //keep last background
-            show.ratings = self.show.ratings
-            self.show = show
-            
-            guard let season = show.latestUnwatchedEpisode()?.season ?? show.seasonNumbers.first else {
-                let error = NSError(domain: "com.popcorntimetv.popcorntime.error", code: -243, userInfo:
-                                        [NSLocalizedDescriptionKey: "There are no seasons available for the selected show. Please try again later.".localized])
-                self.error = error
-                self.isLoading = false
-                return
-            }
-            self.currentSeason = season
-            self.isLoading = false
-            self.didLoad = true
-            
-            let group = DispatchGroup()
+        Task { @MainActor in
+            do  {
+                var show = try await PopcornKit.getShowInfo(show.id)
+                show.largeBackgroundImage = self.show.largeBackgroundImage ?? show.largeBackgroundImage //keep last background
+                show.ratings = self.show.ratings
+                self.show = show
                 
-            group.enter()
-            TraktManager.shared.getRelated(self.show) { related, _ in
-                self.show.related = related
-                group.leave()
+                guard let season = show.latestUnwatchedEpisode()?.season ?? show.seasonNumbers.first else {
+                    let error = NSError(domain: "com.popcorntimetv.popcorntime.error", code: -243, userInfo:
+                                            [NSLocalizedDescriptionKey: "There are no seasons available for the selected show. Please try again later.".localized])
+                    throw error
+                }
+                self.currentSeason = season
+                self.didLoad = true
+                
+                let group = DispatchGroup()
+                    
+                group.enter()
+                TraktManager.shared.getRelated(self.show) { related, _ in
+                    self.show.related = related
+                    group.leave()
+                }
+                
+                group.enter()
+                TraktManager.shared.getPeople(forMediaOfType: .shows, id: self.show.id) { actors, crew, _ in
+                    self.show.actors = actors
+                    self.show.crew = crew
+                    group.leave()
+                }
+                
+    //            group.enter()
+    //            self.loadEpisodeMetadata(for: show) { episodes in
+    //                self.show.episodes = episodes
+    //                self.isLoading = false
+    //                group.leave()
+    //            }
+    //
+    //            group.notify(queue: .main) {
+    //                self.didLoad = true
+    //            }
+                
+            } catch {
+                self.error = error
             }
-            
-            group.enter()
-            TraktManager.shared.getPeople(forMediaOfType: .shows, id: self.show.id) { actors, crew, _ in
-                self.show.actors = actors
-                self.show.crew = crew
-                group.leave()
-            }
-            
-//            group.enter()
-//            self.loadEpisodeMetadata(for: show) { episodes in
-//                self.show.episodes = episodes
-//                self.isLoading = false
-//                group.leave()
-//            }
-//            
-//            group.notify(queue: .main) {
-//                self.didLoad = true
-//            }
+            self.isLoading = false
         }
     }
     

@@ -108,7 +108,7 @@ struct MoviesView: View {
     var filtersView: some View {
         HStack(spacing: 0) {
             Picker("Movies", selection: $viewModel.currentFilter) {
-                ForEach(MovieManager.Filters.allCases, id: \.self) { item in
+                ForEach(MoviesApi.Filters.allCases, id: \.self) { item in
                     Text(item.string).tag(item)
                 }
             
@@ -118,7 +118,7 @@ struct MoviesView: View {
                 .padding(.horizontal, 5)
             #endif
             Picker("Genre", selection: $viewModel.currentGenre) {
-                ForEach(MovieManager.Genres.allCases, id: \.self) { item in
+                ForEach(MoviesApi.Genres.allCases, id: \.self) { item in
                     Text(item.string).tag(item)
                 }
             }

@@ -41,38 +41,35 @@ class MovieDetailsViewModel: ObservableObject {
         }
         
         isLoading = true
-        PopcornKit.getMovieInfo(movie.id) { (movie, error) in
-            if let error = error {
-                self.error = error
-                self.isLoading = false
-                return
-            }
-            if var movie = movie {
+        Task { @MainActor in
+            do {
+                var movie = try await PopcornKit.getMovieInfo(movie.id)
                 movie.ratings = self.movie.ratings
                 movie.largeBackgroundImage = self.movie.largeBackgroundImage ?? movie.largeBackgroundImage //keep last background
                 self.movie = movie
                 self.downloadModel = DownloadButtonViewModel(media: movie)
-            }
-            
-            self.isLoading = false
-            let group = DispatchGroup()
                 
-            group.enter()
-            TraktManager.shared.getRelated(self.movie) {arg1,_ in
-                self.movie.related = arg1
-                group.leave()
+                let group = DispatchGroup()
+                group.enter()
+                TraktManager.shared.getRelated(self.movie) {arg1,_ in
+                    self.movie.related = arg1
+                    group.leave()
+                }
+                
+                group.enter()
+                TraktManager.shared.getPeople(forMediaOfType: .movies, id: self.movie.id) {arg1,arg2,_ in
+                    self.movie.actors = arg1
+                    self.movie.crew = arg2
+                    group.leave()
+                }
+                
+                group.notify(queue: .main) {
+                    self.didLoad = true
+                }
+            } catch {
+                self.error = error
             }
-            
-            group.enter()
-            TraktManager.shared.getPeople(forMediaOfType: .movies, id: self.movie.id) {arg1,arg2,_ in
-                self.movie.actors = arg1
-                self.movie.crew = arg2
-                group.leave()
-            }
-            
-            group.notify(queue: .main) {
-                self.didLoad = true
-            }
+            self.isLoading = false
         }
     }
     

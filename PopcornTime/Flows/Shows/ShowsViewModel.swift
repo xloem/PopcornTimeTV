@@ -12,7 +12,7 @@ import PopcornKit
 class ShowsViewModel: ObservableObject, ShowRatingsLoader {
     var page = 1
     @Published var hasNextPage = false
-    @Published var currentFilter: ShowManager.Filters = .trending {
+    @Published var currentFilter: ShowsApi.Filters = .trending {
         didSet { reload() }
     }
     @Published var currentGenre = NetworkManager.Genres.all {

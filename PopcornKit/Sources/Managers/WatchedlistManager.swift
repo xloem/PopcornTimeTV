@@ -135,13 +135,12 @@ open class WatchedlistManager<N: Media & Hashable> {
      
      - Returns: Locally stored progress (may be out of date if user has authenticated with trakt).
      */
-    @discardableResult open func getProgress(completion: (([N: Float]) -> Void)? = nil) -> [String: Float] {
+    @discardableResult open func getProgress(completion: (([String: Float]) -> Void)? = nil) -> [String: Float] {
         DispatchQueue.global(qos: .background).async{
             TraktManager.shared.getPlaybackProgress(forMediaOfType: N.self) { (dict, error) in
                 guard error == nil else { return }
                 
-                let media = Array(dict.keys)
-                let ids = media.map({ $0.id })
+                let ids = Array(dict.keys)
                 let progress = Array(dict.values)
                 
                 UserDefaults.standard.set(Dictionary<String, Float>(uniqueKeysWithValues: zip(ids, progress)), forKey: "\(self.currentType.rawValue)Progress")
@@ -169,39 +168,39 @@ open class WatchedlistManager<N: Media & Hashable> {
         return 0.0
     }
     
-    /**
-     Retrieves media that the user is currently watching.
-     
-     - Parameter completion: Optional completion handler called when on deck media has been retrieved from trakt. May never be called if user hasn't authenticated with Trakt.
-     
-     - Returns: Locally stored on deck media id's (may be out of date if user has authenticated with trakt).
-     */
-    @discardableResult open func getOnDeck(completion: (([N]) -> Void)? = nil) -> [String] {
-        let group = DispatchGroup()
-        
-        var updatedWatched:  [N] = []
-        var updatedProgress: [N] = []
-        
-        group.enter()
-        let watched = getWatched() { updated in
-            updatedWatched = updated
-            group.leave()
-        }
-        if !TraktManager.shared.isSignedIn(){
-            group.leave()
-        }
-        group.enter()
-        let progress = Array(getProgress() { updated in
-            updatedProgress = Array(updated.keys)
-            group.leave()
-            }.keys)
-        if !TraktManager.shared.isSignedIn(){
-            group.leave()
-        }
-        group.notify(queue: .main) {
-            completion?(Array(Set(updatedProgress).subtracting(updatedWatched)))
-        }
-        
-        return Array(Set(progress).subtracting(watched))
-    }
+//    /**
+//     Retrieves media that the user is currently watching.
+//     
+//     - Parameter completion: Optional completion handler called when on deck media has been retrieved from trakt. May never be called if user hasn't authenticated with Trakt.
+//     
+//     - Returns: Locally stored on deck media id's (may be out of date if user has authenticated with trakt).
+//     */
+//    @discardableResult open func getOnDeck(completion: (([N]) -> Void)? = nil) -> [String] {
+//        let group = DispatchGroup()
+//        
+//        var updatedWatched:  [N] = []
+//        var updatedProgress: [N] = []
+//        
+//        group.enter()
+//        let watched = getWatched() { updated in
+//            updatedWatched = updated
+//            group.leave()
+//        }
+//        if !TraktManager.shared.isSignedIn(){
+//            group.leave()
+//        }
+//        group.enter()
+//        let progress = Array(getProgress() { updated in
+//            updatedProgress = Array(updated.keys)
+//            group.leave()
+//            }.keys)
+//        if !TraktManager.shared.isSignedIn(){
+//            group.leave()
+//        }
+//        group.notify(queue: .main) {
+//            completion?(Array(Set(updatedProgress).subtracting(updatedWatched)))
+//        }
+//        
+//        return Array(Set(progress).subtracting(watched))
+//    }
 }

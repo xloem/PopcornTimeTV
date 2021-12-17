@@ -121,14 +121,14 @@ open class TraktManager: NetworkManager {
      
      - Parameter completion: The completion handler for the request containing a dictionary of either imdbIds or tvdbIds depending on the type selected as keys and the users corrisponding watched progress as values and an optional error. Eg. ["tt1431045": 0.5] means you have watched half of Deadpool.
      */
-    open func getPlaybackProgress<T: Media>(forMediaOfType type: T.Type, completion:@escaping ([T: Float], NSError?) -> Void) {
+    open func getPlaybackProgress<T: Media>(forMediaOfType type: T.Type, completion:@escaping ([String: Float], NSError?) -> Void) {
         guard var credential = traktCredentials() else { return }
         DispatchQueue.global(qos: .userInitiated).async {
             if credential.expired {
                 do {
                     credential = try OAuthCredential(Trakt.base + Trakt.auth + Trakt.token, refreshToken: credential.refreshToken!, clientID: Trakt.apiKey, clientSecret: Trakt.apiSecret, useBasicAuthentication: false)
                 } catch let error as NSError {
-                    DispatchQueue.global(qos: .background).async(execute: { completion([T: Float](), error) })
+                    DispatchQueue.global(qos: .background).async(execute: { completion([String: Float](), error) })
                 }
             }
             let mediaType: String
@@ -140,32 +140,26 @@ open class TraktManager: NetworkManager {
             default:
                 fatalError("Only retrieving progress for movies and episode is supported.")
             }
+            
             let queue = DispatchQueue(label: "com.popcorntimetv.popcornkit.response.queue", attributes: .concurrent)
             self.manager.request(Trakt.base + Trakt.sync + Trakt.playback + mediaType, parameters: Trakt.extended, headers: Trakt.Headers.Authorization(credential.accessToken)).validate().responseJSON(queue: queue, options: .allowFragments) { response in
-                guard let value = response.result.value else { completion([:], response.result.error as NSError?); return }
+                guard let value = response.result.value else {
+                    completion([:], response.result.error as NSError?)
+                    return
+                }
                 let responseObject = JSON(value)
-                let group = DispatchGroup()
-                var progressDict = [T: Float]()
+                var progressDict = [String: Float]()
+                
                 for (_, item) in responseObject {
                     guard let type = item["type"].string,
                         let progress = item["progress"].float,
                         progress != 0,
                         let media = Mapper<T>(context: TraktContext()).map(JSONObject: item[type].dictionaryObject)
                         else { continue }
-                    group.enter()
-                    guard var episode = media as? Episode, let show = Mapper<Show>(context: TraktContext()).map(JSONObject: item["show"].dictionaryObject) else {
-                        let completion: (Media?, NSError?) -> Void = { (media, _) in
-                            if let media = media { progressDict[media as! T] = progress/100.0 }
-                            group.leave()
-                        }
-                        media is Movie ? MovieManager.shared.getInfo(media.id, completion: completion) : ShowManager.shared.getInfo(media.id, completion: completion)
-                        continue
-                    }
-                    episode.show = show
-                    progressDict[episode as! T] = progress/100.0
-                    group.leave()
+
+                    progressDict[media.id] = progress/100.0
                 }
-                group.notify(queue: .main, execute: { completion(progressDict, nil) })
+                completion(progressDict, nil)
             }
         }
     }
@@ -366,7 +360,18 @@ open class TraktManager: NetworkManager {
                         if let media = media { watchlist.append(media as! T) }
                         group.leave()
                     }
-                    media is Movie ?  MovieManager.shared.getInfo(media.id, completion: completion) : ShowManager.shared.getInfo(media.id, completion: completion)
+                    Task {
+                        var item: Media? = nil
+                        switch media {
+                        case is Movie:
+                            item = try? await MoviesApi.shared.getInfo(media.id)
+                        case is Show:
+                            item = try? await ShowsApi.shared.getInfo(media.id)
+                        default:
+                            break
+                        }
+                        completion(item, nil)
+                    }
                 }
                 group.notify(queue: .main, execute: { completion(watchlist, nil) })
             }

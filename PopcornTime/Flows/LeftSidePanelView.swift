@@ -15,7 +15,7 @@ struct LeftSidePanelView: View {
     
     @State var isActive = false
     @State var selectedFilter: String?
-    @Binding var currentSort: MovieManager.Filters
+    @Binding var currentSort: MoviesApi.Filters
     @Binding var currentGenre: NetworkManager.Genres
     
     enum Selection: Hashable {
