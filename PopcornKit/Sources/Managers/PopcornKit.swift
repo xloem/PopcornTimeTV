@@ -36,18 +36,18 @@ public func getShowInfo(_ imdbId: String) async throws -> Show {
     return try await ShowsApi.shared.getInfo(imdbId)
 }
 
-/**
- Get more episode information.
- 
- - Parameter tvdbId:        The tvdb identification code of the episode.
- 
- - Parameter completion:    Completion handler for the request. Returns episode upon success, error upon failure.
- */
-public func getEpisodeInfo(_ tvdbId: Int, completion: @escaping (Episode?, NSError?) -> Void) {
-    DispatchQueue.global(qos: .background).async {
-        TraktManager.shared.getEpisodeInfo(forTvdb: tvdbId, completion: completion)
-    }
-}
+///**
+// Get more episode information.
+// 
+// - Parameter tvdbId:        The tvdb identification code of the episode.
+// 
+// - Parameter completion:    Completion handler for the request. Returns episode upon success, error upon failure.
+// */
+//public func getEpisodeInfo(_ tvdbId: Int, completion: @escaping (Episode?, NSError?) -> Void) {
+//    DispatchQueue.global(qos: .background).async {
+//        TraktManager.shared.getEpisodeInfo(forTvdb: tvdbId, completion: completion)
+//    }
+//}
 
 
 /**

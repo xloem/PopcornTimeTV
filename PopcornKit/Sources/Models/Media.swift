@@ -2,7 +2,6 @@
 
 import Foundation
 import ObjectMapper
-import MediaPlayer.MPMediaItem
 
 /// Generic media protocol.
 public protocol Media: Mappable {

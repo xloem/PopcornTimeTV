@@ -9,7 +9,7 @@
 import Foundation
 import PopcornKit
 
-class MoviesViewModel: ObservableObject, MovieRatingsLoader {
+class MoviesViewModel: ObservableObject {
     var page = 1
     @Published var hasNextPage = false
     @Published var currentFilter: MoviesApi.Filters = .trending {

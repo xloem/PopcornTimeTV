@@ -10,7 +10,7 @@ import SwiftUI
 import PopcornKit
 import Kingfisher
 
-struct PersonDetailsView: View {
+struct PersonDetailsView: View, MediaPosterLoader {
     let theme = Theme()
     @StateObject var viewModel: PersonDetailsViewModel
     
@@ -57,8 +57,8 @@ struct PersonDetailsView: View {
                 .padding(.top, 14)
                 .padding(.leading, theme.leading)
             ScrollView(.horizontal) {
-                HStack(spacing: theme.spacing) {
-                    ForEach(viewModel.movies, id: \.self) { movie in
+                LazyHStack(spacing: theme.spacing) {
+                    ForEach(viewModel.movies, id: \.id) { movie in
                         NavigationLink(
                             destination: MovieDetailsView(viewModel: MovieDetailsViewModel(movie: movie)),
                             label: {
@@ -66,6 +66,9 @@ struct PersonDetailsView: View {
                                     .frame(width: 240)
                             })
                             .buttonStyle(PlainNavigationLinkButtonStyle())
+                            .task {
+                                await loadPosterIfMissing(media: movie, mediaPosters: $viewModel.movies)
+                            }
 //                            .padding([.leading, .trailing], 10)
                     }
                     .padding(20) // allow zoom
@@ -85,8 +88,8 @@ struct PersonDetailsView: View {
                 .padding(.top, 14)
                 .padding(.leading, theme.leading)
             ScrollView(.horizontal) {
-                HStack(spacing: theme.spacing) {
-                    ForEach(viewModel.shows, id: \.self) { show in
+                LazyHStack(spacing: theme.spacing) {
+                    ForEach(viewModel.shows, id: \.id) { show in
                         NavigationLink(
                             destination: ShowDetailsView(viewModel: ShowDetailsViewModel(show: show)),
                             label: {
@@ -94,6 +97,9 @@ struct PersonDetailsView: View {
                                     .frame(width: 240)
                             })
                             .buttonStyle(PlainNavigationLinkButtonStyle())
+                            .task {
+                                await loadPosterIfMissing(media: show, mediaPosters: $viewModel.shows)
+                            }
 //                            .padding([.leading, .trailing], 10)
                     }
                     .padding(20) // allow zoom

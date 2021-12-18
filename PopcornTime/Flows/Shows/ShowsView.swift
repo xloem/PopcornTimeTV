@@ -9,7 +9,7 @@
 import SwiftUI
 import PopcornKit
 
-struct ShowsView: View {
+struct ShowsView: View, MediaRatingsLoader {
     static let theme = Theme()
     
     @StateObject var viewModel = ShowsViewModel()
@@ -74,9 +74,13 @@ struct ShowsView: View {
         NavigationLink(
             destination: ShowDetailsView(viewModel: ShowDetailsViewModel(show: show)),
             label: {
-                ShowView(show: show, ratingsLoader: viewModel)
+                ShowView(show: show)
             })
-            .buttonStyle(PlainNavigationLinkButtonStyle())
+            .buttonStyle(PlainNavigationLinkButtonStyle(onFocus: {
+                Task {
+                    await loadRatingIfMissing(media: show, into: $viewModel.shows)
+                }
+            }))
             .padding([.leading, .trailing], 10)
     }
     

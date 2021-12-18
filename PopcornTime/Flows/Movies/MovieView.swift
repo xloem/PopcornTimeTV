@@ -15,7 +15,7 @@ struct MovieView: View {
     
     var movie: Movie
     var lineLimit = 1
-    var ratingsLoader: MovieRatingsLoader?
+    
     @Environment(\.isFocused) var focused: Bool
     #if os(iOS)
     @Environment(\.isButtonPress) var isButtonPress: Bool
@@ -61,9 +61,6 @@ struct MovieView: View {
             }
         })
         #endif
-        .task {
-            await ratingsLoader?.loadRatingIfMissing(movie: movie)
-        }
     }
     
     struct Theme {

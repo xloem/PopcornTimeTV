@@ -9,15 +9,15 @@
 import SwiftUI
 import PopcornKit
 
-class PersonDetailsViewModel: ObservableObject {
+class PersonDetailsViewModel: ObservableObject, MediaPosterLoader {
     var person: Person
     
     @Published var isLoading = false
     var didLoad = false
     
-    var error: Error?
-    var shows: [Show] = []
-    var movies: [Movie] = []
+    @Published var error: Error?
+    @Published var shows: [Show] = []
+    @Published var movies: [Movie] = []
     
     init(person: Person) {
         self.person = person
@@ -29,25 +29,18 @@ class PersonDetailsViewModel: ObservableObject {
         }
         
         isLoading = true
-        let group = DispatchGroup()
-        
-        group.enter()
-        TraktManager.shared.getMediaCredits(forPersonWithId: person.imdbId, mediaType: Show.self) { [weak self] data, error in
-            self?.shows = data.uniqued
-            self?.error = error
-            group.leave()
-        }
-        
-        group.enter()
-        TraktManager.shared.getMediaCredits(forPersonWithId: person.imdbId, mediaType: Movie.self) {[weak self] data, error in
-            self?.movies = data.uniqued
-            self?.error = error
-            group.leave()
-        }
-        
-        group.notify(queue: .main) { [weak self] in
-            self?.isLoading = false
-            self?.didLoad = true
+        Task { @MainActor in
+            do {
+                async let moviesCredits = TraktManager.shared.getMediaCredits(forPersonWithId: person.imdbId, mediaType: Movie.self)
+                async let showCredits = TraktManager.shared.getMediaCredits(forPersonWithId: person.imdbId, mediaType: Show.self)
+                self.movies = try await moviesCredits
+                self.shows = try await showCredits
+                self.didLoad = true
+            } catch {
+                self.error = error
+            }
+            
+            self.isLoading = false
         }
     }
 }

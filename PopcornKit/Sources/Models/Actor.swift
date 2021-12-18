@@ -82,8 +82,8 @@ extension Actor: Hashable {
     }
 }
 
-// MARK: Equatable
-
-public func ==(rhs: Actor, lhs: Actor) -> Bool {
-    return rhs.imdbId == lhs.imdbId
-}
+//// MARK: Equatable
+//
+//public func ==(rhs: Actor, lhs: Actor) -> Bool {
+//    return rhs.imdbId == lhs.imdbId
+//}

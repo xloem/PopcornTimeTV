@@ -14,7 +14,6 @@ struct ShowView: View {
     let theme = Theme()
     
     var show: Show
-    var ratingsLoader: ShowRatingsLoader?
     @Environment(\.isFocused) var focused: Bool
     #if os(iOS)
     @Environment(\.isButtonPress) var isButtonPress: Bool
@@ -55,9 +54,6 @@ struct ShowView: View {
             }
         })
         #endif
-        .task {
-            await ratingsLoader?.loadRatingIfMissing(show: show)
-        }
     }
     
     struct Theme {

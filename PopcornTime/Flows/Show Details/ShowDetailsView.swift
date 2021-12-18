@@ -10,7 +10,7 @@ import SwiftUI
 import PopcornKit
 import Kingfisher
 
-struct ShowDetailsView: View {
+struct ShowDetailsView: View, MediaPosterLoader {
     let theme = Theme()
     
     @StateObject var viewModel: ShowDetailsViewModel
@@ -80,14 +80,14 @@ struct ShowDetailsView: View {
                         .focusSection()
                         #endif
                         
-                        if show.related.count > 0 {
+                        if viewModel.related.count > 0 {
                             alsoWatchedSection(scroll: scroll)
                                 #if os(tvOS)
                                 .focusSection()
                                 #endif
                         }
-                        if show.actors.count > 0 {
-                            ActorsCrewView(persons: show.actors + show.crew)
+                        if viewModel.persons.count > 0 {
+                            ActorsCrewView(persons: $viewModel.persons)
                             #if os(tvOS)
                             .focusSection()
                             #endif
@@ -243,7 +243,7 @@ struct ShowDetailsView: View {
                 .padding(.top, 14)
             ScrollView(.horizontal, showsIndicators: false) {
                 LazyHStack(alignment: .center, spacing: theme.watchedSection.spacing) {
-                    ForEach(show.related, id: \.self) { show in
+                    ForEach(viewModel.related, id: \.id) { show in
                         NavigationLink(
                             destination: ShowDetailsView(viewModel: ShowDetailsViewModel(show: show)),
                             label: {
@@ -255,6 +255,9 @@ struct ShowDetailsView: View {
 //                                    scroll.scrollTo(section3, anchor: .top)
 //                                }
                             }))
+                            .task {
+                                await loadPosterIfMissing(media: show, mediaPosters: $viewModel.related)
+                            }
                     }
                 }
                 .padding(.horizontal, theme.watchedSection.leading)

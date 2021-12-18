@@ -9,7 +9,7 @@
 import SwiftUI
 import PopcornKit
 
-struct ActorsCrewView: View {
+struct ActorsCrewView: View, CharacterHeadshotLoader {
     struct Theme {
         let height: CGFloat = value(tvOS: 321, macOS: 218)
         let cellWidth: CGFloat = value(tvOS: 220, macOS: 150)
@@ -18,7 +18,7 @@ struct ActorsCrewView: View {
     }
     let theme = Theme()
     
-    var persons: [Person]
+    @Binding var persons: [Person]
     
     var body: some View {
         return VStack(alignment: .leading) {
@@ -33,6 +33,9 @@ struct ActorsCrewView: View {
                 LazyHStack(alignment: .center, spacing: theme.spacing) {
                     ForEach(0..<persons.count, id: \.self) { index in
                         personView(person: persons[index])
+                            .task {
+                                await loadHeadshotIfMissing(person: persons[index], into: $persons)
+                            }
                     }
                 }
                 .padding(.horizontal, theme.leading)
@@ -58,7 +61,7 @@ struct ActorsCrewView: View {
 struct ActorsCrewView_Previews: PreviewProvider {
     static var previews: some View {
         let show = Show.dummy()
-        ActorsCrewView(persons: show.actors + show.crew)
+        ActorsCrewView(persons: .constant(show.actors + show.crew))
             .previewLayout(.sizeThatFits)
             .preferredColorScheme(.dark)
     }

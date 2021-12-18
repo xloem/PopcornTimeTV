@@ -21,6 +21,8 @@ class ShowDetailsViewModel: ObservableObject {
     @Published var isLoading = false
     @Published var didLoad = false
     var latestUnwatchedEpisode: Episode?
+    @Published var persons: [Person] = []
+    @Published var related: [Show] = []
     
     init(show: Show) {
         self.show = show
@@ -47,10 +49,17 @@ class ShowDetailsViewModel: ObservableObject {
         isLoading = true
         Task { @MainActor in
             do  {
+                async let related = TraktManager.shared.getRelated(self.show)
+                async let people = TraktManager.shared.getPeople(forMediaOfType: .shows, id: self.show.id)
+                
                 var show = try await PopcornKit.getShowInfo(show.id)
                 show.largeBackgroundImage = self.show.largeBackgroundImage ?? show.largeBackgroundImage //keep last background
                 show.ratings = self.show.ratings
                 self.show = show
+                
+                self.related = (try? await related) ?? []
+                let persons = (try? await people) ?? (actors: [], crew: [])
+                self.persons = persons.actors + persons.crew
                 
                 guard let season = show.latestUnwatchedEpisode()?.season ?? show.seasonNumbers.first else {
                     let error = NSError(domain: "com.popcorntimetv.popcorntime.error", code: -243, userInfo:
@@ -59,33 +68,6 @@ class ShowDetailsViewModel: ObservableObject {
                 }
                 self.currentSeason = season
                 self.didLoad = true
-                
-                let group = DispatchGroup()
-                    
-                group.enter()
-                TraktManager.shared.getRelated(self.show) { related, _ in
-                    self.show.related = related
-                    group.leave()
-                }
-                
-                group.enter()
-                TraktManager.shared.getPeople(forMediaOfType: .shows, id: self.show.id) { actors, crew, _ in
-                    self.show.actors = actors
-                    self.show.crew = crew
-                    group.leave()
-                }
-                
-    //            group.enter()
-    //            self.loadEpisodeMetadata(for: show) { episodes in
-    //                self.show.episodes = episodes
-    //                self.isLoading = false
-    //                group.leave()
-    //            }
-    //
-    //            group.notify(queue: .main) {
-    //                self.didLoad = true
-    //            }
-                
             } catch {
                 self.error = error
             }

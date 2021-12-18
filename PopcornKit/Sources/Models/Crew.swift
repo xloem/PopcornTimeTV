@@ -80,11 +80,11 @@ extension Crew: Hashable {
     }
 }
 
-// MARK: Equatable
-
-public func ==(rhs: Crew, lhs: Crew) -> Bool {
-    return rhs.imdbId == lhs.imdbId
-}
+//// MARK: Equatable
+//
+//public func ==(rhs: Crew, lhs: Crew) -> Bool {
+//    return rhs.imdbId == lhs.imdbId
+//}
 
 public enum Role: String {
     case artist = "art"

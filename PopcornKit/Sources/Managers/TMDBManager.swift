@@ -9,6 +9,18 @@ open class TMDBManager: NetworkManager {
     /// Creates new instance of TMDBManager class
     public static let shared = TMDBManager()
     
+    let client = HttpClient(config: .init(serverURL: TMDB.base, configuration: {
+        let configuration = URLSessionConfiguration.default
+        configuration.httpCookieAcceptPolicy = .never
+        configuration.httpShouldSetCookies = false
+        configuration.timeoutIntervalForResource = 30
+//        configuration.urlCache = nil
+//        configuration.requestCachePolicy = .returnCacheDataDontLoad
+        configuration.requestCachePolicy = .returnCacheDataElseLoad
+//        configuration.httpAdditionalHeaders = TMDB.defaultHeaders
+        return configuration
+    }()))
+    
     /**
      Load movie posters from TMDB. Either a tmdb id or an imdb id must be passed in.
      
@@ -51,25 +63,21 @@ open class TMDBManager: NetworkManager {
      
      - Parameter completion:        The completion handler for the request containing a poster, backdrop url and an optional error.
      */
-    open func getPoster(forMediaOfType type: TMDB.MediaType, TMDBId tmdb: Int, completion: @escaping (_ backdrop: String?, _ poster: String?, NSError?) -> Void) {
+    open func getPoster(forMediaOfType type: TMDB.MediaType, TMDBId tmdb: Int) async -> (backdrop: String, poster: String) {
+        var image: String?
+        var backdrop: String?
         
-        self.manager.request(TMDB.base + "/" + type.rawValue + "/\(tmdb)" + TMDB.images, parameters: TMDB.defaultHeaders).validate().responseJSON { (response) in
-            guard let value = response.result.value else {
-                completion(nil, nil, response.result.error as NSError?);
-                return
-            }
-            let responseDict = JSON(value)
-            
-            var image: String?
-            var backdrop: String?
+        let path = "/" + type.rawValue + "/\(tmdb)" + TMDB.images
+        if let response = try? await client.request(.get, path: path, parameters: TMDB.defaultHeaders).responseData() {
+            let responseDict = JSON(response)
             if let poster = responseDict["posters"].first?.1["file_path"].string {
                 image = "https://image.tmdb.org/t/p/w780" + poster
             }
             if let backdrops = responseDict["backdrops"].first?.1["file_path"].string {
                 backdrop = "https://image.tmdb.org/t/p/w1280" + backdrops
             }
-            completion(backdrop, image, nil)
         }
+        return (backdrop: backdrop ?? "", poster: image ?? "")
     }
     
     /**
@@ -166,6 +174,23 @@ open class TMDBManager: NetworkManager {
             }
             completion(id, image, nil)
         }
+    }
+    
+    /**
+     Load character headshots from TMDB. Either a tmdb id or an imdb id must be passed in.
+     
+     - Parameter tmdbId:              The tmdb id of the person.
+     */
+    open func getCharacterHeadshots(tmdbId: Int) async throws -> String {
+        let path = TMDB.person + "/\(tmdbId)" + TMDB.images
+        let data = try await client.request(.get, path: path, parameters: TMDB.defaultHeaders).responseData()
+        let responseDict = JSON(data)
+        
+        var image: String?
+        if let headshot = responseDict["profiles"].first?.1["file_path"].string {
+            image = "https://image.tmdb.org/t/p/w780" + headshot
+        }
+        return image ?? ""
     }
     
     /**

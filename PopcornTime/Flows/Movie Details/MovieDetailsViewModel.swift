@@ -10,12 +10,14 @@ import Foundation
 import PopcornKit
 import AVKit
 
-class MovieDetailsViewModel: ObservableObject {
+class MovieDetailsViewModel: ObservableObject, CharacterHeadshotLoader, MediaRatingsLoader, MediaPosterLoader {
     @Published var movie: Movie
     var error: Error?
     
     @Published var isLoading = false
     @Published var didLoad = false
+    @Published var persons: [Person] = []
+    @Published var related: [Movie] = []
     
     var trailerModel: TrailerButtonViewModel
     var downloadModel: DownloadButtonViewModel
@@ -43,29 +45,19 @@ class MovieDetailsViewModel: ObservableObject {
         isLoading = true
         Task { @MainActor in
             do {
+                async let related = TraktManager.shared.getRelated(self.movie)
+                async let people = TraktManager.shared.getPeople(forMediaOfType: .movies, id: self.movie.id)
+                
                 var movie = try await PopcornKit.getMovieInfo(movie.id)
                 movie.ratings = self.movie.ratings
                 movie.largeBackgroundImage = self.movie.largeBackgroundImage ?? movie.largeBackgroundImage //keep last background
                 self.movie = movie
                 self.downloadModel = DownloadButtonViewModel(media: movie)
                 
-                let group = DispatchGroup()
-                group.enter()
-                TraktManager.shared.getRelated(self.movie) {arg1,_ in
-                    self.movie.related = arg1
-                    group.leave()
-                }
-                
-                group.enter()
-                TraktManager.shared.getPeople(forMediaOfType: .movies, id: self.movie.id) {arg1,arg2,_ in
-                    self.movie.actors = arg1
-                    self.movie.crew = arg2
-                    group.leave()
-                }
-                
-                group.notify(queue: .main) {
-                    self.didLoad = true
-                }
+                let persons = (try? await people) ?? (actors: [], crew: [])
+                self.related = (try? await related) ?? []
+                self.persons = persons.actors + persons.crew
+                self.didLoad = true
             } catch {
                 self.error = error
             }

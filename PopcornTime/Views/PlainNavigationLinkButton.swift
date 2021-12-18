@@ -33,6 +33,11 @@ struct PlainNavigationLinkButton: View {
                     onFocus()
                 }
             }
+            .onChange(of: configuration.isPressed) { newValue in
+                if newValue {
+                    onFocus()
+                }
+            }
     }
     
     /// highlight effect

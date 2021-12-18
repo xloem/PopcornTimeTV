@@ -10,7 +10,7 @@ import SwiftUI
 import PopcornKit
 import Kingfisher
 
-struct MovieDetailsView: View {
+struct MovieDetailsView: View, MediaPosterLoader {
     let theme = Theme()
     
     @StateObject var viewModel: MovieDetailsViewModel
@@ -53,14 +53,14 @@ struct MovieDetailsView: View {
                         #endif
                         
                         VStack {
-                            if movie.related.count > 0 {
+                            if viewModel.related.count > 0 {
                                 alsoWatchedSection
                                     #if os(tvOS)
                                     .focusSection()
                                     #endif
                             }
-                            if movie.actors.count > 0 {
-                                ActorsCrewView(persons: movie.actors + movie.crew)
+                            if viewModel.persons.count > 0 {
+                                ActorsCrewView(persons: $viewModel.persons)
                                 #if os(tvOS)
                                 .focusSection()
                                 #endif
@@ -248,7 +248,7 @@ struct MovieDetailsView: View {
                 .padding(.top, 14)
             ScrollView(.horizontal, showsIndicators: false) {
                 LazyHStack(alignment: .center, spacing: theme.watchedSection.spacing) {
-                    ForEach(movie.related, id: \.self) { movie in
+                    ForEach(viewModel.related, id: \.id) { movie in
                         NavigationLink(
                             destination: MovieDetailsView(viewModel: MovieDetailsViewModel(movie: movie)),
                             label: {
@@ -256,6 +256,9 @@ struct MovieDetailsView: View {
                                     .frame(width: theme.watchedSection.cellWidth)
                             })
                             .buttonStyle(PlainNavigationLinkButtonStyle())
+                            .task {
+                                await loadPosterIfMissing(media: movie, mediaPosters: $viewModel.related)
+                            }
                     }
                 }
                 .padding(.horizontal, theme.watchedSection.leading)

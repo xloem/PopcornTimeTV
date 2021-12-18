@@ -9,7 +9,7 @@
 import SwiftUI
 import PopcornKit
 
-class ShowsViewModel: ObservableObject, ShowRatingsLoader {
+class ShowsViewModel: ObservableObject {
     var page = 1
     @Published var hasNextPage = false
     @Published var currentFilter: ShowsApi.Filters = .trending {

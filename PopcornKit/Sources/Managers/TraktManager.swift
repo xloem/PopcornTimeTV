@@ -22,6 +22,18 @@ open class TraktManager: NetworkManager {
     /// OAuth state parameter added for extra security against cross site forgery.
     fileprivate var state: String!
     
+    let client = HttpClient(config: .init(serverURL: Trakt.base, configuration: {
+        let configuration = URLSessionConfiguration.default
+        configuration.httpCookieAcceptPolicy = .never
+        configuration.httpShouldSetCookies = false
+        configuration.timeoutIntervalForResource = 30
+//        configuration.urlCache = nil
+//        configuration.requestCachePolicy = .returnCacheDataDontLoad
+        configuration.requestCachePolicy = .returnCacheDataElseLoad
+        configuration.httpAdditionalHeaders = Trakt.Headers.Default
+        return configuration
+    }()))
+    
     /**
      Scrobbles current video.
      
@@ -283,40 +295,42 @@ open class TraktManager: NetworkManager {
      
      - Parameter type:  The type of the item (movie or show).
      - Parameter id:    The id of the movie or show.
-     
-     - Parameter completion: The completion handler for the request containing an array of actors, array of crews and an optional error.
      */
-    open func getPeople(forMediaOfType type: Trakt.MediaType, id: String, completion: @escaping ([Actor], [Crew], NSError?) -> Void) {
-        self.manager.request(Trakt.base + "/\(type.rawValue)/\(id)" + Trakt.people, headers: Trakt.Headers.Default).validate().responseJSON { response in
-            guard let value = response.result.value else { completion([Actor](), [Crew](), response.result.error as NSError?); return }
-            let responseObject = JSON(value)
-            var actors = [Actor]()
-            var crew = [Crew]()
-            let group = DispatchGroup()
-            for (_, actor) in responseObject["cast"] {
-                guard var actor = Mapper<Actor>().map(JSONObject: actor.dictionaryObject) else { continue }
-                group.enter()
-                TMDBManager.shared.getCharacterHeadshots(forPersonWithImdbId: actor.imdbId, orTMDBId: actor.tmdbId) { (_, image, error) in
-                    if let image = image { actor.largeImage = image }
-                    actors.append(actor)
-                    group.leave()
-                }
-            }
-            for (role, people) in responseObject["crew"] {
-                guard let people = Mapper<Crew>().mapArray(JSONObject: people.arrayObject) else { continue }
-                for var person in people {
-                    group.enter()
-                    TMDBManager.shared.getCharacterHeadshots(forPersonWithImdbId: person.imdbId, orTMDBId: person.tmdbId) { (_, image, error) in
-                        if let image = image { person.largeImage = image }
-                        person.roleType = Role(rawValue: role) ?? .unknown
-                        crew.append(person)
-                        group.leave()
-                    }
-                }
-            }
-            group.notify(queue: .main, execute: { completion(actors, crew, nil) })
-            
-        }
+    open func getPeople(forMediaOfType type: Trakt.MediaType, id: String) async throws -> (actors: [Actor], crew: [Crew]) {
+        let path = "/\(type.rawValue)/\(id)" + Trakt.people
+        let traktPeople: TracktPeople = try await client.request(.get, path: path).responseMapable()
+        return (actors: traktPeople.actors, crew: traktPeople.crew)
+        
+//        self.manager.request(Trakt.base + "/\(type.rawValue)/\(id)" + Trakt.people, headers: Trakt.Headers.Default).validate().responseJSON { response in
+//            guard let value = response.result.value else { completion([Actor](), [Crew](), response.result.error as NSError?); return }
+//            let responseObject = JSON(value)
+//            var actors = [Actor]()
+//            var crew = [Crew]()
+//            let group = DispatchGroup()
+//            for (_, actor) in responseObject["cast"] {
+//                guard var actor = Mapper<Actor>().map(JSONObject: actor.dictionaryObject) else { continue }
+//                group.enter()
+//                TMDBManager.shared.getCharacterHeadshots(forPersonWithImdbId: actor.imdbId, orTMDBId: actor.tmdbId) { (_, image, error) in
+//                    if let image = image { actor.largeImage = image }
+//                    actors.append(actor)
+//                    group.leave()
+//                }
+//            }
+//            for (role, people) in responseObject["crew"] {
+//                guard let people = Mapper<Crew>().mapArray(JSONObject: people.arrayObject) else { continue }
+//                for var person in people {
+//                    group.enter()
+//                    TMDBManager.shared.getCharacterHeadshots(forPersonWithImdbId: person.imdbId, orTMDBId: person.tmdbId) { (_, image, error) in
+//                        if let image = image { person.largeImage = image }
+//                        person.roleType = Role(rawValue: role) ?? .unknown
+//                        crew.append(person)
+//                        group.leave()
+//                    }
+//                }
+//            }
+//            group.notify(queue: .main, execute: { completion(actors, crew, nil) })
+//
+//        }
     }
     
     /**
@@ -442,37 +456,36 @@ open class TraktManager: NetworkManager {
      Retrieves related media.
      
      - Parameter media: The media you would like to get more information about. **Please note:** only the imdbdId is used but an object needs to be passed in for Swift generics to work so creating a blank object with only an imdbId variable initialised will suffice if necessary.
-     
-     - Parameter completion: The requests completion handler containing array of related movies and an optional error.
      */
-    open func getRelated<T: Media>(_ media: T, completion: @escaping ([T], NSError?) -> Void) {
-        self.manager.request(Trakt.base + (media is Movie ? Trakt.movies : Trakt.shows) + "/\(media.id)" + Trakt.related, parameters: Trakt.extended, headers: Trakt.Headers.Default).validate().responseJSON { response in
-            guard let value = response.result.value else {
-                completion([T](), response.result.error as NSError?)
-                return
-            }
-            
-            let responseObject = JSON(value)
-            let group = DispatchGroup()
-            var array = [T]()
-            for (_, item) in responseObject {
-                if var mediaItem = Mapper<T>(context: TraktContext()).map(JSONObject: item.dictionaryObject),
-                   let tmdbId = mediaItem.tmdbId {
-                    group.enter()
-                    let type: TMDB.MediaType = media is Movie ? .movies : .shows
-                    TMDBManager.shared.getPoster(forMediaOfType: type, TMDBId: tmdbId) { backdrop, poster, error in
-                        if let poster = poster, let backdrop = backdrop {
-                            mediaItem.largeCoverImage = poster
-                            mediaItem.largeBackgroundImage = backdrop
-                            array.append(mediaItem)
-                        }
-                        group.leave()
-                    }
-                }
-            }
-            group.notify(queue: .main, execute: { completion(array, nil) })
-        }
+    open func getRelated<T: Media>(_ media: T) async throws -> [T] {
+        let path = (media is Movie ? Trakt.movies : Trakt.shows) + "/\(media.id)" + Trakt.related
+        let items: [T] = try await client.request(.get, path: path, parameters: Trakt.extended).responseMapable(context: TraktContext())
+        
+        return items.filter({ $0.tmdbId != nil })
+        
+///populate missing poster and backdrop image
+//        let type: TMDB.MediaType = media is Movie ? .movies : .shows
+//        return await withTaskGroup(of: T?.self, body: { group in
+//            items.filter({ $0.tmdbId != nil }).forEach({ item in
+//                group.addTask {
+//                    if let response = await TMDBManager.shared.getPoster(forMediaOfType: type, TMDBId: item.tmdbId!) {
+//                        var mediaItem = item
+//                        mediaItem.largeCoverImage = response.poster
+//                        mediaItem.largeBackgroundImage = response.backdrop
+//                        return mediaItem
+//                    }
+//                    return nil
+//                }
+//            })
+//
+//            return await group.reduce(into: [T](), { result, item in
+//                if let item = item {
+//                    result.append(item)
+//                }
+//            })
+//        })
     }
+    
     
     /**
      Retrieves movies or shows that the person in cast/crew in.
@@ -482,41 +495,52 @@ open class TraktManager: NetworkManager {
      
      - Parameter completion:        The requests completion handler containing array of movies and an optional error.
      */
-    open func getMediaCredits<T: Media>(forPersonWithId id: String, mediaType type: T.Type, completion: @escaping ([T], NSError?) -> Void) {
+    open func getMediaCredits<T: Media>(forPersonWithId id: String, mediaType type: T.Type) async throws -> [T] {
         var typeString = (type is Movie.Type ? Trakt.movies : Trakt.shows)
-        self.manager.request(Trakt.base + Trakt.people + "/\(id)" + typeString, parameters: Trakt.extended, headers: Trakt.Headers.Default).validate().responseJSON { response in
-            guard let value = response.result.value else {
-                completion([T](), response.result.error as NSError?)
-                return
-            }
-            
-            let responseObject = JSON(value)
-            typeString.removeLast() // Removes 's' from the type string
-            typeString.removeFirst() // Removes '/' from the type string
-            var medias = [T]()
-            let group = DispatchGroup()
-            
-            for item in [responseObject["crew"], responseObject["cast"]].compactMap({ $0.array }) {
-                for json in item {
-                    if let payload = json[typeString].dictionaryObject,
-                       var mediaItem = Mapper<T>(context: TraktContext()).map(JSONObject: payload),
-                       let tmdbId = mediaItem.tmdbId {
-                        group.enter()
-                        let type: TMDB.MediaType = type is Movie.Type ? .movies : .shows
-                        TMDBManager.shared.getPoster(forMediaOfType: type, TMDBId: tmdbId) { backdrop, poster, error in
-                            if let poster = poster, let backdrop = backdrop {
-                                mediaItem.largeCoverImage = poster
-                                mediaItem.largeBackgroundImage = backdrop
-                                medias.append(mediaItem)
-                            }
-                            group.leave()
-                        }
-                    }
-                }
-            }
-            
-            group.notify(queue: .main, execute: { completion(medias, nil) })
-        }
+        let path = Trakt.people + "/\(id)" + typeString
+
+        typeString.removeLast() // Removes 's' from the type string
+        typeString.removeFirst() // Removes '/' from the type string
+        
+        let mediaCredit: TracktMediaCredits<T> = try await client.request(.get, path: path, parameters: Trakt.extended)
+            .responseMapable(context: TraktContext(type: typeString))
+        
+        return mediaCredit.medias.filter({ $0.tmdbId != nil })
+        
+        
+//        self.manager.request(Trakt.base + Trakt.people + "/\(id)" + typeString, parameters: Trakt.extended, headers: Trakt.Headers.Default).validate().responseJSON { response in
+//            guard let value = response.result.value else {
+//                completion([T](), response.result.error as NSError?)
+//                return
+//            }
+//
+//            let responseObject = JSON(value)
+//            typeString.removeLast() // Removes 's' from the type string
+//            typeString.removeFirst() // Removes '/' from the type string
+//            var medias = [T]()
+//            let group = DispatchGroup()
+//
+//            for item in [responseObject["crew"], responseObject["cast"]].compactMap({ $0.array }) {
+//                for json in item {
+//                    if let payload = json[typeString].dictionaryObject,
+//                       var mediaItem = Mapper<T>(context: TraktContext()).map(JSONObject: payload),
+//                       let tmdbId = mediaItem.tmdbId {
+//                        group.enter()
+//                        let type: TMDB.MediaType = type is Movie.Type ? .movies : .shows
+//                        TMDBManager.shared.getPoster(forMediaOfType: type, TMDBId: tmdbId) { backdrop, poster, error in
+//                            if let poster = poster, let backdrop = backdrop {
+//                                mediaItem.largeCoverImage = poster
+//                                mediaItem.largeBackgroundImage = backdrop
+//                                medias.append(mediaItem)
+//                            }
+//                            group.leave()
+//                        }
+//                    }
+//                }
+//            }
+//
+//            group.notify(queue: .main, execute: { completion(medias, nil) })
+//        }
     }
     
     /// Downloads users latest watchlist and watchedlist from Trakt.
@@ -550,29 +574,29 @@ open class TraktManager: NetworkManager {
         }
     }
     
-    /**
-     Requests episode info from tvdb.
-     
-     - Parameter id:            The tvdb identification code of the episode.
-     
-     - Parameter completion:    Completion handler for the request. Returns episode upon success, error upon failure.
-     */
-    open func getEpisodeInfo(forTvdb id: Int, completion: @escaping (Episode?, NSError?) -> Void) {
-        self.manager.request(Trakt.base + Trakt.search + Trakt.tvdb + "/\(id)", parameters:Trakt.extended, headers: Trakt.Headers.Default).validate().responseJSON { (response) in
-            guard let value = response.result.value else { completion(nil, response.result.error as NSError?); return }
-            let responseObject = JSON(value)[0]
-            
-            var episode = Mapper<Episode>(context: TraktContext()).map(JSONObject: responseObject["episode"].dictionaryObject)
-            episode?.show = Mapper<Show>(context: TraktContext()).map(JSONObject: responseObject["show"].dictionaryObject)
-            
-            TMDBManager.shared.getEpisodeScreenshots(forShowWithImdbId: episode?.show?.id, orTMDBId: episode?.show?.tmdbId, season: episode?.season ?? -1, episode: episode?.episode ?? -1) { (tmdb, image, error) in
-                if let tmdb = tmdb { episode?.show?.tmdbId = tmdb }
-                if let image = image { episode?.largeBackgroundImage = image }
-                
-                completion(episode, error)
-            }
-        }
-    }
+//    /**
+//     Requests episode info from tvdb.
+//     
+//     - Parameter id:            The tvdb identification code of the episode.
+//     
+//     - Parameter completion:    Completion handler for the request. Returns episode upon success, error upon failure.
+//     */
+//    open func getEpisodeInfo(forTvdb id: Int, completion: @escaping (Episode?, NSError?) -> Void) {
+//        self.manager.request(Trakt.base + Trakt.search + Trakt.tvdb + "/\(id)", parameters:Trakt.extended, headers: Trakt.Headers.Default).validate().responseJSON { (response) in
+//            guard let value = response.result.value else { completion(nil, response.result.error as NSError?); return }
+//            let responseObject = JSON(value)[0]
+//            
+//            var episode = Mapper<Episode>(context: TraktContext()).map(JSONObject: responseObject["episode"].dictionaryObject)
+//            episode?.show = Mapper<Show>(context: TraktContext()).map(JSONObject: responseObject["show"].dictionaryObject)
+//            
+//            TMDBManager.shared.getEpisodeScreenshots(forShowWithImdbId: episode?.show?.id, orTMDBId: episode?.show?.tmdbId, season: episode?.season ?? -1, episode: episode?.episode ?? -1) { (tmdb, image, error) in
+//                if let tmdb = tmdb { episode?.show?.tmdbId = tmdb }
+//                if let image = image { episode?.largeBackgroundImage = image }
+//                
+//                completion(episode, error)
+//            }
+//        }
+//    }
     
     /**
      Searches Trakt for people (crew or actor).
@@ -605,7 +629,82 @@ open class TraktManager: NetworkManager {
 }
 
 /// When mapping to movies or shows from Trakt, the JSON is formatted differently to the Popcorn API. This struct is used to distinguish from which API the Media is being mapped from.
-struct TraktContext: MapContext {}
+struct TraktContext: MapContext {
+    var type: String = ""
+}
+
+struct TracktPeople: Mappable {
+    var actors: [Actor]
+    var crew: [Crew]
+    
+    private init(_ map: Map) throws {
+        actors = []
+        crew = []
+        let responseObject = JSON(map.JSON)
+        
+        for (_, actor) in responseObject["cast"] {
+            guard let actor = Mapper<Actor>().map(JSONObject: actor.dictionaryObject) else { continue }
+            actors.append(actor)
+        }
+        for (role, people) in responseObject["crew"] {
+            guard let people = Mapper<Crew>().mapArray(JSONObject: people.arrayObject) else { continue }
+            for var person in people {
+                person.roleType = Role(rawValue: role) ?? .unknown
+                crew.append(person)
+            }
+        }
+    }
+    
+    init?(map: Map) {
+        self.actors = []
+        self.crew = []
+    }
+    
+    public mutating func mapping(map: Map) {
+        switch map.mappingType {
+        case .fromJSON:
+            if let people = try? TracktPeople(map) {
+                self = people
+            }
+        case .toJSON:
+            abort()
+        }
+    }
+}
+
+struct TracktMediaCredits<T: Media>: Mappable {
+    var medias: [T]
+    
+    private init(_ map: Map) throws {
+        let context = map.context as! TraktContext
+        medias = []
+        
+        let responseObject = JSON(map.JSON)
+        for item in [responseObject["crew"], responseObject["cast"]].compactMap({ $0.array }) {
+            for json in item {
+                if let payload = json[context.type].dictionaryObject,
+                   let mediaItem = Mapper<T>(context: TraktContext()).map(JSONObject: payload) {
+                    medias.append(mediaItem)
+                }
+            }
+        }
+    }
+    
+    init?(map: Map) {
+        self.medias = []
+    }
+    
+    public mutating func mapping(map: Map) {
+        switch map.mappingType {
+        case .fromJSON:
+            if let mediaCredits = try? TracktMediaCredits<T>(map) {
+                self = mediaCredits
+            }
+        case .toJSON:
+            abort()
+        }
+    }
+}
 
 extension TraktManager {
     
