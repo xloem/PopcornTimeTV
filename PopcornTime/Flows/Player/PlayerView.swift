@@ -154,7 +154,8 @@ struct PlayerView: View {
     var showInfoView: some View {
         if viewModel.showInfo {
             VStack {
-                PlayerOptionsView(media: viewModel.media,
+                // pass media from subtitleController as it will download subtitles if missing
+                PlayerOptionsView(media: viewModel.subtitleController.media,
                                   audioDelay: viewModel.audioController.audioDelayBinding,
                                   audioProfile: viewModel.audioController.audioProfileBinding,
                                   subtitleDelay: viewModel.subtitleController.subtitleDelayBinding,

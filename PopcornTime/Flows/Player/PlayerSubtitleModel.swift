@@ -36,9 +36,9 @@ class PlayerSubtitleModel {
         
         if !isSwiftUIPreview {
             if media.subtitles.count == 0 {
-                media.getSubtitles(orWithFilePath: localPathToMedia, completion: { (subtitles) in
-                    self.media.subtitles = subtitles
-                })
+                Task { @MainActor in
+                    self.media.subtitles = try await media.getSubtitles(orWithFilePath: localPathToMedia)
+                }
             }
         }
         
@@ -57,10 +57,10 @@ class PlayerSubtitleModel {
     
     func configurePlayer(subtitle: Subtitle?) {
         if let subtitle = subtitle {
-            PopcornKit.downloadSubtitleFile(subtitle.link, downloadDirectory: downloadDirectory, completion: { (subtitlePath, error) in
-                guard let subtitlePath = subtitlePath else { return }
+            Task { @MainActor in
+                let subtitlePath = try await PopcornKit.downloadSubtitleFile(subtitle.link, downloadDirectory: downloadDirectory)
                 self.mediaplayer.addPlaybackSlave(subtitlePath, type: .subtitle, enforce: true)
-            })
+            }
         } else {
             mediaplayer.currentVideoSubTitleIndex = NSNotFound // Remove all subtitles
         }

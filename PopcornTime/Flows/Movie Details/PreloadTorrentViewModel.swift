@@ -63,8 +63,8 @@ class PreloadTorrentViewModel: ObservableObject {
         let finishedLoading: () -> Void = { }
         #endif
         
-        self.media.getSubtitles { [unowned self] subtitles in
-            media.subtitles = subtitles
+        Task { @MainActor in
+            media.subtitles = (try? await self.media.getSubtitles()) ?? [:]
             self.play(fromFileOrMagnetLink: torrent.url, nextEpisodeInSeries: nil, finishedLoadingBlock: finishedLoading)
         }
     }
@@ -135,14 +135,14 @@ class PreloadTorrentViewModel: ObservableObject {
                 }
             })
         } else {
-            PopcornKit.downloadTorrentFile(url, completion: { (url, error) in
-                guard let url = url, error == nil else {
-                    errorBlock(error ?? NSError(domain: "unknow", code: 0, userInfo: [NSLocalizedDescriptionKey : "Unknown error"]))
-                    return
+            Task { @MainActor in
+                do {
+                    let fileUrl = try await PopcornKit.downloadTorrentFile(url)
+                    self.play(fromFileOrMagnetLink: fileUrl.absoluteString, nextEpisodeInSeries: nil, finishedLoadingBlock: finishedLoadingBlock)
+                } catch {
+                    errorBlock(error)
                 }
-                
-                self.play(fromFileOrMagnetLink: url, nextEpisodeInSeries: nil, finishedLoadingBlock: finishedLoadingBlock)
-            })
+            }
         }
     }
     

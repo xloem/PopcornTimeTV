@@ -3,10 +3,22 @@ import Foundation
 import Alamofire
 import ObjectMapper
 
-open class SubtitlesManager: NetworkManager {
+open class SubtitlesApi {
     
     /// Creates new instance of SubtitlesManager class
-    public static let shared = SubtitlesManager()
+    public static let shared = SubtitlesApi()
+    
+    let client = HttpClient(config: .init(serverURL: OpenSubtitles.base, configuration: {
+        let configuration = URLSessionConfiguration.default
+        configuration.httpCookieAcceptPolicy = .never
+        configuration.httpShouldSetCookies = false
+        configuration.timeoutIntervalForResource = 30
+//        configuration.urlCache = nil
+//        configuration.requestCachePolicy = .returnCacheDataDontLoad
+        configuration.requestCachePolicy = .returnCacheDataElseLoad
+        configuration.httpAdditionalHeaders = OpenSubtitles.defaultHeaders
+        return configuration
+    }()))
     
     /**
      Load subtitles from API. Use episode or ImdbId not both. Using ImdbId rewards better results.
@@ -15,38 +27,24 @@ open class SubtitlesManager: NetworkManager {
      - Parameter imdbId:        The Imdb identification code of the episode or movie.
      - Parameter limit:         The limit of subtitles to fetch as a `String`. Defaults to 500.
      - Parameter videoFilePath: The path of the video for subtitle retrieval `URL`. Defaults to nil.
-     
-     - Parameter completion:    Completion handler called with array of subtitles and an optional error.
      */
-    open func search(_ episode: Episode? = nil, imdbId: String? = nil,preferredLang: String? = nil,videoFilePath: URL? = nil, limit: String = "500", completion:@escaping (Dictionary<String, [Subtitle]>, NSError?) -> Void) {
+    open func search(_ episode: Episode? = nil, imdbId: String? = nil,preferredLang: String? = nil,videoFilePath: URL? = nil, limit: String = "500") async throws -> Dictionary<String, [Subtitle]> {
         let params = getParams(episode, imdbId: imdbId, preferredLang: preferredLang, videoFilePath: videoFilePath, limit: limit)
+        let path = OpenSubtitles.search + params.compactMap({"\($0)-\($1)"}).joined(separator: "/")
+        let subtitles: [Subtitle] = try await client.request(.get, path: path, parameters: params).responseMapable()
         
-        let queue = DispatchQueue(label: "com.popcorn-time.response.queue", attributes: DispatchQueue.Attributes.concurrent)
-        self.manager.request(OpenSubtitles.base+OpenSubtitles.search+params.compactMap({"\($0)-\($1)"}).joined(separator: "/"), headers: OpenSubtitles.defaultHeaders).validate().responseJSON(queue: queue) { response in
-            guard
-                let value = response.result.value,
-                let status = response.response?.statusCode,
-                response.result.isSuccess && status == 200
-                else {
-                    return DispatchQueue.main.async {
-                        completion([:], response.result.error as NSError?)
-                    }
+        var allSubtitles = Dictionary<String, [Subtitle]>()
+        for subtitle in subtitles {
+            let language = subtitle.language
+            var languageSubtitles = allSubtitles[language]
+            if languageSubtitles == nil {
+                languageSubtitles = [Subtitle]()
             }
-            
-            let subtitles = Mapper<Subtitle>().mapArray(JSONObject: value) ?? [Subtitle]()
-            var allSubtitles = Dictionary<String, [Subtitle]>()
-            for subtitle in subtitles {
-                let language = subtitle.language
-                var languageSubtitles = allSubtitles[language]
-                if languageSubtitles == nil {
-                    languageSubtitles = [Subtitle]()
-                }
-                languageSubtitles?.append(subtitle)
-                allSubtitles[language] = languageSubtitles
-            }
-            
-            DispatchQueue.main.async(execute: { completion(self.removeDuplicates(sourceSubtitles: allSubtitles), nil) })
+            languageSubtitles?.append(subtitle)
+            allSubtitles[language] = languageSubtitles
         }
+        
+        return self.removeDuplicates(sourceSubtitles: allSubtitles)
     }
     
     /**

@@ -73,14 +73,10 @@ open class TraktManager: NetworkManager {
      - Parameter show:          The imdbId or slug for the show.
      - Parameter episodeNumber: The number of the episode in relation to its current season.
      - Parameter seasonNumber:  The season of which the episode is in.
-     
-     - Parameter completion:    The completion handler for the request containing an optional episode and an optional error.
      */
-    open func getEpisodeMetadata(_ showId: String, episodeNumber: Int, seasonNumber: Int, completion: @escaping (Episode?, NSError?) -> Void) {
-        self.manager.request(Trakt.base + Trakt.shows + "/\(showId)" + Trakt.seasons + "/\(seasonNumber)" + Trakt.episodes + "/\(episodeNumber)", parameters: Trakt.extended, headers: Trakt.Headers.Default).validate().responseJSON { response in
-            guard let value = response.result.value else { completion(nil, response.result.error as NSError?); return }
-            completion(Mapper<Episode>(context: TraktContext()).map(JSONObject: value), nil)
-        }
+    open func getEpisodeMetadata(_ showId: String, episodeNumber: Int, seasonNumber: Int) async throws -> Episode {
+        let path = Trakt.shows + "/\(showId)" + Trakt.seasons + "/\(seasonNumber)" + Trakt.episodes + "/\(episodeNumber)"
+        return try await client.request(.get, path: path, parameters: Trakt.extended).responseMapable(context: TraktContext())
     }
     
     /**
