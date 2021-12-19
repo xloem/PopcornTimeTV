@@ -43,14 +43,14 @@ public struct OMDbMedia: Codable {
             case value = "Value", source = "Source"
         }
     }
-    public var title: String
+    
     public var awards: String
     public var imdbRating: String
     public var metascore: String
     public var ratings: [OMDbMedia.Ratings]
     
     enum CodingKeys: String, CodingKey {
-        case title = "Title", awards = "Awards", imdbRating, metascore = "Metascore", ratings = "Ratings"
+        case awards = "Awards", imdbRating, metascore = "Metascore", ratings = "Ratings"
     }
     
     public func transform() -> PopcornKit.Ratings {

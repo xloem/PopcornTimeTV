@@ -57,6 +57,8 @@ class MovieDetailsViewModel: ObservableObject, CharacterHeadshotLoader, MediaRat
                 let persons = (try? await people) ?? (actors: [], crew: [])
                 self.related = (try? await related) ?? []
                 self.persons = persons.actors + persons.crew
+                self.movie.actors = persons.actors
+                self.movie.crew = persons.crew
                 self.didLoad = true
             } catch {
                 self.error = error

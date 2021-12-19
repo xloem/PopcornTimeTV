@@ -300,37 +300,6 @@ open class TraktManager: NetworkManager {
         let path = "/\(type.rawValue)/\(id)" + Trakt.people
         let traktPeople: TracktPeople = try await client.request(.get, path: path).responseMapable()
         return (actors: traktPeople.actors, crew: traktPeople.crew)
-        
-//        self.manager.request(Trakt.base + "/\(type.rawValue)/\(id)" + Trakt.people, headers: Trakt.Headers.Default).validate().responseJSON { response in
-//            guard let value = response.result.value else { completion([Actor](), [Crew](), response.result.error as NSError?); return }
-//            let responseObject = JSON(value)
-//            var actors = [Actor]()
-//            var crew = [Crew]()
-//            let group = DispatchGroup()
-//            for (_, actor) in responseObject["cast"] {
-//                guard var actor = Mapper<Actor>().map(JSONObject: actor.dictionaryObject) else { continue }
-//                group.enter()
-//                TMDBManager.shared.getCharacterHeadshots(forPersonWithImdbId: actor.imdbId, orTMDBId: actor.tmdbId) { (_, image, error) in
-//                    if let image = image { actor.largeImage = image }
-//                    actors.append(actor)
-//                    group.leave()
-//                }
-//            }
-//            for (role, people) in responseObject["crew"] {
-//                guard let people = Mapper<Crew>().mapArray(JSONObject: people.arrayObject) else { continue }
-//                for var person in people {
-//                    group.enter()
-//                    TMDBManager.shared.getCharacterHeadshots(forPersonWithImdbId: person.imdbId, orTMDBId: person.tmdbId) { (_, image, error) in
-//                        if let image = image { person.largeImage = image }
-//                        person.roleType = Role(rawValue: role) ?? .unknown
-//                        crew.append(person)
-//                        group.leave()
-//                    }
-//                }
-//            }
-//            group.notify(queue: .main, execute: { completion(actors, crew, nil) })
-//
-//        }
     }
     
     /**
@@ -462,28 +431,6 @@ open class TraktManager: NetworkManager {
         let items: [T] = try await client.request(.get, path: path, parameters: Trakt.extended).responseMapable(context: TraktContext())
         
         return items.filter({ $0.tmdbId != nil })
-        
-///populate missing poster and backdrop image
-//        let type: TMDB.MediaType = media is Movie ? .movies : .shows
-//        return await withTaskGroup(of: T?.self, body: { group in
-//            items.filter({ $0.tmdbId != nil }).forEach({ item in
-//                group.addTask {
-//                    if let response = await TMDBManager.shared.getPoster(forMediaOfType: type, TMDBId: item.tmdbId!) {
-//                        var mediaItem = item
-//                        mediaItem.largeCoverImage = response.poster
-//                        mediaItem.largeBackgroundImage = response.backdrop
-//                        return mediaItem
-//                    }
-//                    return nil
-//                }
-//            })
-//
-//            return await group.reduce(into: [T](), { result, item in
-//                if let item = item {
-//                    result.append(item)
-//                }
-//            })
-//        })
     }
     
     
@@ -492,8 +439,6 @@ open class TraktManager: NetworkManager {
      
      - Parameter id:    The id of the person you would like to get more information about.
      - Parameter type:  Just the type of the media is required for Swift generics to work.
-     
-     - Parameter completion:        The requests completion handler containing array of movies and an optional error.
      */
     open func getMediaCredits<T: Media>(forPersonWithId id: String, mediaType type: T.Type) async throws -> [T] {
         var typeString = (type is Movie.Type ? Trakt.movies : Trakt.shows)
@@ -506,41 +451,6 @@ open class TraktManager: NetworkManager {
             .responseMapable(context: TraktContext(type: typeString))
         
         return mediaCredit.medias.filter({ $0.tmdbId != nil })
-        
-        
-//        self.manager.request(Trakt.base + Trakt.people + "/\(id)" + typeString, parameters: Trakt.extended, headers: Trakt.Headers.Default).validate().responseJSON { response in
-//            guard let value = response.result.value else {
-//                completion([T](), response.result.error as NSError?)
-//                return
-//            }
-//
-//            let responseObject = JSON(value)
-//            typeString.removeLast() // Removes 's' from the type string
-//            typeString.removeFirst() // Removes '/' from the type string
-//            var medias = [T]()
-//            let group = DispatchGroup()
-//
-//            for item in [responseObject["crew"], responseObject["cast"]].compactMap({ $0.array }) {
-//                for json in item {
-//                    if let payload = json[typeString].dictionaryObject,
-//                       var mediaItem = Mapper<T>(context: TraktContext()).map(JSONObject: payload),
-//                       let tmdbId = mediaItem.tmdbId {
-//                        group.enter()
-//                        let type: TMDB.MediaType = type is Movie.Type ? .movies : .shows
-//                        TMDBManager.shared.getPoster(forMediaOfType: type, TMDBId: tmdbId) { backdrop, poster, error in
-//                            if let poster = poster, let backdrop = backdrop {
-//                                mediaItem.largeCoverImage = poster
-//                                mediaItem.largeBackgroundImage = backdrop
-//                                medias.append(mediaItem)
-//                            }
-//                            group.leave()
-//                        }
-//                    }
-//                }
-//            }
-//
-//            group.notify(queue: .main, execute: { completion(medias, nil) })
-//        }
     }
     
     /// Downloads users latest watchlist and watchedlist from Trakt.
@@ -556,22 +466,37 @@ open class TraktManager: NetworkManager {
         }
     }
     
+//    /**
+//     Requests tmdb id for object with imdb id.
+//     
+//     - Parameter id:            Imdb id of object.
+//     - Parameter completion:    Completion handler containing optional tmdb id and an optional error.
+//     */
+//    open func getTMDBId(forImdbId id: String, completion: @escaping (Int?, NSError?) -> Void) {
+//        self.manager.request(Trakt.base + Trakt.search + Trakt.imdb + "/\(id)", headers: Trakt.Headers.Default).validate().responseJSON { (response) in
+//            guard let value = response.result.value else { completion(nil, response.result.error as NSError?); return }
+//            let responseObject = JSON(value).arrayValue.first
+//            
+//            if let type = responseObject?["type"].string  {
+//                completion(responseObject?[type]["ids"]["tmdb"].int, nil)
+//            }
+//            
+//        }
+//    }
+    
     /**
      Requests tmdb id for object with imdb id.
      
      - Parameter id:            Imdb id of object.
-     - Parameter completion:    Completion handler containing optional tmdb id and an optional error.
      */
-    open func getTMDBId(forImdbId id: String, completion: @escaping (Int?, NSError?) -> Void) {
-        self.manager.request(Trakt.base + Trakt.search + Trakt.imdb + "/\(id)", headers: Trakt.Headers.Default).validate().responseJSON { (response) in
-            guard let value = response.result.value else { completion(nil, response.result.error as NSError?); return }
-            let responseObject = JSON(value).arrayValue.first
-            
-            if let type = responseObject?["type"].string  {
-                completion(responseObject?[type]["ids"]["tmdb"].int, nil)
-            }
-            
+    open func getTMDBId(forImdbId id: String) async throws -> Int {
+        let path = Trakt.search + Trakt.imdb + "/\(id)"
+        let data = try await client.request(.get, path: path).responseData()
+        let responseObject = JSON(data).arrayValue.first
+        guard let type = responseObject?["type"].string, let id = responseObject?[type]["ids"]["tmdb"].int else {
+            throw APIError.Type_.couldNoteDecodeResponse
         }
+        return id
     }
     
 //    /**
@@ -602,29 +527,11 @@ open class TraktManager: NetworkManager {
      Searches Trakt for people (crew or actor).
      
      - Parameter person:        The name of the person to search.
-     
-     - Parameter completion:    Completion handler for the request. Returns an array of people matching the passed in title, error upon failure.
      */
-    open func search(forPerson person: String, completion: @escaping ([Person]?, NSError?) -> Void) {
-        self.manager.request(Trakt.base + Trakt.search + Trakt.person, parameters: ["query": person], headers: Trakt.Headers.Default).validate().responseJSON { (response) in
-            guard let value = response.result.value,
-                let persons: [Person] = Mapper<Crew>().mapArray(JSONObject: value) // Type of person doesn't matter as it will succeed either way.
-                else { completion(nil, response.result.error as NSError?); return }
-            
-            let group = DispatchGroup()
-            var people = [Person]()
-            
-            for var person in persons {
-                group.enter()
-                TMDBManager.shared.getCharacterHeadshots(forPersonWithImdbId: person.imdbId, orTMDBId: person.tmdbId, completion: { (_, image, error) in
-                    if let image = image { person.largeImage = image }
-                    people.append(person)
-                    group.leave()
-                })
-            }
-            
-            group.notify(queue: .main) { completion(people, nil) }
-        }
+    open func search(forPerson person: String) async throws -> [Person] {
+        // Type of person doesn't matter as it will succeed either way.
+        let persons: [Crew] = try await client.request(.get, path: Trakt.search + Trakt.person, parameters: ["query": person]).responseMapable()
+        return persons
     }
 }
 

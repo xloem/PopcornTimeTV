@@ -15,38 +15,27 @@ class SeasonPickerViewModel: ObservableObject {
         var image: String?
     }
     
-    var show: Show
-    var seasons: [Season] = []
+    @Published var show: Show
+    @Published var seasons: [Season] = []
     @Published var isLoading = false
-    var didLoad = false
     
     init(show: Show) {
         self.show = show
-        self.seasons = show.seasonNumbers.compactMap{ .init(number: $0, image: nil) }
     }
     
     func load() {
-        guard !isLoading && !didLoad else {
+        guard !isLoading else {
             return
         }
         
         isLoading = true
-        let group = DispatchGroup()
-        
-        for (index, season) in show.seasonNumbers.enumerated() {
-            group.enter()
-            TMDBManager.shared.getSeasonPoster(ofShowWithImdbId: show.id, orTMDBId: show.tmdbId, season: season) { (tmdb, image, _) in
-                if let tmdb = tmdb {
-                    self.show.tmdbId = tmdb
-                }
-                self.seasons[index] = Season(number: season, image: image ?? self.show.largeCoverImage)
-                group.leave()
+        Task { @MainActor in
+            if show.tmdbId == nil, let tmdbId = try? await TraktManager.shared.getTMDBId(forImdbId: show.id) {
+                self.show.tmdbId = tmdbId
             }
-        }
-        
-        group.notify(queue: .main) {
-            self.isLoading = false
-            self.didLoad = true
+            
+            self.seasons = show.seasonNumbers.compactMap{ .init(number: $0, image: nil) }
+            isLoading = false
         }
     }
 }

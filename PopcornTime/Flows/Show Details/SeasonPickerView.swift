@@ -9,7 +9,7 @@
 import SwiftUI
 import PopcornKit
 
-struct SeasonPickerView: View {
+struct SeasonPickerView: View, SeasonPosterLoader {
     @StateObject var viewModel: SeasonPickerViewModel
     @Binding var selectedSeasonNumber: Int
     #if os(macOS)
@@ -31,8 +31,8 @@ struct SeasonPickerView: View {
                     .font(.title)
                 ScrollViewReader { scroll in
                     ScrollView(.horizontal) {
-                        HStack {
-                            ForEach(viewModel.seasons, id: \.self) { season in
+                        LazyHStack {
+                            ForEach(viewModel.seasons, id: \.number) { season in
                                 Button(action: {
                                     selectedSeasonNumber = season.number
                                     dismiss()
@@ -43,6 +43,9 @@ struct SeasonPickerView: View {
                                 #if os(tvOS)
                                 .focused($focusedField, equals: season.number)
                                 #endif
+                                .task {
+                                    await loadPosterIfMissing(season: season, show: viewModel.show, into: $viewModel.seasons)
+                                }
                             }
                         }
                         .padding()

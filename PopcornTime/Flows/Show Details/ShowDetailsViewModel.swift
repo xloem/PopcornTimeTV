@@ -51,11 +51,13 @@ class ShowDetailsViewModel: ObservableObject {
             do  {
                 async let related = TraktManager.shared.getRelated(self.show)
                 async let people = TraktManager.shared.getPeople(forMediaOfType: .shows, id: self.show.id)
+                async let tmdbIdLoader = TraktManager.shared.getTMDBId(forImdbId: show.id)
                 
                 var show = try await PopcornKit.getShowInfo(show.id)
                 show.largeBackgroundImage = self.show.largeBackgroundImage ?? show.largeBackgroundImage //keep last background
                 show.ratings = self.show.ratings
                 self.show = show
+                self.didLoad = true
                 
                 self.related = (try? await related) ?? []
                 let persons = (try? await people) ?? (actors: [], crew: [])
@@ -66,8 +68,12 @@ class ShowDetailsViewModel: ObservableObject {
                                             [NSLocalizedDescriptionKey: "There are no seasons available for the selected show. Please try again later.".localized])
                     throw error
                 }
+                
+                if show.tmdbId == nil, let tmdbId = try? await tmdbIdLoader {
+                    self.show.tmdbId = tmdbId
+                }
+                
                 self.currentSeason = season
-                self.didLoad = true
             } catch {
                 self.error = error
             }
@@ -94,17 +100,15 @@ class ShowDetailsViewModel: ObservableObject {
     }
     
     func loadImageIfMissing(episode: Episode) {
-        guard episode.smallBackgroundImage == nil else { return }
+        guard episode.smallBackgroundImage == nil, let tmdbId = show.tmdbId else {
+            return
+        }
         
-        TMDBManager.shared.getEpisodeScreenshots(forShowWithImdbId: show.id, orTMDBId: show.tmdbId, season: episode.season, episode: episode.episode, completion: { (tmdbId, image, error) in
-//            print("episode image", image ?? "None")
-            var episode = episode
-            episode.largeBackgroundImage = image ?? ""
-            if let tmdbId = tmdbId { episode.show?.tmdbId = tmdbId }
-            
+        Task { @MainActor in
+            let image = try? await TMDBApi.shared.getEpisodeScreenshots(tmdbId: tmdbId, season: episode.season, episode: episode.episode)
             if let index = self.show.episodes.firstIndex(where: {$0.id == episode.id }) {
-                self.show.episodes[index] = episode
+                self.show.episodes[index].largeBackgroundImage = image ?? ""
             }
-        })
+        }
     }
 }

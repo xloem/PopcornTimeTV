@@ -9,7 +9,7 @@
 import SwiftUI
 import PopcornKit
 
-struct SearchView: View {
+struct SearchView: View, CharacterHeadshotLoader {
     struct Theme {
         let itemWidth: CGFloat = value(tvOS: 240, macOS: 160)
         let personWidth: CGFloat  = value(tvOS: 220, macOS: 150)
@@ -143,6 +143,9 @@ struct SearchView: View {
                                 PersonView(person: persons[index], radius: theme.personWidth)
                             })
                             .buttonStyle(PlainNavigationLinkButtonStyle())
+                            .task {
+                                await loadHeadshotIfMissing(person: persons[index], into: $viewModel.persons)
+                            }
                     }
                 }
                 #if os(iOS)

@@ -57,7 +57,7 @@ extension CharacterHeadshotLoader {
             return
         }
         
-        let url = try? await TMDBManager.shared.getCharacterHeadshots(tmdbId: person.tmdbId)
+        let url = try? await TMDBApi.shared.getCharacterHeadshots(tmdbId: person.tmdbId)
         if let index = persons.wrappedValue.firstIndex(where: {$0.tmdbId == person.tmdbId }) {
             persons.wrappedValue[index].largeImage = url ?? ""
         }
@@ -77,7 +77,7 @@ extension MediaPosterLoader {
             return
         }
         
-        let response = await TMDBManager.shared.getPoster(forMediaOfType: .movies, TMDBId: tmdbId)
+        let response = await TMDBApi.shared.getPoster(forMediaOfType: .movies, TMDBId: tmdbId)
         if let index = mediaPosters.wrappedValue.firstIndex(where: {$0.id == media.id}) {
             var media = mediaPosters.wrappedValue[index]
             media.largeCoverImage = response.poster
@@ -92,7 +92,7 @@ extension MediaPosterLoader {
             return
         }
         
-        let response = await TMDBManager.shared.getPoster(forMediaOfType: .shows, TMDBId: tmdbId)
+        let response = await TMDBApi.shared.getPoster(forMediaOfType: .shows, TMDBId: tmdbId)
         if let index = mediaPosters.wrappedValue.firstIndex(where: {$0.id == media.id}) {
             var media = mediaPosters.wrappedValue[index]
             media.largeCoverImage = response.poster
@@ -101,3 +101,24 @@ extension MediaPosterLoader {
         }
     }
 }
+
+
+protocol SeasonPosterLoader {
+    func loadPosterIfMissing(season: SeasonPickerViewModel.Season, show: Show, into seasons: Binding<[SeasonPickerViewModel.Season]>) async
+}
+
+extension SeasonPosterLoader {
+    
+    @MainActor
+    func loadPosterIfMissing(season: SeasonPickerViewModel.Season, show: Show, into seasons: Binding<[SeasonPickerViewModel.Season]>) async {
+        guard season.image == nil, let tmdbId = show.tmdbId else {
+            return
+        }
+        
+        let image = try? await TMDBApi.shared.getSeasonPoster(tmdbId: tmdbId, season: season.number)
+        if let index = seasons.wrappedValue.firstIndex(where: {$0.number == season.number}) {
+            seasons.wrappedValue[index] = .init(number: season.number, image: image ?? show.largeCoverImage)
+        }
+    }
+}
+
