@@ -51,7 +51,9 @@ open class WatchlistManager<N: Media> {
      - Parameter media: The media to add.
      */
     open func add(_ media: N) {
-        TraktManager.shared.add(media.id, toWatchlistOfType: currentType)
+        Task {
+            try? await TraktApi.shared.add(media.id, toWatchlistOfType: currentType)
+        }
         var array = UserDefaults.standard.object(forKey: "\(currentType.rawValue)Watchlist") as? jsonArray ?? jsonArray()
         array.append(Mapper<N>().toJSON(media))
         UserDefaults.standard.set(array, forKey: "\(currentType.rawValue)Watchlist")
@@ -63,7 +65,9 @@ open class WatchlistManager<N: Media> {
      - Parameter media: The media to remove.
      */
     open func remove(_ media: N) {
-        TraktManager.shared.remove(media.id, fromWatchlistOfType: currentType)
+        Task {
+            try? await TraktApi.shared.remove(media.id, fromWatchlistOfType: currentType)
+        }
         if var array = UserDefaults.standard.object(forKey: "\(currentType.rawValue)Watchlist") as? jsonArray,
             let index = Mapper<N>().mapArray(JSONArray: array).firstIndex(where: { $0.id == media.id }) {
             array.remove(at: index)
@@ -86,23 +90,19 @@ open class WatchlistManager<N: Media> {
     }
     
     /**
-     Gets watchlist locally first and then from Trakt if available.
-     
-     - Parameter completion: If Trakt is available, completion will be called with a more up-to-date watchlist that will replace the locally stored one and should be reloaded for the user.
-     
-     - Returns: Locally stored watchlist (may be out of date if user has authenticated with trakt).
+     Gets watchlist locally
      */
-    @discardableResult open func getWatchlist(_ completion: (([N]) -> Void)? = nil) -> [N] {
-        
-            let array = UserDefaults.standard.object(forKey: "\(currentType.rawValue)Watchlist") as? jsonArray ?? jsonArray()
-            DispatchQueue.global(qos: .background).async {
-            TraktManager.shared.getWatchlist(forMediaOfType: N.self) { [unowned self] (medias, error) in
-                guard error == nil else {return}
-                UserDefaults.standard.set(Mapper<N>().toJSONArray(medias), forKey: "\(self.currentType.rawValue)Watchlist")
-                completion?(medias)
-            }
-        }
-        
+    @discardableResult open func getWatchlist() -> [N] {
+        let array = UserDefaults.standard.object(forKey: "\(currentType.rawValue)Watchlist") as? jsonArray ?? jsonArray()
         return Mapper<N>().mapArray(JSONArray: array)
+    }
+    
+    /**
+     Gets watchlist locally from Trakt if available.
+     */
+    @discardableResult open func refreshWatchlist() async throws -> [N] {
+        let medias = try await TraktApi.shared.getWatchlist(forMediaOfType: N.self)
+        UserDefaults.standard.set(Mapper<N>().toJSONArray(medias), forKey: "\(self.currentType.rawValue)Watchlist")
+        return medias
     }
 }

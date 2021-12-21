@@ -2,11 +2,10 @@
 
 import Foundation
 import AVFoundation
-import Alamofire
 import SwiftyJSON
 
 /// Class for managing TV Show and Movie Theme songs.
-public class ThemeSongManager: NSObject, AVAudioPlayerDelegate {
+public class ThemeSongManager {
     
     /// Global player ref.
     private var player: AVAudioPlayer?
@@ -32,10 +31,14 @@ public class ThemeSongManager: NSObject, AVAudioPlayerDelegate {
      - Parameter name: The name of the movie.
      */
     public func playMovieTheme(_ name: String) {
-        Alamofire.request("https://itunes.apple.com/search", parameters: ["term": "\(name) soundtrack", "media": "music", "attribute": "albumTerm", "limit": 1]).validate().responseJSON { (response) in
-            guard let response = response.result.value else { return }
-            let responseDict = JSON(response)
-            if let url = responseDict["results"].arrayValue.first?["previewUrl"].string { self.playTheme(url) }
+        Task { @MainActor in
+            let client = HttpClient(config: .init(serverURL: "https://itunes.apple.com/search"))
+            let params: [String: Any] = ["term": "\(name) soundtrack", "media": "music", "attribute": "albumTerm", "limit": 1]
+            let data = try await client.request(.get, path: "", parameters: params).responseData()
+            let responseDict = JSON(data)
+            if let url = responseDict["results"].arrayValue.first?["previewUrl"].string {
+                self.playTheme(url)
+            }
         }
     }
     

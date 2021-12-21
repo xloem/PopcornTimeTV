@@ -39,12 +39,10 @@ class YoutubeApi {
               "videoId": "{VIDEO_ID}"
             }
             """.replacingOccurrences(of: "{VIDEO_ID}", with: id)
-        let url = "https://youtubei.googleapis.com/youtubei/v1/player?key=AIzaSyAO_FJ2SlqU8Q4STEHLGCilw_Y9_11qcW8"
+        let url = URL(string: "https://youtubei.googleapis.com/youtubei/v1/player?key=AIzaSyAO_FJ2SlqU8Q4STEHLGCilw_Y9_11qcW8")!
         
-        guard var request = try? URLRequest(url: url, method: .post) else {
-            throw NSError(domain: "popcorn", code: 3, userInfo: [NSLocalizedDescriptionKey: "Invalid trailer URL!".localized])
-        }
-        
+        var request = URLRequest(url: url)
+        request.httpMethod = "POST"
         request.httpBody = body.data(using: .utf8)
         request.addValue("application/json", forHTTPHeaderField: "Content-Type")
         

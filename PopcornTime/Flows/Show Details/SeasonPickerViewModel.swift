@@ -30,7 +30,7 @@ class SeasonPickerViewModel: ObservableObject {
         
         isLoading = true
         Task { @MainActor in
-            if show.tmdbId == nil, let tmdbId = try? await TraktManager.shared.getTMDBId(forImdbId: show.id) {
+            if show.tmdbId == nil, let tmdbId = try? await TraktApi.shared.getTMDBId(forImdbId: show.id) {
                 self.show.tmdbId = tmdbId
             }
             

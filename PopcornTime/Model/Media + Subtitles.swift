@@ -20,7 +20,7 @@ extension Media {
         if let filePath = orWithFilePath {
             return try await SubtitlesApi.shared.search(preferredLang: "el", videoFilePath: filePath)
         } else if let episode = self as? Episode, !id.hasPrefix("tt"), let show = episode.show {
-            let episode = try? await TraktManager.shared.getEpisodeMetadata(show.id, episodeNumber: episode.episode, seasonNumber: episode.season)
+            let episode = try? await TraktApi.shared.getEpisodeMetadata(show.id, episodeNumber: episode.episode, seasonNumber: episode.season)
             if let imdb = episode?.imdbId {
                 return try await SubtitlesApi.shared.search(imdbId: imdb)
             }

@@ -1,6 +1,5 @@
 
 import Foundation
-import Alamofire
 
 /**
  Load TV Shows from API.

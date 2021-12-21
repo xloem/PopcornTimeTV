@@ -9,7 +9,7 @@
 import SwiftUI
 import PopcornKit
 
-struct WatchlistView: View {
+struct WatchlistView: View, MediaPosterLoader {
     let theme = Theme()
     
     @StateObject var viewModel = WatchlistViewModel()
@@ -43,7 +43,7 @@ struct WatchlistView: View {
                 .foregroundColor(.appSecondary)
                 .padding(.top, 14)
             ScrollView(.horizontal) {
-                HStack(spacing: theme.itemSpacing) {
+                LazyHStack(spacing: theme.itemSpacing) {
                     ForEach(viewModel.movies, id: \.self) { movie in
                         NavigationLink(
                             destination: MovieDetailsView(viewModel: MovieDetailsViewModel(movie: movie)),
@@ -52,6 +52,9 @@ struct WatchlistView: View {
                                     .frame(width: theme.itemWidth)
                             })
                             .buttonStyle(PlainNavigationLinkButtonStyle())
+                            .task {
+                                await loadPosterIfMissing(media: movie, mediaPosters: $viewModel.movies)
+                            }
 //                            .padding([.leading, .trailing], 10)
                     }
                     .padding(20) // allow zoom
@@ -69,7 +72,7 @@ struct WatchlistView: View {
                 .foregroundColor(.appSecondary)
                 .padding(.top, 14)
             ScrollView(.horizontal) {
-                HStack(spacing: theme.itemSpacing) {
+                LazyHStack(spacing: theme.itemSpacing) {
                     ForEach(viewModel.shows, id: \.self) { show in
                         NavigationLink(
                             destination: ShowDetailsView(viewModel: ShowDetailsViewModel(show: show)),
@@ -78,6 +81,9 @@ struct WatchlistView: View {
                                     .frame(width: theme.itemWidth)
                             })
                             .buttonStyle(PlainNavigationLinkButtonStyle())
+                            .task {
+                                await loadPosterIfMissing(media: show, mediaPosters: $viewModel.shows)
+                            }
 //                            .padding([.leading, .trailing], 10)
                     }
                     .padding(20) // allow zoom

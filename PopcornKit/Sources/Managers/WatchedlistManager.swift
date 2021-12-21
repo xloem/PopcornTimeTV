@@ -49,7 +49,9 @@ open class WatchedlistManager<N: Media & Hashable> {
      - Parameter id: The imdbId or tvdbId of the movie or episode.
      */
     open func add(_ id: String) {
-        TraktManager.shared.add(id, toWatchedlistOfType: currentType)
+        Task {
+            try? await TraktApi.shared.add(id, toWatchedlistOfType: currentType)
+        }
         var array = UserDefaults.standard.object(forKey: "\(currentType.rawValue)Watchedlist") as? [String] ?? [String]()
         !array.contains(id) ? array.append(id) : ()
         UserDefaults.standard.set(array, forKey: "\(currentType.rawValue)Watchedlist")
@@ -61,8 +63,10 @@ open class WatchedlistManager<N: Media & Hashable> {
      - Parameter id: The imdbId for movie or tvdbId for episode.
      */
     open func remove(_ id: String) {
-        TraktManager.shared.remove(id, fromWatchedlistOfType: currentType)
-        TraktManager.shared.scrobble(id, progress: 0, type: currentType, status: .finished)
+        Task {
+            try? await TraktApi.shared.remove(id, fromWatchedlistOfType: currentType)
+            try? await TraktApi.shared.scrobble(id, progress: 0, type: currentType, status: .finished)
+        }
         var array = UserDefaults.standard.object(forKey: "\(currentType.rawValue)Watchedlist") as? [String] ?? []
         var dict = UserDefaults.standard.object(forKey: "\(currentType.rawValue)Progress") as? [String: Float] ?? [:]
         if let index = array.firstIndex(of: id) {
@@ -89,26 +93,25 @@ open class WatchedlistManager<N: Media & Hashable> {
     }
     
     /**
+     Gets watchedlist locally
+     */
+    @discardableResult open func getWatched() -> [String] {
+        let watched = UserDefaults.standard.object(forKey: "\(currentType.rawValue)Watchedlist") as? [String] ?? [String]()
+        return watched
+    }
+    
+    /**
      Gets watchedlist locally first and then from Trakt.
      
      - Parameter completion: Called if local watchedlist was updated from trakt.
      
      - Returns: Locally stored watchedlist imdbId's (may be out of date if user has authenticated with trakt).
      */
-    @discardableResult open func getWatched(completion: (([N]) -> Void)? = nil) -> [String] {
-        DispatchQueue.global(qos: .background).async{
-            TraktManager.shared.getWatched(forMediaOfType: N.self) { [unowned self] (medias, error) in
-                guard error == nil else { return }
-                
-                let ids = medias.map({ $0.id })
-                UserDefaults.standard.set(ids, forKey: "\(self.currentType.rawValue)Watchedlist")
-                
-                completion?(medias)
-            }
-        }
-        
-        let watched = UserDefaults.standard.object(forKey: "\(currentType.rawValue)Watchedlist") as? [String] ?? [String]()
-        return watched
+    @discardableResult open func refreshWatched() async throws -> [N] {
+        let medias = try await TraktApi.shared.getWatched(forMediaOfType: N.self)
+        let ids = medias.map({ $0.id })
+        UserDefaults.standard.set(ids, forKey: "\(self.currentType.rawValue)Watchedlist")
+        return medias
     }
     
     /**
@@ -119,7 +122,9 @@ open class WatchedlistManager<N: Media & Hashable> {
      - Parameter status:    The status of the item.
      */
     open func setCurrentProgress(_ progress: Float, for id: String, with status: Trakt.WatchedStatus) {
-        progress <= 0.8 ? TraktManager.shared.scrobble(id, progress: progress, type: currentType, status: status) : ()
+        Task {
+            progress <= 0.8 ? try? await TraktApi.shared.scrobble(id, progress: progress, type: currentType, status: status) : ()
+        }
         var dict = UserDefaults.standard.object(forKey: "\(currentType.rawValue)Progress") as? [String: Float] ?? [String: Float]()
         let _ = progress == 0 ? dict.removeValue(forKey: id) : dict.updateValue(progress, forKey: id)
         progress >= 0.8 ? add(id) : ()
@@ -127,30 +132,25 @@ open class WatchedlistManager<N: Media & Hashable> {
     }
     
     /**
+     Retrieves latest progress
+     */
+    @discardableResult open func getProgress() -> [String: Float] {
+        let progress = UserDefaults.standard.object(forKey: "\(self.currentType.rawValue)Progress") as? [String: Float] ?? [String: Float]()
+        return progress
+    }
+    
+    /**
      Retrieves latest progress from Trakt and updates local storage.
      
      - Important: Local watchedlist may be more up-to-date than Trakt version but local version will be replaced with Trakt version regardless.
-     
-     - Parameter completion: Optional completion handler called when progress has been retrieved from trakt. May never be called if user hasn't authenticated with Trakt.
-     
-     - Returns: Locally stored progress (may be out of date if user has authenticated with trakt).
      */
-    @discardableResult open func getProgress(completion: (([String: Float]) -> Void)? = nil) -> [String: Float] {
-        DispatchQueue.global(qos: .background).async{
-            TraktManager.shared.getPlaybackProgress(forMediaOfType: N.self) { (dict, error) in
-                guard error == nil else { return }
-                
-                let ids = Array(dict.keys)
-                let progress = Array(dict.values)
-                
-                UserDefaults.standard.set(Dictionary<String, Float>(uniqueKeysWithValues: zip(ids, progress)), forKey: "\(self.currentType.rawValue)Progress")
-                
-                completion?(dict)
-            }
-        }
-        
-        let progress = UserDefaults.standard.object(forKey: "\(self.currentType.rawValue)Progress") as? [String: Float] ?? [String: Float]()
-        return progress
+    @discardableResult open func refreshProgress() async throws -> [String: Float] {
+        let dict = try await TraktApi.shared.getPlaybackProgress(forMediaOfType: N.self)
+        let ids = Array(dict.keys)
+        let progress = Array(dict.values)
+            
+        UserDefaults.standard.set(Dictionary<String, Float>(uniqueKeysWithValues: zip(ids, progress)), forKey: "\(self.currentType.rawValue)Progress")
+        return dict
     }
     
     /**

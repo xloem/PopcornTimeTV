@@ -1,6 +1,5 @@
 
 import Foundation
-import Alamofire
 import ObjectMapper
 
 open class SubtitlesApi {

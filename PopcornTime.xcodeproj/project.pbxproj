@@ -23,7 +23,6 @@
 		230C082526BD3D3C00989E7F /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4D990E321DC4F028005CDE34 /* Images.xcassets */; };
 		23166C012694EE6E00D87AD0 /* TopShelf.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 23E4976626947E1300175DEE /* TopShelf.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		232BB51E269450B3005448AE /* XCDYouTubeKit in Frameworks */ = {isa = PBXBuildFile; productRef = 232BB51D269450B3005448AE /* XCDYouTubeKit */; };
-		232BB5212694512C005448AE /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = 232BB5202694512C005448AE /* Alamofire */; };
 		232BB5242694562C005448AE /* PopcornTorrent in Frameworks */ = {isa = PBXBuildFile; productRef = 232BB5232694562C005448AE /* PopcornTorrent */; };
 		232BB527269456BF005448AE /* Kingfisher in Frameworks */ = {isa = PBXBuildFile; productRef = 232BB526269456BF005448AE /* Kingfisher */; };
 		23313B00267E374F00774A85 /* App.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23313AFF267E374F00774A85 /* App.swift */; };
@@ -563,7 +562,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				23313B53267E4A6600774A85 /* libc++.tbd in Frameworks */,
-				232BB5212694512C005448AE /* Alamofire in Frameworks */,
 				23507DC8269483310098CC12 /* ObjectMapper in Frameworks */,
 				23E8172D26950B56003258CC /* PopcornKit in Frameworks */,
 				232BB527269456BF005448AE /* Kingfisher in Frameworks */,
@@ -1006,7 +1004,6 @@
 			name = "PopcornTime (tvOS)";
 			packageProductDependencies = (
 				232BB51D269450B3005448AE /* XCDYouTubeKit */,
-				232BB5202694512C005448AE /* Alamofire */,
 				232BB5232694562C005448AE /* PopcornTorrent */,
 				232BB526269456BF005448AE /* Kingfisher */,
 				23507DC7269483310098CC12 /* ObjectMapper */,
@@ -1134,7 +1131,6 @@
 			mainGroup = 287B852B1C9873A200EEF5C8;
 			packageReferences = (
 				232BB51C269450B3005448AE /* XCRemoteSwiftPackageReference "XCDYouTubeKit" */,
-				232BB51F2694512C005448AE /* XCRemoteSwiftPackageReference "Alamofire" */,
 				232BB5222694562C005448AE /* XCRemoteSwiftPackageReference "PopcornTorrent" */,
 				232BB525269456BF005448AE /* XCRemoteSwiftPackageReference "Kingfisher" */,
 				232BB52A26946B47005448AE /* XCRemoteSwiftPackageReference "ObjectMapper" */,
@@ -1978,7 +1974,7 @@
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 3;
-				TVOS_DEPLOYMENT_TARGET = 14.5;
+				TVOS_DEPLOYMENT_TARGET = 15.0;
 			};
 			name = Debug;
 		};
@@ -2187,14 +2183,6 @@
 				kind = branch;
 			};
 		};
-		232BB51F2694512C005448AE /* XCRemoteSwiftPackageReference "Alamofire" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/Alamofire/Alamofire";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 4.9.0;
-			};
-		};
 		232BB5222694562C005448AE /* XCRemoteSwiftPackageReference "PopcornTorrent" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/alextud/PopcornTorrent";
@@ -2234,11 +2222,6 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 232BB51C269450B3005448AE /* XCRemoteSwiftPackageReference "XCDYouTubeKit" */;
 			productName = XCDYouTubeKit;
-		};
-		232BB5202694512C005448AE /* Alamofire */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 232BB51F2694512C005448AE /* XCRemoteSwiftPackageReference "Alamofire" */;
-			productName = Alamofire;
 		};
 		232BB5232694562C005448AE /* PopcornTorrent */ = {
 			isa = XCSwiftPackageProductDependency;

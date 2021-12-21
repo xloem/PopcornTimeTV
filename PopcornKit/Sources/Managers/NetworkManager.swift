@@ -1,5 +1,4 @@
 import Foundation
-import Alamofire
 
 public struct Trakt {
     static let apiKey = "d3b0811a35719a67187cba2476335b2144d31e5840d02f687fbf84e7eaadc811"
@@ -121,17 +120,7 @@ public struct OMDb {
 }
 
 
-open class NetworkManager: NSObject {
-    internal let manager: SessionManager = {
-        var configuration = URLSessionConfiguration.default
-        configuration.httpCookieAcceptPolicy = .never
-        configuration.httpShouldSetCookies = false
-//        configuration.urlCache = nil
-//        configuration.requestCachePolicy = .returnCacheDataDontLoad
-        configuration.httpAdditionalHeaders = ["User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_16_0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.138 Safari/"]
-        return Alamofire.SessionManager(configuration: configuration)
-    }()
-    
+open class NetworkManager {
     /// Possible orders used in API call.
     public enum Orders: Int {
         case ascending = 1

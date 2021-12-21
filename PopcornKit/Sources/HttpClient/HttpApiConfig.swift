@@ -1,5 +1,5 @@
 //
-//  File.swift
+//  HttpApiConfig.swift
 //  
 //
 //  Created by Alexandru Tudose on 15.12.2021.
@@ -8,10 +8,15 @@
 import Foundation
 
 enum HTTPMethod: String {
-    case get = "GET"
-    case put = "PUT"
-    case post = "POST"
-    case delete = "DELETE"
+    case options = "OPTIONS"
+    case get     = "GET"
+    case head    = "HEAD"
+    case post    = "POST"
+    case put     = "PUT"
+    case patch   = "PATCH"
+    case delete  = "DELETE"
+    case trace   = "TRACE"
+    case connect = "CONNECT"
 }
 
 typealias HTTPHeaders = [String: String]

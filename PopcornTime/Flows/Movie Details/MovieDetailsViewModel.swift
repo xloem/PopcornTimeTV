@@ -45,8 +45,8 @@ class MovieDetailsViewModel: ObservableObject, CharacterHeadshotLoader, MediaRat
         isLoading = true
         Task { @MainActor in
             do {
-                async let related = TraktManager.shared.getRelated(self.movie)
-                async let people = TraktManager.shared.getPeople(forMediaOfType: .movies, id: self.movie.id)
+                async let related = TraktApi.shared.getRelated(self.movie)
+                async let people = TraktApi.shared.getPeople(forMediaOfType: .movies, id: self.movie.id)
                 
                 var movie = try await PopcornKit.getMovieInfo(movie.id)
                 movie.ratings = self.movie.ratings

@@ -12,8 +12,16 @@ import PopcornKit
 class SettingsViewModel: ObservableObject {
     @Published var clearCache = ClearCache()
     
-    @Published var isTraktSingedIn: Bool = TraktManager.shared.isSignedIn()
-    var traktAuthorizationUrl: URL = TraktManager.shared.authorizationUrl(appScheme: AppScheme)
+    init() {
+        Task { @MainActor in
+            self.isTraktLoggedIn = await TraktSession.shared.isLoggedIn()
+        }
+    }
+    
+    @Published var isTraktLoggedIn: Bool = false
+    var traktAuthorizationUrl: URL {
+        return TraktAuthApi.shared.authorizationUrl(appScheme: AppScheme)
+    }
     
     var lastUpdate: String {
         var date = "Never".localized
@@ -30,22 +38,22 @@ class SettingsViewModel: ObservableObject {
     
     func validate(traktUrl: URL) {
         if traktUrl.scheme?.lowercased() == AppScheme.lowercased() {
-            TraktManager.shared.authenticate(traktUrl) { error in
-                let success = error == nil
-                if success {
-                    self.traktDidLoggedIn()
-                }
+            Task { @MainActor in
+                try await TraktAuthApi.shared.authenticate(traktUrl)
+                self.traktDidLoggedIn()
             }
         }
     }
     
     func traktLogout() {
-        TraktManager.shared.logout()
-        isTraktSingedIn = false
+        Task {
+            await TraktSession.shared.logout()
+        }
+        isTraktLoggedIn = false
     }
     
     func traktDidLoggedIn() {
-        isTraktSingedIn = true
-        TraktManager.shared.syncUserData()
+        isTraktLoggedIn = true
+        TraktApi.shared.syncUserData()
     }
 }

@@ -1,5 +1,5 @@
 //
-//  File.swift
+//  HttpClient.swift
 //  
 //
 //  Created by Alexandru Tudose on 15.12.2021.
@@ -35,6 +35,7 @@ public class HttpClient {
         if method != .get, let parameters = parameters {
             do {
                 request.httpBody = try JSONSerialization.data(withJSONObject: parameters, options: [])
+                request.addValue("application/json", forHTTPHeaderField: "Content-Type")
             } catch {
                 print(error.localizedDescription)
             }

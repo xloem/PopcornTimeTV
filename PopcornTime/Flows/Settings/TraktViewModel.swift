@@ -26,20 +26,16 @@ class TraktViewModel: ObservableObject {
     
     func getNewCode() {
         self.error = nil
-        TraktManager.shared.generateCode { [weak self] (displayCode, deviceCode, expires, interval, error) in
-            guard let displayCode = displayCode,
-                let deviceCode = deviceCode,
-                let expires = expires,
-                let interval = interval,
-                let `self` = self,
-                error == nil else {
-                    self?.error = error
-                    return
-                }
-            self.displayCode = displayCode
-            self.expiresIn = expires
-            self.deviceCode = deviceCode
-            self.intervalTimer = Timer.scheduledTimer(timeInterval: interval, target: self, selector: #selector(self.poll), userInfo: nil, repeats: true)
+        Task { @MainActor in
+            do {
+                let authorization = try await TraktAuthApi.shared.generateCode()
+                self.displayCode = authorization.userCode
+                self.expiresIn = authorization.expiresInDate
+                self.deviceCode = authorization.deviceCode
+                self.intervalTimer = Timer.scheduledTimer(timeInterval: TimeInterval(authorization.interval), target: self, selector: #selector(self.poll), userInfo: nil, repeats: true)
+            } catch let error {
+                self.error = error
+            }
         }
     }
     
@@ -53,7 +49,8 @@ class TraktViewModel: ObservableObject {
             timer.invalidate()
             getNewCode()
         } else if let deviceCode = deviceCode, deviceCode.isEmpty == false {
-            TraktManager.shared.check(deviceCode: deviceCode) { [weak self] in
+            Task { @MainActor [weak self] in
+                try await TraktAuthApi.shared.check(deviceCode: deviceCode)
                 self?.onSuccess()
             }
         }

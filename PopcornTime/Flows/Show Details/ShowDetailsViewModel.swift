@@ -49,9 +49,9 @@ class ShowDetailsViewModel: ObservableObject {
         isLoading = true
         Task { @MainActor in
             do  {
-                async let related = TraktManager.shared.getRelated(self.show)
-                async let people = TraktManager.shared.getPeople(forMediaOfType: .shows, id: self.show.id)
-                async let tmdbIdLoader = TraktManager.shared.getTMDBId(forImdbId: show.id)
+                async let related = TraktApi.shared.getRelated(self.show)
+                async let people = TraktApi.shared.getPeople(forMediaOfType: .shows, id: self.show.id)
+                async let tmdbIdLoader = TraktApi.shared.getTMDBId(forImdbId: show.id)
                 
                 var show = try await PopcornKit.getShowInfo(show.id)
                 show.largeBackgroundImage = self.show.largeBackgroundImage ?? show.largeBackgroundImage //keep last background

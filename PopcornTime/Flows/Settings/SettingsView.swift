@@ -329,9 +329,9 @@ struct SettingsView: View {
 
     @ViewBuilder
     var trackButton: some View {
-        let tracktValue = viewModel.isTraktSingedIn ? "Sign Out".localized : "Sign In".localized
+        let tracktValue = viewModel.isTraktLoggedIn ? "Sign Out".localized : "Sign In".localized
         button(text: "Trakt", value: tracktValue) {
-            if viewModel.isTraktSingedIn {
+            if viewModel.isTraktLoggedIn {
                 showTraktAlert = true
             } else  {
                 #if os(tvOS)
