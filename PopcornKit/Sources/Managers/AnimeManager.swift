@@ -2,8 +2,8 @@
 
 //import ObjectMapper
 
-@available(*, unavailable, message: "Anime API does not provide sufficient metadata to be included in the application. If the API is not improved, this class shall be removed in future releases.")
-open class AnimeManager: NetworkManager {
+//@available(*, unavailable, message: "Anime API does not provide sufficient metadata to be included in the application. If the API is not improved, this class shall be removed in future releases.")
+//open class AnimeManager: Popcorn {
     /*
     
     /// Creates new instance of AnimeManager class
@@ -122,4 +122,4 @@ open class AnimeManager: NetworkManager {
         }
     }
  */
-}
+//}

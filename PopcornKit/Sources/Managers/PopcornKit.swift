@@ -12,10 +12,10 @@ import Foundation
  */
 public func loadShows(
     _ page: Int = 1,
-    filterBy filter: PopcornApi.Filters = .popularity,
-    genre: PopcornApi.Genres = .all,
+    filterBy filter: Popcorn.Filters = .popularity,
+    genre: Popcorn.Genres = .all,
     searchTerm: String? = nil,
-    orderBy order: PopcornApi.Orders = .descending) async throws -> [Show] {
+    orderBy order: Popcorn.Orders = .descending) async throws -> [Show] {
     return try await PopcornApi.shared.load(page, filterBy: filter, genre: genre, searchTerm: searchTerm, orderBy: order)
 }
 
@@ -40,10 +40,10 @@ public func getShowInfo(_ imdbId: String) async throws -> Show {
  */
 public func loadMovies(
     _ page: Int = 1,
-    filterBy filter: PopcornApi.Filters = .popularity,
-    genre: PopcornApi.Genres = .all,
+    filterBy filter: Popcorn.Filters = .popularity,
+    genre: Popcorn.Genres = .all,
     searchTerm: String? = nil,
-    orderBy order: PopcornApi.Orders = .descending) async throws -> [Movie] {
+    orderBy order: Popcorn.Orders = .descending) async throws -> [Movie] {
     try await PopcornApi.shared.load(page, filterBy: filter, genre: genre, searchTerm: searchTerm, orderBy: order)
 }
 

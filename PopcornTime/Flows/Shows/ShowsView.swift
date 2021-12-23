@@ -111,7 +111,7 @@ struct ShowsView: View, MediaRatingsLoader {
     var filtersView: some View {
         HStack(spacing: 0) {
             Picker("Shows", selection: $viewModel.currentFilter) {
-                ForEach(PopcornApi.Filters.allCases, id: \.self) { item in
+                ForEach(Popcorn.Filters.allCases, id: \.self) { item in
                     Text(item.string).tag(item)
                 }
             
@@ -121,7 +121,7 @@ struct ShowsView: View, MediaRatingsLoader {
                 .padding(.horizontal, 5)
             #endif
             Picker("Genre", selection: $viewModel.currentGenre) {
-                ForEach(PopcornApi.Genres.allCases, id: \.self) { item in
+                ForEach(Popcorn.Genres.allCases, id: \.self) { item in
                     Text(item.string).tag(item)
                 }
             }

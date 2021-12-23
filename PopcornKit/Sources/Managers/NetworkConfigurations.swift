@@ -62,18 +62,6 @@ public struct Trakt {
     }
 }
 
-public struct PopcornShows {
-    static let base = "https://popcorn-ru.tk" //"https://tv-v2.api-fetch.sh"
-    static let shows = "/shows"
-    static let show = "/show"
-}
-
-public struct PopcornMovies {
-    static let base = "https://popcorn-ru.tk" //"https://movies-v2.api-fetch.sh"
-    static let movies = "/movies"
-    static let movie = "/movie"
-}
-
 public struct TMDB {
     static let apiKey = "ac92176abc89a80e6f5df9510e326601"
     static let base = "https://api.themoviedb.org/3"
@@ -120,7 +108,13 @@ public struct OMDb {
 }
 
 
-open class NetworkManager {
+public struct Popcorn {
+    static let base = "https://popcorn-ru.tk" //"https://movies-v2.api-fetch.sh"
+    static let movies = "/movies"
+    static let movie = "/movie"
+    static let shows = "/shows"
+    static let show = "/show"
+    
     /// Possible orders used in API call.
     public enum Orders: Int {
         case ascending = 1
@@ -189,7 +183,7 @@ open class NetworkManager {
         }
     }
     
-    struct PopcornAPIError: Decodable, Error, LocalizedError {
+    struct APIError: Decodable, Error, LocalizedError {
         var message: String
         var code: Int
         

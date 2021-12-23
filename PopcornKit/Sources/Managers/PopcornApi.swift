@@ -2,13 +2,13 @@
 import Foundation
 import ObjectMapper
 
-open class PopcornApi: NetworkManager {
+open class PopcornApi {
     
     /// Creates new instance of PopcornApi class
     public static let shared = PopcornApi()
     
-    let client = HttpClient(config: .init(serverURL: PopcornMovies.base, apiErrorDecoder: { data in
-        return try? JSONDecoder().decode(PopcornAPIError.self, from: data)
+    let client = HttpClient(config: .init(serverURL: Popcorn.base, apiErrorDecoder: { data in
+        return try? JSONDecoder().decode(Popcorn.APIError.self, from: data)
     }))
     
     /**
@@ -20,7 +20,7 @@ open class PopcornApi: NetworkManager {
      - Parameter searchTerm: Only return movies that match the provided string.
      - Parameter orderBy:    Ascending or descending.
      */
-    open func load(_ page: Int, filterBy filter: Filters, genre: Genres, searchTerm: String?, orderBy order: Orders) async throws -> [Movie] {
+    open func load(_ page: Int, filterBy filter: Popcorn.Filters, genre: Popcorn.Genres, searchTerm: String?, orderBy order: Popcorn.Orders) async throws -> [Movie] {
         var params: [String: Any] = ["sort": filter.rawValue,
                                      "order": order.rawValue,
                                      "genre": genre.rawValue.replacingOccurrences(of: " ", with: "-").lowercased()]
@@ -28,7 +28,7 @@ open class PopcornApi: NetworkManager {
             params["keywords"] = searchTerm
         }
         
-        return try await client.request(.get, path: PopcornMovies.movies + "/\(page)", parameters: params).responseMapable()
+        return try await client.request(.get, path: Popcorn.movies + "/\(page)", parameters: params).responseMapable()
     }
     
     /**
@@ -37,7 +37,7 @@ open class PopcornApi: NetworkManager {
      - Parameter imdbId:        The imdb identification code of the movie.
      */
     open func getInfo(_ imdbId: String) async throws -> Movie {
-        return try await client.request(.get, path: PopcornMovies.movie + "/\(imdbId)").responseMapable()
+        return try await client.request(.get, path: Popcorn.movie + "/\(imdbId)").responseMapable()
     }
     
     
@@ -51,14 +51,14 @@ open class PopcornApi: NetworkManager {
      - Parameter searchTerm: Only return shows that match the provided string.
      - Parameter orderBy:    Ascending or descending.
      */
-    open func load(_ page: Int, filterBy filter: Filters, genre: Genres, searchTerm: String?, orderBy order: Orders) async throws -> [Show] {
+    open func load(_ page: Int, filterBy filter: Popcorn.Filters, genre: Popcorn.Genres, searchTerm: String?, orderBy order: Popcorn.Orders) async throws -> [Show] {
         var params: [String: Any] = ["sort": filter.rawValue,
                                      "genre": genre.rawValue.replacingOccurrences(of: " ", with: "-").lowercased(),
                                      "order": order.rawValue]
         if let searchTerm = searchTerm , !searchTerm.isEmpty {
             params["keywords"] = searchTerm
         }
-        return try await client.request(.get, path: PopcornShows.shows + "/\(page)", parameters: params).responseMapable()
+        return try await client.request(.get, path: Popcorn.shows + "/\(page)", parameters: params).responseMapable()
     }
     
     /**
@@ -67,6 +67,6 @@ open class PopcornApi: NetworkManager {
      - Parameter imdbId:        The imdb identification code of the show.
      */
     open func getInfo(_ imdbId: String) async throws -> Show {
-        return try await client.request(.get, path: PopcornShows.show + "/\(imdbId)").responseMapable()
+        return try await client.request(.get, path: Popcorn.show + "/\(imdbId)").responseMapable()
     }
 }

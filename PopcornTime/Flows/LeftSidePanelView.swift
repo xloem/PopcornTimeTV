@@ -10,13 +10,13 @@ import SwiftUI
 import PopcornKit
 
 struct LeftSidePanelView: View {
-    var sortFilters = NetworkManager.Filters.allCases
-    var genreFilters = NetworkManager.Genres.allCases
+    var sortFilters = Popcorn.Filters.allCases
+    var genreFilters = Popcorn.Genres.allCases
     
     @State var isActive = false
     @State var selectedFilter: String?
-    @Binding var currentSort: PopcornApi.Filters
-    @Binding var currentGenre: NetworkManager.Genres
+    @Binding var currentSort: Popcorn.Filters
+    @Binding var currentGenre: Popcorn.Genres
     
     enum Selection: Hashable {
         case sort
