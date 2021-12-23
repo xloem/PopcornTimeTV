@@ -26,7 +26,7 @@ struct ShowView: View {
                 .resizable()
                 .loadImmediately()
                 .placeholder {
-                    Image("Episode Placeholder")
+                    Image("Show Placeholder")
                         .resizable()
                         .aspectRatio(contentMode: .fit)
                 }
