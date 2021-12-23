@@ -12,13 +12,7 @@ import PopcornKit
 class SettingsViewModel: ObservableObject {
     @Published var clearCache = ClearCache()
     
-    init() {
-        Task { @MainActor in
-            self.isTraktLoggedIn = await TraktSession.shared.isLoggedIn()
-        }
-    }
-    
-    @Published var isTraktLoggedIn: Bool = false
+    @Published var isTraktLoggedIn: Bool = TraktSession.shared.isLoggedIn()
     var traktAuthorizationUrl: URL {
         return TraktAuthApi.shared.authorizationUrl(appScheme: AppScheme)
     }
@@ -46,9 +40,7 @@ class SettingsViewModel: ObservableObject {
     }
     
     func traktLogout() {
-        Task {
-            await TraktSession.shared.logout()
-        }
+        TraktSession.shared.logout()
         isTraktLoggedIn = false
     }
     

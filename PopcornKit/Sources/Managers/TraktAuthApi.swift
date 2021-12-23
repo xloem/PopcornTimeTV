@@ -41,7 +41,7 @@ public class TraktAuthApi {
                       "client_secret": Trakt.apiSecret]
         
         let credentials: TraktOauthResponse = try await client.request(.post, path: path, parameters: params).responseDecode()
-        await TraktSession.shared.storeCredentials(credentials.oauthCredential)
+        TraktSession.shared.storeCredentials(credentials.oauthCredential)
     }
     /// ============================= Apple TV =============================
     
@@ -73,7 +73,7 @@ public class TraktAuthApi {
                       "client_secret": Trakt.apiSecret]
         
         let credentials: TraktOauthResponse = try await client.request(.post, path: Trakt.auth + Trakt.token, parameters: params).responseDecode()
-        await TraktSession.shared.storeCredentials(credentials.oauthCredential)
+        TraktSession.shared.storeCredentials(credentials.oauthCredential)
     }
     /// ============================= ipad =============================
     
@@ -83,7 +83,7 @@ public class TraktAuthApi {
                       "client_id": Trakt.apiKey,
                       "client_secret": Trakt.apiSecret]
         let credentials: TraktOauthResponse = try await client.request(.post, path: Trakt.auth + Trakt.token, parameters: params).responseDecode()
-        await TraktSession.shared.storeCredentials(credentials.oauthCredential)
+        TraktSession.shared.storeCredentials(credentials.oauthCredential)
         return credentials.oauthCredential
     }
 }

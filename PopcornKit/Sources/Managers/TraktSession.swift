@@ -2,9 +2,9 @@
 
 import Foundation
 
-/// used as an actor here, as credentials can expire and we want to make sure that they are refreshed only once
-public actor TraktSession {
+public class TraktSession {
     public static var shared  = TraktSession()
+    var refreshTask: Task<OAuthCredential, Error>?
     
     private var credentials: OAuthCredential? = {
         if let data = Session.traktCredentials,
@@ -24,10 +24,20 @@ public actor TraktSession {
     }
     
     func traktCredentials() async throws -> OAuthCredential {
+        /// there might be a refresh token request onflight, we should wait for it
+        if let task = refreshTask {
+            return try await task.value
+        }
+        
         if let credentials = credentials {
             if credentials.expired, let refreshToken = credentials.refreshToken {
-                let credentials = try await TraktAuthApi.shared.refreshToken(refreshToken: refreshToken)
+                self.refreshTask = Task {
+                    return try await TraktAuthApi.shared.refreshToken(refreshToken: refreshToken)
+                }
+                let credentials = try await refreshTask!.value
                 storeCredentials(credentials)
+                self.refreshTask = nil
+                return credentials
             } else {
                 return credentials
             }
