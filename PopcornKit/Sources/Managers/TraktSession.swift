@@ -43,7 +43,7 @@ public class TraktSession {
             }
         }
         
-        throw APIError.Type_.missingSession
+        throw APIError(type: .missingSession)
     }
     
     func storeCredentials(_ credentials: OAuthCredential) {

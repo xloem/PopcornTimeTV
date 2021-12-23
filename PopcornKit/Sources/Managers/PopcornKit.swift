@@ -12,11 +12,11 @@ import Foundation
  */
 public func loadShows(
     _ page: Int = 1,
-    filterBy filter: ShowsApi.Filters = .popularity,
-    genre: ShowsApi.Genres = .all,
+    filterBy filter: PopcornApi.Filters = .popularity,
+    genre: PopcornApi.Genres = .all,
     searchTerm: String? = nil,
-    orderBy order: ShowsApi.Orders = .descending) async throws -> [Show] {
-    return try await ShowsApi.shared.load(page, filterBy: filter, genre: genre, searchTerm: searchTerm, orderBy: order)
+    orderBy order: PopcornApi.Orders = .descending) async throws -> [Show] {
+    return try await PopcornApi.shared.load(page, filterBy: filter, genre: genre, searchTerm: searchTerm, orderBy: order)
 }
 
 /**
@@ -25,7 +25,7 @@ public func loadShows(
  - Parameter imdbId:        The imdb identification code of the show.
  */
 public func getShowInfo(_ imdbId: String) async throws -> Show {
-    return try await ShowsApi.shared.getInfo(imdbId)
+    return try await PopcornApi.shared.getInfo(imdbId)
 }
 
 
@@ -40,11 +40,11 @@ public func getShowInfo(_ imdbId: String) async throws -> Show {
  */
 public func loadMovies(
     _ page: Int = 1,
-    filterBy filter: MoviesApi.Filters = .popularity,
-    genre: MoviesApi.Genres = .all,
+    filterBy filter: PopcornApi.Filters = .popularity,
+    genre: PopcornApi.Genres = .all,
     searchTerm: String? = nil,
-    orderBy order: MoviesApi.Orders = .descending) async throws -> [Movie] {
-    try await MoviesApi.shared.load(page, filterBy: filter, genre: genre, searchTerm: searchTerm, orderBy: order)
+    orderBy order: PopcornApi.Orders = .descending) async throws -> [Movie] {
+    try await PopcornApi.shared.load(page, filterBy: filter, genre: genre, searchTerm: searchTerm, orderBy: order)
 }
 
 /**
@@ -53,7 +53,7 @@ public func loadMovies(
  - Parameter imdbId:        The imdb identification code of the movie.
  */
 public func getMovieInfo(_ imdbId: String) async throws -> Movie {
-    try await MoviesApi.shared.getInfo(imdbId)
+    try await PopcornApi.shared.getInfo(imdbId)
 }
 
 /**

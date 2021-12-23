@@ -12,7 +12,7 @@ import PopcornKit
 class MoviesViewModel: ObservableObject {
     var page = 1
     @Published var hasNextPage = false
-    @Published var currentFilter: MoviesApi.Filters = .trending {
+    @Published var currentFilter: PopcornApi.Filters = .trending {
         didSet { reload() }
     }
     @Published var currentGenre = NetworkManager.Genres.all {

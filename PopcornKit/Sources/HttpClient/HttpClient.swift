@@ -42,7 +42,7 @@ public class HttpClient {
             }
         }
         
-        return HttpSessionRequest(request: request, session: session)
+        return HttpSessionRequest(request: request, session: session, apiErrorDecoder: config.apiErrorDecoder)
     }
     
     /// The encoding to use for `Array` parameters.

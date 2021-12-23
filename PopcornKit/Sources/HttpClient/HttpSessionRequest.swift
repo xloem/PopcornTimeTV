@@ -15,6 +15,7 @@ struct HttpSessionRequest {
     var validStatuses = (200...299)
     var missingSession = [401]
     var closeSession: (_ error: Error) -> Void = { error in  }
+    var apiErrorDecoder: (_ data: Data) -> Error? = { data in return nil } // used de extract errors from data
     
     func response() async throws {
         let (data, response): (Data, URLResponse) = try await session.data(for: request)
@@ -53,10 +54,10 @@ struct HttpSessionRequest {
         try validate(request: request, response: response, data: data)
         
         guard let jsonString = String(data: data, encoding: .utf8) else {
-            throw APIError.Type_.missingContent
+            throw APIError(type: .missingContent)
         }
         guard let response = Mapper<T>(context: context).mapArray(JSONString: jsonString) else {
-            throw APIError.Type_.couldNoteDecodeResponse
+            throw APIError(type:.couldNotDecodeResponse)
         }
         
         return response
@@ -67,10 +68,10 @@ struct HttpSessionRequest {
         try validate(request: request, response: response, data: data)
         
         guard let jsonString = String(data: data, encoding: .utf8) else {
-            throw APIError.Type_.missingContent
+            throw APIError(type: .missingContent)
         }
         guard let response = Mapper<T>(context: context).map(JSONString: jsonString) else {
-            throw APIError.Type_.couldNoteDecodeResponse
+            throw APIError(type:.couldNotDecodeResponse)
         }
         
         return response
@@ -78,7 +79,12 @@ struct HttpSessionRequest {
     
     func validate(request: URLRequest, response: URLResponse, data: Data?) throws {
         guard let statusCode = (response as? HTTPURLResponse)?.statusCode else {
-            throw APIError.Type_.invalidHttpStatusCode
+            throw APIError(type: .invalidHttpStatusCode)
+        }
+        
+        var apiError: Error?
+        if let data = data {
+            apiError = apiErrorDecoder(data)
         }
         
         guard validStatuses.contains(statusCode) else {
@@ -92,11 +98,15 @@ struct HttpSessionRequest {
             
             if accessDenied {
                 DispatchQueue.main.async {
-                    closeSession(APIError.Type_.missingSession)
+                    closeSession(APIError(type: .missingSession))
                 }
             }
             
-            throw APIError.Type_.invalidHttpStatusCode
+            throw apiError ?? APIError(type: .unacceptableStatusCode(code: statusCode))
+        }
+        
+        if let apiError = apiError {
+            throw apiError
         }
     }
 }

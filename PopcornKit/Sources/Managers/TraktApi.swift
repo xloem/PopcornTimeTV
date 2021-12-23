@@ -357,7 +357,7 @@ open class TraktApi {
         let data = try await client.request(.get, path: path).responseData()
         let responseObject = JSON(data).arrayValue.first
         guard let type = responseObject?["type"].string, let id = responseObject?[type]["ids"]["tmdb"].int else {
-            throw APIError.Type_.couldNoteDecodeResponse
+            throw APIError(type: .couldNotDecodeResponse)
         }
         return id
     }

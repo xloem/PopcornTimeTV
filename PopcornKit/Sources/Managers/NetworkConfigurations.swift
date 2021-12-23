@@ -188,4 +188,13 @@ open class NetworkManager {
             return rawValue.localized
         }
     }
+    
+    struct PopcornAPIError: Decodable, Error, LocalizedError {
+        var message: String
+        var code: Int
+        
+        public var errorDescription: String? {
+            return "\(message) - \(code)"
+        }
+    }
 }
