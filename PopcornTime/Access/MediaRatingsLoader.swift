@@ -40,7 +40,9 @@ extension MediaRatingsLoader {
         
         let info = try? await OMDbApi.shared.loadCachedInfo(imdbId: media.id)
         if let info = info, let index = mediaRatings.wrappedValue.firstIndex(where: {$0.id == media.id}) {
-            mediaRatings.wrappedValue[index].ratings = info.transform()
+            withAnimation {
+                mediaRatings.wrappedValue[index].ratings = info.transform()
+            }
         }
     }
 }
