@@ -42,7 +42,12 @@ public class HttpClient {
             }
         }
         
-        return HttpSessionRequest(request: request, session: session, apiErrorDecoder: config.apiErrorDecoder)
+        return HttpSessionRequest(request: request,
+                                  session: session,
+                                  validStatuses: config.validStatuses,
+                                  missingSession: config.missingSession,
+                                  closeSession: config.closeSession,
+                                  apiErrorDecoder: config.apiErrorDecoder)
     }
     
     /// The encoding to use for `Array` parameters.
@@ -52,6 +57,19 @@ public class HttpClient {
     private let boolEncoding: BoolEncoding = .numeric
 }
 
+enum HTTPMethod: String {
+    case options = "OPTIONS"
+    case get     = "GET"
+    case head    = "HEAD"
+    case post    = "POST"
+    case put     = "PUT"
+    case patch   = "PATCH"
+    case delete  = "DELETE"
+    case trace   = "TRACE"
+    case connect = "CONNECT"
+}
+
+typealias HTTPHeaders = [String: String]
 
 /// Extracted from Alamofire
 extension HttpClient {
