@@ -83,8 +83,13 @@ struct PlayerControlsView: View {
         #endif
         .frame(maxWidth: 750)
         .padding([.leading, .trailing], 10)
-        .background(.regularMaterial)
-        .cornerRadius(10)
+        .background {
+            Color.clear
+                .background(.regularMaterial)
+                .cornerRadius(10)
+        }
+//        .background(.regularMaterial)
+//        .cornerRadius(10)
         .buttonStyle(.plain)
     }
     
@@ -113,6 +118,28 @@ struct PlayerControlsView: View {
                 })) { started in
                     viewModel.clickGesture()
                 }
+                .overlay(content: {
+                    snapshotImage
+                })
+            }
+        }
+    }
+    
+    @ViewBuilder
+    var snapshotImage: some View {
+        if let image = viewModel.progress.screenshotImage, viewModel.progress.isScrubbing {
+            GeometryReader { geometry in
+                #if os(macOS)
+                Image(nsImage: image)
+                    .border(Color.init(white: 1.0, opacity: 0.5), width: 1)
+                    .padding(.top, -image.size.height - 15)
+                    .padding(.leading, CGFloat(viewModel.progress.scrubbingProgress) * geometry.size.width - 0.5 * image.size.width)
+                #elseif os(iOS)
+                Image(uiImage: image)
+                    .border(Color.init(white: 1.0, opacity: 0.5), width: 1)
+                    .padding(.top, -image.size.height - 15)
+                    .padding(.leading, CGFloat(viewModel.progress.scrubbingProgress) * geometry.size.width - 0.5 * image.size.width)
+                #endif
             }
         }
     }

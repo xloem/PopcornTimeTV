@@ -47,6 +47,15 @@ struct DownloadButton: View {
             }
         })
         .frame(width: theme.buttonWidth, height: theme.buttonHeight)
+        .alert(isPresented: $viewModel.showDownloadFailedAlert, content: {
+            Alert(title: Text( "Download Failed"),
+                  message: Text(viewModel.downloadError?.localizedDescription ?? ""),
+                  primaryButton: .cancel(Text("OK")),
+                  secondaryButton: .default(Text("Clear All Cache"), action: {
+                    viewModel.clearCache.emptyCache()
+                    viewModel.downloadError = nil
+            }))
+          })
     }
     
     var downloadedButton: some View {    

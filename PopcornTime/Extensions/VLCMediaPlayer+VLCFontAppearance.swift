@@ -44,6 +44,9 @@ import VLCKit
      - Important: Provide the font in reverse size as `libvlc` sets the text matrix to the identity matrix which reverses the font size. Ie. 5pt is really big and 100pt is really small.
      */
     @objc optional func setTextRendererFontSize(_ fontSize: NSNumber)
+    
+//    @objc optional func setCurrentSubTitleFontScale(_ scale: Float)
+//    @objc optional func currentSubTitleFontScale() -> Float
 }
 
 extension VLCMediaPlayer: VLCFontAppearance {}

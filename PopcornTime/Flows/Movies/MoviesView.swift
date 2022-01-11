@@ -111,11 +111,13 @@ struct MoviesView: View, MediaRatingsLoader {
     @ViewBuilder
     var filtersView: some View {
         HStack(spacing: 0) {
+            #if os(iOS)
+            Image(systemName: "chevron.up.chevron.down")
+            #endif
             Picker("Movies", selection: $viewModel.currentFilter) {
                 ForEach(Popcorn.Filters.allCases, id: \.self) { item in
                     Text(item.string).tag(item)
                 }
-            
             }
             #if os(iOS)
             Text("Movies - Genre")

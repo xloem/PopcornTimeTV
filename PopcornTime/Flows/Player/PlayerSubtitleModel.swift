@@ -31,6 +31,7 @@ class PlayerSubtitleModel {
         self.media = media
         self.mediaplayer = mediaplayer
         self.downloadDirectory = directory
+        mediaplayer.currentVideoSubTitleDelay = 0
         
         let isSwiftUIPreview = ProcessInfo.processInfo.environment["XCODE_RUNNING_FOR_PREVIEWS"] != nil
         
@@ -78,9 +79,9 @@ class PlayerSubtitleModel {
     
     lazy var subtitleDelayBinding: Binding<Int> = {
         Binding(get: { [unowned self] in
-            mediaplayer.currentVideoSubTitleDelay
+            mediaplayer.currentVideoSubTitleDelay / 1_000_000 // from microseconds to seconds
         }, set: { [unowned self] newDelay in
-            mediaplayer.currentVideoSubTitleDelay = newDelay
+            mediaplayer.currentVideoSubTitleDelay = newDelay * 1_000_000
         })
     }()
     

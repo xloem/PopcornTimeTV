@@ -24,6 +24,9 @@ class NowPlayingController {
     private var imageGenerator: AVAssetImageGenerator
     var onPlayPause: () -> Void = {}
     
+    private (set) var mediaThumbnailer: VLCMediaThumbnailer?
+    var onThumbnailCompletion: (_ image: CGImage) -> Void = { _ in }
+    
     internal var nowPlayingInfo: [String: Any]? {
         get {
             return MPNowPlayingInfoCenter.default().nowPlayingInfo
@@ -146,5 +149,35 @@ class NowPlayingController {
     func screenshot(at progress: Float) -> CGImage? {
         let currentTime = NSNumber(value: progress * streamDuration)
         return screenshotAtTime(currentTime)
+    }
+}
+
+extension NowPlayingController: VLCMediaThumbnailerDelegate {
+    func vlcScreenshotAtPercentage(_ percentage: Float, completion: @escaping (_ image: CGImage) -> Void) {
+        if mediaThumbnailer == nil {
+            mediaThumbnailer = VLCMediaThumbnailer(media: mediaplayer.media, andDelegate: self)
+            mediaThumbnailer?.snapshotPosition = percentage
+            let ratio = mediaplayer.videoSize.width / mediaplayer.videoSize.height
+//            #if os(iOS) || os(macOS)
+            mediaThumbnailer?.thumbnailWidth = 480
+            mediaThumbnailer?.thumbnailHeight = 480 / ratio //270
+//            #elseif os(tvOS)
+//            mediaThumbnailer?.thumbnailWidth = 480
+//            mediaThumbnailer?.thumbnailHeight = 270
+//            #endif
+            onThumbnailCompletion = completion
+            mediaThumbnailer?.fetchThumbnail()
+        } else {
+            mediaThumbnailer?.snapshotPosition = percentage
+        }
+    }
+    
+    func mediaThumbnailerDidTimeOut(_ mediaThumbnailer: VLCMediaThumbnailer) {
+        self.mediaThumbnailer = nil
+    }
+    
+    func mediaThumbnailer(_ mediaThumbnailer: VLCMediaThumbnailer, didFinishThumbnail thumbnail: CGImage) {
+        self.mediaThumbnailer = nil
+        self.onThumbnailCompletion(thumbnail)
     }
 }

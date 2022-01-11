@@ -66,6 +66,20 @@ class PlayerViewModel: NSObject, ObservableObject {
         var scrubbingTime: String = ""
         var screenshot: CGImage?
         var hint: TransportBarHint = .none
+        
+        #if os(macOS)
+        var screenshotImage: NSImage? {
+            screenshot.flatMap{ NSImage(cgImage: $0, size: NSSize(width: 200, height: 100)) }
+        }
+        #elseif os(iOS)
+        var screenshotImage: UIImage? {
+            screenshot.flatMap{ UIImage(cgImage: $0, scale: 2.5, orientation: .up) }
+        }
+        #elseif os(tvOS)
+        var screenshotImage: UIImage? {
+            screenshot.flatMap{ UIImage(cgImage: $0, scale: 1, orientation: .up) }
+        }
+        #endif
     }
     @Published var progress = Progress()
     
@@ -244,8 +258,15 @@ class PlayerViewModel: NSObject, ObservableObject {
         progress.remainingTime = VLCTime(number: remainingTime).stringValue
         progress.scrubbingTime = VLCTime(number: time).stringValue
         workItem?.cancel()
+        let percentage = progress.scrubbingProgress
         workItem = DispatchWorkItem { [weak self] in
-            self?.progress.screenshot = self?.nowPlaying.screenshotAtTime(time)
+            if let image = self?.nowPlaying.screenshotAtTime(time) {
+                self?.progress.screenshot = image
+            } else {
+                self?.nowPlaying.vlcScreenshotAtPercentage(percentage, completion: { image in
+                    self?.progress.screenshot = image
+                })
+            }
         }
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.25, execute: workItem!)
     }
@@ -271,9 +292,15 @@ class PlayerViewModel: NSObject, ObservableObject {
         progress.isScrubbing = true
         progress.scrubbingProgress = progress.progress
         showControls = true
+        progress.screenshot = nil
         
         if let image = nowPlaying.screenshot(at: progress.progress) {
             progress.screenshot = image
+        } else {
+            let percentage = progress.scrubbingProgress
+            self.nowPlaying.vlcScreenshotAtPercentage(percentage, completion: { image in
+                self.progress.screenshot = image
+            })
         }
     }
 

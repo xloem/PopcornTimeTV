@@ -25,11 +25,12 @@ class PlayerAudioModel {
     
     init(mediaplayer: VLCMediaPlayer) {
         self.mediaplayer = mediaplayer
+        mediaplayer.currentAudioPlaybackDelay = 0
         
         audioDelayBinding = Binding(get: {
-            mediaplayer.currentAudioPlaybackDelay
+            mediaplayer.currentAudioPlaybackDelay / 1_000_000 // from microseconds to seconds
         }, set: { newDelay in
-            mediaplayer.currentAudioPlaybackDelay = newDelay
+            mediaplayer.currentAudioPlaybackDelay = newDelay * 1_000_000
         })
         
         audioProfileBinding = Binding(get: { [unowned self] in
