@@ -32,21 +32,9 @@ class PlayerSubtitleModel {
         self.mediaplayer = mediaplayer
         self.downloadDirectory = directory
         mediaplayer.currentVideoSubTitleDelay = 0
+
+        loadSubtitles(localPathToMedia: localPathToMedia)
         
-        let isSwiftUIPreview = ProcessInfo.processInfo.environment["XCODE_RUNNING_FOR_PREVIEWS"] != nil
-        
-        if !isSwiftUIPreview {
-            if media.subtitles.count == 0 {
-                Task { @MainActor in
-                    self.media.subtitles = try await media.getSubtitles(orWithFilePath: localPathToMedia)
-                }
-            }
-        }
-        
-        if let preferredLanguage = settings.language {
-            self.currentSubtitle = media.subtitles[preferredLanguage]?.first
-            configurePlayer(subtitle: self.currentSubtitle)
-        }
         let vlcAppearance = mediaplayer as VLCFontAppearance
         vlcAppearance.setTextRendererFontSize?(NSNumber(value: settings.size.rawValue))
         vlcAppearance.setTextRendererFontColor?(NSNumber(value: settings.color.rawValue))
@@ -54,6 +42,29 @@ class PlayerSubtitleModel {
         vlcAppearance.setTextRendererFontForceBold?(NSNumber(booleanLiteral: settings.style == .bold || settings.style == .boldItalic))
         
         mediaplayer.media.addOptions([vlcSettingTextEncoding: settings.encoding])
+    }
+    
+    func loadSubtitles(localPathToMedia: URL) {
+        if media.subtitles.count == 0 {
+            Task { @MainActor in
+                var subtitles = (try? await media.getSubtitles()) ?? [:]
+                if subtitles.isEmpty {
+                    subtitles = try await media.getSubtitles(orWithFilePath: localPathToMedia)
+                }
+                
+                self.media.subtitles = subtitles
+                configureUserDefaultSubtitle()
+            }
+        } else {
+            configureUserDefaultSubtitle()
+        }
+    }
+    
+    func configureUserDefaultSubtitle() {
+        if let preferredLanguage = settings.language {
+            self.currentSubtitle = media.subtitles[preferredLanguage]?.first
+            configurePlayer(subtitle: self.currentSubtitle)
+        }
     }
     
     func configurePlayer(subtitle: Subtitle?) {

@@ -63,10 +63,7 @@ class PreloadTorrentViewModel: ObservableObject {
         let finishedLoading: () -> Void = { }
         #endif
         
-        Task { @MainActor in
-            media.subtitles = (try? await self.media.getSubtitles()) ?? [:]
-            self.play(fromFileOrMagnetLink: torrent.url, nextEpisodeInSeries: nil, finishedLoadingBlock: finishedLoading)
-        }
+        self.play(fromFileOrMagnetLink: torrent.url, nextEpisodeInSeries: nil, finishedLoadingBlock: finishedLoading)
     }
     
 

@@ -29,8 +29,8 @@ open class SubtitlesApi {
      */
     open func search(_ episode: Episode? = nil, imdbId: String? = nil,preferredLang: String? = nil,videoFilePath: URL? = nil, limit: String = "500") async throws -> Dictionary<String, [Subtitle]> {
         let params = getParams(episode, imdbId: imdbId, preferredLang: preferredLang, videoFilePath: videoFilePath, limit: limit)
-        let path = OpenSubtitles.search + params.compactMap({"\($0)-\($1)"}).joined(separator: "/")
-        let subtitles: [Subtitle] = try await client.request(.get, path: path, parameters: params).responseMapable()
+        let path = OpenSubtitles.search + params.sorted(by: {$0.key < $1.key}).compactMap({"\($0)-\($1)"}).joined(separator: "/")
+        let subtitles: [Subtitle] = try await client.request(.get, path: path).responseMapable()
         
         var allSubtitles = Dictionary<String, [Subtitle]>()
         for subtitle in subtitles {
