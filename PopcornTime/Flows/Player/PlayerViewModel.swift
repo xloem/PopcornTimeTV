@@ -368,7 +368,7 @@ class PlayerViewModel: NSObject, ObservableObject {
 
 extension PlayerViewModel: VLCMediaPlayerDelegate {
     
-    func mediaPlayerTimeChanged(_ aNotification: Notification!) {
+    func mediaPlayerTimeChanged(_ aNotification: Notification) {
         if isLoading {
             isLoading = false
 
@@ -404,7 +404,7 @@ extension PlayerViewModel: VLCMediaPlayerDelegate {
 //        }
     }
     
-    func mediaPlayerStateChanged(_ aNotification: Notification!) {
+    func mediaPlayerStateChanged(_ aNotification: Notification) {
         nowPlaying.configureNowPlayingPositions()
         resetIdleTimer()
         progress.isBuffering = false

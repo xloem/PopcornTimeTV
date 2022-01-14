@@ -35,11 +35,14 @@ class DownloadViewModel: NSObject, ObservableObject {
     }
     
     func delete() {
-        if download.downloadStatus == .processing {
-            downloadManager.pause(download)
-        } else {
+        switch download.downloadStatus {
+        case .processing, .paused, .downloading, .failed:
+            downloadManager.stop(download) // will also clear downloeded data
+        case .finished:
             downloadManager.delete(download)
             NotificationCenter.default.post(name: downloadDeleted, object: self)
+        @unknown default:
+            break
         }
     }
     

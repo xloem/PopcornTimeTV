@@ -22,6 +22,7 @@ class DownloadButtonViewModel: NSObject, ObservableObject {
     @Published var showDownloadedActionSheet = false
     @Published var downloadError: Error?
     @Published var downloadProgress: Float = 0
+    var savedDownloadProgress: Float = 0
     var clearCache = ClearCache()
     
     enum State: CaseIterable {
@@ -58,11 +59,13 @@ class DownloadButtonViewModel: NSObject, ObservableObject {
     
     func download(torrent: Torrent) {
         state = .pending
-        self.download = PTTorrentDownloadManager.shared().startDownloading(fromFileOrMagnetLink:  torrent.url, mediaMetadata: self.media.mediaItemDictionary)
+        download = PTTorrentDownloadManager.shared().startDownloading(fromFileOrMagnetLink:  torrent.url, mediaMetadata: self.media.mediaItemDictionary)
         print("download torrent", torrent)
         if download?.downloadStatus == .failed {
             state = .normal
             showDownloadFailedAlert = true
+        } else {
+            download?.save()
         }
     }
     
