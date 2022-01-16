@@ -42,10 +42,13 @@ struct MacModalWindow<Content: View, Modal: View>: View {
         window.center()
         window.setFrameAutosaveName("VideoPlayer")
         window.title = title
-        window.contentView = NSHostingView(rootView: modalView())
+        window.contentView = NSHostingView(rootView: modalView()
+                                            .simultaneousGesture(TapGesture(count: 2)
+                                                                    .onEnded {
+                                                                        window.toggleFullScreen(nil)
+                                                                 })
+        )
         window.level = .normal
-//        let mainScreen: NSScreen = NSScreen.screens[0]
-//        playerWindow.contentView?.enterFullScreenMode(mainScreen, withOptions: [.])
         window.makeKeyAndOrderFront(nil)
     }
     
@@ -84,6 +87,11 @@ struct MacModalWindowWrapper<Item, Content, Modal>: View where Item : Identifiab
         content
             .onChange(of: item) { newValue in
                 self.isPresented = (newValue != nil)
+            }
+            .onChange(of: isPresented) { newValue in
+                if !newValue {  // propagate back change
+                    self.item = nil
+                }
             }
             .fullScreenModal(isPresented: $isPresented, title: title, modalView: { modalView(item!) })
     }

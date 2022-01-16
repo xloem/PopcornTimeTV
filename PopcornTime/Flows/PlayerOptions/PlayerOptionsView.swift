@@ -86,7 +86,7 @@ struct PlayerOptionsView: View {
                 AudioView(currentDelay: $audioDelay, currentSound: $audioProfile)
             }
         }
-        .frame(maxHeight: theme.maxHeight)
+        .frame(maxWidth: 1024, maxHeight: theme.maxHeight)
         .padding(.bottom, 20)
         .background(VisualEffectBlur().cornerRadius(10))
         .padding(.horizontal, 50)
