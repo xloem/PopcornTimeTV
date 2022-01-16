@@ -115,7 +115,10 @@ class PlayerViewModel: NSObject, ObservableObject {
             isLoading = false
             resumePlaybackAlert = true
         } else {
-            mediaplayer.play()
+            // delay a little bit as it seems that vlcplayer sometimes for downloaded items will dismiss without requesting content from gcdwebserver
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.1, execute: {
+                self.mediaplayer.play()
+            })
         }
     }
     

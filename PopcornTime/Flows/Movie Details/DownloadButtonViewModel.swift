@@ -49,6 +49,7 @@ class DownloadButtonViewModel: NSObject, ObservableObject {
         self.media = media
         self.download = media.associatedDownload
         state = download.flatMap{ State($0.downloadStatus) } ?? .normal
+        downloadProgress = download?.torrentStatus.totalProgress ?? 0
         super.init()
         PTTorrentDownloadManager.shared().add(self)
     }

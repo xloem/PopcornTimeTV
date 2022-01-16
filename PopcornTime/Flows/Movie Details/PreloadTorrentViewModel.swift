@@ -118,10 +118,8 @@ class PreloadTorrentViewModel: ObservableObject {
         }
 
         
-        PTTorrentStreamer.shared().cancelStreamingAndDeleteData(false) // Make sure we're not already streaming
-        
         if url.hasPrefix("magnet") || (url.hasSuffix(".torrent") && !url.hasPrefix("http")) {
-            self.streamer = .shared()
+            self.streamer = PTTorrentStreamer()
             self.streamer!.startStreaming(fromFileOrMagnetLink: url, progress: { (status) in
                 loadingBlock(status)
             }, readyToPlay: { (videoFileURL, videoFilePath) in

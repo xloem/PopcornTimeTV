@@ -208,9 +208,9 @@ struct PlayerView_Previews: PreviewProvider {
     static var previews: some View {
         let url = URL(string: "http://www.youtube.com/watch?v=zI2qbr99H64")!
         let directory = URL(fileURLWithPath: "/tmp")
-        let loadingModel = PlayerViewModel(media: Movie.dummy(), fromUrl: url, localUrl: directory, directory: directory, streamer: .shared())
+        let loadingModel = PlayerViewModel(media: Movie.dummy(), fromUrl: url, localUrl: directory, directory: directory, streamer: .init())
         
-        let showControlsModel = PlayerViewModel(media: Movie.dummy(), fromUrl: url, localUrl: directory, directory: directory, streamer: .shared())
+        let showControlsModel = PlayerViewModel(media: Movie.dummy(), fromUrl: url, localUrl: directory, directory: directory, streamer: .init())
         showControlsModel.isLoading = false
         showControlsModel.showControls = true
         showControlsModel.showInfo = true

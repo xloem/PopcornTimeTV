@@ -265,7 +265,7 @@ struct PlayerControlsView_Previews: PreviewProvider {
     static var playingPlayerModel: PlayerViewModel {
         let url = URL(string: "https://multiplatform-f.akamaihd.net/i/multi/will/bunny/big_buck_bunny_,640x360_400,640x360_700,640x360_1000,950x540_1500,.f4v.csmil/master.m3u8")!
         
-        let showControlsModel = PlayerViewModel(media: Movie.dummy(), fromUrl: url, localUrl: url, directory: url, streamer: .shared())
+        let showControlsModel = PlayerViewModel(media: Movie.dummy(), fromUrl: url, localUrl: url, directory: url, streamer: .init())
         showControlsModel.isLoading = false
         showControlsModel.showControls = false
         showControlsModel.showInfo = false
@@ -277,7 +277,7 @@ struct PlayerControlsView_Previews: PreviewProvider {
     static var loadingPlayerModel: PlayerViewModel {
         let url = URL(string: "https://multiplatform-f.akamaihd.net/i/multi/will/bunny/big_buck_bunny_,640x360_400,640x360_700,640x360_1000,950x540_1500,.f4v.csmil/master.m3u8")!
         
-        let showControlsModel = PlayerViewModel(media: Movie.dummy(), fromUrl: url, localUrl: url, directory: url, streamer: .shared())
+        let showControlsModel = PlayerViewModel(media: Movie.dummy(), fromUrl: url, localUrl: url, directory: url, streamer: .init())
         showControlsModel.isLoading = true
         showControlsModel.progress = .init(progress: 0.1, isBuffering: true, bufferProgress: 0.7, isScrubbing: false, scrubbingProgress: 0, remainingTime: "-23:10", elapsedTime: "01:20", scrubbingTime: "03:04", screenshot: nil, hint: .none)
         return showControlsModel
