@@ -57,7 +57,7 @@ class ShowsViewModel: ObservableObject {
                     lastReloadDate = Date()
                 }
                 
-                self.shows = (self.shows + shows).uniqued
+                self.shows = (self.shows + shows).uniqueById()
                 self.hasNextPage = !shows.isEmpty
                 self.page += 1
             } catch {

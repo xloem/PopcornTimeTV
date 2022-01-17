@@ -51,3 +51,26 @@ extension Array where Element: Hashable {
         return new
     }
 }
+
+
+extension Array where Element: Hashable, Element: Identifiable {
+    
+    /**
+     Remove duplicates from an array while preserving the order. Array elements must conform to protocol, `Hashable`
+     
+     - Parameter source: The array.
+     
+     - Returns: A copy of the array, made unique.
+     */
+    func uniqueById() -> Array {
+        var buffer = [Element]()
+        var added = Set<Element>()
+        for elem in self {
+            if !added.contains(where: { $0.id == elem.id}) {
+                buffer.append(elem)
+                added.insert(elem)
+            }
+        }
+        return buffer
+    }
+}

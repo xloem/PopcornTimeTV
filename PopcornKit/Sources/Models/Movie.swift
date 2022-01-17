@@ -11,7 +11,7 @@ import MediaPlayer.MPMediaItem
  
  `TraktManager` has to be called regardless to fill up the special variables.
  */
-public struct Movie: Media, Equatable {
+public struct Movie: Media, Equatable, Identifiable {
     
     /// Imdb id of the movie.
     public let id: String

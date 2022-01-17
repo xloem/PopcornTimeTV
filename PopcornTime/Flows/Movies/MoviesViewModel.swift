@@ -58,7 +58,7 @@ class MoviesViewModel: ObservableObject {
                     lastReloadDate = Date()
                 }
                 
-                self.movies = (self.movies + movies).uniqued
+                self.movies = (self.movies + movies).uniqueById()
                 self.hasNextPage = !movies.isEmpty
                 self.page += 1
             } catch {
