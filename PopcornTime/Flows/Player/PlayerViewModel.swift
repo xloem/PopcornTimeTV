@@ -403,11 +403,13 @@ extension PlayerViewModel: VLCMediaPlayerDelegate {
         progress.progress = mediaplayer.position
         
         let remaining = Int(mediaplayer.remainingTime.intValue / 1000)
-        if remaining == -ShowUpNextDuration {
-            progress.showUpNext = true
-            progress.showUpNextProgress = 1.0
-        } else if remaining > -ShowUpNextDuration {
-            progress.showUpNextProgress = CGFloat(CGFloat(-remaining) / CGFloat(ShowUpNextDuration))
+        if remaining >= -ShowUpNextDuration {
+            if progress.showUpNext == false && progress.showUpNextProgress == 0 {
+                progress.showUpNext = true
+                progress.showUpNextProgress = 1.0
+            } else {
+                progress.showUpNextProgress = CGFloat(CGFloat(-remaining) / CGFloat(ShowUpNextDuration))
+            }
         }
     }
     

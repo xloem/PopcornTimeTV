@@ -25,10 +25,12 @@ struct PlayerView: View {
             VLCPlayerView(mediaplayer: viewModel.mediaplayer)
             #if os(tvOS)
                 .addGestures(onSwipeDown: {
+                    guard !viewModel.progress.showUpNext else { return }
                     withAnimation {
                         viewModel.showInfo = true
                     }
                 }, onSwipeUp: {
+                    guard !viewModel.progress.showUpNext else { return }
                     withAnimation {
                         viewModel.showControls = true
                     }
@@ -105,9 +107,9 @@ struct PlayerView: View {
                     }
                 }
             #endif
-            upNextViewContainer
             controlsView
             showInfoView
+            upNextViewContainer
         }
         .onAppear {
             viewModel.playOnAppear()

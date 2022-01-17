@@ -64,7 +64,7 @@ struct UpNextView: View {
                     Circle()
                         .trim(from:0, to: playerModel.progress.showUpNextProgress)
                         .stroke(.white, style: StrokeStyle(lineWidth: 4))
-                        .animation(.linear(duration: 1), value: playerModel.progress.showUpNextProgress)
+                        .animation(.linear(duration: theme.animationDuration), value: playerModel.progress.showUpNextProgress)
                         .rotationEffect(Angle(degrees: -90))
                 }
                 .overlay {
@@ -89,6 +89,7 @@ extension UpNextView {
     struct Theme {
         let episodeWidth: CGFloat = value(tvOS: 310, macOS: 217)
         let episodeHeight: CGFloat = value(tvOS: 215, macOS: 150)
+        let animationDuration: CGFloat = value(tvOS: 2, macOS: 1)
     }
 }
 
