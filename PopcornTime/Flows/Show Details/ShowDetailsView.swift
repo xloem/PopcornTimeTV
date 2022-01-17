@@ -298,7 +298,7 @@ extension ShowDetailsView {
             = (height: value(tvOS: 475, macOS: 280),
                cellWidth: value(tvOS: 220, macOS: 150),
                cellHeight: value(tvOS: 460, macOS: 180),
-               spacing: value(tvOS: 90, macOS: 30),
+               spacing: value(tvOS: 80, macOS: 30),
                leading: value(tvOS: 90, macOS: 50))
         let backgroundOpacity = value(tvOS: 0.3, macOS: 0.5)
         let seasonFontSize: CGFloat = value(tvOS: 43, macOS: 21)
@@ -312,6 +312,8 @@ struct ShowDetailsView_Previews: PreviewProvider {
         let show = Show.dummy()
         let model = ShowDetailsViewModel(show: show)
         model.currentSeason = show.latestUnwatchedEpisode()?.season ?? show.seasonNumbers.first ?? -1
+        model.persons = show.actors
+        model.related = show.related
         model.didLoad = true
         
         return Group {

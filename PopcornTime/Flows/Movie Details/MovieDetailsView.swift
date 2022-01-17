@@ -300,7 +300,7 @@ extension MovieDetailsView {
         let watchedSection: (height: CGFloat, cellWidth: CGFloat, spacing: CGFloat, leading: CGFloat)
             = (height: value(tvOS: 450, macOS: 280),
                cellWidth: value(tvOS: 220, macOS: 150),
-               spacing: value(tvOS: 90, macOS: 30),
+               spacing: value(tvOS: 80, macOS: 30),
                leading: value(tvOS: 90, macOS: 50))
         let backgroundOpacity = value(tvOS: 0.3, macOS: 0.5)
         let titleFont: Font = Font.system(size: value(tvOS: 76, macOS: 50), weight: .medium)
@@ -314,7 +314,7 @@ struct MovieDetailsView_Previews: PreviewProvider {
         Group {
             MovieDetailsView(viewModel: viewModel())
             #if os(tvOS)
-                .previewLayout(.fixed(width: 2000, height: 1800))
+//                .previewLayout(.fixed(height: 1800))
             #endif
             
             MovieDetailsView(viewModel: errorViewModel())
@@ -328,7 +328,10 @@ struct MovieDetailsView_Previews: PreviewProvider {
     }
     
     static func viewModel() -> MovieDetailsViewModel {
-        let viewModel = MovieDetailsViewModel(movie: Movie.dummy())
+        let movie = Movie.dummy()
+        let viewModel = MovieDetailsViewModel(movie: movie)
+        viewModel.related = movie.related
+        viewModel.persons = movie.actors
         viewModel.didLoad = true
         return viewModel
     }
