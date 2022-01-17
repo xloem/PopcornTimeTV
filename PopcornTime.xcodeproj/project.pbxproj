@@ -39,7 +39,6 @@
 		23313B22267E3AFB00774A85 /* PersonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23313B21267E3AFB00774A85 /* PersonView.swift */; };
 		23313B24267E3B4A00774A85 /* MovieDetailsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23313B23267E3B4A00774A85 /* MovieDetailsView.swift */; };
 		23313B26267E3B6300774A85 /* SeasonPickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23313B25267E3B6300774A85 /* SeasonPickerView.swift */; };
-		23313B28267E3B6F00774A85 /* DescriptionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23313B27267E3B6F00774A85 /* DescriptionView.swift */; };
 		23313B2C267E3BAC00774A85 /* EpisodesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23313B2B267E3BAC00774A85 /* EpisodesView.swift */; };
 		23313B2E267E3BD500774A85 /* InfoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23313B2D267E3BD500774A85 /* InfoView.swift */; };
 		23313B30267E3BE200774A85 /* SubtitlesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23313B2F267E3BE200774A85 /* SubtitlesView.swift */; };
@@ -103,6 +102,11 @@
 		2356F692272DC1E80039DB75 /* TorrentHealth.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2356F691272DC1E80039DB75 /* TorrentHealth.swift */; };
 		2356F693272DC1E80039DB75 /* TorrentHealth.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2356F691272DC1E80039DB75 /* TorrentHealth.swift */; };
 		2356F694272DC1E80039DB75 /* TorrentHealth.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2356F691272DC1E80039DB75 /* TorrentHealth.swift */; };
+		2358EC462792CA6300C79643 /* PlayTorrentEpisode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2358EC452792CA6300C79643 /* PlayTorrentEpisode.swift */; };
+		2358EC472792CA6300C79643 /* PlayTorrentEpisode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2358EC452792CA6300C79643 /* PlayTorrentEpisode.swift */; };
+		2358EC482792CA6300C79643 /* PlayTorrentEpisode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2358EC452792CA6300C79643 /* PlayTorrentEpisode.swift */; };
+		2358EC492793410E00C79643 /* UpNextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23313B33267E3C0000774A85 /* UpNextView.swift */; };
+		2358EC4A2793410F00C79643 /* UpNextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23313B33267E3C0000774A85 /* UpNextView.swift */; };
 		2364708B2694B76E008743CB /* ObjectMapper in Frameworks */ = {isa = PBXBuildFile; productRef = 2364708A2694B76E008743CB /* ObjectMapper */; };
 		236A11B426C6772E00AFF1FD /* PreloadTorrentViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23446AC5267FAD000049CC72 /* PreloadTorrentViewModel.swift */; };
 		236A11B526C6773200AFF1FD /* PreloadTorrentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23313B37267E3C2700774A85 /* PreloadTorrentView.swift */; };
@@ -233,7 +237,6 @@
 		23A2BDAB26BEDA19004B864E /* DownloadView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23793D9C26AD950D0094FFA0 /* DownloadView.swift */; };
 		23A2BDAC26BEDA19004B864E /* DownloadViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23DBB51C26ADBF1400AAF824 /* DownloadViewModel.swift */; };
 		23A2BDAD26BEDA23004B864E /* ErrorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23F15C8E26B1A8F800E0FE60 /* ErrorView.swift */; };
-		23A2BDAE26BEDA23004B864E /* DescriptionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23313B27267E3B6F00774A85 /* DescriptionView.swift */; };
 		23A2BDAF26BEDA2A004B864E /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23313B1D267E3AB800774A85 /* SettingsView.swift */; };
 		23A2BDB026BEDA2A004B864E /* SettingsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2304530A26B541900050BCB8 /* SettingsViewModel.swift */; };
 		23A2BDB226BEDA5F004B864E /* PopcornKit in Frameworks */ = {isa = PBXBuildFile; productRef = 23A2BDB126BEDA5F004B864E /* PopcornKit */; };
@@ -421,7 +424,6 @@
 		23313B21267E3AFB00774A85 /* PersonView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersonView.swift; sourceTree = "<group>"; };
 		23313B23267E3B4A00774A85 /* MovieDetailsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovieDetailsView.swift; sourceTree = "<group>"; };
 		23313B25267E3B6300774A85 /* SeasonPickerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SeasonPickerView.swift; sourceTree = "<group>"; };
-		23313B27267E3B6F00774A85 /* DescriptionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DescriptionView.swift; sourceTree = "<group>"; };
 		23313B2B267E3BAC00774A85 /* EpisodesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EpisodesView.swift; sourceTree = "<group>"; };
 		23313B2D267E3BD500774A85 /* InfoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InfoView.swift; sourceTree = "<group>"; };
 		23313B2F267E3BE200774A85 /* SubtitlesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubtitlesView.swift; sourceTree = "<group>"; };
@@ -461,6 +463,7 @@
 		2353D82426FF46AE00C71C09 /* RatingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RatingsView.swift; sourceTree = "<group>"; };
 		2353D82826FF47A800C71C09 /* RatingsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RatingsViewModel.swift; sourceTree = "<group>"; };
 		2356F691272DC1E80039DB75 /* TorrentHealth.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TorrentHealth.swift; sourceTree = "<group>"; };
+		2358EC452792CA6300C79643 /* PlayTorrentEpisode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayTorrentEpisode.swift; sourceTree = "<group>"; };
 		23793D9C26AD950D0094FFA0 /* DownloadView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DownloadView.swift; sourceTree = "<group>"; };
 		237EC9F426B842F300EE8B46 /* MPMediaType.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MPMediaType.swift; sourceTree = "<group>"; };
 		237EC9FE26B8478100EE8B46 /* PopcornTime.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PopcornTime.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -681,8 +684,6 @@
 				2304530C26B542880050BCB8 /* Settings */,
 				23D770F626F7A31700EA4C78 /* LoadExternalTorrentView */,
 				23F15C8E26B1A8F800E0FE60 /* ErrorView.swift */,
-				23313B27267E3B6F00774A85 /* DescriptionView.swift */,
-				23313B33267E3C0000774A85 /* UpNextView.swift */,
 			);
 			path = Flows;
 			sourceTree = "<group>";
@@ -747,9 +748,9 @@
 				2391BE7C268475A200576CAD /* DownloadButtonViewModel.swift */,
 				23313B37267E3C2700774A85 /* PreloadTorrentView.swift */,
 				23446AC5267FAD000049CC72 /* PreloadTorrentViewModel.swift */,
+				23B0A01526B9818100844309 /* TorrentPlayerView.swift */,
 				2391BE7E26847B9800576CAD /* SelectTorrentQualityButton.swift */,
 				237F28692693503D00FE036C /* ActorsCrewView.swift */,
-				23B0A01526B9818100844309 /* TorrentPlayerView.swift */,
 				2353D82426FF46AE00C71C09 /* RatingsView.swift */,
 				2353D82826FF47A800C71C09 /* RatingsViewModel.swift */,
 			);
@@ -808,6 +809,7 @@
 				237F28642692F6B900FE036C /* SeasonPickerViewModel.swift */,
 				237F28662692F91000FE036C /* SeasonView.swift */,
 				23313B2B267E3BAC00774A85 /* EpisodesView.swift */,
+				2358EC452792CA6300C79643 /* PlayTorrentEpisode.swift */,
 				2388FD662692019E00B51201 /* EpisodeView.swift */,
 			);
 			path = "Show Details";
@@ -843,6 +845,7 @@
 				23446AD62680BBE80049CC72 /* VLCPlayerView.swift */,
 				23446ADE2680E8600049CC72 /* ProgressBarView.swift */,
 				23BE4BF326C7F57C0081D2AA /* PlayerControlsView.swift */,
+				23313B33267E3C0000774A85 /* UpNextView.swift */,
 			);
 			path = Player;
 			sourceTree = "<group>";
@@ -1357,6 +1360,7 @@
 				23446AD82680BD7B0049CC72 /* Font+Style.swift in Sources */,
 				23313B4D267E48C300774A85 /* MoviesViewModel.swift in Sources */,
 				2356F692272DC1E80039DB75 /* TorrentHealth.swift in Sources */,
+				2358EC462792CA6300C79643 /* PlayTorrentEpisode.swift in Sources */,
 				23313B10267E39B400774A85 /* TabBarView.swift in Sources */,
 				23313B30267E3BE200774A85 /* SubtitlesView.swift in Sources */,
 				237F28672692F91000FE036C /* SeasonView.swift in Sources */,
@@ -1412,7 +1416,6 @@
 				238F78CF26BADCFF00C4A4E9 /* YoutubeApi.swift in Sources */,
 				23BEFC9826D7952E008EDC44 /* PlayerAudioModel.swift in Sources */,
 				23313B26267E3B6300774A85 /* SeasonPickerView.swift in Sources */,
-				23313B28267E3B6F00774A85 /* DescriptionView.swift in Sources */,
 				2391BE7F26847B9800576CAD /* SelectTorrentQualityButton.swift in Sources */,
 				23025D93267E71BA00229559 /* MovieView.swift in Sources */,
 				23446ACC26804AE80049CC72 /* TrailerButtonViewModel.swift in Sources */,
@@ -1452,7 +1455,6 @@
 				23A2BDD726BEDC50004B864E /* MediaRatingsLoader.swift in Sources */,
 				2353D82A26FF47A800C71C09 /* RatingsViewModel.swift in Sources */,
 				23A2BDD326BEDC3E004B864E /* Media + Subtitles.swift in Sources */,
-				23A2BDAE26BEDA23004B864E /* DescriptionView.swift in Sources */,
 				23A2BDD026BEDC3E004B864E /* Subtitle + Identifiable.swift in Sources */,
 				23A2BD9126BEDA00004B864E /* WatchlistViewModel.swift in Sources */,
 				23A2BDAB26BEDA19004B864E /* DownloadView.swift in Sources */,
@@ -1468,6 +1470,7 @@
 				23BE4BFA26C8598C0081D2AA /* UIScreen+AspectRatio.swift in Sources */,
 				2353D82626FF46AE00C71C09 /* RatingsView.swift in Sources */,
 				2356F693272DC1E80039DB75 /* TorrentHealth.swift in Sources */,
+				2358EC472792CA6300C79643 /* PlayTorrentEpisode.swift in Sources */,
 				23A2BDB026BEDA2A004B864E /* SettingsViewModel.swift in Sources */,
 				23A2BDAC26BEDA19004B864E /* DownloadViewModel.swift in Sources */,
 				23A2BDAD26BEDA23004B864E /* ErrorView.swift in Sources */,
@@ -1497,6 +1500,7 @@
 				23A2BD8926BED9EE004B864E /* TabBarView.swift in Sources */,
 				236A11B826C677AD00AFF1FD /* VLCMediaPlayer+VLCFontAppearance.swift in Sources */,
 				23BEFC9926D7952E008EDC44 /* PlayerAudioModel.swift in Sources */,
+				2358EC492793410E00C79643 /* UpNextView.swift in Sources */,
 				23A2BD9E26BEDA0C004B864E /* ShowDetailsView.swift in Sources */,
 				23A2BDBE26BEDBC2004B864E /* StarRatingView.swift in Sources */,
 				236A11B526C6773200AFF1FD /* PreloadTorrentView.swift in Sources */,
@@ -1618,11 +1622,13 @@
 				234180A126C29F7D00C32083 /* WatchlistView.swift in Sources */,
 				2304531F26BAFAEA0050BCB8 /* StarRatingView.swift in Sources */,
 				2304531B26BAFA9B0050BCB8 /* TrailerButton.swift in Sources */,
+				2358EC4A2793410F00C79643 /* UpNextView.swift in Sources */,
 				23CD7956270CA02B00AE001C /* HideableView.swift in Sources */,
 				23A2BD7D26BC5930004B864E /* ShowDetailsViewModel.swift in Sources */,
 				2353D82726FF46AE00C71C09 /* RatingsView.swift in Sources */,
 				2304532626BAFB1A0050BCB8 /* DownloadButtonViewModel.swift in Sources */,
 				23B24D6C26CA6DAE00B8CD84 /* TorrentPlayerView.swift in Sources */,
+				2358EC482792CA6300C79643 /* PlayTorrentEpisode.swift in Sources */,
 				23B24D7B26CA78F400B8CD84 /* VLCPlayerView.swift in Sources */,
 				23B24D6E26CA717200B8CD84 /* PlayerViewModel.swift in Sources */,
 				23B4F07727118CD2002C5662 /* VisibleToolbarView.swift in Sources */,
@@ -1716,7 +1722,7 @@
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
-				PRODUCT_BUNDLE_IDENTIFIER = swiftui.PopcornTime;
+				PRODUCT_BUNDLE_IDENTIFIER = tapp.PopcornTime;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;

@@ -80,7 +80,9 @@ struct DownloadButton: View {
             Button(role: .cancel, action: {}, label: { Text("Cancel") })
         })
         .fullScreenContent(isPresented: $showPlayer, title: viewModel.media.title) {
-            TorrentPlayerView(torrent: viewModel.torrent ?? Torrent(), media: viewModel.media)
+            TorrentPlayerView(torrent: viewModel.torrent ?? Torrent(),
+                              media: viewModel.media,
+                              nextEpisode: NextEpisode(media: viewModel.media)?.next())
         }
     }
     

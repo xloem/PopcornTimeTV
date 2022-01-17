@@ -70,7 +70,7 @@ struct ShowDetailsView: View, MediaPosterLoader {
                     .focusSection()
                     #endif
                     
-                    VStack(alignment: .center) {
+                    LazyVStack(alignment: .center) {
                         EpisodesView(show: viewModel.show, episodes: viewModel.seasonEpisodes(), currentSeason: viewModel.currentSeason, onFocus: {
                             withAnimation() {
                                 scroll.scrollTo(section2, anchor: .top)

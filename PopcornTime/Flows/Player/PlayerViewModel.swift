@@ -66,6 +66,8 @@ class PlayerViewModel: NSObject, ObservableObject {
         var scrubbingTime: String = ""
         var screenshot: CGImage?
         var hint: TransportBarHint = .none
+        var showUpNext = false
+        var showUpNextProgress: CGFloat = 0
         
         #if os(macOS)
         var screenshotImage: NSImage? {
@@ -400,11 +402,13 @@ extension PlayerViewModel: VLCMediaPlayerDelegate {
         progress.elapsedTime = mediaplayer.time.stringValue
         progress.progress = mediaplayer.position
         
-//        if nextEpisode != nil && (mediaplayer.remainingTime.intValue/1000) == -31 && presentedViewController == nil {
-//            performSegue(withIdentifier: "showUpNext", sender: nil)
-//        } else if (mediaplayer.remainingTime.intValue/1000) < -31, let vc = presentedViewController as? UpNextViewController {
-//            vc.dismiss(animated: true)
-//        }
+        let remaining = Int(mediaplayer.remainingTime.intValue / 1000)
+        if remaining == -ShowUpNextDuration {
+            progress.showUpNext = true
+            progress.showUpNextProgress = 1.0
+        } else if remaining > -ShowUpNextDuration {
+            progress.showUpNextProgress = CGFloat(CGFloat(-remaining) / CGFloat(ShowUpNextDuration))
+        }
     }
     
     func mediaPlayerStateChanged(_ aNotification: Notification) {

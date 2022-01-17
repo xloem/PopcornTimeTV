@@ -12,11 +12,13 @@ import PopcornKit
 struct TorrentPlayerView: View {
     var torrent: Torrent
     var media: Media
+    var nextEpisode: NextEpisode?
 
-    enum State_ {
+    indirect enum State_ {
         case none
         case preload(PreloadTorrentViewModel)
         case play(PlayerViewModel)
+        case next(TorrentPlayerView)
     }
     @State var state: State_ = .none
     
@@ -31,9 +33,11 @@ struct TorrentPlayerView: View {
             PreloadTorrentView(viewModel: preloadModel)
                 .background(Color.black)
         case .play(let playerModel):
-            PlayerView()
+            PlayerView(upNextView: upNextView(playerModel: playerModel))
                 .environmentObject(playerModel)
                 .background(Color.black)
+        case .next(let nextView):
+            nextView
         }
     }
     
@@ -41,6 +45,17 @@ struct TorrentPlayerView: View {
         self.state = .preload(PreloadTorrentViewModel(torrent: torrent, media: media, onReadyToPlay: { playerModel in
             self.state = .play(playerModel)
         }))
+    }
+    
+    @ViewBuilder
+    func upNextView(playerModel: PlayerViewModel) -> UpNextView? {
+        if let nextEpisode = nextEpisode,
+           let episode = self.nextEpisode?.episode,
+           let torrent = episode.torrents.first(where: {$0.quality == self.torrent.quality}) {
+            UpNextView(episode: episode, show: nextEpisode.show, playerModel: playerModel) {
+                self.state = .next(TorrentPlayerView(torrent: torrent, media: episode, nextEpisode: nextEpisode.next()))
+            }
+        }
     }
 }
 

@@ -22,13 +22,7 @@ struct EpisodesView: View {
         }
     }
     @State var downloadModel: DownloadButtonViewModel?
-    @State var showTorrent: PlayTorrent?
-    
-    struct PlayTorrent: Identifiable, Equatable {
-        var id: String  { torrent.id }
-        var torrent: Torrent
-        var episode: Episode
-    }
+    @State var showTorrent: PlayTorrentEpisode?
     
     var onFocus: () -> Void = {}
     
@@ -38,7 +32,7 @@ struct EpisodesView: View {
             episodesCountView
             ScrollView(.horizontal) {
                 LazyHStack(spacing: theme.episodeSpacing) {
-                    ForEach(episodes, id: \.self) { episode in
+                    ForEach(episodes, id: \.episode) { episode in
                         episodeView(episode: episode)
                     }
                 }
@@ -51,7 +45,9 @@ struct EpisodesView: View {
             #endif
         }
         .fullScreenContent(item: $showTorrent, title: show.title, content: { item in
-            TorrentPlayerView(torrent: item.torrent, media: item.episode)
+            TorrentPlayerView(torrent: item.torrent,
+                              media: item.episode,
+                              nextEpisode: NextEpisode(episode: item.episode, show: show).next())
         })
         .onChange(of: episodes) { newValue in
             if currentEpisode == nil {
@@ -74,7 +70,7 @@ struct EpisodesView: View {
     func episodeView(episode: Episode) -> some View {
         SelectTorrentQualityButton(media: episode, action: { torrent in
             self.currentEpisode = episode
-            showTorrent = PlayTorrent(torrent: torrent, episode: episode)
+            showTorrent = PlayTorrentEpisode(torrent: torrent, episode: episode)
         }, label: {
             EpisodeView(episode: episode)
         })
@@ -106,7 +102,7 @@ struct EpisodesView: View {
     var currentEpisodeView: some View {
         if let episode = currentEpisode, let downloadModel = downloadModel {
             let airDateString = DateFormatter.localizedString(from: episode.firstAirDate, dateStyle: .medium, timeStyle: .none)
-            let showGenre = episode.show?.genres.first?.localizedCapitalized.localized ?? ""
+            let showGenre = show.genres.first?.localizedCapitalized.localized ?? ""
             let infoText = "\(airDateString) \n \(showGenre)"
             
             HStack() {

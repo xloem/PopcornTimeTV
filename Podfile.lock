@@ -9,7 +9,7 @@ DEPENDENCIES:
   - VLCKit (~> 3.3.18b8)
 
 SPEC REPOS:
-  https://github.com/CocoaPods/Specs.git:
+  https://github.com/CocoaPods/Specs:
     - MobileVLCKit
     - TVVLCKit
     - VLCKit
@@ -21,4 +21,4 @@ SPEC CHECKSUMS:
 
 PODFILE CHECKSUM: d4c5bfa92a2b5916d6d4cdc555966b4e6287d4fc
 
-COCOAPODS: 1.10.1
+COCOAPODS: 1.11.2

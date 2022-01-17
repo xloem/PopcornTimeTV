@@ -18,6 +18,7 @@ struct PlayerView: View {
     @Environment(\.resetFocus) var resetFocus
     @State var playerHasFocus = true // workaround to make infoView to have focus on appear
     #endif
+    var upNextView: UpNextView?
     
     var body: some View {
         ZStack {
@@ -104,6 +105,7 @@ struct PlayerView: View {
                     }
                 }
             #endif
+            upNextViewContainer
             controlsView
             showInfoView
         }
@@ -201,6 +203,30 @@ struct PlayerView: View {
         }, label: {
             Text("Start from Beginning")
         })
+    }
+    
+    @ViewBuilder
+    var upNextViewContainer: some View {
+        if viewModel.progress.showUpNext, !viewModel.showControls, let nextView = upNextView {
+            Color.clear
+                .overlay(alignment: .bottomTrailing) {
+                    nextView
+                        .padding(80)
+#if os(tvOS)
+                        .onExitCommand {
+                            viewModel.progress.showUpNext = false
+                            playerHasFocus = true
+                        }
+#endif
+                }
+#if os(tvOS)
+                .onAppear {
+                    playerHasFocus = false
+                }.onDisappear {
+                    playerHasFocus = true
+                }
+#endif
+        }
     }
 }
 
