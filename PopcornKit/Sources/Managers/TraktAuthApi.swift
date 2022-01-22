@@ -82,9 +82,19 @@ public class TraktAuthApi {
                       "refresh_token": refreshToken,
                       "client_id": Trakt.apiKey,
                       "client_secret": Trakt.apiSecret]
-        let credentials: TraktOauthResponse = try await client.request(.post, path: Trakt.auth + Trakt.token, parameters: params).responseDecode()
-        TraktSession.shared.storeCredentials(credentials.oauthCredential)
-        return credentials.oauthCredential
+        do {
+            let credentials: TraktOauthResponse = try await client.request(.post, path: Trakt.auth + Trakt.token, parameters: params).responseDecode()
+            TraktSession.shared.storeCredentials(credentials.oauthCredential)
+            return credentials.oauthCredential
+        } catch let error as APIError {
+            switch error.type {
+            case .unacceptableStatusCode(code: 400): // refresh token not good
+                TraktSession.shared.logout()
+            default:
+                break
+            }
+            throw error
+        }
     }
 }
 
