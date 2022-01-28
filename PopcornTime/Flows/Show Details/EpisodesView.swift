@@ -68,11 +68,12 @@ struct EpisodesView: View {
     
     @ViewBuilder
     func episodeView(episode: Episode) -> some View {
+        let isSelected = episode.id == currentEpisode?.id && episode.episode == currentEpisode?.episode
         SelectTorrentQualityButton(media: episode, action: { torrent in
             self.currentEpisode = episode
             showTorrent = PlayTorrentEpisode(torrent: torrent, episode: episode)
         }, label: {
-            EpisodeView(episode: episode)
+            EpisodeView(episode: episode, isSelected: isSelected)
         })
         .frame(width: theme.episodeWidth, height: theme.episodeHeight)
         .buttonStyle(TVButtonStyle(onFocus: {
@@ -80,7 +81,7 @@ struct EpisodesView: View {
             onFocus()
         }, onPressed: {
             currentEpisode = episode
-        }, isSelected: episode.id == currentEpisode?.id))
+        }, isSelected: isSelected))
     }
     
     @ViewBuilder
@@ -100,48 +101,25 @@ struct EpisodesView: View {
     
     @ViewBuilder
     var currentEpisodeView: some View {
-        if let episode = currentEpisode, let downloadModel = downloadModel {
-            let airDateString = DateFormatter.localizedString(from: episode.firstAirDate, dateStyle: .medium, timeStyle: .none)
-            let showGenre = show.genres.first?.localizedCapitalized.localized ?? ""
-            let infoText = "\(airDateString) \n \(showGenre)"
-            
-            HStack() {
-                VStack {
-                    Text(infoText)
-                        .font(.callout)
-                        .multilineTextAlignment(.trailing)
-                }
-                VStack(alignment: .leading) {
+        if let episode = currentEpisode {
+            HStack {
+                VStack(alignment: .leading, spacing: 20) {
                     Text("\(episode.episode). " + episode.title)
                         .font(.headline)
-                        #if !os(tvOS)
-                            .padding(.horizontal, 30)
-                        #endif
                     HStack {
                         Text(episode.summary)
                             .multilineTextAlignment(.leading)
-//                            .lineLimit(6)
-                            .padding(.bottom, 30)
-//                            .frame(minWidth: 600, maxWidth: 800)
-                        #if os(tvOS)
-                            .frame(width: 800)
-                        #else
-                            .padding(.horizontal, 30)
-                        #endif
+                        Spacer(minLength: theme.currentEpisode.trailing)
+                    }
+                    if episode == currentEpisode, let downloadModel = downloadModel {
                         DownloadButton(viewModel: downloadModel)
                             .buttonStyle(TVButtonStyle(onFocus: onFocus))
                     }
-//                    .background(Color.red)
                 }
-//                .background(Color.blue)
+                .padding([.leading], theme.currentEpisode.leading + 10)
+                Spacer()
             }
-            .padding(0)
             .frame(height: theme.currentEpisode.height)
-//            #if os(tvOS)
-//            .frame(maxWidth: .infinity)
-            .padding([.leading, .trailing], theme.currentEpisode.padding)
-//            #endif
-//            .background(Color.gray)
         }
     }
 }
@@ -151,9 +129,10 @@ extension EpisodesView {
         let episodeWidth: CGFloat = value(tvOS: 310, macOS: 217)
         let episodeHeight: CGFloat = value(tvOS: 215, macOS: 150)
         let episodeSpacing: CGFloat = value(tvOS: 40, macOS: 20)
-        let currentEpisode: (padding: CGFloat, height: CGFloat)
-            = (padding: value(tvOS: 250, macOS: 80),
-               height: value(tvOS: 350, macOS: 250))
+        let currentEpisode: (leading: CGFloat, height: CGFloat, trailing: CGFloat)
+            = (leading: value(tvOS: 90, macOS: 20),
+               height: value(tvOS: 350, macOS: 250),
+               trailing: value(tvOS: 500, macOS: 200))
         let leading: CGFloat = value(tvOS: 90, macOS: 50)
     }
 }
@@ -166,16 +145,17 @@ struct EpisodesView_Previews: PreviewProvider {
         let showDetails = ShowDetailsViewModel(show: show)
         
         Group {
-            EpisodesView(show: show, episodes: show.episodes, currentSeason: 0, currentEpisode: episode, downloadModel: downloadModel)
-                .environmentObject(showDetails)
-//                .frame(maxHeight: 500)
+            ScrollView {
+                EpisodesView(show: show, episodes: show.episodes, currentSeason: 0, currentEpisode: episode, downloadModel: downloadModel)
+                    .environmentObject(showDetails)
+            }
             
-            EpisodesView(show: show, episodes: show.episodes, currentSeason: 0, currentEpisode: episode)
-                .environmentObject(showDetails)
-//                .frame(maxHeight: 300)
+            ScrollView {
+                EpisodesView(show: show, episodes: show.episodes, currentSeason: 0, currentEpisode: episode)
+                    .environmentObject(showDetails)
+            }
         }
             .preferredColorScheme(.dark)
-//            .previewLayout(.sizeThatFits)
             .background(.gray)
     }
 }

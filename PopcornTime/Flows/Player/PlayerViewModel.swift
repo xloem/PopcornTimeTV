@@ -212,47 +212,13 @@ class PlayerViewModel: NSObject, ObservableObject {
         }
     }
     
-    @objc func touchLocationDidChange(_ gesture: SiriRemoteGestureRecognizer) {
-        guard progress.isScrubbing && showControls && !progress.isBuffering else {
-            return
-        }
-        
-//        print("", gesture.touchLocation)
-        
-//        progress.hint = .none
-//        resetIdleTimer()
-//        
-//        switch gesture.touchLocation {
-//        case .left:
-//            if gesture.isClick && gesture.state == .ended {
-//                rewind()
-//                progress.hint = .none
-//            }
-//            if gesture.isLongPress {
-//                rewindHeld(gesture)
-//            } else if gesture.state != .ended {
-//                progress.hint = .jumpBackward30
-//            }
-//        case .right:
-//            if gesture.isClick && gesture.state == .ended {
-//                fastForward()
-//                progress.hint = .none
-//            }
-//            if gesture.isLongPress {
-//                fastForwardHeld(gesture)
-//            } else if gesture.state != .ended {
-//                progress.hint = .jumpForward30
-//            }
-//        default: return
-//        }
-    }
-    
     func handlePositionSliderDrag(offset: Float) {
         guard showControls && progress.isScrubbing else {
             return
         }
         
         progress.scrubbingProgress += offset
+        progress.scrubbingProgress = max(0, progress.scrubbingProgress)
         positionSliderDidDrag()
     }
     
@@ -410,6 +376,8 @@ extension PlayerViewModel: VLCMediaPlayerDelegate {
             } else {
                 progress.showUpNextProgress = CGFloat(CGFloat(-remaining) / CGFloat(ShowUpNextDuration))
             }
+        } else {
+            progress.showUpNext = false
         }
     }
     

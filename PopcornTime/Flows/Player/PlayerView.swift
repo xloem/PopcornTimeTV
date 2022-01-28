@@ -34,8 +34,6 @@ struct PlayerView: View {
                     withAnimation {
                         viewModel.showControls = true
                     }
-                }, onTouchLocationDidChange: { gesture in
-                    viewModel.touchLocationDidChange(gesture)
                 }, onPositionSliderDrag: { offset in
                     viewModel.handlePositionSliderDrag(offset: offset)
                 })
@@ -142,6 +140,7 @@ struct PlayerView: View {
                         .background(LinearGradient(gradient: Gradient(colors: [.clear, .black]), startPoint: .top, endPoint: .bottom))
                         .frame(height: 190)
                     ProgressBarView(progress: viewModel.progress)
+                        .id("progressbar")
                         .frame(height: 10)
                         .padding([.leading, .trailing], 90)
                 }

@@ -71,14 +71,16 @@ struct ShowDetailsView: View, MediaPosterLoader {
                     #endif
                     
                     LazyVStack(alignment: .center) {
-                        EpisodesView(show: viewModel.show, episodes: viewModel.seasonEpisodes(), currentSeason: viewModel.currentSeason, onFocus: {
-                            withAnimation() {
-                                scroll.scrollTo(section2, anchor: .top)
-                            }
-                        })
-                        #if os(tvOS)
-                        .focusSection()
-                        #endif
+                        if !show.episodes.isEmpty {
+                            EpisodesView(show: viewModel.show, episodes: viewModel.seasonEpisodes(), currentSeason: viewModel.currentSeason, onFocus: {
+                                withAnimation() {
+                                    scroll.scrollTo(section2, anchor: .top)
+                                }
+                            })
+                            #if os(tvOS)
+                            .focusSection()
+                            #endif
+                        }
                         
                         if viewModel.related.count > 0 {
                             alsoWatchedSection(scroll: scroll)
@@ -94,7 +96,7 @@ struct ShowDetailsView: View, MediaPosterLoader {
                         }
                     }
                     .padding([.bottom, .top], 30)
-                    .background(Color.init(white: 0, opacity: 0.3))
+                    .background( show.episodes.isEmpty ? .clear : Color.init(white: 0, opacity: 0.3))
 //                    .padding(.top, 50)
                     .id(section2)
                 }

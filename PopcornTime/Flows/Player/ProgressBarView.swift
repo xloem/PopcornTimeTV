@@ -10,7 +10,7 @@ import SwiftUI
 
 struct ProgressBarView: UIViewRepresentable {
     var progress: PlayerViewModel.Progress
-    @State var view = ProgressBar()
+    @State var view = ProgressBar(frame: .init(x: 0, y: 0, width: 1740, height: 10))
     
     func makeUIView(context: Context) -> ProgressBar {
         return view
@@ -27,5 +27,6 @@ struct ProgressBarView: UIViewRepresentable {
         uiView.scrubbingProgress = progress.scrubbingProgress
         uiView.scrubbingTimeLabel.text = progress.scrubbingTime
         uiView.hint = progress.hint
+        uiView.setNeedsLayout()
     }
 }

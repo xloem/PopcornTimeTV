@@ -3,9 +3,9 @@
 import Foundation
 import UIKit
 
-@IBDesignable class ProgressBar: UIView {
+class ProgressBar: UIView {
     
-    @IBInspectable var progress: Float = 0.0 {
+    var progress: Float = 0.0 {
         didSet {
             if progress < 0.0 { progress = 0.0 }
             if progress > 1.0 { progress = 1.0 }
@@ -14,43 +14,31 @@ import UIKit
             scrubbingProgress = progress
             
             if !isScrubbing { bufferingBar.elapsedProgress = progress }
-            
-            setNeedsLayout()
-            layoutIfNeeded()
         }
     }
     
-    @IBInspectable var scrubbingProgress: Float = 0.0 {
+    var scrubbingProgress: Float = 0.0 {
         didSet {
             if scrubbingProgress < 0.0 { scrubbingProgress = 0.0 }
             if scrubbingProgress > 1.0 { scrubbingProgress = 1.0 }
-            setNeedsLayout()
-            layoutIfNeeded()
         }
     }
-    @IBInspectable var bufferProgress: Float = 1.0 {
+    var bufferProgress: Float = 1.0 {
         didSet {
             bufferingBar.bufferProgress = bufferProgress
-            setNeedsLayout()
-            layoutIfNeeded()
         }
     }
     
-    @IBInspectable var screenshot: UIImage? {
+    var screenshot: UIImage? {
         didSet {
             screenshotImageView.image = screenshot
             
             let color: UIColor = isImageHidden ? .clear : .black
             screenshotImageView.backgroundColor = color
             screenshotImageView.layer.borderWidth = isImageHidden ? 0.0 : 1.0
-            
-            setNeedsLayout()
-//            UIView.animate(withDuration: 0.3) {
-                self.layoutIfNeeded()
-//            }
         }
     }
-    @IBInspectable var isScrubbing: Bool = false {
+    var isScrubbing: Bool = false {
         didSet {
             if isScrubbing {
                 scrubbingProgress = progress
@@ -70,11 +58,8 @@ import UIKit
                 frame.size = CGSize(width: 480, height: 270)
                 frame.origin.y = scrubbingPositionMarker.frame.origin.y - frame.size.height
                 
-//                UIView.animate(withDuration: 0.3, animations: {
-                    self.screenshotImageView.frame = frame
-                    self.screenshotImageView.alpha = 1.0
-                    self.layoutIfNeeded()
-//                })
+                self.screenshotImageView.frame = frame
+                self.screenshotImageView.alpha = 1.0
             } else {
                 playbackPositionMarker.alpha = 1.0
                 elapsedTimeLabel.alpha = 1.0
@@ -84,28 +69,17 @@ import UIKit
                 var frame = screenshotImageView.frame
                 frame.origin.y = scrubbingPositionMarker.frame.origin.y
                 frame.size = .zero
-                
-//                UIView.animate(withDuration: 0.3, animations: {
-                    self.screenshotImageView.frame = frame
-                    self.screenshotImageView.alpha = 0.0
-                    self.layoutIfNeeded()
-//                }, completion: { _ in
-                    self.screenshotImageView.isHidden = true
-                    self.screenshotImageView.image = nil
-//                })
+                self.screenshotImageView.isHidden = true
+                self.screenshotImageView.image = nil
             }
-            setNeedsLayout()
         }
     }
     
-    @IBInspectable var isBuffering: Bool = false {
+    var isBuffering: Bool = false {
         didSet {
             bufferingIndicatorView.isHidden = !isBuffering
             rightHintImageView.isHidden = isBuffering
             leftHintImageView.isHidden = isBuffering
-            
-            setNeedsLayout()
-            layoutIfNeeded()
         }
     }
     
@@ -218,8 +192,32 @@ import UIKit
         screenshotImageView.addSubview(scrubbingTimeLabel)
     }
     
-    override func layoutIfNeeded() {
-        super.layoutIfNeeded()
+    
+    func scrubbingMarkerFrame(forBounds bounds: CGRect, scrubFraction fraction: Float) -> CGRect {
+        let width = bounds.width - markerWidth
+        let height = bounds.height
+    
+        let scrubbingHeight = height * 3.0
+        
+        // x position is always center of marker == view width * fraction
+        let scrubbingXPosition = width * CGFloat(fraction)
+        let scrubbingYPosition = height - scrubbingHeight
+        
+        return CGRect(x: scrubbingXPosition, y: scrubbingYPosition, width: markerWidth, height: scrubbingHeight)
+    }
+    
+    func progressMarkerFrame(forBounds bounds: CGRect, progressFraction fraction: Float) -> CGRect {
+        let width = bounds.width - markerWidth
+        let height = bounds.height
+        
+        // x position is always center of marker == view width * fraction
+        let scrubbingXPosition = width * CGFloat(fraction)
+        
+        return CGRect(x: scrubbingXPosition, y: 0, width: markerWidth, height: height)
+    }
+    
+    override func layoutSubviews() {
+        super.layoutSubviews()
         
         let width = bounds.width - markerWidth
         
@@ -271,32 +269,6 @@ import UIKit
         let shouldHideRemainingTime = timeLabelIntersects || imageViewIntersects || bufferIndicatorIntersects
         let alpha: CGFloat = shouldHideRemainingTime ? 0.0 : isScrubbing ? 0.8 : 1.0
         
-//        UIView.animate(withDuration: 0.15) {
-            self.remainingTimeLabel.alpha = alpha
-//        }
-    }
-    
-    
-    func scrubbingMarkerFrame(forBounds bounds: CGRect, scrubFraction fraction: Float) -> CGRect {
-        let width = bounds.width - markerWidth
-        let height = bounds.height
-    
-        let scrubbingHeight = height * 3.0
-        
-        // x position is always center of marker == view width * fraction
-        let scrubbingXPosition = width * CGFloat(fraction)
-        let scrubbingYPosition = height - scrubbingHeight
-        
-        return CGRect(x: scrubbingXPosition, y: scrubbingYPosition, width: markerWidth, height: scrubbingHeight)
-    }
-    
-    func progressMarkerFrame(forBounds bounds: CGRect, progressFraction fraction: Float) -> CGRect {
-        let width = bounds.width - markerWidth
-        let height = bounds.height
-        
-        // x position is always center of marker == view width * fraction
-        let scrubbingXPosition = width * CGFloat(fraction)
-        
-        return CGRect(x: scrubbingXPosition, y: 0, width: markerWidth, height: height)
+        self.remainingTimeLabel.alpha = alpha
     }
 }

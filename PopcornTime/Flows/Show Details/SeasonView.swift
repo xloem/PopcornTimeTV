@@ -17,7 +17,7 @@ struct SeasonView: View {
             KFImage(URL(string: season.image ?? ""))
                 .resizable()
                 .placeholder {
-                    Image("Episode Placeholder")
+                    Image("Show Placeholder")
                         .resizable()
                         .aspectRatio(contentMode: .fill)
                 }
