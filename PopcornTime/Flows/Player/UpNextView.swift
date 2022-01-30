@@ -55,7 +55,7 @@ struct UpNextView: View {
     @ViewBuilder
     var episodeView: some View {
         ZStack {
-            EpisodeView(episode: episode, isSelected: false)
+            EpisodeView(episode: episode)
                 .environmentObject(ShowDetailsViewModel(show: show))
             Circle()
                 .fill(Color.init(white: 0, opacity: 0.5))

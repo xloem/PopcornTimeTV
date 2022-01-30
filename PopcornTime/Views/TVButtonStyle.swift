@@ -73,3 +73,19 @@ extension TVButton {
         let scaleEffect: CGFloat = value(tvOS: 1.1, macOS: 0.96)
     }
 }
+
+
+#if os(iOS) || os(macOS)
+private struct FocusedKey: EnvironmentKey {
+    static let defaultValue: Bool = false
+
+}
+
+extension EnvironmentValues {
+    var isFocused: Bool {
+        get { self[FocusedKey.self] }
+        set { self[FocusedKey.self] = newValue }
+    }
+}
+
+#endif

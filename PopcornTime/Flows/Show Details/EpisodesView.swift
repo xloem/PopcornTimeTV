@@ -30,17 +30,23 @@ struct EpisodesView: View {
         VStack(alignment: .leading) {
             titleView
             episodesCountView
-            ScrollView(.horizontal) {
-                LazyHStack(spacing: theme.episodeSpacing) {
-                    ForEach(episodes, id: \.episode) { episode in
-                        episodeView(episode: episode)
+            ScrollViewReader { scroll in
+                ScrollView(.horizontal) {
+                    LazyHStack(spacing: theme.episodeSpacing) {
+                        ForEach(episodes, id: \.episode) { episode in
+                            episodeView(episode: episode, scroll: scroll)
+                        }
                     }
+                    .padding([.top, .bottom], 20) // allow zooming to be visible
+                    #if os(tvOS)
+                    .padding(.bottom, 55) // allow card style - shadow to be visible
+                    #endif
+                    .padding([.leading, .trailing], theme.leading)
                 }
-                .padding([.top, .bottom], 20) // allow zooming to be visible
-                .padding([.leading, .trailing], theme.leading)
             }
             currentEpisodeView
             #if os(tvOS)
+                .padding(.top, -55) // revert back on top, because of focused shadow
                 .focusSection()
             #endif
         }
@@ -67,36 +73,50 @@ struct EpisodesView: View {
     }
     
     @ViewBuilder
-    func episodeView(episode: Episode) -> some View {
+    func episodeView(episode: Episode, scroll: ScrollViewProxy) -> some View {
         let isSelected = episode.id == currentEpisode?.id && episode.episode == currentEpisode?.episode
         SelectTorrentQualityButton(media: episode, action: { torrent in
             self.currentEpisode = episode
             showTorrent = PlayTorrentEpisode(torrent: torrent, episode: episode)
         }, label: {
-            EpisodeView(episode: episode, isSelected: isSelected)
+            EpisodeView(episode: episode, onFocus: {
+                #if os(tvOS)
+                onFocus()
+                currentEpisode = episode
+//                scroll.scrollTo(episode.episode, anchor: .leading)
+                #endif
+            })
+            #if os(iOS) || os(macOS)
+                .environment(\.isFocused, isSelected)
+            #endif
         })
         .frame(width: theme.episodeWidth, height: theme.episodeHeight)
-        .buttonStyle(TVButtonStyle(onFocus: {
-            currentEpisode = episode
-            onFocus()
-        }, onPressed: {
+        #if os(tvOS)
+        .buttonStyle(.card)
+        #else
+        .buttonStyle(TVButtonStyle(onFocus: {}, onPressed:{
             currentEpisode = episode
         }, isSelected: isSelected))
+        #endif
     }
     
-    @ViewBuilder
     var episodesCountView: some View {
         let localizedSeason = NumberFormatter.localizedString(from: NSNumber(value: currentSeason), number: .none)
         let seasonString = "Season".localized + " \(localizedSeason)"
         let count = episodes.count
         let isSingular = count == 1
         let numberOfEpisodes = "\(NumberFormatter.localizedString(from: NSNumber(value: count), number: .none)) \(isSingular ? "Episode".localized : "Episodes".localized)"
+        var year = ""
+        if let date = episodes.first?.firstAirDate {
+            let components = Calendar.current.dateComponents([.year], from: date)
+            year = components.year.flatMap({ "\($0)" }) ?? ""
+        }
         
-        Text("\(seasonString) (\(numberOfEpisodes.lowercased()))")
-            .font(.callout)
-            .foregroundColor(.appSecondary)
-            .padding(.leading, theme.leading)
-            .padding(.top, 14)
+        return Text("\(seasonString) (\(numberOfEpisodes.lowercased())) - \(year)")
+                .font(.callout)
+                .foregroundColor(.appSecondary)
+                .padding(.leading, theme.leading)
+                .padding(.top, 14)
     }
     
     @ViewBuilder
@@ -126,11 +146,11 @@ struct EpisodesView: View {
 
 extension EpisodesView {
     struct Theme {
-        let episodeWidth: CGFloat = value(tvOS: 310, macOS: 217)
-        let episodeHeight: CGFloat = value(tvOS: 215, macOS: 150)
-        let episodeSpacing: CGFloat = value(tvOS: 40, macOS: 20)
+        let episodeWidth: CGFloat = value(tvOS: 330, macOS: 227)
+        let episodeHeight: CGFloat = value(tvOS: 200, macOS: 141)
+        let episodeSpacing: CGFloat = value(tvOS: 40, macOS: 24)
         let currentEpisode: (leading: CGFloat, height: CGFloat, trailing: CGFloat)
-            = (leading: value(tvOS: 90, macOS: 20),
+            = (leading: value(tvOS: 90, macOS: 50),
                height: value(tvOS: 350, macOS: 250),
                trailing: value(tvOS: 500, macOS: 200))
         let leading: CGFloat = value(tvOS: 90, macOS: 50)

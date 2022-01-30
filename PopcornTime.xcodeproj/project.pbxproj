@@ -70,7 +70,6 @@
 		2343A7662688AD5000B824E7 /* SearchViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2343A7652688AD5000B824E7 /* SearchViewModel.swift */; };
 		2343A7692688AEFC00B824E7 /* ShowsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2343A7682688AEFC00B824E7 /* ShowsViewModel.swift */; };
 		2343A76B2688AF1100B824E7 /* ShowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2343A76A2688AF1100B824E7 /* ShowView.swift */; };
-		2343A76C2688BE3F00B824E7 /* SiriRemoteGestureRecogniser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4DD6E4D61DFB315100818A2C /* SiriRemoteGestureRecogniser.swift */; };
 		23446AB9267EF4FE0049CC72 /* PlainNavigationLinkButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23446AB8267EF4FE0049CC72 /* PlainNavigationLinkButton.swift */; };
 		23446ABB267F168F0049CC72 /* MovieDetailsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23446ABA267F168F0049CC72 /* MovieDetailsViewModel.swift */; };
 		23446ABE267F1ED10049CC72 /* TVButtonStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23446ABD267F1ED10049CC72 /* TVButtonStyle.swift */; };
@@ -116,7 +115,6 @@
 		236A11BA26C6784C00AFF1FD /* PlayerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23313B35267E3C1400774A85 /* PlayerView.swift */; };
 		236A11BB26C6786200AFF1FD /* VLCPlayerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23446AD62680BBE80049CC72 /* VLCPlayerView.swift */; };
 		236A11BC26C678BD00AFF1FD /* ProgressBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23446ADE2680E8600049CC72 /* ProgressBarView.swift */; };
-		236A11BD26C678E100AFF1FD /* SiriRemoteGestureRecogniser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4DD6E4D61DFB315100818A2C /* SiriRemoteGestureRecogniser.swift */; };
 		236A11BE26C678F600AFF1FD /* AudioView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23313B31267E3BF700774A85 /* AudioView.swift */; };
 		236A11BF26C6790000AFF1FD /* PlayerOptionsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23989FA626865A3500FEDA41 /* PlayerOptionsView.swift */; };
 		236A11C026C6791800AFF1FD /* InfoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23313B2D267E3BD500774A85 /* InfoView.swift */; };
@@ -546,8 +544,6 @@
 		4DCCBA5A1DC50D780046C755 /* Color+Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Color+Extension.swift"; sourceTree = "<group>"; };
 		4DD6E4CF1DFB17B400818A2C /* ProgressBar.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProgressBar.swift; sourceTree = "<group>"; };
 		4DD6E4D11DFB197E00818A2C /* BufferingBar.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BufferingBar.swift; sourceTree = "<group>"; };
-		4DD6E4D41DFB2FAA00818A2C /* TapGestureRecogniser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TapGestureRecogniser.swift; sourceTree = "<group>"; };
-		4DD6E4D61DFB315100818A2C /* SiriRemoteGestureRecogniser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SiriRemoteGestureRecogniser.swift; sourceTree = "<group>"; };
 		4DDBD9081E0EDA2E00CEA1B1 /* Array+Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Array+Extension.swift"; sourceTree = "<group>"; };
 		4DF3942C1E96B10500DFCEC6 /* AVKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVKit.framework; path = System/Library/Frameworks/AVKit.framework; sourceTree = SDKROOT; };
 		60B34B536975850179B89908 /* Pods_PopcornTimeiOS.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_PopcornTimeiOS.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -645,7 +641,6 @@
 				23313B42267E3DCD00774A85 /* Model */,
 				23313B43267E3DD700774A85 /* Access */,
 				23446AC4267F26E60049CC72 /* Views */,
-				4DD6E4D31DFB2F8400818A2C /* Gesture Recognisers */,
 				28EB626A1CA3362B00985F78 /* Extensions */,
 				4D990E261DC4EFF2005CDE34 /* Resources */,
 				23313B08267E375100774A85 /* Info.plist */,
@@ -808,8 +803,8 @@
 				23313B25267E3B6300774A85 /* SeasonPickerView.swift */,
 				237F28642692F6B900FE036C /* SeasonPickerViewModel.swift */,
 				237F28662692F91000FE036C /* SeasonView.swift */,
-				23313B2B267E3BAC00774A85 /* EpisodesView.swift */,
 				2358EC452792CA6300C79643 /* PlayTorrentEpisode.swift */,
+				23313B2B267E3BAC00774A85 /* EpisodesView.swift */,
 				2388FD662692019E00B51201 /* EpisodeView.swift */,
 			);
 			path = "Show Details";
@@ -943,15 +938,6 @@
 				4D990E271DC4F00F005CDE34 /* SubtitleSettings.swift */,
 			);
 			path = Resources;
-			sourceTree = "<group>";
-		};
-		4DD6E4D31DFB2F8400818A2C /* Gesture Recognisers */ = {
-			isa = PBXGroup;
-			children = (
-				4DD6E4D61DFB315100818A2C /* SiriRemoteGestureRecogniser.swift */,
-				4DD6E4D41DFB2FAA00818A2C /* TapGestureRecogniser.swift */,
-			);
-			path = "Gesture Recognisers";
 			sourceTree = "<group>";
 		};
 		84C1D15150747C921393E38F /* Pods */ = {
@@ -1384,7 +1370,6 @@
 				23C96EE42685DBC40056455E /* RotateAnimation.swift in Sources */,
 				23313B22267E3AFB00774A85 /* PersonView.swift in Sources */,
 				2343A7692688AEFC00B824E7 /* ShowsViewModel.swift in Sources */,
-				2343A76C2688BE3F00B824E7 /* SiriRemoteGestureRecogniser.swift in Sources */,
 				2388FD5B268F871F00B51201 /* BannerView.swift in Sources */,
 				23B0A01626B9818100844309 /* TorrentPlayerView.swift in Sources */,
 				23446AD226806FD20049CC72 /* Media + Subtitles.swift in Sources */,
@@ -1480,7 +1465,6 @@
 				23A2BDD826BEDC50004B864E /* JSONDecoder+KeyPath.swift in Sources */,
 				23A2BD9A26BEDA07004B864E /* PlayButton.swift in Sources */,
 				23CBC4CF275409B1008D2BBE /* ClearCache.swift in Sources */,
-				236A11BD26C678E100AFF1FD /* SiriRemoteGestureRecogniser.swift in Sources */,
 				23A2BD9926BEDA07004B864E /* DownloadButtonViewModel.swift in Sources */,
 				23A2BDAF26BEDA2A004B864E /* SettingsView.swift in Sources */,
 				23A2BDC626BEDBE2004B864E /* Array+Extension.swift in Sources */,
