@@ -71,8 +71,8 @@ struct ShowDetailsView: View, MediaPosterLoader {
                     #endif
                     
                     LazyVStack(alignment: .center) {
-                        if !show.episodes.isEmpty {
-                            EpisodesView(show: viewModel.show, episodes: viewModel.seasonEpisodes(), currentSeason: viewModel.currentSeason, onFocus: {
+                        if show.episodes.count > 0 {
+                            EpisodesView(show: viewModel.show, episodes: viewModel.seasonEpisodes(), currentSeason: viewModel.currentSeason, currentEpisode: viewModel.latestUnwatchedEpisode, onFocus: {
                                 withAnimation() {
                                     scroll.scrollTo(section2, anchor: .top)
                                 }

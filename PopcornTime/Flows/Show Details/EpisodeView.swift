@@ -14,6 +14,7 @@ struct EpisodeView: View {
     struct Theme {
         let imageWidth: CGFloat = value(tvOS: 340, macOS: 227)
         let imageHeight: CGFloat = value(tvOS: 200, macOS: 141)
+        let fontSize: CGFloat = value(tvOS: 28, macOS: 16)
     }
     let theme = Theme()
     
@@ -94,6 +95,7 @@ struct EpisodeView: View {
     var episodeNameLabel: some View {
         HStack {
             Text("\(episode.episode). " + episode.title)
+                .font(.system(size: theme.fontSize, weight: .regular))
                 .lineLimit(1)
                 .shadow(color: .init(white: 0, opacity: 0.7), radius: 4)
                 .foregroundColor(isFocused ? .white : .init(white: 1, opacity: 0.8))

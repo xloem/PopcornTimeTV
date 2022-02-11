@@ -43,6 +43,11 @@ struct EpisodesView: View {
                     #endif
                     .padding([.leading, .trailing], theme.leading)
                 }
+                .onAppear {
+                    if let episode = currentEpisode {
+                        scroll.scrollTo(episode.episode)
+                    }
+                }
             }
             currentEpisodeView
             #if os(tvOS)

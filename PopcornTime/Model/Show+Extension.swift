@@ -13,7 +13,7 @@ extension Show {
      */
     func latestUnwatchedEpisode(from episodes: [Episode]? = nil) -> Episode? {
         let episodes = episodes ?? self.episodes
-        guard episodes.filter({$0.show == self}).count == episodes.count else { return nil } // Make sure all of the episodes are of the current show.
+//        guard episodes.filter({$0.show == self}).count == episodes.count else { return nil } // Make sure all of the episodes are of the current show.
         
         let manager = WatchedlistManager<Episode>.episode
         

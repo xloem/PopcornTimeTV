@@ -59,21 +59,22 @@ class ShowDetailsViewModel: ObservableObject {
                 self.show = show
                 self.didLoad = true
                 
-                self.related = (try? await related) ?? []
-                let persons = (try? await people) ?? (actors: [], crew: [])
-                self.persons = persons.actors + persons.crew
-                
                 guard let season = show.latestUnwatchedEpisode()?.season ?? show.seasonNumbers.first else {
                     let error = NSError(domain: "com.popcorntimetv.popcorntime.error", code: -243, userInfo:
                                             [NSLocalizedDescriptionKey: "There are no seasons available for the selected show. Please try again later.".localized])
-                    throw error
+                    self.error = error
+                    return
                 }
+                
+                self.currentSeason = season
                 
                 if show.tmdbId == nil, let tmdbId = try? await tmdbIdLoader {
                     self.show.tmdbId = tmdbId
                 }
                 
-                self.currentSeason = season
+                self.related = (try? await related) ?? []
+                let persons = (try? await people) ?? (actors: [], crew: [])
+                self.persons = persons.actors + persons.crew
             } catch {
                 self.error = error
             }
