@@ -45,7 +45,8 @@ struct EpisodesView: View {
                 }
                 .onAppear {
                     if let episode = currentEpisode {
-                        scroll.scrollTo(episode.episode)
+                        currentEpisode = episode /// so that downloadModel is created in didSet
+                        scroll.scrollTo(episode.episode, anchor: theme.scrollPosition)
                     }
                 }
             }
@@ -159,6 +160,8 @@ extension EpisodesView {
                height: value(tvOS: 350, macOS: 250),
                trailing: value(tvOS: 500, macOS: 200))
         let leading: CGFloat = value(tvOS: 90, macOS: 50)
+        
+        let scrollPosition: UnitPoint? = value(tvOS: nil, macOS: nil)
     }
 }
 
