@@ -51,4 +51,16 @@ struct PopcornTime: App {
 //        }
         #endif
     }
+
+// in order do exit app on window close
+#if os(macOS)
+    @NSApplicationDelegateAdaptor(AppDelegate.self)
+    var appDelegate
+    
+    final class AppDelegate: NSObject, NSApplicationDelegate {
+        func applicationShouldTerminateAfterLastWindowClosed(_ sender: NSApplication) -> Bool {
+            true
+        }
+    }
+#endif
 }

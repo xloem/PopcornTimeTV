@@ -66,11 +66,11 @@ class ShowDetailsViewModel: ObservableObject {
                     return
                 }
                 
-                self.currentSeason = season
-                
+                // load tmdbId so we can show episode preview
                 if show.tmdbId == nil, let tmdbId = try? await tmdbIdLoader {
                     self.show.tmdbId = tmdbId
                 }
+                self.currentSeason = season
                 
                 self.related = (try? await related) ?? []
                 let persons = (try? await people) ?? (actors: [], crew: [])
