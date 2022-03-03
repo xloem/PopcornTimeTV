@@ -9,20 +9,6 @@
 import Foundation
 
 enum Session {
-    @UserDefault(key: "tosAccepted", defaultValue: false)
-    static var tosAccepted: Bool
-    
-    @UserDefault(key: "autoSelectQuality", defaultValue: nil)
-    static var autoSelectQuality: String?
-    
-    @UserDefault(key: "streamOnCellular", defaultValue: false)
-    static var streamOnCellular: Bool
-    
-    @UserDefault(key: "removeCacheOnPlayerExit", defaultValue: false)
-    static var removeCacheOnPlayerExit: Bool
-    
-    @UserDefault(key: "themeSongVolume", defaultValue: 0.75)
-    static var themeSongVolume: Float
     
     @UserDefault(key: "traktCredentials", defaultValue: nil)
     static var traktCredentials: Data?
@@ -30,6 +16,6 @@ enum Session {
     @UserDefault(key: "skipReleaseVersion", defaultValue: nil)
     static var skipReleaseVersion: Data?
     
-    @UserDefault(key: "subtitleSettings", defaultValue: nil)
-    static var subtitleSettings: Data?
+    @UserDefault(key: "popcornUrl", defaultValue: nil)
+    static var popcornBaseUrl: String?
 }

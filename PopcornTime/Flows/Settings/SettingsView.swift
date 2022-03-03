@@ -66,6 +66,12 @@ struct SettingsView: View {
                     button(text: "Version", value: viewModel.version) {
                         
                     }
+                    
+                    TextField("Edit Popcorn url", text: $viewModel.serverUrl)
+                        .onSubmit {
+                            viewModel.changeUrl(viewModel.serverUrl)
+                        }
+                        .font(.system(size: theme.fontSize, weight: .medium))
                 }
             }
             .listStyle(GroupedListStyle())

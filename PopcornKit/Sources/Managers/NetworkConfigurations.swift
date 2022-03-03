@@ -109,7 +109,7 @@ public struct OMDb {
 
 
 public struct Popcorn {
-    static let base = "https://popcorn-ru.tk" //"https://movies-v2.api-fetch.sh"
+    static let base = "https://popcorn-time.ga"
     static let movies = "/movies"
     static let movie = "/movie"
     static let shows = "/shows"

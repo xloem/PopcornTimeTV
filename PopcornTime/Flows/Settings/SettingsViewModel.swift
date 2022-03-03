@@ -48,4 +48,11 @@ class SettingsViewModel: ObservableObject {
         isTraktLoggedIn = true
         TraktApi.shared.syncUserData()
     }
+    
+    @Published var serverUrl: String = PopcornApi.shared.customBaseURL
+    
+    func changeUrl(_ url: String) {
+        PopcornApi.changeBaseUrl(newUrl: url.isEmpty ? nil : url)
+        serverUrl = PopcornApi.shared.customBaseURL
+    }
 }

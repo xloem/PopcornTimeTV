@@ -5,11 +5,25 @@ import ObjectMapper
 open class PopcornApi {
     
     /// Creates new instance of PopcornApi class
-    public static let shared = PopcornApi()
+    public static var shared = PopcornApi()
     
-    let client = HttpClient(config: .init(serverURL: Popcorn.base, apiErrorDecoder: { data in
-        return try? JSONDecoder().decode(Popcorn.APIError.self, from: data)
-    }))
+    let client: HttpClient
+    
+    public init() {
+        let url = Session.popcornBaseUrl ?? Popcorn.base
+        client = HttpClient(config: .init(serverURL: url, apiErrorDecoder: { data in
+            return try? JSONDecoder().decode(Popcorn.APIError.self, from: data)
+        }))
+    }
+    
+    public var customBaseURL: String { // empty if default
+        return client.config.serverURL != Popcorn.base ? client.config.serverURL : ""
+    }
+    
+    public static func changeBaseUrl(newUrl: String?) {
+        Session.popcornBaseUrl = newUrl
+        shared = PopcornApi()
+    }
     
     /**
      Load Movies from API.
