@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Scheme
-   LastUpgradeVersion = "1310"
-   wasCreatedForAppExtension = "YES"
-   version = "2.0">
+   LastUpgradeVersion = "1020"
+   version = "1.3">
    <BuildAction
       parallelizeBuildables = "YES"
       buildImplicitDependencies = "YES">
@@ -15,23 +14,9 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "23E4976526947E1300175DEE"
-               BuildableName = "TopShelf.appex"
-               BlueprintName = "TopShelf"
-               ReferencedContainer = "container:PopcornTime.xcodeproj">
-            </BuildableReference>
-         </BuildActionEntry>
-         <BuildActionEntry
-            buildForTesting = "YES"
-            buildForRunning = "YES"
-            buildForProfiling = "YES"
-            buildForArchiving = "YES"
-            buildForAnalyzing = "YES">
-            <BuildableReference
-               BuildableIdentifier = "primary"
-               BlueprintIdentifier = "23313AFC267E374F00774A85"
-               BuildableName = "PopcornTime (tvOS).app"
-               BlueprintName = "PopcornTime (tvOS)"
+               BlueprintIdentifier = "4D689A161DD88E17001D1318"
+               BuildableName = "PopcornTime.app"
+               BlueprintName = "PopcornTimeiOS"
                ReferencedContainer = "container:PopcornTime.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
@@ -43,46 +28,83 @@
       selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
       shouldUseLaunchSchemeArgsEnv = "YES">
       <Testables>
+         <TestableReference
+            skipped = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "D9CC9C962064FE64006C1274"
+               BuildableName = "Popcorn TimeiOSUITests.xctest"
+               BlueprintName = "Popcorn TimeiOSUITests"
+               ReferencedContainer = "container:PopcornTime.xcodeproj">
+            </BuildableReference>
+         </TestableReference>
+         <TestableReference
+            skipped = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "D9CC9CA42064FE81006C1274"
+               BuildableName = "Popcorn TimeiOSTests.xctest"
+               BlueprintName = "Popcorn TimeiOSTests"
+               ReferencedContainer = "container:PopcornTime.xcodeproj">
+            </BuildableReference>
+         </TestableReference>
       </Testables>
+      <MacroExpansion>
+         <BuildableReference
+            BuildableIdentifier = "primary"
+            BlueprintIdentifier = "4D689A161DD88E17001D1318"
+            BuildableName = "PopcornTime.app"
+            BlueprintName = "PopcornTimeiOS"
+            ReferencedContainer = "container:PopcornTime.xcodeproj">
+         </BuildableReference>
+      </MacroExpansion>
+      <AdditionalOptions>
+      </AdditionalOptions>
    </TestAction>
    <LaunchAction
       buildConfiguration = "Debug"
-      selectedDebuggerIdentifier = ""
-      selectedLauncherIdentifier = "Xcode.IDEFoundation.Launcher.PosixSpawn"
+      selectedDebuggerIdentifier = "Xcode.DebuggerFoundation.Debugger.LLDB"
+      selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
       launchStyle = "0"
-      askForAppToLaunch = "Yes"
       useCustomWorkingDirectory = "NO"
       ignoresPersistentStateOnLaunch = "NO"
       debugDocumentVersioning = "YES"
       debugServiceExtension = "internal"
       allowLocationSimulation = "YES"
-      launchAutomaticallySubstyle = "2">
+      showNonLocalizedStrings = "YES">
       <BuildableProductRunnable
          runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "23313AFC267E374F00774A85"
-            BuildableName = "PopcornTime (tvOS).app"
-            BlueprintName = "PopcornTime (tvOS)"
+            BlueprintIdentifier = "4D689A161DD88E17001D1318"
+            BuildableName = "PopcornTime.app"
+            BlueprintName = "PopcornTimeiOS"
             ReferencedContainer = "container:PopcornTime.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
+      <EnvironmentVariables>
+         <EnvironmentVariable
+            key = "OS_ACTIVITY_MODE"
+            value = "disable"
+            isEnabled = "YES">
+         </EnvironmentVariable>
+      </EnvironmentVariables>
+      <AdditionalOptions>
+      </AdditionalOptions>
    </LaunchAction>
    <ProfileAction
       buildConfiguration = "Release"
       shouldUseLaunchSchemeArgsEnv = "YES"
       savedToolIdentifier = ""
       useCustomWorkingDirectory = "NO"
-      debugDocumentVersioning = "YES"
-      askForAppToLaunch = "Yes"
-      launchAutomaticallySubstyle = "2">
+      debugDocumentVersioning = "YES">
       <BuildableProductRunnable
          runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "23313AFC267E374F00774A85"
-            BuildableName = "PopcornTime (tvOS).app"
-            BlueprintName = "PopcornTime (tvOS)"
+            BlueprintIdentifier = "4D689A161DD88E17001D1318"
+            BuildableName = "PopcornTime.app"
+            BlueprintName = "PopcornTimeiOS"
             ReferencedContainer = "container:PopcornTime.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
@@ -92,6 +114,7 @@
    </AnalyzeAction>
    <ArchiveAction
       buildConfiguration = "Release"
+      customArchiveName = "Popcorn Time"
       revealArchiveInOrganizer = "YES">
    </ArchiveAction>
 </Scheme>
