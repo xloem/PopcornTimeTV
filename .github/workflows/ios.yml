@@ -28,8 +28,7 @@ jobs:
       if: steps.cache.outputs.cache-hit != 'true'
       run: |
         gem install bundler cocoapods
-        bundle install
-        bundle update cocoapods
+        bundle install --full-index
         bundle exec pod repo update
         bundle exec pod install
 
